@@ -13,19 +13,22 @@ import IconSun from '../svgs/IconSun';
 import IconMoon from '../svgs/IconMoon';
 
 
+/*
+	background-image: url("https://www.transparenttextures.com/patterns/worn-dots.png"), linear-gradient(-10deg, hsl(210,100%,33%) 50%, hsl(210,100%,25%) 100%);
+	background-color: ${props => props.theme.COLOR_normal};
+	background-color: #22a7f0;
+	background-image: linear-gradient(-20deg, hsl(233,60%,50%) 50%,hsl(233,60%,45%) 100%);
+	hsl(233,60%,50%) 
+*/
+
+// SubCompGallery 의 z-index 가 1
 
 const DivSub = styled(Div)`
 	
 	background-color: ${props => props.theme.COLOR_normal};
-
-	/*background-image: url("https://www.transparenttextures.com/patterns/worn-dots.png"), linear-gradient(-10deg, hsl(210,100%,33%) 50%, hsl(210,100%,25%) 100%);*/
-	/*background-color: ${props => props.theme.COLOR_normal};*/
-	/*background-color: #22a7f0;*/
-	/*background-image: linear-gradient(-20deg, hsl(233,60%,50%) 50%,hsl(233,60%,45%) 100%);*/
-	/* hsl(233,60%,50%) */
-  
-  
   color: ${props => props.theme.color_strong};
+  
+  z-index: 2; 
   
   position: fixed;
   top: 0px;
@@ -219,6 +222,7 @@ const Sub = ({match, location, replaceData, themeName}) => {
 
 		<DivNavItem > <NavLinkNavItem to="/" exact={true}> Home </NavLinkNavItem> </DivNavItem>
 		<DivNavItem > <NavLinkNavItem to="/team-generator" isActive={checkActive} > Team Generator </NavLinkNavItem> </DivNavItem>
+		<DivNavItem > <NavLinkNavItem to="/comp-gallery" isActive={checkActive} > Comp Gallery </NavLinkNavItem> </DivNavItem>
 		
 		<DivButtonToggleMode>
 		

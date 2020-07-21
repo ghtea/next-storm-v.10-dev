@@ -8,7 +8,7 @@ const REPLACE_WORKING = "REPLACE_WORKING";
 const REPLACE_AUTHORITY = "REPLACE_AUTHORITY";
 
 const REPLACE_DATA = "REPLACE_DATA";
-
+const REPLACE_DATA_2 = "REPLACE_DATA_2";
 
 const ADD_NOTIFICATION = "ADD_NOTIFICATION";
 const REMOVE_NOTIFICATION = "REMOVE_NOTIFICATION";
@@ -26,6 +26,7 @@ const stateInitial = {
     
     ready : {
       planTeam: false
+      ,objAllHeroBasic: false
     }
     
     ,loading : {
@@ -81,10 +82,14 @@ const stateInitial = {
     ,comp_gallery: {
       
       listComp : []  // searching
-      , vComp: {} // viewing, commenting, rating, editing title as viewer
+      , vComp: {} // VIEW a comp
       
-      , dComp: {} // adding/creating as designer
-      
+      , aComp: {} // ADD a comp
+    }
+    
+    // common
+    , hots: {
+      objAllHeroBasic: {}
     }
     
   };
@@ -133,6 +138,43 @@ const reducer = (
         	[action.which]: action.data
         }
       }
+      
+    
+    case REPLACE_DATA_2:
+      
+      if ( (!!action.data) && (action.data.constructor === Array) ) {
+        return {
+        	...state, 
+        	[action.which1]: {
+        	  ...state[action.which1]
+        	  ,[action.which2]: [...action.data]
+        	}
+        }
+      }
+      
+      else if ( (!!action.data) && (action.data.constructor === Object) ) {
+        return {
+        	...state, 
+        	[action.which1]: {
+        	  ...state[action.which1]
+        	  ,[action.which2]: {...action.data}
+        	}
+        }
+      }
+        
+      
+      else {
+        return {
+        	...state, 
+        	[action.which1]: {
+        	  ...state[action.which1]
+        	  ,[action.which2]: action.data
+        	}
+        }
+      } 
+        
+
+      
       
     case REPLACE_READY:
       return {

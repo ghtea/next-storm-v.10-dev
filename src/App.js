@@ -8,8 +8,13 @@ import replaceTheme from "./redux/thunks/replaceTheme";
 import Sub from "./routes/Sub";
 import Notification from "./routes/Notification";
 import Home from "./routes/Home";
+
 import TeamGenerator from "./routes/TeamGenerator";
 import TeamGeneratorDoor from "./routes/TeamGeneratorDoor";
+
+import CompGallery from "./routes/CompGallery";
+
+
 
 import {ThemeProvider } from 'styled-components';
 import themes from "./styles/themes"
@@ -55,20 +60,7 @@ const isDarkMode = () => {
 
 const App = ({themeName, replaceTheme, notification}) => {
   
-  /*
   
-  */
-  
-  /*
-  constructor(props){
-      super(props);
-      
-      this.state = {
-          themeApp: 'light'
-      };
-      
-  }
-  */
   useEffect(()=>{
     console.log(notification);
     const themeDeviceStr = isDarkMode() ? 'dark' : 'light';
@@ -96,6 +88,8 @@ const App = ({themeName, replaceTheme, notification}) => {
       
       <Route path="/team-generator" exact={true} component={TeamGeneratorDoor} />
       <Route path="/team-generator/:idPlanTeam"  component={TeamGenerator} />
+      
+      <Route path="/comp-gallery" component={CompGallery} />
       
       </Switch >
       </DivContent>

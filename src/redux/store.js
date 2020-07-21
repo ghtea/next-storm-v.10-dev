@@ -13,6 +13,7 @@ const REPLACE_WORKING = "REPLACE_WORKING";
 const REPLACE_AUTHORITY = "REPLACE_AUTHORITY";
 
 const REPLACE_DATA = "REPLACE_DATA";
+const REPLACE_DATA_2 = "REPLACE_DATA_2";
 
 const ADD_NOTIFICATION = "ADD_NOTIFICATION";
 const REMOVE_NOTIFICATION = "REMOVE_NOTIFICATION";
@@ -71,14 +72,26 @@ export const replaceAuthority = (which, authority) => {
 }
 
 
+
+
 export const replaceData = (which, newData) => {
   return {
     type: REPLACE_DATA,
     which: which,
     data: newData
   }
-  
 }
+
+export const replaceData2 = (which1, which2, newData) => {
+  return {
+    type: REPLACE_DATA_2,
+    which1: which1,
+    which2: which2,
+    data: newData
+  }
+}
+
+
 
 export const addNotification = (situation, message, idNotification) => {
   return {
