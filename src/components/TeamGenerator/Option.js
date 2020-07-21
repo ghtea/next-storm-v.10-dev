@@ -300,7 +300,7 @@ function mapStateToProps(state) {
     //, readyPlanTeam: state.ready.planTeam
     
     ,option: state.planTeam.option
-    , authority: state.authority
+    , authority: state.authority.team_generator
     
     //, planTeam: {...state.planTeam}
     

@@ -867,7 +867,7 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
 
 function mapStateToProps(state) { 
   return { 
-    authority: state.authority
+    authority: state.authority.team_generator
     ,idPlanTeam: state.planTeam._id
     ,option: state.planTeam.option
     ,listPlayerEntry: state.planTeam.listPlayerEntry

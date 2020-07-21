@@ -636,7 +636,7 @@ const Entry = ({
 
 function mapStateToProps(state) { 
   return { 
-    authority: state.authority
+    authority: state.authority.team_generator
     ,listPlayerEntry: [...state.planTeam.listPlayerEntry]
     ,idPlanTeam: state.planTeam._id
     ,option: state.planTeam.option

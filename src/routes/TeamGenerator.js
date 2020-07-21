@@ -8,10 +8,7 @@ import { connect } from "react-redux";
 import readPlanTeam from "../redux/thunks/readPlanTeam";
 
 //import {replaceRerender} from "../redux/store";
-import {replaceWorking} from "../redux/store";
-import {replaceLoading} from "../redux/store";
-import {replaceReady} from "../redux/store";
-import {replaceData} from "../redux/store";
+import {replaceData, replaceReady, replaceLoading, replaceWorking, replaceAuthority} from "../redux/store";
 
 import addRemoveNotification from "../redux/thunks/addRemoveNotification";
 
@@ -127,6 +124,7 @@ const TeamGenerator = ({
   
   , readPlanTeam
   , replaceData
+  ,replaceAuthority
   , addRemoveNotification
 }) => {
   
@@ -146,7 +144,7 @@ const TeamGenerator = ({
     if (isFirstRun.current) {isFirstRun.current = false; return; }
     
     if (!loadingPlanTeam && !readyPlanTeam)  {  // (readyPlanTeam === false)
-      replaceData("authority", "unknown");
+      replaceAuthority("team_generator", "unknown");
       addRemoveNotification("error", "plan id is wrong");
       
       history.push(`/team-generator`);
@@ -168,12 +166,12 @@ const TeamGenerator = ({
     if (!loadingPlanTeam && readyPlanTeam && (authority === "unknown") ) {
       
       if (!passwordPlanTeamTrying) {
-        replaceData("authority", "viewer");
+        replaceAuthority("team_generator", "viewer");
         addRemoveNotification("success", "welcome viewer!");
       }
       
       else if ( passwordPlanTeamTrying === passwordPlanTeam ) {
-        replaceData("authority", "administrator");
+        replaceAuthority("team_generator", "administrator");
         addRemoveNotification("success", "welcome administrator!");
       }
       
@@ -181,7 +179,7 @@ const TeamGenerator = ({
       // 정안되면 비번 틀린거는 알람이 아니라 일반 표시로 하기..
       // if password is wrong
       else {
-        replaceData("authority", "unknown");
+        replaceAuthority("team_generator", "viewer");
         addRemoveNotification("error", "password is wrong");
       }
       
@@ -256,7 +254,7 @@ const TeamGenerator = ({
 
 function mapStateToProps(state) { 
   return { 
-    authority: state.authority
+    authority: state.authority.team_generator
     
     ,idPlanTeam: state.idPlanTeam
     ,passwordPlanTeam: state.planTeam.password
@@ -278,6 +276,8 @@ function mapDispatchToProps(dispatch) {
     ,replaceData: (which, newData) => dispatch(replaceData(which, newData))
     ,replaceLoading: (which, true_false) => dispatch(replaceLoading(which, true_false)) 
     ,replaceReady: (which, true_false) => dispatch(replaceReady(which, true_false)) 
+    ,replaceAuthority: (which, authority) => dispatch(replaceAuthority(which, authority))
+    
     ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
   }; 
 }

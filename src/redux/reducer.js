@@ -1,10 +1,11 @@
 import {getTimeStamp} from '../tools/vanilla/time'
 import {toggleArrayElement} from '../tools/vanilla/array'
 
-//const REPLACE_RERENDER = "REPLACE_RERENDER";
+
 const REPLACE_READY = "REPLACE_READY";
 const REPLACE_LOADING = "REPLACE_LOADING";
 const REPLACE_WORKING = "REPLACE_WORKING";
+const REPLACE_AUTHORITY = "REPLACE_AUTHORITY";
 
 const REPLACE_DATA = "REPLACE_DATA";
 
@@ -22,12 +23,6 @@ const REPLACE_NUMBER = "REPLACE_NUMBER";
 
 
 const stateInitial = { 
-    
-    // foundamental 
-    /*
-    rerender: {
-      planTeam: ""
-    }*/
     
     ready : {
       planTeam: false
@@ -50,11 +45,23 @@ const stateInitial = {
     ,notification : []
     
     
-    // others
-    ,authority: "unknown" // "administrator" "viewer"
+    ,themeName: "light"
     
+  
+    
+    
+    
+    
+    
+   
+    ,authority: {
+      team_generator: "viewer" // "administrator" "viewer"
+      , comp_gallery: "viewer" // "master" "viewer"
+    }
+    
+    
+    // team-generator
     ,idPlanTeam: ""
-    
     ,planTeam: {
       _id:"_id"
       ,password:"password"
@@ -70,7 +77,15 @@ const stateInitial = {
     }
     
     
-    ,themeName: "light"
+    // comp-gallery
+    ,comp_gallery: {
+      
+      listComp : []  // searching
+      , vComp: {} // viewing, commenting, rating, editing title as viewer
+      
+      , dComp: {} // adding/creating as designer
+      
+    }
     
   };
 
@@ -145,6 +160,15 @@ const reducer = (
       	  [action.which]: action.true_false
       	}
       };
+      
+   case REPLACE_AUTHORITY:
+    return {
+    	...state, 
+    	authority: {
+    	  ...state.authority,
+    	  [action.which]: action.authority
+    	}
+    };
       
     case ADD_NOTIFICATION:
       

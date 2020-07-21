@@ -6,10 +6,11 @@ import dotenv from 'dotenv';
 
 import reducer from './reducer';
 
-const REPLACE_RERENDER = "REPLACE_RERENDER";
+
 const REPLACE_READY = "REPLACE_READY";
 const REPLACE_LOADING = "REPLACE_LOADING";
 const REPLACE_WORKING = "REPLACE_WORKING";
+const REPLACE_AUTHORITY = "REPLACE_AUTHORITY";
 
 const REPLACE_DATA = "REPLACE_DATA";
 
@@ -59,6 +60,16 @@ export const replaceWorking = (which, true_false) => {
     true_false: true_false
   }
 }
+
+
+export const replaceAuthority = (which, authority) => {
+  return {
+    type: REPLACE_AUTHORITY,
+    which: which,
+    authority: authority
+  }
+}
+
 
 export const replaceData = (which, newData) => {
   return {

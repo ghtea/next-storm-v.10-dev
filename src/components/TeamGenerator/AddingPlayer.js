@@ -435,7 +435,8 @@ function mapStateToProps(state) {
     //, loadingPlanTeam: state.loading.planTeam
     //, readyPlanTeam: state.ready.planTeam
     
-    , authority: state.authority
+    ,authority: state.authority.team_generator
+
     , planTeam: {...state.planTeam}
     
   }; 
