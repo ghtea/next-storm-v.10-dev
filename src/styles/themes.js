@@ -19,6 +19,14 @@ const common = {
     ,COLOR_tip: '#caebfb'
     
     
+    ,color_save: '#bbffbb'
+    ,COLOR_save: '#2ecc71'
+    
+    ,color_delete: '#ffbbbb'
+    ,COLOR_delete: '#d00000'
+    
+    
+    
     ,media: {
         
         small_mid: 420 // 
@@ -43,13 +51,13 @@ const themes =  {
         ,name: "light"
         
         ,color_strong: 'hsl(240, 2%, 0%)'   
-        ,color_normal: 'hsl(240, 2%, 12%)'   // 15% down
-        ,color_weak: 'hsl(240, 2%, 50%)'       // 38% down
+        ,color_normal: 'hsl(240, 2%, 18%)'   // 18% down
+        ,color_weak: 'hsl(240, 2%, 50%)'       // 32% down
         ,color_very_weak: 'hsl(240, 2%, 80%)'   // 30% down
         
-        ,COLOR_normal: 'hsl(240, 20%, 100%)'  // 2% 씩
-        ,COLOR_middle: 'hsl(240, 20%, 98%)'
-        ,COLOR_bg: 'hsl(240, 20%, 96%)'
+        ,COLOR_normal: 'hsl(240, 20%, 100%)'  // 3% 씩
+        ,COLOR_middle: 'hsl(240, 20%, 97%)'
+        ,COLOR_bg: 'hsl(240, 20%, 94%)'
         
         
     },

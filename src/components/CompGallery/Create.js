@@ -6,6 +6,9 @@ import axios from 'axios';
 
 import { connect } from "react-redux";
 
+import * as config from '../../config';
+
+
 import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
 import {replaceWorking} from "../../redux/store";
 
@@ -51,7 +54,10 @@ const DivCreate = styled(Div)`
 const DivA = styled(Div)`
   grid-area: A;
   
- 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
     
@@ -78,6 +84,15 @@ const DivB = styled(Div)`
 
 
 //
+const ButtonCreate = styled(Button)`
+  width: 150px;
+  height: 36px;
+  
+  border-radius: 10px;
+  
+  margin: 10px;
+`
+
 const DivCreatingComp = styled(Div)`
   width: 100%;
   height:100%;
@@ -267,13 +282,15 @@ const DivEachHero = styled(Div)`
 
   margin: 2px;
   cursor: pointer;
-    
+  
+  position: relative;
+  
   &:nth-child(n+2) img {
     opacity: 0.66;
   }
   
   &[data-is-focused='true'] {
-    border: 3px solid ${props => (props.theme.color_strong) };
+    border: 3px solid ${props => (props.theme.COLOR_delete) };
   }
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
@@ -290,7 +307,8 @@ const DivEachHero = styled(Div)`
 const ImgEachHero = styled(Img)`
   border-radius: 50%;
   
-  
+  position: absolute;
+  z-index:2;
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
     object-fit: cover;
@@ -304,6 +322,36 @@ const ImgEachHero = styled(Img)`
     height: 50px;
   } 
 `
+const ButtonDelete = styled(Button)`
+  color: ${props => (props.theme.color_delete) };
+  background-color: ${props => (props.theme.COLOR_delete) };
+  
+  width: 50px;
+  height: 25px;
+  
+  border-radius: 4px;
+  
+  &:focus {outline:none;}
+`
+/*
+const BackgroundEachHero = styled(Div)`
+  background-color: ${props => (props.theme.COLOR_bg) };
+  border-radius: 50px;
+  position: absolute;
+  
+  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+    width: 50px;
+    height: 50px;
+  }
+ 
+  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+    width: 50px;
+    height: 50px;
+  } 
+  
+`
+*/
+
 const DivPlus = styled(Div)`
   margin: 2px;
   
@@ -311,7 +359,7 @@ const DivPlus = styled(Div)`
   height: 50px;
   
   &[data-is-focused='true'] > div {
-    background-color: ${props => (props.theme.color_weak) };
+    background-color: ${props => (props.theme.COLOR_save) };
   }
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
@@ -331,10 +379,15 @@ const DivIconPlus = styled(Div)`
   background-color: ${props => (props.theme.color_very_weak) };
 `
 
+
+
 const Position = ({
   indexPosition, listPosition, setListPosition, dictHeroBasic
   , locationAdding, setLocationAdding
 }) => {
+  
+  
+  const [trigger, setTrigger] = useState("");
   
   const listIsFocusedHeroDefault = new Array(5);
   const [listIsFocusedHero, setListIsFocusedHero] = useState(listIsFocusedHeroDefault);
@@ -370,6 +423,15 @@ const Position = ({
     setLocationAdding([indexPosition, indexHero]);
   }
   
+  const onClick_ButtonDelete = (event, indexPosition, idHero) => {
+    let listPositionTemp = listPosition;
+    listPositionTemp[indexPosition] = listPositionTemp[indexPosition].filter(tIdHero => tIdHero !== idHero);
+    
+    setListPosition(listPositionTemp);
+    setTrigger(Date.now().toString());
+  }
+  
+  
   
   const returnIsFocused = (indexPosition, indexItem) => {
     if (indexPosition === locationAdding[0] && indexItem === locationAdding[1]) {
@@ -393,7 +455,7 @@ const Position = ({
         const isFocused = returnIsFocused(indexPosition, indexHero);
         
         return (
-        
+          <>
           <DivEachHero 
             key={idHero}
             onClick = {(event) => onClick_Hero(event, indexPosition, indexHero)}
@@ -403,6 +465,15 @@ const Position = ({
             <ImgEachHero src={`https://heroes-talents.avantwing.com/images/heroes/${key_HeroesTalents}.png`} />
             
           </DivEachHero>
+          { (isFocused==='true')? 
+            <ButtonDelete
+              onClick={(event)=>onClick_ButtonDelete(event, indexPosition, idHero)}
+            > 
+              delete 
+            </ButtonDelete> 
+            : <> </> 
+            }
+          </>
         )
       })}
       
@@ -412,16 +483,17 @@ const Position = ({
         data-is-focused = {returnIsFocused(indexPosition, listPosition[indexPosition].length)}
       > 
         <DivIconPlus>
-          <IconPlus width={"30px"} height={"30px"} color={"COLOR_normal"} /> 
+          <IconPlus width={"30px"} height={"30px"} color={"COLOR_bg"} /> 
         </DivIconPlus>
         
       </DivPlus>
-      <Div> delete! </Div>
+      
       
       
     </DivPosition>
   )
 }
+
 
 
 
@@ -434,11 +506,22 @@ const DivEachMap = styled(Div)`
 `
 
 
+
+
+
  const Create = ({dictHeroBasic}) => {
   
   const listHeroDefault = [];
   //const listPositionDefault = new Array(5).fill(listHeroDefault);
   // for test
+  
+  
+  
+  
+  
+  
+  // error!!, Position 은 object 여야 한다?! 
+  
   const listPositionDefault = [
       ["Anub'arak", "Muradin"]
       , ["Genji"]
@@ -454,16 +537,16 @@ const DivEachMap = styled(Div)`
   
   // information of comp
   const [title, setTitle] = useState("");  // (no title)
-  const [author, setAuthor] = useState([""]);    // (anonymous)
+  const [author, setAuthor] = useState("");    // (anonymous)
   
-  const [listMap, setListMap] = useState(["all"]);
-  const [difficulty, setDifficulty] = useState(["normal"]);
+  const [maps, setMaps] = useState(["all"]);
+
   
   const [listPosition, setListPosition] = useState(listPositionDefault);
   
-  //const [rating, setRating] = useState([]);
+  const [rating, setRating] = useState({});
   
-  const [dictComment, setDictComment] = useState([]);
+  const [comments, setComments] = useState([]);
   
   
   
@@ -481,10 +564,58 @@ const DivEachMap = styled(Div)`
     }
   }, [idHeroChosen])
   
+  
+  const onClick_ButtonCreate = async (event) => {
+    let bodyRequest = {
+      
+      _id: Date.now().toString()
+      ,password: "1234"
+      
+      ,title: title
+      ,author: author
+    
+      
+      ,added: Date.now()
+      
+      ,maps: maps
+      ,tags: ["tag1"]
+      
+      ,listPosition: listPosition
+      
+      ,rating: rating
+      ,comments: comments
+    }
+    
+    await axios.post(`${config.URL_API_NS}/comp/`, bodyRequest);
+    
+    /*
+    ,password: String //?
+  
+    ,title: String
+    ,author: String
+    
+    ,added: Date
+    ,links: [String] //?
+    ,tags: [String] //?
+    
+    ,listPosition:[schemaPosition]
+    
+    ,rating: schemaRating
+    ,comments: [schemaComment]
+    */
+  }
+  
+  
   return (
   
   <DivCreate>
     <DivA> 
+      
+      <ButtonCreate
+        onClick={(event) => onClick_ButtonCreate(event)}
+      >
+        CREATE
+      </ButtonCreate>
     
       <DivCreatingComp>
       
@@ -517,7 +648,7 @@ const DivEachMap = styled(Div)`
         </DivThree>
         
         <DivFour> 
-          <Button> Create </Button>
+          <Div> <Input /> </Div>
         </DivFour>
         
         <DivFive>
