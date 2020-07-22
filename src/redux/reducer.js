@@ -26,7 +26,7 @@ const stateInitial = {
     
     ready : {
       planTeam: false
-      ,objAllHeroBasic: false
+      ,dictHeroBasic: false
     }
     
     ,loading : {
@@ -82,14 +82,14 @@ const stateInitial = {
     ,comp_gallery: {
       
       listComp : []  // searching
-      , vComp: {} // VIEW a comp
+      , fComp: {} // FOCUS a comp
       
-      , aComp: {} // ADD a comp
+      , cComp: {} // CREATE a comp
     }
     
     // common
     , hots: {
-      objAllHeroBasic: {}
+      dictHeroBasic: {}
     }
     
   };

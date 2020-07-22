@@ -8,9 +8,9 @@ import { Route, NavLink, Switch } from 'react-router-dom';
 
 import * as config from '../config';
 
-import Gallery from "../components/CompGallery/Gallery"
-import View from "../components/CompGallery/View"
-import Add from "../components/CompGallery/Add"
+import Gallery, {SubGallery} from "../components/CompGallery/Gallery"
+import Focus, {SubFocus} from "../components/CompGallery/Focus"
+import Create, {SubCreate} from "../components/CompGallery/Create"
 
 import { connect } from "react-redux";
 
@@ -32,11 +32,11 @@ const DivCompGallery = styled(Div)`
   justify-content: flex-start;
   align-items: center;
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
     
   }
 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
     
   }
 `;
@@ -52,7 +52,7 @@ const SubCompGallery = styled(Div)`
   
   
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
     top: 50px;
     left: 0px;
     
@@ -63,7 +63,7 @@ const SubCompGallery = styled(Div)`
   	border-bottom: 1px solid ${props => props.theme.color_very_weak};
   }
 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
     top: 0px;
     left: 0px;
     z-index: 1;
@@ -88,14 +88,14 @@ const Main = styled(Div)`
   justify-content: center;
   align-items: center;
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
     
-    margin-top: 100px; /* Sub + SubCompGallery */
+    margin-top: 50px; /* SubCompGallery */
   	
 	}
  
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    margin-left: 120px; /* Sub */
+  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+    
     margin-top: 50px; /* SubCompGallery */
     
   }
@@ -109,25 +109,25 @@ const CompGallery = ({
   match, location
   
   , authority
-  , readyObjAllHeroBasic
+  , readyDictHeroBasic
   , replaceAuthority
   , replaceData2
   , addRemoveNotification
   
 }) => {
   
-  // HeroBasic 가져오기
+  // comp-gallery 접속하자 마자, HeroBasic 가져오기
   useEffect( () => { 
     (async () => {
     
-      if (!readyObjAllHeroBasic ) {
+      if (!readyDictHeroBasic ) {
         
         try { 
           
           const {data} = await axios.get (`${config.URL_API_NS}/hero-basic/`);
           
-          replaceData2("hots", "objAllHeroBasic", data)
-          replaceData2("ready", "objAllHeroBasic", true)
+          replaceData2("hots", "dictHeroBasic", data)
+          replaceData2("ready", "dictHeroBasic", true)
           
         } 
         catch (error) { 
@@ -182,18 +182,26 @@ const CompGallery = ({
   
    return (
    <DivCompGallery>
-      
+    
       <SubCompGallery>
-        <Div> COMP GALLERY </Div>
+        <Switch>
+          <Route path="/comp-gallery/" exact={true} component={SubGallery} />
+          <Route path="/comp-gallery/focus"  component={SubFocus} />
+          <Route path="/comp-gallery/create"  component={SubCreate} />
+        </Switch>
       </SubCompGallery>
       
-      
+    {!readyDictHeroBasic?
+      <Div> loading </Div>
+     :
       <Main>
-      
-        
-        
+        <Switch>
+          <Route path="/comp-gallery/" exact={true} component={Gallery} />
+          <Route path="/comp-gallery/focus"  component={Focus} />
+          <Route path="/comp-gallery/create"  component={Create} />
+        </Switch>
       </Main>
-    
+    }
   
     </DivCompGallery>
     )
@@ -209,7 +217,7 @@ function mapStateToProps(state) {
   return { 
     authority: state.authority.comp_gallery
     
-    , readyObjAllHeroBasic: state.ready.objAllHeroBasic
+    , readyDictHeroBasic: state.ready.dictHeroBasic
   
   }; 
 } 

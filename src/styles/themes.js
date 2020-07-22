@@ -23,6 +23,11 @@ const common = {
         
         small_mid: 420 // 
         ,mid_big: 920 // 120 + 400 * 2
+        
+        ,comp_gallery :{
+            mid_big: 850 // 840 = 120 + 360 * 2
+        }
+        
     }
     
 }

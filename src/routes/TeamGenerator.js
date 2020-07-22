@@ -163,7 +163,7 @@ const TeamGenerator = ({
     // 참고2 https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables
     
     
-    if (!loadingPlanTeam && readyPlanTeam && (authority === "unknown") ) {
+    if (!loadingPlanTeam && readyPlanTeam && (authority === "viewer") ) {
       
       if (!passwordPlanTeamTrying) {
         replaceAuthority("team_generator", "viewer");

@@ -146,9 +146,9 @@ const NavLinkNavItem = styled(NavLink).attrs({ activeClassName })`
 	
 `;
 
-const checkActive = () => {
+const checkActive = (regex) => {
     
-    return /^(\/team-generator)/.test(window.location.pathname);
+    return regex.test(window.location.pathname);
 }
 
 
@@ -221,8 +221,8 @@ const Sub = ({match, location, replaceData, themeName}) => {
   	
 
 		<DivNavItem > <NavLinkNavItem to="/" exact={true}> Home </NavLinkNavItem> </DivNavItem>
-		<DivNavItem > <NavLinkNavItem to="/team-generator" isActive={checkActive} > Team Generator </NavLinkNavItem> </DivNavItem>
-		<DivNavItem > <NavLinkNavItem to="/comp-gallery" isActive={checkActive} > Comp Gallery </NavLinkNavItem> </DivNavItem>
+		<DivNavItem > <NavLinkNavItem to="/team-generator" isActive={()=>checkActive(/^(\/team-generator)/)} > Team Generator </NavLinkNavItem> </DivNavItem>
+		<DivNavItem > <NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > Comp Gallery </NavLinkNavItem> </DivNavItem>
 		
 		<DivButtonToggleMode>
 		

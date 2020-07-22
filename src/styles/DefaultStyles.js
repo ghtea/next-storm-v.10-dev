@@ -126,6 +126,11 @@ export const Div = styled.div`
  box-sizing: border-box;
 `
 
+// https://stackoverflow.com/questions/12991351/css-force-image-resize-and-keep-aspect-ratio
+export const Img = styled.img`
+ object-fit: cover;
+ width: 100%;
+`
 
 
  export const Button = styled.button`

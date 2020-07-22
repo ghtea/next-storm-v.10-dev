@@ -35,6 +35,16 @@ const DivGallery = styled(Div)`
 `;
 
 
+ export const SubGallery = ({}) => {
+  
+  return (
+  <Div>
+    search!
+  </Div>
+  
+  )
+}
+
 
  const Gallery = ({}) => {
   
@@ -43,7 +53,7 @@ const DivGallery = styled(Div)`
   return (
   
   <DivGallery>
-    ...
+    .hahaha
   </DivGallery>
   
   )
