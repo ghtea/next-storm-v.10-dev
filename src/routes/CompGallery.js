@@ -27,6 +27,7 @@ import IconLoading from '../svgs/basic/IconLoading'
 const DivCompGallery = styled(Div)`
   width: 100%;
   
+  
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -48,8 +49,6 @@ const SubCompGallery = styled(Div)`
   color: ${props => props.theme.color_normal};
   
   position: fixed;
-  display: flex;
-  
   
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
@@ -66,7 +65,7 @@ const SubCompGallery = styled(Div)`
   @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
     top: 0px;
     left: 0px;
-    z-index: 1;
+    z-index: 10;
     
     width: 100%;
   	height: 50px; 
@@ -80,23 +79,28 @@ const SubCompGallery = styled(Div)`
 
 const Main = styled(Div)`
   
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 120px);
+  height: calc(100% - 50px);
+  
+  position: fixed;
   
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  
+  
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
     
-    margin-top: 50px; /* SubCompGallery */
-  	
+    top: 50px; /* SubCompGallery */
+  	left: 120px;
 	}
  
   @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
     
-    margin-top: 50px; /* SubCompGallery */
+    top: 50px; 
+    left: 120px;
     
   }
 `

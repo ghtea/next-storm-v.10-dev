@@ -1,0 +1,301 @@
+import dotenv from 'dotenv';
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
+
+import axios from 'axios';
+
+import { connect } from "react-redux";
+
+import * as config from '../../../config';
+
+
+import addRemoveNotification from "../../../redux/thunks/addRemoveNotification";
+//import {replaceWorking} from "../../../redux/store";
+
+//import { NavLink, useHistory } from 'react-router-dom';
+
+import {Div, Input, Button, Img} from '../../../styles/DefaultStyles';
+
+
+
+import useInput from '../../../tools/hooks/useInput';
+import {getTimeStamp} from '../../../tools/vanilla/time';
+
+import IconPlus from '../../../svgs/basic/IconPlus'
+
+
+
+//
+const DivPosition = styled(Div)`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+`
+
+const DivEachHero = styled(Div)`
+
+  margin: 2px;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  
+  &:nth-child(n+2) img {
+    opacity: 0.66;
+  }
+  
+  
+  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+    
+  }
+ 
+  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+    
+  } 
+  
+  
+`
+
+const ContainerImgEachHero = styled(Div)`
+
+  cursor: pointer;
+  
+  position: relative;
+  
+  
+  &[data-is-focused='true'] {
+    border: 3px solid ${props => (props.theme.COLOR_delete) };
+    border-radius: 6px 6px 0 0;
+  }
+  
+  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+    
+  }
+ 
+  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+    width: 50px;
+    height: 50px;
+  } 
+  
+  
+`
+const ImgEachHero = styled(Img)`
+  border-radius: 50%;
+  
+  position: absolute;
+  z-index:2;
+  
+  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+    object-fit: cover;
+    width: 50px;
+    height: 50px;
+  }
+ 
+  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+    object-fit: cover;
+    width: 50px;
+    height: 50px;
+  } 
+`
+const ButtonDelete = styled(Button)`
+  color: ${props => (props.theme.color_delete) };
+  background-color: ${props => (props.theme.COLOR_delete) };
+  
+  width: 50px;
+  height: 20px;
+  
+  border-radius: 0 0 6px 6px;
+  
+  &:focus {outline:none;}
+`
+/*
+const BackgroundEachHero = styled(Div)`
+  background-color: ${props => (props.theme.COLOR_bg) };
+  border-radius: 50px;
+  position: absolute;
+  
+  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+    width: 50px;
+    height: 50px;
+  }
+ 
+  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+    width: 50px;
+    height: 50px;
+  } 
+  
+`
+*/
+
+const DivPlus = styled(Div)`
+  margin: 2px;
+  
+  width: 50px;
+  height: 50px;
+  
+  &[data-is-focused='true'] > div {
+    background-color: ${props => (props.theme.COLOR_save) };
+  }
+  
+  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+    
+  }
+ 
+  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+    
+  } 
+`
+
+const DivIconPlus = styled(Div)`
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  
+  background-color: ${props => (props.theme.color_very_weak) };
+`
+
+
+
+const Position = ({
+  indexPosition, listPosition, setListPosition, dictHeroBasic
+  , locationAdding, setLocationAdding
+}) => {
+  
+  
+  const [trigger, setTrigger] = useState("");
+  
+  const listIsFocusedHeroDefault = new Array(5);
+  const [listIsFocusedHero, setListIsFocusedHero] = useState(listIsFocusedHeroDefault);
+  const [doesHaveFocusedHero, setDoesHaveFocusedHero] = useState(false);
+  
+  useEffect(()=>{
+    console.log(listIsFocusedHero)
+    if (listIsFocusedHero.includes(true)){
+      setDoesHaveFocusedHero(true);
+      
+    }
+    else {
+      setDoesHaveFocusedHero(false);
+    }
+  },[listIsFocusedHero])
+  
+  
+  useEffect(()=>{
+    if (locationAdding[0] ===  indexPosition && locationAdding[1] < listPosition[indexPosition].length) {
+      setDoesHaveFocusedHero(true);
+    }
+    else {
+      setDoesHaveFocusedHero(false);
+    }
+  }, [ locationAdding[0], locationAdding[1] ])
+  
+  
+  const onClick_Hero = (event, indexPosition, indexHero) => {
+    setLocationAdding([indexPosition, indexHero]);
+  }
+  
+  const onClick_Plus = (event, indexPosition, indexHero) => {
+    setLocationAdding([indexPosition, indexHero]);
+  }
+  
+  const onClick_ButtonDelete = (event, indexPosition, idHero) => {
+    let listPositionTemp = listPosition;
+    listPositionTemp[indexPosition]["listIdHero"] = listPositionTemp[indexPosition]["listIdHero"].filter(tIdHero => tIdHero !== idHero);
+    
+    setListPosition(listPositionTemp);
+    setTrigger(Date.now().toString());
+  }
+  
+  
+  
+  const returnIsFocused = (indexPosition, indexItem) => {
+    if (indexPosition === locationAdding[0] && indexItem === locationAdding[1]) {
+
+      return 'true';
+    }
+    else {
+      
+      return 'false';
+    }
+  }
+  
+  
+  return (
+  
+    <DivPosition>
+      {listPosition[indexPosition]["listIdHero"].map((idHero, indexHero) => {
+        
+        const tHeroBasic = dictHeroBasic.find(element => element._id === idHero)
+        const key_HeroesTalents = tHeroBasic['key_HeroesTalents']
+        const isFocused = returnIsFocused(indexPosition, indexHero);
+        
+        return (
+          <DivEachHero
+            key={`${indexPosition}-${indexHero}-${idHero}`}
+          >
+            <ContainerImgEachHero 
+              
+              onClick = {(event) => onClick_Hero(event, indexPosition, indexHero)}
+              data-is-focused = {isFocused}
+            > 
+            
+              <ImgEachHero src={`https://heroes-talents.avantwing.com/images/heroes/${key_HeroesTalents}.png`} />
+              
+            </ContainerImgEachHero>
+            { (isFocused==='true')? 
+              <ButtonDelete
+                onClick={(event)=>onClick_ButtonDelete(event, indexPosition, idHero)}
+              > 
+                delete 
+              </ButtonDelete> 
+              : <> </> 
+              }
+          </DivEachHero >
+        )
+      })}
+      
+      
+      <DivPlus
+        onClick = {(event) => onClick_Plus(event, indexPosition, listPosition[indexPosition].length)}
+        data-is-focused = {returnIsFocused(indexPosition, listPosition[indexPosition].length)}
+      > 
+        <DivIconPlus>
+          <IconPlus width={"30px"} height={"30px"} color={"COLOR_bg"} /> 
+        </DivIconPlus>
+        
+      </DivPlus>
+      
+      
+      
+    </DivPosition>
+  )
+}
+
+
+
+
+
+  
+
+
+function mapStateToProps(state) { 
+  return { 
+    //dictHeroBasic: state.hots.dictHeroBasic
+    //ready: state.ready 
+   // ,loading: state.loading
+    ///,working: state.working
+  }; 
+} 
+
+function mapDispatchToProps(dispatch) { 
+  return { 
+    //readPlanTeam: (idPlanTeam) => dispatch(readPlanTeam(idPlanTeam)) 
+    //,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    //,replaceWorking: (which, true_false) => dispatch(replaceWorking(which, true_false))
+  }; 
+}
+
+// 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다
+export default connect(mapStateToProps, mapDispatchToProps)(Position);

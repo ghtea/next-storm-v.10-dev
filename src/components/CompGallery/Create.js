@@ -17,6 +17,7 @@ import { NavLink, useHistory } from 'react-router-dom';
 import {Div, Input, Button, Img} from '../../styles/DefaultStyles';
 
 import ChooseHero from './Create/ChooseHero';
+import Position from './Create/Position';
 
 import useInput from '../../tools/hooks/useInput';
 import {getTimeStamp} from '../../tools/vanilla/time';
@@ -27,18 +28,22 @@ import IconPlus from '../../svgs/basic/IconPlus'
 
 
 const DivCreate = styled(Div)`
-  width: 100%;
-  height:100%;
+  width: calc(100% - 120px);
+  height: calc(100% - 50px);
   
   display: grid;
   align-items: start;
+  
+  position: fixed;
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
     grid-template-columns: 1fr;
     grid-template-rows: minmax(240px, 360px)  minmax(360px, 480px);
     grid-template-areas: 
       "A"
-      "B"
+      "B";
+    grid-gap: 20px;
+    
   }
  
 
@@ -47,16 +52,35 @@ const DivCreate = styled(Div)`
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
     grid-template-areas: 
-      "A B"
+      "A B";
+    grid-gap: 20px;
+    
   }
 `;
 
-const DivA = styled(Div)`
+
+const ContainerA = styled(Div)`
   grid-area: A;
+  height: 100%;
+  position: relative;
+`
+
+const ContainerB = styled(Div)`
+  grid-area: B;
+  height: 100%;
+  position: relative;
+`
+
+
+
+const DivA = styled(Div)`
+  overflow-y: auto;
+  position: absolute;
+  height: 100%;
   
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
@@ -69,8 +93,14 @@ const DivA = styled(Div)`
 `
 
 const DivB = styled(Div)`
+  overflow-y: auto;
+  position: absolute;
+  height: 100%;
   
-  grid-area: B;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
     
@@ -90,12 +120,18 @@ const ButtonCreate = styled(Button)`
   
   border-radius: 10px;
   
-  margin: 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
 `
 
 const DivCreatingComp = styled(Div)`
   width: 100%;
   height:100%;
+  
+  margin-top: 5px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
   
   display: grid;
   
@@ -104,7 +140,7 @@ const DivCreatingComp = styled(Div)`
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
     grid-template-columns: 300px;
-    grid-template-rows: 45px 60px 300px 45px minmax(45px, 300px);
+    grid-template-rows: 130px 60px 300px 45px 300px;
     grid-template-areas: 
       "One"
       "Two"
@@ -117,7 +153,7 @@ const DivCreatingComp = styled(Div)`
   @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
     
     grid-template-columns: 60px 300px; /* 270 = (2+50+2)*5 */
-    grid-template-rows: 45px 300px 45px minmax(45px, 300px);
+    grid-template-rows: 130px 300px 45px 300px;
     grid-template-areas: 
       "One One"
       "Two Three"
@@ -137,8 +173,8 @@ const DivOne = styled(Div)`
   color: ${props => props.theme.color_normal};
   
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
@@ -242,7 +278,7 @@ const DivFive = styled(Div)`
   
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-evenly;
   align-items: center;
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
@@ -270,235 +306,27 @@ export const SubCreate = ({}) => {
 
 
 
-//
-const DivPosition = styled(Div)`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-`
+// Own
+const InputCommon = styled(Input)`
+  height: 30px;
+  
+  border: 2px solid ${props => props.theme.color_very_weak};
+  margin-left: 8px;
+  margin-right: 8px;
+  
+  margin-bottom: 4px;
+  margin-top: 4px;
 
-const DivEachHero = styled(Div)`
-
-  margin: 2px;
-  cursor: pointer;
-  
-  position: relative;
-  
-  &:nth-child(n+2) img {
-    opacity: 0.66;
-  }
-  
-  &[data-is-focused='true'] {
-    border: 3px solid ${props => (props.theme.COLOR_delete) };
-  }
-  
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    width: 50px;
-    height: 50px;
-  } 
-  
-  
-`
-const ImgEachHero = styled(Img)`
-  border-radius: 50%;
-  
-  position: absolute;
-  z-index:2;
-  
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    object-fit: cover;
-    width: 50px;
-    height: 50px;
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    object-fit: cover;
-    width: 50px;
-    height: 50px;
-  } 
-`
-const ButtonDelete = styled(Button)`
-  color: ${props => (props.theme.color_delete) };
-  background-color: ${props => (props.theme.COLOR_delete) };
-  
-  width: 50px;
-  height: 25px;
-  
   border-radius: 4px;
-  
-  &:focus {outline:none;}
-`
-/*
-const BackgroundEachHero = styled(Div)`
-  background-color: ${props => (props.theme.COLOR_bg) };
-  border-radius: 50px;
-  position: absolute;
-  
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    width: 50px;
-    height: 50px;
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    width: 50px;
-    height: 50px;
-  } 
-  
-`
-*/
-
-const DivPlus = styled(Div)`
-  margin: 2px;
-  
-  width: 50px;
-  height: 50px;
-  
-  &[data-is-focused='true'] > div {
-    background-color: ${props => (props.theme.COLOR_save) };
-  }
-  
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    
-  } 
-`
-
-const DivIconPlus = styled(Div)`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  
-  background-color: ${props => (props.theme.color_very_weak) };
 `
 
 
-
-const Position = ({
-  indexPosition, listPosition, setListPosition, dictHeroBasic
-  , locationAdding, setLocationAdding
-}) => {
-  
-  
-  const [trigger, setTrigger] = useState("");
-  
-  const listIsFocusedHeroDefault = new Array(5);
-  const [listIsFocusedHero, setListIsFocusedHero] = useState(listIsFocusedHeroDefault);
-  const [doesHaveFocusedHero, setDoesHaveFocusedHero] = useState(false);
-  
-  useEffect(()=>{
-    console.log(listIsFocusedHero)
-    if (listIsFocusedHero.includes(true)){
-      setDoesHaveFocusedHero(true);
-      
-    }
-    else {
-      setDoesHaveFocusedHero(false);
-    }
-  },[listIsFocusedHero])
-  
-  
-  useEffect(()=>{
-    if (locationAdding[0] ===  indexPosition && locationAdding[1] < listPosition[indexPosition].length) {
-      setDoesHaveFocusedHero(true);
-    }
-    else {
-      setDoesHaveFocusedHero(false);
-    }
-  }, [ locationAdding[0], locationAdding[1] ])
-  
-  
-  const onClick_Hero = (event, indexPosition, indexHero) => {
-    setLocationAdding([indexPosition, indexHero]);
-  }
-  
-  const onClick_Plus = (event, indexPosition, indexHero) => {
-    setLocationAdding([indexPosition, indexHero]);
-  }
-  
-  const onClick_ButtonDelete = (event, indexPosition, idHero) => {
-    let listPositionTemp = listPosition;
-    listPositionTemp[indexPosition] = listPositionTemp[indexPosition].filter(tIdHero => tIdHero !== idHero);
-    
-    setListPosition(listPositionTemp);
-    setTrigger(Date.now().toString());
-  }
-  
-  
-  
-  const returnIsFocused = (indexPosition, indexItem) => {
-    if (indexPosition === locationAdding[0] && indexItem === locationAdding[1]) {
-
-      return 'true';
-    }
-    else {
-      
-      return 'false';
-    }
-  }
-  
-  
-  return (
-  
-    <DivPosition>
-      {listPosition[indexPosition].map((idHero, indexHero) => {
-        
-        const tHeroBasic = dictHeroBasic.find(element => element._id === idHero)
-        const key_HeroesTalents = tHeroBasic['key_HeroesTalents']
-        const isFocused = returnIsFocused(indexPosition, indexHero);
-        
-        return (
-          <>
-          <DivEachHero 
-            key={idHero}
-            onClick = {(event) => onClick_Hero(event, indexPosition, indexHero)}
-            data-is-focused = {isFocused}
-          > 
-          
-            <ImgEachHero src={`https://heroes-talents.avantwing.com/images/heroes/${key_HeroesTalents}.png`} />
-            
-          </DivEachHero>
-          { (isFocused==='true')? 
-            <ButtonDelete
-              onClick={(event)=>onClick_ButtonDelete(event, indexPosition, idHero)}
-            > 
-              delete 
-            </ButtonDelete> 
-            : <> </> 
-            }
-          </>
-        )
-      })}
-      
-      
-      <DivPlus
-        onClick = {(event) => onClick_Plus(event, indexPosition, listPosition[indexPosition].length)}
-        data-is-focused = {returnIsFocused(indexPosition, listPosition[indexPosition].length)}
-      > 
-        <DivIconPlus>
-          <IconPlus width={"30px"} height={"30px"} color={"COLOR_bg"} /> 
-        </DivIconPlus>
-        
-      </DivPlus>
-      
-      
-      
-    </DivPosition>
-  )
-}
+const InputContentComment =  styled(InputCommon)`
+  height: 240px;
+`
 
 
-
-
-
-
+// Two
 const DivEachMap = styled(Div)`
   width: auto;
   margin-left: auto;
@@ -522,32 +350,51 @@ const DivEachMap = styled(Div)`
   
   // error!!, Position 은 object 여야 한다?! 
   
+  
   const listPositionDefault = [
-      ["Anub'arak", "Muradin"]
-      , ["Genji"]
-      , ["Maiev", "Cassia"]
-      , ["Mephisto", "Orphea"]
-      , ["Rehgar", "Kharazim"]
-    ]
+    {
+      listIdHero: ["Anub'arak", "Muradin"]
+    }
+    
+    ,{
+      listIdHero: ["Genji"]
+    }
+    
+    ,{
+      listIdHero: ["Maiev", "Cassia"]
+    }
+    
+    ,{
+      listIdHero: ["Mephisto", "Orphea"]
+    }
+    
+    ,{
+      listIdHero: ["Rehgar", "Kharazim"]
+    }
+  ];
+    
+      
   
   //console.log(listPositionDefault);
+  
   
   const [trigger, setTrigger] = useState("");
   
   
   // information of comp
-  const [title, setTitle] = useState("");  // (no title)
-  const [author, setAuthor] = useState("");    // (anonymous)
+  const inputTitle = useInput(""); // {value, setValue, onChange};
+  const inputAuthor = useInput("");
+  
+  const inputPassword1 = useInput("");
+  const inputPassword2 = useInput("");
   
   const [maps, setMaps] = useState(["all"]);
-
-  
   const [listPosition, setListPosition] = useState(listPositionDefault);
   
   const [rating, setRating] = useState({});
   
-  const [comments, setComments] = useState([]);
-  
+  const inputContentComment = useInput("");
+  const inputLinkComment = useInput("");
   
   
   const [locationAdding, setLocationAdding] = useState([0,0]);
@@ -556,7 +403,7 @@ const DivEachMap = styled(Div)`
   useEffect(()=>{
     if (idHeroChosen != "") {
       let listPositionTemp = listPosition;
-      listPositionTemp[locationAdding[0]][locationAdding[1]] = idHeroChosen;
+      listPositionTemp[locationAdding[0]]["listIdHero"][locationAdding[1]] = idHeroChosen;
       setListPosition(listPositionTemp);
       
       setTrigger(Date.now().toString());
@@ -566,13 +413,20 @@ const DivEachMap = styled(Div)`
   
   
   const onClick_ButtonCreate = async (event) => {
+    
+    const comment = {
+      author: inputAuthor.value
+      , content: inputContentComment.value
+      , link: inputLinkComment.value
+    }
+    
     let bodyRequest = {
       
       _id: Date.now().toString()
       ,password: "1234"
       
-      ,title: title
-      ,author: author
+      ,title: inputTitle.value
+      ,author: inputAuthor.value
     
       
       ,added: Date.now()
@@ -583,7 +437,7 @@ const DivEachMap = styled(Div)`
       ,listPosition: listPosition
       
       ,rating: rating
-      ,comments: comments
+      ,comments: [comment]
     }
     
     await axios.post(`${config.URL_API_NS}/comp/`, bodyRequest);
@@ -609,61 +463,71 @@ const DivEachMap = styled(Div)`
   return (
   
   <DivCreate>
-    <DivA> 
-      
-      <ButtonCreate
-        onClick={(event) => onClick_ButtonCreate(event)}
-      >
-        CREATE
-      </ButtonCreate>
-    
-      <DivCreatingComp>
-      
-        <DivOne> 
-          <Div> crazy dropship {`${locationAdding[0]}, ${locationAdding[1]}`} </Div>
-          <Div> author </Div>
-        </DivOne>
-      
-        <DivTwo> 
-          <DivEachMap> Cursed Hollow </DivEachMap>
-          <Div> Easy </Div>
-        </DivTwo>
-      
-        <DivThree>
-          {[0,1,2,3,4].map(element => {
-            return (
-              <Position 
-                key={`Position${element}`} 
-                indexPosition={element} 
-                
-                listPosition={listPosition} 
-                setListPosition={setListPosition} 
-                
-                dictHeroBasic={dictHeroBasic} 
-                
-                locationAdding={locationAdding}
-                setLocationAdding={setLocationAdding} />
-            ) 
-          })}
-        </DivThree>
+    <ContainerA>
+      <DivA> 
         
-        <DivFour> 
-          <Div> <Input /> </Div>
-        </DivFour>
+        <ButtonCreate
+          onClick={(event) => onClick_ButtonCreate(event)}
+        >
+          CREATE
+        </ButtonCreate>
+      
+        <DivCreatingComp>
         
-        <DivFive>
-          <Div> </Div>
-        </DivFive>
+          <DivOne> 
+          
+            <Div>  <InputCommon  {...inputTitle} placeholder="title of comp" />  </Div>
+            <Div> <InputCommon  {...inputAuthor} placeholder="author" />  </Div>
+            <Div> 
+              <InputCommon  {...inputPassword1} placeholder="password" /> 
+              <InputCommon {...inputPassword1} placeholder="password again" /> 
+            </Div>
+            
+          </DivOne>
+        
+          <DivTwo> 
+            <DivEachMap> Cursed Hollow </DivEachMap>
+          </DivTwo>
+        
+          <DivThree>
+            {[0,1,2,3,4].map((element, index) => {
+              return (
+              
+                <Position 
+                  key={index}  
+                  indexPosition={element} 
+                  
+                  listPosition={listPosition} 
+                  setListPosition={setListPosition} 
+                  
+                  dictHeroBasic={dictHeroBasic} 
+                  
+                  locationAdding={locationAdding}
+                  setLocationAdding={setLocationAdding} />
+              ) 
+            })}
+          </DivThree>
+          
+          <DivFour> 
+            <Div> 아직 안정했다.. </Div>
+          </DivFour>
+          
+          <DivFive>
+            <Div> <InputContentComment  {...inputContentComment} placeholder="comment" /> </Div>
+            <Div> <InputCommon  {...inputLinkComment} placeholder="link" /> </Div>
+          </DivFive>
+        
+        </DivCreatingComp>
+        
       
-      </DivCreatingComp>
-      
+      </DivA>
+    </ContainerA>
     
-    </DivA>
-    
-    <DivB>
-      <ChooseHero setIdHeroChosen={setIdHeroChosen}/> 
-    </DivB>
-    
+    <ContainerB>
+      <DivB>
+        <ChooseHero setIdHeroChosen={setIdHeroChosen}/> 
+      </DivB>
+    </ContainerB>
   </DivCreate>
   
   )

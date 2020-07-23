@@ -28,7 +28,7 @@ const DivSub = styled(Div)`
 	background-color: ${props => props.theme.COLOR_normal};
   color: ${props => props.theme.color_strong};
   
-  z-index: 2; 
+  z-index: 100; 
   
   position: fixed;
   top: 0px;
