@@ -23,7 +23,7 @@ import useInput from '../../tools/hooks/useInput';
 import {getTimeStamp} from '../../tools/vanilla/time';
 
 import IconPlus from '../../svgs/basic/IconPlus'
-
+import * as imgHero from '../../images/heroes'
 
 
 
@@ -306,6 +306,9 @@ export const SubCreate = ({}) => {
 
 
 
+
+
+
 // Own
 const InputCommon = styled(Input)`
   height: 30px;
@@ -397,19 +400,39 @@ const DivEachMap = styled(Div)`
   const inputLinkComment = useInput("");
   
   
-  const [locationAdding, setLocationAdding] = useState([0,0]);
+  // Hero Map 선택
+  const [whichAdding, setWhichAdding] = useState("Hero"); // Hero, Map
+  
+  const [locationAddingHero, setLocationAddingHero] = useState([0,0]);
   const [idHeroChosen, setIdHeroChosen] = useState("");
   
+  const [locationAddingMap, setLocationAddingMap] = useState([0]);
+  const [idMapChosen, setIdMapChosen] = useState("");
+  
   useEffect(()=>{
-    if (idHeroChosen != "") {
+    
+    //console.log("idHeroChosen is changed");
+    //console.log(idHeroChosen);
+    //console.log(whichAdding);
+    
+    if (idHeroChosen != "" && whichAdding === "Hero") {
       let listPositionTemp = listPosition;
-      listPositionTemp[locationAdding[0]]["listIdHero"][locationAdding[1]] = idHeroChosen;
+      listPositionTemp[locationAddingHero[0]]["listIdHero"][locationAddingHero[1]] = idHeroChosen;
       setListPosition(listPositionTemp);
       
+      //console.log("hi")
       setTrigger(Date.now().toString());
-      console.log(listPosition);
     }
   }, [idHeroChosen])
+  
+  
+  // important!!! https://github.com/reactjs/reactjs.org/issues/1689
+  const setIdHeroChosenForChild = (idHero) => { setIdHeroChosen(idHero); }
+  const setListPositionForChild = (listPosition) => { setListPosition(listPosition); }
+  const setWhichAddingForChild = (one) => { setWhichAdding(one); }
+  const setLocationAddingHeroForChild = (location) => { setLocationAddingHero(location); }
+  const setLocationAddingMapForChild = (location) => { setLocationAddingMap(location); }
+  
   
   
   const onClick_ButtonCreate = async (event) => {
@@ -460,6 +483,20 @@ const DivEachMap = styled(Div)`
   }
   
   
+  const returnChoose = (whichAdding) => {
+    switch (whichAdding) {
+      case "Hero":
+        return (<ChooseHero setIdHeroChosenForChild={setIdHeroChosenForChild}/>);
+        break;
+      case "Map":
+        return (<Div> choose map </Div>);
+        break;
+      case "Tag":
+        return (<Div> choose tag </Div>);
+        break;
+    }
+  }
+  
   return (
   
   <DivCreate>
@@ -494,16 +531,20 @@ const DivEachMap = styled(Div)`
               return (
               
                 <Position 
+                  
                   key={index}  
                   indexPosition={element} 
                   
+                  idHeroChosen={idHeroChosen}
+                  
                   listPosition={listPosition} 
-                  setListPosition={setListPosition} 
+                  setListPositionForChild={setListPositionForChild} 
                   
                   dictHeroBasic={dictHeroBasic} 
                   
-                  locationAdding={locationAdding}
-                  setLocationAdding={setLocationAdding} />
+                  setWhichAddingForChild={setWhichAddingForChild}
+                  locationAddingHero={locationAddingHero}
+                  setLocationAddingHeroForChild={setLocationAddingHeroForChild} />
               ) 
             })}
           </DivThree>
@@ -525,7 +566,7 @@ const DivEachMap = styled(Div)`
     
     <ContainerB>
       <DivB>
-        <ChooseHero setIdHeroChosen={setIdHeroChosen}/> 
+        {returnChoose(whichAdding)} 
       </DivB>
     </ContainerB>
   </DivCreate>

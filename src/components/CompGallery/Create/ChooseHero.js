@@ -18,6 +18,7 @@ import useInput from '../../../tools/hooks/useInput';
 import {getTimeStamp} from '../../../tools/vanilla/time';
 
 import IconWorking from '../../../svgs/IconWorking'
+import * as imgHero from '../../../images/heroes'
 
 
 const DivChooseHero = styled(Div)`
@@ -106,7 +107,7 @@ const ImgEachHero = styled(Img)`
 `
 
 
- const ChooseHero = ({dictHeroBasic, setIdHeroChosen } ) => {
+ const ChooseHero = ({dictHeroBasic, setIdHeroChosenForChild } ) => {
   
     const dictTank = dictHeroBasic.filter(objHero => objHero.role === "Tank");
     const dictBruiser = dictHeroBasic.filter(objHero => objHero.role === "Bruiser");
@@ -117,7 +118,7 @@ const ImgEachHero = styled(Img)`
     
     
     const onClick_Hero = (event, idHero) => {
-      setIdHeroChosen(idHero);
+      setIdHeroChosenForChild(idHero);
     }
   
   return (
@@ -149,7 +150,7 @@ const ImgEachHero = styled(Img)`
                 <DivEachHero key={idHero}
                   onClick={(event)=> onClick_Hero(event, idHero)}
                 > 
-                  <ImgEachHero src={`https://heroes-talents.avantwing.com/images/heroes/${key_HeroesTalents}.png`} />
+                  <ImgEachHero src={imgHero[key_HeroesTalents]} />
                 </DivEachHero>
               )
             })}
@@ -169,7 +170,7 @@ const ImgEachHero = styled(Img)`
                 <DivEachHero key={idHero}
                   onClick={(event)=> onClick_Hero(event, idHero)}  
                 > 
-                  <ImgEachHero src={`https://heroes-talents.avantwing.com/images/heroes/${key_HeroesTalents}.png`} />
+                  <ImgEachHero src={imgHero[key_HeroesTalents]} />
                 </DivEachHero>
               )
             })}
@@ -189,7 +190,7 @@ const ImgEachHero = styled(Img)`
                 <DivEachHero key={idHero}
                   onClick={(event)=> onClick_Hero(event, idHero)}  
                 >
-                  <ImgEachHero src={`https://heroes-talents.avantwing.com/images/heroes/${key_HeroesTalents}.png`} />
+                  <ImgEachHero src={imgHero[key_HeroesTalents]} />
                 </DivEachHero>
               )
             })}
@@ -209,7 +210,7 @@ const ImgEachHero = styled(Img)`
                 <DivEachHero key={idHero}
                   onClick={(event)=> onClick_Hero(event, idHero)}  
                 >
-                  <ImgEachHero src={`https://heroes-talents.avantwing.com/images/heroes/${key_HeroesTalents}.png`} />
+                  <ImgEachHero src={imgHero[key_HeroesTalents]} />
                 </DivEachHero>
               )
             })}
@@ -229,7 +230,7 @@ const ImgEachHero = styled(Img)`
                 <DivEachHero key={idHero}
                   onClick={(event)=> onClick_Hero(event, idHero)}  
                 >
-                  <ImgEachHero src={`https://heroes-talents.avantwing.com/images/heroes/${key_HeroesTalents}.png`} />
+                  <ImgEachHero src={imgHero[key_HeroesTalents]} />
                 </DivEachHero>
               )
             })}
@@ -249,7 +250,7 @@ const ImgEachHero = styled(Img)`
                 <DivEachHero key={idHero}
                   onClick={(event)=> onClick_Hero(event, idHero)}  
                 >
-                  <ImgEachHero src={`https://heroes-talents.avantwing.com/images/heroes/${key_HeroesTalents}.png`} />
+                  <ImgEachHero src={imgHero[key_HeroesTalents]} />
                 </DivEachHero>
               )
             })}

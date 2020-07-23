@@ -28,6 +28,19 @@ import * as imgHero from '../../../images/heroes'
 
 
 
+
+
+
+
+
+//
+const DivPosition = styled(Div)`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+`
+
 const DivEachHero = styled(Div)`
 
   margin: 2px;
@@ -152,94 +165,19 @@ const DivIconPlus = styled(Div)`
 `
 
 
-
-const Hero = ({
-  idHero, indexHero
-  
-  ,returnIsFocused
-  
-  ,idHeroChosen
-  , indexPosition, listPosition, setListPositionForChild, dictHeroBasic
-  , setWhichAddingForChild, locationAddingHero, setLocationAddingHeroForChild
-  
-}) => {
-        
-  
-  const [trigger, setTrigger] = useState("");
-  
-  const onClick_Hero = (event, indexPosition, indexHero) => {
-    setLocationAddingHeroForChild([indexPosition, indexHero]);
-    setWhichAddingForChild("Hero");
-    
-  }
-  
-  
-  
-  const onClick_ButtonDelete = (event, indexPosition, idHero) => {
-    let listPositionTemp = listPosition;
-    listPositionTemp[indexPosition]["listIdHero"] = listPositionTemp[indexPosition]["listIdHero"].filter(tIdHero => tIdHero !== idHero);
-    
-    setListPositionForChild(listPositionTemp);
-  }
-  
-  
-  
-  
-  const tHeroBasic = dictHeroBasic.find(element => element._id === idHero)
-  
-  const key_HeroesTalents = tHeroBasic['key_HeroesTalents']
-  const isFocused = returnIsFocused(indexPosition, indexHero);
-  
-  
-  return (
-    <DivEachHero
-      key={`${indexPosition}-${indexHero}-${idHero}`}
-    >
-      <ContainerImgEachHero 
-        
-        onClick = {(event) => onClick_Hero(event, indexPosition, indexHero)}
-        data-is-focused = {isFocused}
-      > 
-      
-        <ImgEachHero 
-          src={imgHero[key_HeroesTalents]}
-          />
-        
-      </ContainerImgEachHero>
-      { (isFocused==='true')? 
-        <ButtonDelete
-          onClick={(event)=>onClick_ButtonDelete(event, indexPosition, idHero)}
-        > 
-          delete 
-        </ButtonDelete> 
-        : <> </> 
-        }
-    </DivEachHero >
-  )
-}
-
-
-
-//
-const DivPosition = styled(Div)`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-`
-
-
-
 // image rerendering problem
 //https://stackoverflow.com/questions/47922687/force-react-to-reload-an-image-file
 // https://www.npmjs.com/package/react-image
 const Position = ({
   idHeroChosen
-  , indexPosition, listPosition, setListPositionForChild, dictHeroBasic
-  , setWhichAddingForChild, locationAddingHero, setLocationAddingHeroForChild
+  , indexPosition, listPosition, setListPosition, dictHeroBasic
+  , setWhichAdding, locationAddingHero, setLocationAddingHero
 }) => {
   
-  
+  useEffect(()=>{
+    console.log("Position has rerendered") 
+    console.log(listPosition)
+  })
   
   const [trigger, setTrigger] = useState("");
   
@@ -268,10 +206,30 @@ const Position = ({
     }
   }, [ locationAddingHero[0], locationAddingHero[1] ])
   
-  const onClick_Plus = (event, indexPosition, indexHero) => {
-    setLocationAddingHeroForChild([indexPosition, indexHero]);
-    setWhichAddingForChild("Hero");
+  
+  const onClick_Hero = (event, indexPosition, indexHero) => {
+    setLocationAddingHero([indexPosition, indexHero]);
+    setWhichAdding("Hero");
+    
   }
+  
+  const onClick_Plus = (event, indexPosition, indexHero) => {
+    setLocationAddingHero([indexPosition, indexHero]);
+    setWhichAdding("Hero");
+  }
+  
+  const onClick_ButtonDelete = (event, indexPosition, idHero) => {
+    let listPositionTemp = listPosition;
+    listPositionTemp[indexPosition]["listIdHero"] = listPositionTemp[indexPosition]["listIdHero"].filter(tIdHero => tIdHero !== idHero);
+    
+    setListPosition(listPositionTemp);
+  }
+  
+  const onLoad_Img = () => {
+    setTrigger(Date.now().toString());
+  }
+  
+  
   
   const returnIsFocused = (indexPosition, indexItem) => {
     if (indexPosition === locationAddingHero[0] && indexItem === locationAddingHero[1]) {
@@ -288,26 +246,41 @@ const Position = ({
   return (
   
     <DivPosition>
-      {listPosition[indexPosition]["listIdHero"].map((idHero, indexHero) => 
-        (
-        <Hero 
-          key={idHero}
-          idHero={idHero}
-          indexHero={indexHero}
-          
-          returnIsFocused={returnIsFocused}
-          
-          idHeroChosen={idHeroChosen}
-          indexPosition={indexPosition}
-          listPosition={listPosition}
-          setListPositionForChild={setListPositionForChild}
-          dictHeroBasic={dictHeroBasic}
-          setWhichAddingForChild={setWhichAddingForChild}
-          locationAddingHero={locationAddingHero}
-          setLocationAddingHeroForChild={setLocationAddingHeroForChild}
-        />
+      {listPosition[indexPosition]["listIdHero"].map((idHero, indexHero) => {
+        
+        const tHeroBasic = dictHeroBasic.find(element => element._id === idHero)
+        const key_HeroesTalents = tHeroBasic['key_HeroesTalents']
+        const isFocused = returnIsFocused(indexPosition, indexHero);
+        
+        
+        
+        return (
+          <DivEachHero
+            key={`${indexPosition}-${indexHero}-${idHero}`}
+          >
+            <ContainerImgEachHero 
+              
+              onClick = {(event) => onClick_Hero(event, indexPosition, indexHero)}
+              data-is-focused = {isFocused}
+            > 
+            
+              <ImgEachHero 
+                src={imgHero[key_HeroesTalents]}
+                
+                />
+              
+            </ContainerImgEachHero>
+            { (isFocused==='true')? 
+              <ButtonDelete
+                onClick={(event)=>onClick_ButtonDelete(event, indexPosition, idHero)}
+              > 
+                delete 
+              </ButtonDelete> 
+              : <> </> 
+              }
+          </DivEachHero >
         )
-      )}
+      })}
       
       
       <DivPlus

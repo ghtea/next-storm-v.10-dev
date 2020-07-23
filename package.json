@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
+    "heroes-talents": "git+https://git@github.com/heroespatchnotes/heroes-talents.git",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-copy-to-clipboard": "^5.0.2",
@@ -25,7 +26,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-    
   },
   "eslintConfig": {
     "extends": "react-app"

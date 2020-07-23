@@ -113,7 +113,10 @@ const CompGallery = ({
   match, location
   
   , authority
+  
   , readyDictHeroBasic
+  , readyListMap
+  
   , replaceAuthority
   , replaceData2
   , addRemoveNotification
@@ -124,6 +127,7 @@ const CompGallery = ({
   useEffect( () => { 
     (async () => {
     
+      // 내 서버에서 히오스 영웅들 정보 가져오기
       if (!readyDictHeroBasic ) {
         
         try { 
@@ -132,6 +136,24 @@ const CompGallery = ({
           
           replaceData2("hots", "dictHeroBasic", data)
           replaceData2("ready", "dictHeroBasic", true)
+          
+        } 
+        catch (error) { 
+          
+          addRemoveNotification("error", `server is not working`);
+          console.log(error) 
+        }
+      }
+      
+      // Heroes Profile API 로 맵 정보 가져오기
+      if (!readyListMap ) {
+        
+        try { 
+          
+          const {data} = await axios.get (`${config.URL_API_NS}/map/`);
+          
+          replaceData2("hots", "listMap", data)
+          replaceData2("ready", "listMap", true)
           
         } 
         catch (error) { 
@@ -222,7 +244,7 @@ function mapStateToProps(state) {
     authority: state.authority.comp_gallery
     
     , readyDictHeroBasic: state.ready.dictHeroBasic
-  
+    , readyListMap: state.ready.listMap
   }; 
 } 
 

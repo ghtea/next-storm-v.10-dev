@@ -27,6 +27,7 @@ const stateInitial = {
     ready : {
       planTeam: false
       ,dictHeroBasic: false
+      ,listMap: false
     }
     
     ,loading : {
@@ -90,6 +91,9 @@ const stateInitial = {
     // common
     , hots: {
       dictHeroBasic: {}
+      , listMap : [
+          
+        ]
     }
     
   };
