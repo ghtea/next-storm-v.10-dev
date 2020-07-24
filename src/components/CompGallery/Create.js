@@ -10,7 +10,9 @@ import * as config from '../../config';
 
 
 import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
-import {replaceWorking} from "../../redux/store";
+import {replaceWorking} from "../../redux/actions/basic";
+import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} from "../../redux/actions/comp_gallery";
+
 
 import { NavLink, useHistory } from 'react-router-dom';
 
@@ -341,7 +343,30 @@ const DivEachMap = styled(Div)`
 
 
 
- const Create = ({dictHeroBasic}) => {
+
+
+ const Create = ({
+   dictHeroBasic
+   ,listAllMap
+   
+   ,listMap
+    , listPosition
+  
+   , whichAdding
+   , locationAddingMap
+   , locationAddingHero
+   
+   , idHeroChosen
+   , idMapChosen
+   
+   
+   , replaceDataCompGallery
+   , replaceData2CompGallery
+   , replaceListPosition
+   
+   , addRemoveNotification
+   
+ }) => {
   
   const listHeroDefault = [];
   //const listPositionDefault = new Array(5).fill(listHeroDefault);
@@ -349,43 +374,14 @@ const DivEachMap = styled(Div)`
   
   
   
-  
-  
-  
   // error!!, Position 은 object 여야 한다?! 
   
-  
-  const listPositionDefault = [
-    {
-      listIdHero: ["Anub'arak", "Muradin"]
-    }
-    
-    ,{
-      listIdHero: ["Genji"]
-    }
-    
-    ,{
-      listIdHero: ["Maiev", "Cassia"]
-    }
-    
-    ,{
-      listIdHero: ["Mephisto", "Orphea"]
-    }
-    
-    ,{
-      listIdHero: ["Rehgar", "Kharazim"]
-    }
-  ];
-    
-      
-  
-  //console.log(listPositionDefault);
-  
-  
+   
   //const [trigger, setTrigger] = useState("");
   
   
   // information of comp
+  // just use useState for simple inputs (which don't need communication with child components)
   const inputTitle = useInput(""); // {value, setValue, onChange};
   const inputAuthor = useInput("");
   
@@ -399,16 +395,16 @@ const DivEachMap = styled(Div)`
   
   
   // Hero Map 선택
-  const [maps, setMaps] = useState(["all"]);
-  const [listPosition, setListPosition] = useState(listPositionDefault);
+  //const [maps, setMaps] = useState(["all"]);
+  //const [listPosition, setListPosition] = useState(listPositionDefault);
   
-  const [whichAdding, setWhichAdding] = useState("Hero"); // Hero, Map
+  //const [whichAdding, setWhichAdding] = useState("Hero"); // Hero, Map
   
-  const [locationAddingHero, setLocationAddingHero] = useState([0,0]);
-  const [idHeroChosen, setIdHeroChosen] = useState("");
+  //const [locationAddingHero, setLocationAddingHero] = useState([0,0]);
+  //const [idHeroChosen, setIdHeroChosen] = useState("");
   
-  const [locationAddingMap, setLocationAddingMap] = useState([0]);
-  const [idMapChosen, setIdMapChosen] = useState("");
+  //const [locationAddingMap, setLocationAddingMap] = useState([0]);
+  //const [idMapChosen, setIdMapChosen] = useState("");
   
   useEffect(()=>{
     
@@ -419,20 +415,12 @@ const DivEachMap = styled(Div)`
     if (idHeroChosen != "" && whichAdding === "Hero") {
       let listPositionTemp = listPosition;
       listPositionTemp[locationAddingHero[0]]["listIdHero"][locationAddingHero[1]] = idHeroChosen;
-      setListPosition(listPositionTemp);
+      replaceListPosition(listPositionTemp);
       
       //console.log("hi")
       //setTrigger(Date.now().toString());
     }
   }, [idHeroChosen])
-  
-  
-  // important!!! https://github.com/reactjs/reactjs.org/issues/1689
-  const setIdHeroChosenForChild = (idHero) => { setIdHeroChosen(idHero); }
-  const setListPositionForChild = (listPosition) => { setListPosition(listPosition); }
-  const setWhichAddingForChild = (one) => { setWhichAdding(one); }
-  const setLocationAddingHeroForChild = (location) => { setLocationAddingHero(location); }
-  const setLocationAddingMapForChild = (location) => { setLocationAddingMap(location); }
   
   
   
@@ -455,7 +443,7 @@ const DivEachMap = styled(Div)`
       
       ,added: Date.now()
       
-      ,maps: maps
+      ,maps: listMap
       ,tags: ["tag1"]
       
       ,listPosition: listPosition
@@ -487,7 +475,7 @@ const DivEachMap = styled(Div)`
   const returnChoose = (whichAdding) => {
     switch (whichAdding) {
       case "Hero":
-        return (<ChooseHero setIdHeroChosenForChild={setIdHeroChosenForChild}/>);
+        return (<ChooseHero />);
         break;
       case "Map":
         return (<Div> choose map </Div>);
@@ -536,16 +524,7 @@ const DivEachMap = styled(Div)`
                   key={index}  
                   indexPosition={element} 
                   
-                  idHeroChosen={idHeroChosen}
-                  
-                  listPosition={listPosition} 
-                  setListPositionForChild={setListPositionForChild} 
-                  
-                  dictHeroBasic={dictHeroBasic} 
-                  
-                  setWhichAddingForChild={setWhichAddingForChild}
-                  locationAddingHero={locationAddingHero}
-                  setLocationAddingHeroForChild={setLocationAddingHeroForChild} />
+                  />
               ) 
             })}
           </DivThree>
@@ -598,18 +577,31 @@ const DivEachMap = styled(Div)`
 
 function mapStateToProps(state) { 
   return { 
-    dictHeroBasic: state.basic.hots.dictHeroBasic
-   
+    listMap: state.comp_gallery.create.listMap
+    , listPosition: state.comp_gallery.create.listPosition
+    
+    , whichAdding: state.comp_gallery.create.whichAdding
+    , locationAddingMap: state.comp_gallery.create.locationAddingMap
+    , locationAddingHero: state.comp_gallery.create.locationAddingHero
+    
+    , idMapChosen: state.comp_gallery.create.idMapChosen
+    , idHeroChosen: state.comp_gallery.create.idHeroChosen
   }; 
 } 
 
 function mapDispatchToProps(dispatch) { 
   return { 
-    //readPlanTeam: (idPlanTeam) => dispatch(readPlanTeam(idPlanTeam)) 
-    //,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
-    //,replaceWorking: (which, true_false) => dispatch(replaceWorking(which, true_false))
+    
+    replaceDataCompGallery : (which, replacement) => dispatch(replaceDataCompGallery(which, replacement))
+    ,replaceData2CompGallery : (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
+    
+    ,replaceListPosition : (replacement) => dispatch(replaceListPosition(replacement))
+    
+    
+    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
   }; 
 }
 
-// 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다
+
 export default connect(mapStateToProps, mapDispatchToProps)(Create);
+

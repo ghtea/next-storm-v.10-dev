@@ -13,11 +13,18 @@ const stateInitial = {
     }
     
     , create : {
+      
       listMap: []
-      , listPosition: [[], [], [], [], []]
+      , listPosition: [ { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }]
+      
+      , whichAdding: "Hero"
       
       , locationAddingMap: [0]
       , locationAddingHero: [0,0]
+      
+      , idMapChosen: ""
+      , idHeroChosen: ""
+      
     }
     
 };
@@ -34,7 +41,76 @@ const comp_gallery = (
     
   switch (action.type) {
     
-
+    case types.REPLACE_DATA_COMP_GALLERY:
+      
+      if ( (!!action.replacement) && (action.replacement.constructor === Array) ) {
+        return {
+      	...state, 
+      	[action.which]: [...action.data]
+        }
+      }
+      
+      else if ( (!!action.replacement) && (action.replacement.constructor === Object) ) {
+        return {
+      	...state, 
+      	[action.which]: {...action.replacement}
+        }
+      }
+      else {
+        return {
+        	...state, 
+        	[action.which]: action.replacement
+        }
+      }
+    //REPLACE_DATA_HOTS
+      
+    
+    case types.REPLACE_DATA_2_COMP_GALLERY:
+      
+      if ( (!!action.replacement) && (action.replacement.constructor === Array) ) {
+        return {
+        	...state, 
+        	[action.which1]: {
+        	  ...state[action.which1]
+        	  ,[action.which2]: [...action.replacement]
+        	}
+        }
+      }
+      
+      else if ( (!!action.replacement) && (action.replacement.constructor === Object) ) {
+        return {
+        	...state, 
+        	[action.which1]: {
+        	  ...state[action.which1]
+        	  ,[action.which2]: {...action.replacement}
+        	}
+        }
+      }
+        
+      
+      else {
+        return {
+        	...state, 
+        	[action.which1]: {
+        	  ...state[action.which1]
+        	  ,[action.which2]: action.replacement
+        	}
+        }
+      }
+    // REPLACE_DATA_2_HOTS
+      
+      
+    case types.REPLACE_LIST_POSITION:
+      return {
+      	...state, 
+      	create: {
+      	  ...state.create
+      	  , listPosition: action.replacement
+      	}
+      } // return
+      
+      
+      
       
     default:
       return state;

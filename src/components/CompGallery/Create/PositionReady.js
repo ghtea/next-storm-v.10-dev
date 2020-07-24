@@ -10,9 +10,9 @@ import * as config from '../../../config';
 
 
 import addRemoveNotification from "../../../redux/thunks/addRemoveNotification";
-//import {replaceWorking} from "../../../redux/store";
+import {replaceWorking} from "../../../redux/actions/basic";
+import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} from "../../../redux/actions/comp_gallery";
 
-//import { NavLink, useHistory } from 'react-router-dom';
 
 import {Div, Input, Button, Img} from '../../../styles/DefaultStyles';
 
@@ -154,22 +154,38 @@ const DivIconPlus = styled(Div)`
 
 
 const Hero = ({
-  idHero, indexHero
+  idHero, indexHero, indexPosition
+  , returnIsFocused
   
-  ,returnIsFocused
+  , dictAllHeroBasic
   
-  ,idHeroChosen
-  , indexPosition, listPosition, setListPositionForChild, dictHeroBasic
-  , setWhichAddingForChild, locationAddingHero, setLocationAddingHeroForChild
   
+   
+  , listPosition
+  
+   , whichAdding
+  
+   , locationAddingHero
+   
+   , idHeroChosen
+   
+   
+   , replaceDataCompGallery
+   , replaceData2CompGallery
+   , replaceListPosition
+   
+   , addRemoveNotification
 }) => {
         
   
   //const [trigger, setTrigger] = useState("");
   
+  
+  
+  
   const onClick_Hero = (event, indexPosition, indexHero) => {
-    setLocationAddingHeroForChild([indexPosition, indexHero]);
-    setWhichAddingForChild("Hero");
+    replaceData2CompGallery("locationAddingHero", [indexPosition, indexHero]);
+    replaceData2CompGallery("whichAdding", "Hero");
     
   }
   
@@ -179,13 +195,13 @@ const Hero = ({
     let listPositionTemp = listPosition;
     listPositionTemp[indexPosition]["listIdHero"] = listPositionTemp[indexPosition]["listIdHero"].filter(tIdHero => tIdHero !== idHero);
     
-    setListPositionForChild(listPositionTemp);
+    replaceListPosition(listPositionTemp);
   }
   
   
   
   
-  const tHeroBasic = dictHeroBasic.find(element => element._id === idHero)
+  const tHeroBasic = dictAllHeroBasic.find(element => element._id === idHero)
   
   const key_HeroesTalents = tHeroBasic['key_HeroesTalents']
   const isFocused = returnIsFocused(indexPosition, indexHero);
@@ -234,9 +250,24 @@ const DivPositionReady = styled(Div)`
 //https://stackoverflow.com/questions/47922687/force-react-to-reload-an-image-file
 // https://www.npmjs.com/package/react-image
 const PositionReady = ({
-  idHeroChosen
-  , indexPosition, listPosition, setListPositionForChild, dictHeroBasic
-  , setWhichAddingForChild, locationAddingHero, setLocationAddingHeroForChild
+  indexPosition
+  
+  , dictAllHeroBasic
+  
+  , listPosition
+  
+   , whichAdding
+  
+   , locationAddingHero
+   
+   , idHeroChosen
+   
+   
+   , replaceDataCompGallery
+   , replaceData2CompGallery
+   , replaceListPosition
+   
+   , addRemoveNotification
 }) => {
   
   
@@ -268,9 +299,11 @@ const PositionReady = ({
     }
   }, [ locationAddingHero[0], locationAddingHero[1] ])
   
-  const onClick_Plus = (event, indexPosition, indexHero) => {
-    setLocationAddingHeroForChild([indexPosition, indexHero]);
-    setWhichAddingForChild("Hero");
+  
+  
+  const onClick_Plus = (event, indexPosition, indexItem) => {
+    replaceData2CompGallery("locationAddingHero", [indexPosition, indexItem]);
+    replaceData2CompGallery("whichAdding", "Hero");
   }
   
   const returnIsFocused = (indexPosition, indexItem) => {
@@ -284,7 +317,6 @@ const PositionReady = ({
     }
   }
   
-  
   return (
   
     <DivPositionReady>
@@ -294,17 +326,10 @@ const PositionReady = ({
           key={idHero}
           idHero={idHero}
           indexHero={indexHero}
-          
-          returnIsFocused={returnIsFocused}
-          
-          idHeroChosen={idHeroChosen}
           indexPosition={indexPosition}
-          listPosition={listPosition}
-          setListPositionForChild={setListPositionForChild}
-          dictHeroBasic={dictHeroBasic}
-          setWhichAddingForChild={setWhichAddingForChild}
-          locationAddingHero={locationAddingHero}
-          setLocationAddingHeroForChild={setLocationAddingHeroForChild}
+          
+          dictAllHeroBasic={dictAllHeroBasic}
+          returnIsFocused = {returnIsFocused}
         />
         )
       )}
@@ -335,17 +360,32 @@ const PositionReady = ({
 
 function mapStateToProps(state) { 
   return { 
-
+    
+    dictAllHeroBasic: state.hots.dictAllHeroBasic
+    
+    , listPosition: state.comp_gallery.create.listPosition
+    
+    , whichAdding: state.comp_gallery.create.whichAdding
+    , locationAddingMap: state.comp_gallery.create.locationAddingMap
+    , locationAddingHero: state.comp_gallery.create.locationAddingHero
+    
+    , idMapChosen: state.comp_gallery.create.idMapChosen
+    , idHeroChosen: state.comp_gallery.create.idHeroChosen
   }; 
 } 
 
 function mapDispatchToProps(dispatch) { 
   return { 
-    //readPlanTeam: (idPlanTeam) => dispatch(readPlanTeam(idPlanTeam)) 
-    //,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
-    //,replaceWorking: (which, true_false) => dispatch(replaceWorking(which, true_false))
+    
+    replaceDataCompGallery : (which, replacement) => dispatch(replaceDataCompGallery(which, replacement))
+    ,replaceData2CompGallery : (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
+    
+    ,replaceListPosition : (replacement) => dispatch(replaceListPosition(replacement))
+    
+    
+    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
   }; 
 }
 
-// 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다
+
 export default connect(mapStateToProps, mapDispatchToProps)(PositionReady);

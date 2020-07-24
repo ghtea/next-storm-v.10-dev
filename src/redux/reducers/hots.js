@@ -6,7 +6,7 @@ import * as types from '../actions/ActionTypes';
 
 const stateInitial = { 
     
-      dictHeroBasic: {}
+      dictAllHeroBasic: {}
       , listAllMap : [
           
         ]
@@ -26,47 +26,47 @@ const hots = (
   switch (action.type) {
     
 
-    case types.REPLACE_DATA:
+    case types.REPLACE_DATA_HOTS:
       
-      if ( (!!action.data) && (action.data.constructor === Array) ) {
+      if ( (!!action.replacement) && (action.replacement.constructor === Array) ) {
         return {
       	...state, 
-      	[action.which]: [...action.data]
+      	[action.which]: [...action.replacement]
         }
       }
       
-      else if ( (!!action.data) && (action.data.constructor === Object) ) {
+      else if ( (!!action.replacement) && (action.replacement.constructor === Object) ) {
         return {
       	...state, 
-      	[action.which]: {...action.data}
+      	[action.which]: {...action.replacement}
         }
       }
       else {
         return {
         	...state, 
-        	[action.which]: action.data
+        	[action.which]: action.replacement
         }
       }
       
     
-    case types.REPLACE_DATA_2:
+    case types.REPLACE_DATA_2_HOTS:
       
-      if ( (!!action.data) && (action.data.constructor === Array) ) {
+      if ( (!!action.replacement) && (action.replacement.constructor === Array) ) {
         return {
         	...state, 
         	[action.which1]: {
         	  ...state[action.which1]
-        	  ,[action.which2]: [...action.data]
+        	  ,[action.which2]: [...action.replacement]
         	}
         }
       }
       
-      else if ( (!!action.data) && (action.data.constructor === Object) ) {
+      else if ( (!!action.replacement) && (action.replacement.constructor === Object) ) {
         return {
         	...state, 
         	[action.which1]: {
         	  ...state[action.which1]
-        	  ,[action.which2]: {...action.data}
+        	  ,[action.which2]: {...action.replacement}
         	}
         }
       }
@@ -77,7 +77,7 @@ const hots = (
         	...state, 
         	[action.which1]: {
         	  ...state[action.which1]
-        	  ,[action.which2]: action.data
+        	  ,[action.which2]: action.replacement
         	}
         }
       } 

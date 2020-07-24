@@ -15,7 +15,8 @@ import Create, {SubCreate} from "../components/CompGallery/Create"
 import { connect } from "react-redux";
 
 import {replaceData, replaceReady, replaceLoading, replaceWorking, replaceAuthority, replaceData2} from "../redux/actions/basic";
-import {replaceDataHots} from "../redux/actions/hots";
+
+import {replaceDataHots, replaceData2Hots} from "../redux/actions/hots";
 
 
 import addRemoveNotification from "../redux/thunks/addRemoveNotification";
@@ -116,11 +117,17 @@ const CompGallery = ({
   
   , authority
   
-  , readyDictHeroBasic
-  , readyListMap
+  , readyDictAllHeroBasic
+  , readyListAllMap
   
-  , replaceAuthority
+  //, replaceAuthority
+  
+  , replaceDataHots
+  , replaceData2Hots
+  
+  , replaceData
   , replaceData2
+  
   , addRemoveNotification
   
 }) => {
@@ -130,14 +137,14 @@ const CompGallery = ({
     (async () => {
     
       // 내 서버에서 히오스 영웅들 정보 가져오기
-      if (!readyDictHeroBasic ) {
+      if (!readyDictAllHeroBasic ) {
         
         try { 
           
           const {data} = await axios.get (`${config.URL_API_NS}/hero-basic/`);
           
-          replaceDataHots("dictHeroBasic", data)
-          replaceData2("ready", "dictHeroBasic", true)
+          replaceDataHots("dictAllHeroBasic", data)
+          replaceData2("ready", "dictAllHeroBasic", true)
           
         } 
         catch (error) { 
@@ -148,14 +155,14 @@ const CompGallery = ({
       }
       
       // Heroes Profile API 로 맵 정보 가져오기
-      if (!readyListMap ) {
+      if (!readyListAllMap ) {
         
         try { 
           
           const {data} = await axios.get (`${config.URL_API_NS}/map/`);
           
-          replaceDataHots("listMap", data)
-          replaceData2("ready", "listMap", true)
+          replaceDataHots("listAllMap", data)
+          replaceData2("ready", "listAllMap", true)
           
         } 
         catch (error) { 
@@ -219,7 +226,7 @@ const CompGallery = ({
         </Switch>
       </SubCompGallery>
       
-    {!readyDictHeroBasic?
+    {!readyDictAllHeroBasic?
       <Div> loading </Div>
      :
       <Main>
@@ -245,8 +252,8 @@ function mapStateToProps(state) {
   return { 
     authority: state.basic.authority.comp_gallery
     
-    , readyDictHeroBasic: state.basic.ready.dictHeroBasic
-    , readyListMap: state.basic.ready.listMap
+    , readyDictAllHeroBasic: state.basic.ready.dictAllHeroBasic
+    , readyListAllMap: state.basic.ready.listAllMap
   }; 
 } 
 
@@ -258,11 +265,18 @@ function mapDispatchToProps(dispatch) {
     //,replaceLoading: (which, true_false) => dispatch(replaceLoading(which, true_false)) 
     //,replaceReady: (which, true_false) => dispatch(replaceReady(which, true_false)) 
     
-    replaceAuthority: (which, authority) => dispatch(replaceAuthority(which, authority))
-    ,replaceData2 : (which1, which2, newData) => dispatch(replaceData2(which1, which2, newData))
+    //replaceAuthority: (which, authority) => dispatch(replaceAuthority(which, authority))
+    
+    replaceDataHots : (which, replacement) => dispatch(replaceDataHots(which, replacement))
+    ,replaceData2Hots : (which1, which2, replacement) => dispatch(replaceData2Hots(which1, which2, replacement))
+    
+    ,replaceData : (which, replacement) => dispatch(replaceData(which, replacement))
+    ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
+    
     ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
   }; 
 }
 
 // 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다
 export default connect(mapStateToProps, mapDispatchToProps)(CompGallery);
+

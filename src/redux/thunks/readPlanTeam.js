@@ -23,6 +23,7 @@ const readPlanTeam = (idPlanTeam) => {
       dispatch( replaceLoading("planTeam", false) ); 
       
       
+      
     } 
 
 
@@ -45,10 +46,22 @@ const readPlanTeam = (idPlanTeam) => {
       dispatch( replaceReady("planTeam", false) );
       dispatch( replaceLoading("planTeam", true) ); 
       
+      
+      
       const response = await axios.get( `${process.env.REACT_APP_URL_AHR}/plan-team/${idPlanTeam}`);
       
       const newPlanTeam = response.data;
       
+      
+      // leave record of when is the latest access
+      await axios.put (`${process.env.REACT_APP_URL_AHR}/plan-team/`,
+        {
+          filter: {_id: idPlanTeam}
+          , update : {
+            $set: { "accessed": Date.now() }
+          }
+        }
+      );
       
       onSuccess(newPlanTeam);
   

@@ -8,8 +8,8 @@ const stateInitial = {
     
     ready : {
       planTeam: false
-      ,dictHeroBasic: false
-      ,listMap: false
+      ,dictAllHeroBasic: false
+      ,listAllMap: false
     }
     
     ,loading : {
