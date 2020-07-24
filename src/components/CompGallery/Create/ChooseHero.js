@@ -269,10 +269,8 @@ const ImgEachHero = styled(Img)`
 
 function mapStateToProps(state) { 
   return { 
-    dictHeroBasic: state.hots.dictHeroBasic
-    //ready: state.ready 
-   // ,loading: state.loading
-    ///,working: state.working
+    dictHeroBasic: state.basic.hots.dictHeroBasic
+    
   }; 
 } 
 

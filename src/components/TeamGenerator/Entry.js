@@ -7,9 +7,8 @@ import axios from 'axios';
 import { NavLink, useParams } from 'react-router-dom';
 
 import { connect } from "react-redux";
-import {replacePlayerTags} from "../../redux/store";
-import {replacePlayerStatus} from "../../redux/store";
-import {addNotification, removeNotification} from "../../redux/store";
+import {replacePlayerTags, replacePlayerStatus} from "../../redux/actions/team-generator";
+import {addNotification, removeNotification} from "../../redux/actions/basic";
 
 import readPlanTeam from "../../redux/thunks/readPlanTeam";
 import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
@@ -636,10 +635,10 @@ const Entry = ({
 
 function mapStateToProps(state) { 
   return { 
-    authority: state.authority.team_generator
-    ,listPlayerEntry: [...state.planTeam.listPlayerEntry]
-    ,idPlanTeam: state.planTeam._id
-    ,option: state.planTeam.option
+    authority: state.basic.authority.team_generator
+    ,listPlayerEntry: [...state.basic.planTeam.listPlayerEntry]
+    ,idPlanTeam: state.basic.planTeam._id
+    ,option: state.basic.planTeam.option
     //,workingAddPlayerToListPlayerEntry: state.working.addPlayerToListPlayerEntry
     //,readyPlanTeam: state.ready.planTeam
     //,loading: state.loading

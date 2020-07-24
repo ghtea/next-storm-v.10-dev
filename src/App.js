@@ -106,8 +106,8 @@ const App = ({themeName, replaceTheme, notification}) => {
 
 function mapStateToProps(state) { 
   return { 
-    themeName: state.themeName,
-    notification: state.notification
+    themeName: state.basic.themeName,
+    notification: state.basic.notification
   }; 
 } 
 

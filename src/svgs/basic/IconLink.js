@@ -40,7 +40,7 @@ d="M497.6,0,334.4.17A14.4,14.4,0,0,0,320,14.57V47.88a14.4,14.4,0,0,0,14.69,14.4l
 
 function mapStateToProps(state) { 
   return { 
-    themeName: state.themeName
+    themeName: state.basic.themeName
   }; 
 } 
 

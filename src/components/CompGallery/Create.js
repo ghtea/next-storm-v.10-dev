@@ -17,7 +17,8 @@ import { NavLink, useHistory } from 'react-router-dom';
 import {Div, Input, Button, Img} from '../../styles/DefaultStyles';
 
 import ChooseHero from './Create/ChooseHero';
-import Position from './Create/Position';
+import PositionReady from './Create/PositionReady';
+//import MapReady from './Create/MapReady';
 
 import useInput from '../../tools/hooks/useInput';
 import {getTimeStamp} from '../../tools/vanilla/time';
@@ -381,7 +382,7 @@ const DivEachMap = styled(Div)`
   //console.log(listPositionDefault);
   
   
-  const [trigger, setTrigger] = useState("");
+  //const [trigger, setTrigger] = useState("");
   
   
   // information of comp
@@ -391,9 +392,6 @@ const DivEachMap = styled(Div)`
   const inputPassword1 = useInput("");
   const inputPassword2 = useInput("");
   
-  const [maps, setMaps] = useState(["all"]);
-  const [listPosition, setListPosition] = useState(listPositionDefault);
-  
   const [rating, setRating] = useState({});
   
   const inputContentComment = useInput("");
@@ -401,6 +399,9 @@ const DivEachMap = styled(Div)`
   
   
   // Hero Map 선택
+  const [maps, setMaps] = useState(["all"]);
+  const [listPosition, setListPosition] = useState(listPositionDefault);
+  
   const [whichAdding, setWhichAdding] = useState("Hero"); // Hero, Map
   
   const [locationAddingHero, setLocationAddingHero] = useState([0,0]);
@@ -421,7 +422,7 @@ const DivEachMap = styled(Div)`
       setListPosition(listPositionTemp);
       
       //console.log("hi")
-      setTrigger(Date.now().toString());
+      //setTrigger(Date.now().toString());
     }
   }, [idHeroChosen])
   
@@ -523,14 +524,14 @@ const DivEachMap = styled(Div)`
           </DivOne>
         
           <DivTwo> 
-            <DivEachMap> Cursed Hollow </DivEachMap>
+            
           </DivTwo>
         
           <DivThree>
             {[0,1,2,3,4].map((element, index) => {
               return (
               
-                <Position 
+                <PositionReady 
                   
                   key={index}  
                   indexPosition={element} 
@@ -574,16 +575,31 @@ const DivEachMap = styled(Div)`
   )
 
 }
+
+/*
+<MapReady 
+              
+              idMapChosen={idMapChosen}
+              
+              listMap={listMap} 
+              setListMapForChild={setListMapForChild} 
+              
+              listAllMap={listAllMap} 
+              
+              setWhichAddingForChild={setWhichAddingForChild}
+              locationAddingMap={locationAddingMap}
+              setLocationAddingMapForChild={setLocationAddingMapForChild}
+            
+            /> 
+*/
   
   
 
 
 function mapStateToProps(state) { 
   return { 
-    dictHeroBasic: state.hots.dictHeroBasic
-    //ready: state.ready 
-   // ,loading: state.loading
-    ///,working: state.working
+    dictHeroBasic: state.basic.hots.dictHeroBasic
+   
   }; 
 } 
 

@@ -7,7 +7,7 @@ import axios from 'axios';
 import { connect } from "react-redux";
 
 import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
-import {replaceWorking} from "../../redux/store";
+import {replaceWorking} from "../../redux/actions/basic";
 
 import { NavLink, useHistory } from 'react-router-dom';
 
@@ -64,9 +64,9 @@ export const SubFocus = ({}) => {
 
 function mapStateToProps(state) { 
   return { 
-    //ready: state.ready 
-   // ,loading: state.loading
-    ///,working: state.working
+    //ready: state.basic.ready 
+   // ,loading: state.basic.loading
+    ///,working: state.basic.working
   }; 
 } 
 

@@ -165,7 +165,7 @@ const Hero = ({
 }) => {
         
   
-  const [trigger, setTrigger] = useState("");
+  //const [trigger, setTrigger] = useState("");
   
   const onClick_Hero = (event, indexPosition, indexHero) => {
     setLocationAddingHeroForChild([indexPosition, indexHero]);
@@ -221,7 +221,7 @@ const Hero = ({
 
 
 //
-const DivPosition = styled(Div)`
+const DivPositionReady = styled(Div)`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -233,7 +233,7 @@ const DivPosition = styled(Div)`
 // image rerendering problem
 //https://stackoverflow.com/questions/47922687/force-react-to-reload-an-image-file
 // https://www.npmjs.com/package/react-image
-const Position = ({
+const PositionReady = ({
   idHeroChosen
   , indexPosition, listPosition, setListPositionForChild, dictHeroBasic
   , setWhichAddingForChild, locationAddingHero, setLocationAddingHeroForChild
@@ -241,7 +241,7 @@ const Position = ({
   
   
   
-  const [trigger, setTrigger] = useState("");
+  //const [trigger, setTrigger] = useState("");
   
   const listIsFocusedHeroDefault = new Array(5);
   const [listIsFocusedHero, setListIsFocusedHero] = useState(listIsFocusedHeroDefault);
@@ -287,7 +287,7 @@ const Position = ({
   
   return (
   
-    <DivPosition>
+    <DivPositionReady>
       {listPosition[indexPosition]["listIdHero"].map((idHero, indexHero) => 
         (
         <Hero 
@@ -322,7 +322,7 @@ const Position = ({
       
       
       
-    </DivPosition>
+    </DivPositionReady>
   )
 }
 
@@ -335,10 +335,7 @@ const Position = ({
 
 function mapStateToProps(state) { 
   return { 
-    //dictHeroBasic: state.hots.dictHeroBasic
-    //ready: state.ready 
-   // ,loading: state.loading
-    ///,working: state.working
+
   }; 
 } 
 
@@ -351,4 +348,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 // 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다
-export default connect(mapStateToProps, mapDispatchToProps)(Position);
+export default connect(mapStateToProps, mapDispatchToProps)(PositionReady);

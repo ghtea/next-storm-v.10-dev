@@ -6,11 +6,8 @@ import queryString from 'query-string';
 import { connect } from "react-redux";
 import readPlanTeam from "../redux/thunks/readPlanTeam";
 
-import {replaceRerender} from "../redux/store";
-import {replaceWorking} from "../redux/store";
-import {replaceLoading} from "../redux/store";
-import {replaceReady} from "../redux/store";
-import {replaceData} from "../redux/store";
+import {replaceRerender, replaceWorking, replaceLoading, replaceReady, replaceData} from "../redux/actions/basic";
+
 
 import addRemoveNotification from "../redux/thunks/addRemoveNotification";
 

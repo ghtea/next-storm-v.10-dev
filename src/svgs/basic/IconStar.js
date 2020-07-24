@@ -45,7 +45,7 @@ const IconStar = ({width, height, isFilled, themeName}) => {
 
 function mapStateToProps(state) { 
   return { 
-    themeName: state.themeName
+    themeName: state.basic.themeName
   }; 
 } 
 

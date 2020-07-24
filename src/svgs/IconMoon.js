@@ -40,7 +40,7 @@ const IconMoon = ({width, height, themeName}) => {
 
 function mapStateToProps(state) { 
   return { 
-    themeName: state.themeName
+    themeName: state.basic.themeName
   }; 
 } 
 

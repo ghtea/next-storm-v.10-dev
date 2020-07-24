@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 import { connect } from "react-redux";
-import {replaceWorking, replaceRegion, replaceNumber} from "../../redux/store";
+import {replaceWorking} from "../../redux/actions/basic";
+import {replaceRegion, replaceNumber} from "../../redux/actions/team-generator";
 import readPlanTeam from "../../redux/thunks/readPlanTeam";
 import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
 
@@ -290,19 +291,11 @@ const ButtonNumberSide = styled(Button)`
 function mapStateToProps(state) { 
   return { 
    
-    //workingAddPlayer: state.working.addPlayer
-    //,workingPutPlayerMmr: state.working.putPlayerMmr
+    idPlanTeam: state.basic.planTeam._id
+  
+    ,option: state.basic.planTeam.option
+    , authority: state.basic.authority.team_generator
     
-    idPlanTeam: state.planTeam._id
-    //,passwordPlanTeam: state.planTeam.password
-    
-    //, loadingPlanTeam: state.loading.planTeam
-    //, readyPlanTeam: state.ready.planTeam
-    
-    ,option: state.planTeam.option
-    , authority: state.authority.team_generator
-    
-    //, planTeam: {...state.planTeam}
     
   }; 
 } 

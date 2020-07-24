@@ -40,7 +40,7 @@ const IconPlus = ({width, height, color="color_weak",  themeName}) => {
 
 function mapStateToProps(state) { 
   return { 
-    themeName: state.themeName
+    themeName: state.basic.themeName
   }; 
 } 
 

@@ -40,7 +40,7 @@ d="M504 64H96V8c0-4.4-3.6-8-8-8H72c-4.4 0-8 3.6-8 8v56H8c-4.4 0-8 3.6-8 8v16c0 4
 
 function mapStateToProps(state) { 
   return { 
-    themeName: state.themeName
+    themeName: state.basic.themeName
   }; 
 } 
 

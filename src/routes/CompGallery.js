@@ -14,7 +14,7 @@ import Create, {SubCreate} from "../components/CompGallery/Create"
 
 import { connect } from "react-redux";
 
-import {replaceData, replaceReady, replaceLoading, replaceWorking, replaceAuthority, replaceData2} from "../redux/store";
+import {replaceData, replaceReady, replaceLoading, replaceWorking, replaceAuthority, replaceData2} from "../redux/actions/basic";
 
 import addRemoveNotification from "../redux/thunks/addRemoveNotification";
 
@@ -241,10 +241,10 @@ const CompGallery = ({
 
 function mapStateToProps(state) { 
   return { 
-    authority: state.authority.comp_gallery
+    authority: state.basic.authority.comp_gallery
     
-    , readyDictHeroBasic: state.ready.dictHeroBasic
-    , readyListMap: state.ready.listMap
+    , readyDictHeroBasic: state.basic.ready.dictHeroBasic
+    , readyListMap: state.basic.ready.listMap
   }; 
 } 
 

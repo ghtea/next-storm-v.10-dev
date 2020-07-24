@@ -1,9 +1,5 @@
-/*
-import axios from 'axios';
-import dotenv from 'dotenv';
-*/
-import {REPLACE_READY, REPLACE_LOADING, REPLACE_DATA, ADD_NOTIFICATION, REMOVE_NOTIFICATION} from '../store';
-import {replaceReady, replaceLoading, replaceData, addNotification, removeNotification} from '../store'
+import * as types from '../actions/ActionTypes';
+import {replaceReady, replaceLoading, replaceData, addNotification, removeNotification} from '../actions/basic'
 
 
 const awaitTime = (ms) => {

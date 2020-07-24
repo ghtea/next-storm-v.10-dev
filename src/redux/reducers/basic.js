@@ -1,25 +1,7 @@
-import {getTimeStamp} from '../tools/vanilla/time'
-import {toggleArrayElement} from '../tools/vanilla/array'
+import {getTimeStamp} from '../../tools/vanilla/time'
+import {toggleArrayElement} from '../../tools/vanilla/array'
 
-
-const REPLACE_READY = "REPLACE_READY";
-const REPLACE_LOADING = "REPLACE_LOADING";
-const REPLACE_WORKING = "REPLACE_WORKING";
-const REPLACE_AUTHORITY = "REPLACE_AUTHORITY";
-
-const REPLACE_DATA = "REPLACE_DATA";
-const REPLACE_DATA_2 = "REPLACE_DATA_2";
-
-const ADD_NOTIFICATION = "ADD_NOTIFICATION";
-const REMOVE_NOTIFICATION = "REMOVE_NOTIFICATION";
-
-const ADD_RESULT = "ADD_RESULT";
-const DELETE_RESULT = "DELETE_RESULT";
-
-const REPLACE_PLAYER_TAGS = "REPLACE_PLAYER_TAGS";
-const REPLACE_PLAYER_STATUS = "REPLACE_PLAYER_STATUS";
-const REPLACE_REGION = "REPLACE_REGION";
-const REPLACE_NUMBER = "REPLACE_NUMBER";
+import * as types from '../actions/ActionTypes';
 
 
 const stateInitial = { 
@@ -51,10 +33,6 @@ const stateInitial = {
     
   
     
-    
-    
-    
-    
    
     ,authority: {
       team_generator: "viewer" // "administrator" "viewer"
@@ -82,16 +60,25 @@ const stateInitial = {
     // comp-gallery
     ,comp_gallery: {
       
-      listComp : []  // searching
-      , fComp: {} // FOCUS a comp
+      gallery : {
+        listComp: [] // searching
+        , fComp: {} // FOCUS a comp
+      }
       
-      , cComp: {} // CREATE a comp
+      , create : {
+        listMap: []
+        , listPosition: [[], [], [], [], []]
+        
+        , locationAddingMap: [0]
+        , locationAddingHero: [0,0]
+      }
+      
     }
     
     // common
     , hots: {
       dictHeroBasic: {}
-      , listMap : [
+      , listAllMap : [
           
         ]
     }
@@ -100,7 +87,7 @@ const stateInitial = {
 
 
 
-const reducer = (
+const basic = (
   
   // 기본값 설정
   state = stateInitial, 
@@ -110,18 +97,8 @@ const reducer = (
     
   switch (action.type) {
     
-    /*
-    case REPLACE_RERENDER:
-      return {
-      	...state, 
-      	rerender: {
-      	  ...state.rerender
-      	  ,[action.which]: getTimeStamp()
-      	}
-      };
-      */
-      
-    case REPLACE_DATA:
+
+    case types.REPLACE_DATA:
       
       if ( (!!action.data) && (action.data.constructor === Array) ) {
         return {
@@ -144,7 +121,7 @@ const reducer = (
       }
       
     
-    case REPLACE_DATA_2:
+    case types.REPLACE_DATA_2:
       
       if ( (!!action.data) && (action.data.constructor === Array) ) {
         return {
@@ -180,7 +157,7 @@ const reducer = (
 
       
       
-    case REPLACE_READY:
+    case types.REPLACE_READY:
       return {
       	...state, 
       	ready: {
@@ -189,7 +166,7 @@ const reducer = (
       	}
       };
       
-    case REPLACE_LOADING:
+    case types.REPLACE_LOADING:
       return {
       	...state, 
       	loading: {
@@ -198,7 +175,7 @@ const reducer = (
       	}
       };
       
-    case REPLACE_WORKING:
+    case types.REPLACE_WORKING:
       return {
       	...state, 
       	working: {
@@ -207,7 +184,7 @@ const reducer = (
       	}
       };
       
-   case REPLACE_AUTHORITY:
+   case types.REPLACE_AUTHORITY:
     return {
     	...state, 
     	authority: {
@@ -216,7 +193,7 @@ const reducer = (
     	}
     };
       
-    case ADD_NOTIFICATION:
+    case types.ADD_NOTIFICATION:
       
       const listIdNotification = state.notification.map(element => element.idNotification); // list of idNotification
       if ( !(listIdNotification.includes(action.idNotification)) ) {  // 기존에 동일한 아이디의 알림이 없어야 추가
@@ -238,14 +215,14 @@ const reducer = (
       
       
     
-    case REMOVE_NOTIFICATION:
+    case types.REMOVE_NOTIFICATION:
       return {
       	...state, 
       	notification: state.notification.filter(element => element.idNotification !== action.idNotification)
       };
     
     
-    case ADD_RESULT:
+    case types.ADD_RESULT:
       
       // 같은 id의 result 가 이미 존재하면 그거 먼저 빼놓기
       
@@ -269,7 +246,7 @@ const reducer = (
       } // return
       
       
-    case DELETE_RESULT:
+    case types.DELETE_RESULT:
       
       const listResultFiltered = state.planTeam.listResult.filter(element => element._id !== action.idResult);
       
@@ -282,7 +259,7 @@ const reducer = (
       } // return
       
       
-    case REPLACE_REGION:
+    case types.REPLACE_REGION:
       return {
       	...state, 
       	
@@ -296,7 +273,7 @@ const reducer = (
       	
       };
       
-    case REPLACE_NUMBER:
+    case types.REPLACE_NUMBER:
       
       let whichNumber;
       let valueCurrent;
@@ -363,7 +340,7 @@ const reducer = (
       }
        
       
-    case REPLACE_PLAYER_TAGS:
+    case types.REPLACE_PLAYER_TAGS:
       
       const index1 = (state.planTeam.listPlayerEntry).findIndex( objPlayer => objPlayer._id === action.battletag);
       
@@ -382,7 +359,7 @@ const reducer = (
       	}
       }
     
-    case REPLACE_PLAYER_STATUS:
+    case types.REPLACE_PLAYER_STATUS:
       
 
       return {
@@ -405,4 +382,4 @@ const reducer = (
 };
 
 
-export default reducer;
+export default basic;

@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import readPlanTeam from "../redux/thunks/readPlanTeam";
 
 //import {replaceRerender} from "../redux/store";
-import {replaceData, replaceReady, replaceLoading, replaceWorking, replaceAuthority} from "../redux/store";
+import {replaceData, replaceReady, replaceLoading, replaceWorking, replaceAuthority} from "../redux/actions/basic";
 
 import addRemoveNotification from "../redux/thunks/addRemoveNotification";
 
@@ -254,13 +254,13 @@ const TeamGenerator = ({
 
 function mapStateToProps(state) { 
   return { 
-    authority: state.authority.team_generator
+    authority: state.basic.authority.team_generator
     
-    ,idPlanTeam: state.idPlanTeam
-    ,passwordPlanTeam: state.planTeam.password
+    ,idPlanTeam: state.basic.idPlanTeam
+    ,passwordPlanTeam: state.basic.planTeam.password
     
-    , loadingPlanTeam: state.loading.planTeam
-    , readyPlanTeam: state.ready.planTeam
+    , loadingPlanTeam: state.basic.loading.planTeam
+    , readyPlanTeam: state.basic.ready.planTeam
     
     //, rerenderPlanTeamA: state.rerender.planTeam.A
     

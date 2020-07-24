@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { connect } from "react-redux";
-import {addNotification} from "../redux/store";
-import {removeNotification} from "../redux/store";
+import {addNotification, removeNotification} from "../redux/actions/basic";
 import addRemoveNotification from "../redux/thunks/addRemoveNotification";
 
 
@@ -84,7 +83,7 @@ const Notification = ({notification}) => {
 
 function mapStateToProps(state) { 
   return { 
-    notification: state.notification
+    notification: state.basic.notification
   }; 
 } 
 

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { connect } from "react-redux";
-import {replaceData} from "../redux/store";
+import {replaceData} from "../redux/actions/basic";
 
 
 import { NavLink } from 'react-router-dom';
@@ -251,7 +251,7 @@ const Sub = ({match, location, replaceData, themeName}) => {
 
 function mapStateToProps(state) { 
   return { 
-    themeName: state.themeName
+    themeName: state.basic.themeName
   }; 
 } 
 

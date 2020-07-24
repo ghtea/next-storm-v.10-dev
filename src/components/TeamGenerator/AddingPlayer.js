@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 import { connect } from "react-redux";
-import {replaceWorking} from "../../redux/store";
+import {replaceWorking} from "../../redux/actions/basic";
 import readPlanTeam from "../../redux/thunks/readPlanTeam";
 import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
 
@@ -426,18 +426,12 @@ const DivIconWorking = styled(Div)`
 function mapStateToProps(state) { 
   return { 
    
-    workingAddPlayer: state.working.addPlayer
-    //,workingPutPlayerMmr: state.working.putPlayerMmr
+    workingAddPlayer: state.basic.working.addPlayer
     
-    //,idPlanTeam: state.idPlanTeam
-    //,passwordPlanTeam: state.planTeam.password
     
-    //, loadingPlanTeam: state.loading.planTeam
-    //, readyPlanTeam: state.ready.planTeam
-    
-    ,authority: state.authority.team_generator
+    ,authority: state.basic.authority.team_generator
 
-    , planTeam: {...state.planTeam}
+    , planTeam: {...state.basic.planTeam}
     
   }; 
 } 

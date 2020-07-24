@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import readPlanTeam from "../../redux/thunks/readPlanTeam";
 
 import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
-import {replaceWorking} from "../../redux/store";
+import {replaceWorking} from "../../redux/actions/basic";
 
 import { NavLink, useHistory } from 'react-router-dom';
 
@@ -308,9 +308,9 @@ const DivIconWorking = styled(Div)`
 
 function mapStateToProps(state) { 
   return { 
-    ready: state.ready 
-    ,loading: state.loading
-    ,working: state.working
+    ready: state.basic.ready 
+    ,loading: state.basic.loading
+    ,working: state.basic.working
   }; 
 } 
 
