@@ -15,6 +15,8 @@ import Create, {SubCreate} from "../components/CompGallery/Create"
 import { connect } from "react-redux";
 
 import {replaceData, replaceReady, replaceLoading, replaceWorking, replaceAuthority, replaceData2} from "../redux/actions/basic";
+import {replaceDataHots} from "../redux/actions/hots";
+
 
 import addRemoveNotification from "../redux/thunks/addRemoveNotification";
 
@@ -134,7 +136,7 @@ const CompGallery = ({
           
           const {data} = await axios.get (`${config.URL_API_NS}/hero-basic/`);
           
-          replaceData2("hots", "dictHeroBasic", data)
+          replaceDataHots("dictHeroBasic", data)
           replaceData2("ready", "dictHeroBasic", true)
           
         } 
@@ -152,7 +154,7 @@ const CompGallery = ({
           
           const {data} = await axios.get (`${config.URL_API_NS}/map/`);
           
-          replaceData2("hots", "listMap", data)
+          replaceDataHots("listMap", data)
           replaceData2("ready", "listMap", true)
           
         } 

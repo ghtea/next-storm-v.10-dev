@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import { connect } from "react-redux";
 import {replaceWorking} from "../../redux/actions/basic";
-import {replaceRegion, replaceNumber} from "../../redux/actions/team-generator";
+import {replaceRegion, replaceNumber} from "../../redux/actions/team_generator";
 import readPlanTeam from "../../redux/thunks/readPlanTeam";
 import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
 
@@ -291,9 +291,9 @@ const ButtonNumberSide = styled(Button)`
 function mapStateToProps(state) { 
   return { 
    
-    idPlanTeam: state.basic.planTeam._id
+    idPlanTeam: state.team_generator.ePlanTeam._id
   
-    ,option: state.basic.planTeam.option
+    ,option: state.team_generator.ePlanTeam.option
     , authority: state.basic.authority.team_generator
     
     

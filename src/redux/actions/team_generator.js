@@ -1,6 +1,16 @@
 import * as types from './ActionTypes';
 
 
+
+
+export const replacePlanTeam = (newPlanTeam) => {
+  return {
+    type: types.REPLACE_PLAN_TEAM,
+    newPlanTeam: newPlanTeam
+  }
+}
+
+
 export const addResult = (result) => {
   return {
     type: types.ADD_RESULT,
@@ -33,6 +43,8 @@ export const replacePlayerStatus = (battletag, status) => {
     status: status
   }
 }
+
+
 
 export const replaceRegion = (region) => {
   return {

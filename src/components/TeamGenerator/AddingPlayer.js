@@ -198,7 +198,7 @@ const DivIconWorking = styled(Div)`
   //, readyPlanTeam
   
   , authority
-  , planTeam
+  , ePlanTeam
   
   , readPlanTeam
   , addRemoveNotification
@@ -215,7 +215,7 @@ const DivIconWorking = styled(Div)`
     
     let battletag = inputBattletag.value;
     //let name = inputName.value;
-    const idPlanTeam = planTeam._id;
+    const idPlanTeam = ePlanTeam._id;
     
     let listRegionMain;
     //console.log(battletag, name, idPlanTeam, statusPlayer)
@@ -284,7 +284,7 @@ const DivIconWorking = styled(Div)`
       if (!workingAddPlayer ) {
         
         let battletag = inputBattletag.value;
-        const idPlanTeam = planTeam._id;
+        const idPlanTeam = ePlanTeam._id;
         
         inputBattletag.setValue(""); // 이때 초기화!
         inputName.setValue("");
@@ -322,7 +322,7 @@ const DivIconWorking = styled(Div)`
         
     <DivHeader>
       <DivTitle> 
-        <Div> {`${planTeam.title}`}  </Div>
+        <Div> {`${ePlanTeam.title}`}  </Div>
         
         {(authority==="administrator")?
           <IconAdministrator width={"30px"} height={"24px"} /> 
@@ -334,7 +334,7 @@ const DivIconWorking = styled(Div)`
       <GroupCopy>
         
         <CopyToClipboard 
-          text={`https://ps.avantwing.com/team-generator/${planTeam._id}`}
+          text={`https://ps.avantwing.com/team-generator/${ePlanTeam._id}`}
           onCopy={ () => { addRemoveNotification("success", "viewer link has been copied") } } >
           
           <ButtonCopy> 
@@ -346,7 +346,7 @@ const DivIconWorking = styled(Div)`
         
         { (authority === "administrator") && 
           <CopyToClipboard 
-            text={`https://ps.avantwing.com/team-generator/${planTeam._id}?pw=${planTeam.password}`}
+            text={`https://ps.avantwing.com/team-generator/${ePlanTeam._id}?pw=${ePlanTeam.password}`}
             onCopy={ () => { addRemoveNotification("success", "administrator link has been copied") } } >
             
             <ButtonCopy>
@@ -431,7 +431,7 @@ function mapStateToProps(state) {
     
     ,authority: state.basic.authority.team_generator
 
-    , planTeam: {...state.basic.planTeam}
+    , ePlanTeam: {...state.team_generator.ePlanTeam}
     
   }; 
 } 

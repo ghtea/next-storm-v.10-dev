@@ -8,7 +8,7 @@ import { NavLink, useParams } from 'react-router-dom';
 
 import { connect } from "react-redux";
 
-import {addResult, deleteResult} from "../../redux/actions/team-generator";
+import {addResult, deleteResult} from "../../redux/actions/team_generator";
 import readPlanTeam from "../../redux/thunks/readPlanTeam";
 import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
 // https://reacttraining.com/blog/react-router-v5-1/
@@ -868,14 +868,12 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
 function mapStateToProps(state) { 
   return { 
     authority: state.basic.authority.team_generator
-    ,idPlanTeam: state.basic.planTeam._id
-    ,option: state.basic.planTeam.option
-    ,listPlayerEntry: state.basic.planTeam.listPlayerEntry
-    ,listResult: state.basic.planTeam.listResult
-    //listPlayerEntry: [...state.planTeam.listPlayerEntry]
-    //,workingAddPlayerToListPlayerEntry: state.working.addPlayerToListPlayerEntry
-    //,readyPlanTeam: state.ready.planTeam
-    //,loading: state.loading
+    
+    ,idPlanTeam: state.team_generator.ePlanTeam._id
+    ,option: state.team_generator.ePlanTeam.option
+    ,listPlayerEntry: state.team_generator.ePlanTeam.listPlayerEntry
+    ,listResult: state.team_generator.ePlanTeam.listResult
+   
   }; 
 } 
 

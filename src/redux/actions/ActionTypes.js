@@ -1,3 +1,5 @@
+
+// basic
 export const REPLACE_READY = "REPLACE_READY";
 export const REPLACE_LOADING = "REPLACE_LOADING";
 export const REPLACE_WORKING = "REPLACE_WORKING";
@@ -9,10 +11,20 @@ export const REPLACE_DATA_2 = "REPLACE_DATA_2";
 export const ADD_NOTIFICATION = "ADD_NOTIFICATION";
 export const REMOVE_NOTIFICATION = "REMOVE_NOTIFICATION";
 
-export const ADD_RESULT = "ADD_RESULT";
-export const DELETE_RESULT = "DELETE_RESULT";
+
+// hots
+export const REPLACE_DATA_HOTS = "REPLACE_DATA_HOTS";
+export const REPLACE_DATA_2_HOTS = "REPLACE_DATA_2_HOTS";
+
+
+
+// team_generator
+export const REPLACE_PLAN_TEAM = "REPLACE_PLAN_TEAM";
 
 export const REPLACE_PLAYER_TAGS = "REPLACE_PLAYER_TAGS";
 export const REPLACE_PLAYER_STATUS = "REPLACE_PLAYER_STATUS";
 export const REPLACE_REGION = "REPLACE_REGION";
 export const REPLACE_NUMBER = "REPLACE_NUMBER";
+
+export const ADD_RESULT = "ADD_RESULT";
+export const DELETE_RESULT = "DELETE_RESULT";

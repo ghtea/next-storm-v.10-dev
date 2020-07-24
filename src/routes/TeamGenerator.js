@@ -256,8 +256,8 @@ function mapStateToProps(state) {
   return { 
     authority: state.basic.authority.team_generator
     
-    ,idPlanTeam: state.basic.idPlanTeam
-    ,passwordPlanTeam: state.basic.planTeam.password
+    ,idPlanTeam: state.team_generator.ePlanTeam._id
+    ,passwordPlanTeam: state.team_generator.ePlanTeam.password
     
     , loadingPlanTeam: state.basic.loading.planTeam
     , readyPlanTeam: state.basic.ready.planTeam

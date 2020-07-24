@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 
 import * as types from '../actions/ActionTypes';
 import { replaceReady, replaceLoading, replaceData, addNotification, removeNotification} from '../actions/basic'
+import { replacePlanTeam } from '../actions/team_generator'
 
 import addRemoveNotification from "./addRemoveNotification";
 
@@ -15,8 +16,8 @@ const readPlanTeam = (idPlanTeam) => {
 
     const onSuccess = (newPlanTeam) => { 
       
-      dispatch( replaceData("planTeam", newPlanTeam) );  // 이게 먼저 돼고, 아래 loading, ready 수정해 주어야 한다!!!
-      dispatch( replaceData("idPlanTeam", newPlanTeam._id) );
+      dispatch( replacePlanTeam(newPlanTeam) );  // 이게 먼저 돼고, 아래 loading, ready 수정해 주어야 한다!!!
+      //dispatch( replaceData("idPlanTeam", newPlanTeam._id) );
       
       dispatch( replaceReady("planTeam", true) );
       dispatch( replaceLoading("planTeam", false) ); 
@@ -27,8 +28,8 @@ const readPlanTeam = (idPlanTeam) => {
 
     const onError = (error) =>{ 
       
-      dispatch( replaceData("planTeam", {}) );
-      dispatch( replaceData("idPlanTeam", "") );
+      dispatch( replacePlanTeam({}) );  
+      //dispatch( replaceData("idPlanTeam", "") );
       
       dispatch( replaceReady("planTeam", false) );
       dispatch( replaceLoading("planTeam", false) ); 
