@@ -15,7 +15,7 @@ import {replaceDataCompGallery, replaceData2CompGallery} from "../../redux/actio
 import { NavLink, useHistory } from 'react-router-dom';
 
 import {Div, Input, Button} from '../../styles/DefaultStyles';
-
+import Comp from './Gallery/Comp'
 
 import useInput from '../../tools/hooks/useInput';
 import {getTimeStamp} from '../../tools/vanilla/time';
@@ -28,6 +28,20 @@ import IconWorking from '../../svgs/basic/IconWorking'
 const DivGallery = styled(Div)`
   width: 100%;
   height:100%;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  
+  flex-wrap: wrap;
+`;
+
+const DivListComp = styled(Div)`
+  width: 100%;
+  height: 100%;
+  
+  margin: 10px;
   
   display: flex;
   flex-direction: row;
@@ -94,11 +108,20 @@ const DivGallery = styled(Div)`
     
     {(!readyListComp)? <Div> loading </Div>
       :
-      <Div>
+      <DivListComp>
       
-        {listComp[0].title}
+        {listComp.map( (comp, index) => {
+          
+          return (
+            <Comp 
+              key={index}
+              tComp = {comp}
+            />
+          )
+          }) //map
+        }
     
-      </Div>
+      </DivListComp>
     }
     
     

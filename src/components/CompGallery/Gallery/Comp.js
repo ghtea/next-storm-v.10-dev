@@ -9,59 +9,48 @@ import { connect } from "react-redux";
 import * as config from '../../../config';
 
 
-import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
+import addRemoveNotification from "../../../redux/thunks/addRemoveNotification";
 
-import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} from "../../redux/actions/comp_gallery";
+import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} from "../../../redux/actions/comp_gallery";
 
 
 import {Div, Input, Button, Img, Textarea} from '../../../styles/DefaultStyles';
 
-//import PositionReady from './Create/PositionReady';
+import ListMap from './Comp/ListMap';
+import Position from './Comp/Position';
 //import MapsReady from './Create/MapsReady';
 //import TagsReady from './Create/TagsReady';
 
 import useInput from '../../../tools/hooks/useInput';
 import {getTimeStamp} from '../../../tools/vanilla/time';
 
-import IconPlus from '../../../svgs/basic/IconPlus'
 import * as imgHero from '../../../images/heroes'
+import * as imgMap from '../../../images/maps'
+
+import IconFun from '../../../svgs/tags/IconFun'
+import IconSerious from '../../../svgs/tags/IconSerious'
+import IconFast from '../../../svgs/tags/IconFast'
+import IconSlow from '../../../svgs/tags/IconSlow'
+import IconKill from '../../../svgs/tags/IconKill'
+import IconPush from '../../../svgs/tags/IconPush'
 
 
 
-
-const DivCreatingComp = styled(Div)`
-  width: 100%;
-  height:100%;
+const DivComp = styled(Div)`
+  width: 300px; /* 6 + ddd + ddd + 6  */
+  height: auto;
   
-  margin-top: 5px;
-  margin-bottom: 20px;
-  margin-left: 5px;
-  margin-right: 5px;
-  
-  display: grid;
-  grid-template-columns: 70px 300px;
-  grid-template-rows: 90px 300px 70px 270px;
-  grid-template-areas: 
-    "One One"
-    "Two Three"
-    "Four Four"
-    "Five Five"
-  ;
-  align-items: start;
-  
-  
-  & > div:first-child {border-radius: 10px 10px 0 0;}
-  & > div:last-child {border-radius: 0 0 10px 10px;}
-  
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 `
 
 
 // title, author
-const DivOne = styled(Div)`
-  grid-area: One;
-  
-  height: 100%;
+const DivHeader = styled(Div)`
+  width: 100%;
+  height: 36px;
   
   background-color: ${props => props.theme.COLOR_normal};
   color: ${props => props.theme.color_normal};
@@ -71,124 +60,104 @@ const DivOne = styled(Div)`
   justify-content: center;
   align-items: center;
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    
-  }
 `
 
-// 정렬 방식 고민중 https://css-tricks.com/vertically-center-multi-lined-text/
-
-// map, difficulty
-const DivTwo = styled(Div)`
-  grid-area: Two;
-  height: 100%;
+//map, hero (position)
+const DivMain = styled(Div)`
   
+  height: 70px;
   background-color: ${props => props.theme.COLOR_middle};
+  
   border-left: 6px solid  ${props => props.theme.COLOR_normal};
-  
-  color: ${props => props.theme.color_normal};
-  
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  
-  & > div {
-    
-  }
-  
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-  
-   
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    
-   
-  
-    
-  }
-`
-
-// list of positions (heroes)
-const DivThree = styled(Div)`
-  grid-area: Three;
-  height: 100%;
- 
-  overflow-x: auto;
-  
-  background-color: ${props => props.theme.COLOR_bg};
-  
   border-right: 6px solid  ${props => props.theme.COLOR_normal};
   
   color: ${props => props.theme.color_normal};
   
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
-  align-items: flex-start;
+  justify-content: flex-start;
+  align-items: center;
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    
-  }
 `
 
-// actions 'create'
-const DivFour = styled(Div)`
-  grid-area: Four;
+
+
+const DivListMap = styled(Div)`
   height: 100%;
   
+  background-color: ${props => props.theme.COLOR_bg};
+  color: ${props => props.theme.color_normal};
   
-  background-color: ${props => props.theme.COLOR_normal};
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+`
+
+
+const DivListPosition = styled(Div)`
+  height: 100%;
+  
+  background-color: ${props => props.theme.COLOR_bg};
   color: ${props => props.theme.color_normal};
   
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  align-items: center;
-  
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    
-  }
+  align-items: flex-start;
 `
 
-// comments
-const DivFive = styled(Div)`
-  grid-area: Five;
-  height: 100%;
+
+// tag, rating
+const DivSecond = styled(Div)`
   
+  height: 36px;
   background-color: ${props => props.theme.COLOR_normal};
+  
+  padding-left: 3px;
+  padding-right: 3px;
+  
   color: ${props => props.theme.color_normal};
   
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    
+  & > div {
+    width: 50%;
   }
 `
 
 
+const DivListTag = styled(Div)`
+  height: 100%;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+`
 
+const Tag = styled(Div)`
+  width: 32px;
+  height: 32px;
+  margin-left: 3px;
+  margin-right: 3px;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`
+
+const DivListRating = styled(Div)`
+  
+`
+const DivListComment = styled(Div)`
+  
+`
 
 
 
@@ -196,67 +165,109 @@ const DivFive = styled(Div)`
  const Comp = ({
    dictHeroBasic
    ,listAllMap
-   
-   ,listMap
-    , listPosition
-    ,listTag
   
-   , whichAdding
-   , locationAddingMap
-   , locationAddingHero
-   
-   
-   
-   , replaceDataCompGallery
-   , replaceData2CompGallery
-   , replaceListPosition
+   , tComp
    
    , addRemoveNotification
    
  }) => {
   
- 
   
+  const listMap = tComp.listMap;
+  const listPosition = tComp.listPosition;
+  const listTag =  tComp.listTag;
+  const listComment =  tComp.listComment;
+  
+  const listAllTag = ["ToWin", "ForFun", "Kill", "Push", "Early", "Late"];
+  const listTagSorted = listAllTag.filter(tag => listTag.includes(tag));
+  
+  console.log(listTagSorted);
+  
+  
+  const returnIcon = (tag) => {
+    switch (tag) {
+      case "ToWin":
+        return (<IconSerious width={"24px"} height={"24px"} color={"color_weak"} />)
+      case "ForFun":
+        return (<IconFun width={"24px"} height={"24px"} color={"color_weak"} />)
+      case "Kill":
+        return (<IconKill width={"24px"} height={"24px"} color={"color_weak"} />)
+      case "Push":
+        return (<IconPush width={"23px"} height={"23px"} color={"color_weak"} />)
+      case "Early":
+        return (<IconFast width={"27px"} height={"27px"} color={"color_weak"} />)
+      case "Late":
+        return (<IconSlow width={"24px"} height={"24px"} color={"color_weak"} />)
+      
+    }
+  }
+  
+
+
   return (
   
     <DivComp>
     
-      <DivOne> 
-      
-        <Div>  <InputCommon  {...inputTitle} placeholder="title of composition" />  </Div>
-        <Div> 
-          <InputCommon type="password" {...inputPassword1} placeholder="password" /> 
-          <InputCommon type="password" {...inputPassword2} placeholder="password again" /> 
-        </Div>
+      <DivHeader> 
+        <Div>  {tComp["title"]} </Div>
+      </DivHeader>
+    
+    
+    
+      <DivMain> 
         
-      </DivOne>
+        <ListMap 
+          listMap={listMap}
+        />
     
-      <DivTwo> 
-        <MapsReady />
-      </DivTwo>
-    
-      <DivThree>
-        {[0,1,2,3,4].map((element, index) => {
+        <DivListPosition>
+          { listPosition.map((position, index) => {
+            const tPosition = position;
+            
+            return (
+            
+              <Position
+                key={index}  
+                tPosition={tPosition} 
+                /> 
+            ) 
+          })}
+          
+        </DivListPosition>
+      
+      </DivMain>
+      
+      
+      <DivSecond >
+        <DivListTag> 
+          {listTagSorted.map(tag=>{
+            return (
+              <Tag
+                key={tag}
+                > {returnIcon(tag)} </Tag>
+              )
+            })
+          }
+        </DivListTag>
+      
+        <DivListRating> 
+          rating
+        </DivListRating>
+      </DivSecond>
+      
+      <DivListComment>
+        { tComp["listComment"].map((comment, index) => {
+          const tComment = comment;
+          
           return (
           
-            <PositionReady 
-              
+            <Div
               key={index}  
-              indexPosition={element} 
-              
+              tComment={tComment} 
               />
           ) 
         })}
-      </DivThree>
-      
-      <DivFour> 
-        < TagsReady />
-      </DivFour>
-      
-      <DivFive>
-        <Div> <TextareaContentComment {...inputContentComment} placeholder="comment" /> </Div>
-        <Div> <InputLink  {...inputLinkComment} placeholder="link (ex: twitch/youtube, replay match page)" /> </Div>
-      </DivFive>
+      </DivListComment>
     
     </DivComp>
         
@@ -264,53 +275,24 @@ const DivFive = styled(Div)`
 
 }
 
-/*
-<MapReady 
-              
-              idMapChosen={idMapChosen}
-              
-              listMap={listMap} 
-              setListMapForChild={setListMapForChild} 
-              
-              listAllMap={listAllMap} 
-              
-              setWhichAddingForChild={setWhichAddingForChild}
-              locationAddingMap={locationAddingMap}
-              setLocationAddingMapForChild={setLocationAddingMapForChild}
-            
-            /> 
-*/
   
   
 
 
 function mapStateToProps(state) { 
   return { 
+    
     listMap: state.comp_gallery.create.listMap
     , listPosition: state.comp_gallery.create.listPosition
     , listTag: state.comp_gallery.create.listTag
     
-    , whichAdding: state.comp_gallery.create.whichAdding
-    , locationAddingMap: state.comp_gallery.create.locationAddingMap
-    , locationAddingHero: state.comp_gallery.create.locationAddingHero
-    
-    //, idMapChosen: state.comp_gallery.create.idMapChosen
-    //, idHeroChosen: state.comp_gallery.create.idHeroChosen
-    
-    //, triggerPosition: state.comp_gallery.create.triggerPosition
   }; 
 } 
 
 function mapDispatchToProps(dispatch) { 
   return { 
     
-    replaceDataCompGallery : (which, replacement) => dispatch(replaceDataCompGallery(which, replacement))
-    ,replaceData2CompGallery : (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
-    
-    ,replaceListPosition : (replacement) => dispatch(replaceListPosition(replacement))
-    
-    
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
   }; 
 }
 
