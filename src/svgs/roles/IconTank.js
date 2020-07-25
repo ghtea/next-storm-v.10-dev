@@ -11,7 +11,7 @@ const DivContainer = styled(Div)`
 `;
 
 
-const IconTank = ({width, height, themeName}) => {
+const IconTank = ({width, height, color="color_very_weak", themeName}) => {
 	
 	return (
 		
@@ -26,7 +26,7 @@ const IconTank = ({width, height, themeName}) => {
 			height="100%"
 			viewBox="0 0 512 512"
 			
-			fill={ themes[themeName]["color_very_weak"] }
+			fill={ themes[themeName][color] }
 			>
 			
 			<path 

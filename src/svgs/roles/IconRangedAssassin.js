@@ -11,7 +11,7 @@ const DivContainer = styled(Div)`
 `;
 
 
-const IconRangedAssassin = ({width, height, themeName}) => {
+const IconRangedAssassin = ({width, height, color="color_very_weak", themeName}) => {
 	
 	return (
 		
@@ -26,7 +26,7 @@ const IconRangedAssassin = ({width, height, themeName}) => {
 			height="100%"
 			viewBox="0 0 512 512"
 			
-			fill={ themes[themeName]["color_very_weak"] }
+			fill={ themes[themeName][color] }
 			>
 			
 			<path 

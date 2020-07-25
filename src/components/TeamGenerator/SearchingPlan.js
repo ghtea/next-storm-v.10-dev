@@ -14,7 +14,7 @@ import {Div, Input, Button, A} from '../../styles/DefaultStyles';
 
 
 import useInput from '../../tools/hooks/useInput';
-import IconWorking from '../../svgs/IconWorking'
+import IconWorking from '../../svgs/basic/IconWorking'
 
 
 const DivSearchingPlan = styled(Div)`

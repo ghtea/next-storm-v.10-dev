@@ -11,7 +11,7 @@ const DivContainer = styled(Div)`
 `;
 
 // w:h = 3:4 = 6:8
-const IconMeleeAssassin = ({width, height, themeName}) => {
+const IconMeleeAssassin = ({width, height, color="color_very_weak", themeName}) => {
 	
 	return (
 		
@@ -26,7 +26,7 @@ const IconMeleeAssassin = ({width, height, themeName}) => {
 			height="100%"
 			viewBox="0 0 384 512"
 			
-			fill={ themes[themeName]["color_very_weak"] }
+			fill={ themes[themeName][color] }
 			>
 			
 			<path 

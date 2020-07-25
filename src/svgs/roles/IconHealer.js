@@ -11,7 +11,7 @@ const DivContainer = styled(Div)`
 `;
 
 // w:h = 7:8
-const IconHealer = ({width, height, themeName}) => {
+const IconHealer = ({width, height, color="color_very_weak", themeName}) => {
 	
 	return (
 		
@@ -26,7 +26,7 @@ const IconHealer = ({width, height, themeName}) => {
 			height="100%"
 			viewBox="0 0 448 512" 
 			
-			fill={ themes[themeName]["color_very_weak"] }
+			fill={ themes[themeName][color] }
 			>
 			
 			<path 

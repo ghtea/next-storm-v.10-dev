@@ -19,7 +19,7 @@ import {Div, Input, Button} from '../../styles/DefaultStyles';
 import useInput from '../../tools/hooks/useInput';
 import {getTimeStamp} from '../../tools/vanilla/time';
 
-import IconWorking from '../../svgs/IconWorking'
+import IconWorking from '../../svgs/basic/IconWorking'
 import IconCopy from '../../svgs/basic/IconCopy'
 import IconMinus from '../../svgs/basic/IconMinus'
 import IconPlus from '../../svgs/basic/IconPlus'

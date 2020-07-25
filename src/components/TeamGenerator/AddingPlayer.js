@@ -18,7 +18,7 @@ import {Div, Input, Button, A} from '../../styles/DefaultStyles';
 import useInput from '../../tools/hooks/useInput';
 import {getTimeStamp} from '../../tools/vanilla/time';
 
-import IconWorking from '../../svgs/IconWorking';
+import IconWorking from '../../svgs/basic/IconWorking';
 import IconCopy from '../../svgs/basic/IconCopy';
 import IconAdministrator from '../../svgs/basic/IconAdministrator';
 import IconViewer from '../../svgs/basic/IconViewer';

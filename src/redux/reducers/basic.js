@@ -10,10 +10,12 @@ const stateInitial = {
       planTeam: false
       ,dictAllHeroBasic: false
       ,listAllMap: false
+      ,listComp: false
     }
     
     ,loading : {
       planTeam: false
+      ,listComp: false
     }
     
     

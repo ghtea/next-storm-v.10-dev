@@ -18,9 +18,9 @@ import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
 import {Div} from '../../styles/DefaultStyles';
 
 
-import IconConfirmed from '../../svgs/IconConfirmed'
-import IconPending from '../../svgs/IconPending'
-import IconInfo from '../../svgs/IconInfo'
+import IconConfirmed from '../../svgs/basic/IconConfirmed'
+import IconPending from '../../svgs/basic/IconPending'
+import IconInfo from '../../svgs/basic/IconInfo'
 import IconLeader from '../../svgs/basic/IconLeader'
 
 import IconTank from '../../svgs/roles/IconTank'

@@ -6,10 +6,8 @@ import axios from 'axios';
 
 import { connect } from "react-redux";
 
-//import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
-//import {replaceWorking} from "../../redux/store";
-
-//import { NavLink, useHistory } from 'react-router-dom';
+import addRemoveNotification from "../../../redux/thunks/addRemoveNotification"
+import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} from "../../../redux/actions/comp_gallery";
 
 import {Div, Input, Button, Img} from '../../../styles/DefaultStyles';
 
@@ -17,11 +15,23 @@ import {Div, Input, Button, Img} from '../../../styles/DefaultStyles';
 import useInput from '../../../tools/hooks/useInput';
 import {getTimeStamp} from '../../../tools/vanilla/time';
 
-import IconWorking from '../../../svgs/IconWorking'
+import IconTank from '../../../svgs/roles/IconTank'
+import IconBruiser from '../../../svgs/roles/IconBruiser'
+import IconMelee from '../../../svgs/roles/IconMeleeAssassin'
+import IconRanged from '../../../svgs/roles/IconRangedAssassin'
+import IconHealer from '../../../svgs/roles/IconHealer'
+import IconSupport from '../../../svgs/roles/IconSupport'
+
 import * as imgHero from '../../../images/heroes'
 
 
 const DivChooseHero = styled(Div)`
+
+  margin-top: 20px;
+  margin-bottom: 20px;
+ 
+  max-width: 540px;
+  
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -50,7 +60,7 @@ const GroupEachRole = styled(Div)`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: stretch;
+  height: 100%;
   
   padding: 5px;
 `
@@ -64,6 +74,7 @@ const DivRoles = styled(Div)`
 `
 
 const DivRoleName = styled(Div)`
+  height: 100%;
   width: 50px;
   background-color: ${props => props.theme.COLOR_middle};
 `
@@ -80,65 +91,82 @@ const ContainerHero = styled(Div)`
 const DivEachHero = styled(Div)`
 
   margin: 2px;
-
+   width: 40px;
+    height: 40px;
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
     
   }
  
   @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    width: 40px;
-    height: 40px;
+   
   } 
 `
 const ImgEachHero = styled(Img)`
   border-radius: 50%;
   
+  object-fit: cover;
+  width: 40px;
+  height: 40px;
+    
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    object-fit: cover;
-    width: 40px;
-    height: 40px;
+    
+    
   }
  
   @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    object-fit: cover;
-    width: 40px;
-    height: 40px;
+
+
   } 
 `
 
 
- const ChooseHero = ({dictHeroBasic, setIdHeroChosenForChild } ) => {
+ const ChooseHero = ({
+   dictAllHeroBasic
+   
+    , listPosition
+    
+    , whichAdding
+    , locationAddingHero
+   
+    , replaceData2CompGallery 
+    , replaceListPosition
+    
+    , addRemoveNotification
+   
+ } ) => {
   
-    const dictTank = dictHeroBasic.filter(objHero => objHero.role === "Tank");
-    const dictBruiser = dictHeroBasic.filter(objHero => objHero.role === "Bruiser");
-    const dictMelee = dictHeroBasic.filter(objHero => objHero.role === "Melee Assassin");
-    const dictRanged = dictHeroBasic.filter(objHero => objHero.role === "Ranged Assassin");
-    const dictHealer = dictHeroBasic.filter(objHero => objHero.role === "Healer");
-    const dictSupport = dictHeroBasic.filter(objHero => objHero.role === "Support");
+    const dictTank = dictAllHeroBasic.filter(objHero => objHero.role === "Tank");
+    const dictBruiser = dictAllHeroBasic.filter(objHero => objHero.role === "Bruiser");
+    const dictMelee = dictAllHeroBasic.filter(objHero => objHero.role === "Melee Assassin");
+    const dictRanged = dictAllHeroBasic.filter(objHero => objHero.role === "Ranged Assassin");
+    const dictHealer = dictAllHeroBasic.filter(objHero => objHero.role === "Healer");
+    const dictSupport = dictAllHeroBasic.filter(objHero => objHero.role === "Support");
     
     
     const onClick_Hero = (event, idHero) => {
-      setIdHeroChosenForChild(idHero);
+      if (whichAdding === "Hero" && !(listPosition[locationAddingHero[0]]["listIdHero"].includes(idHero)) && listPosition[locationAddingHero[0]]["listIdHero"].length < 5) {
+        let listPositionTemp = listPosition;
+        listPositionTemp[locationAddingHero[0]]["listIdHero"][locationAddingHero[1]] = idHero;
+        replaceListPosition(listPositionTemp);
+        
+        replaceData2CompGallery("create", "triggerPosition", Date.now().toString());
+      }
+      else if ( listPosition[locationAddingHero[0]]["listIdHero"].includes(idHero) ) {
+        addRemoveNotification("error", "This hero is already in current position");
+      }
+      else if ( listPosition[locationAddingHero[0]]["listIdHero"].lenght === 5) {
+        addRemoveNotification("error", "Max number for each position is 5");
+      }
     }
   
   return (
     <DivChooseHero>
     
-      <Div> 
-        <Div> 
-          <InputSearch placeholder="search"/>  
-        </Div>
-      </Div>
-    
-      <Div> 
-        filters
-      </Div>
-      
-      
+ 
       <DivRoles>
         
         <GroupEachRole>
-          <DivRoleName> TANK </DivRoleName>
+          <DivRoleName> <IconTank width={"24px"} height={"24px"} /> </DivRoleName>
           <ContainerHero> 
             {dictTank.map((tHeroBasic) => {
         
@@ -158,7 +186,7 @@ const ImgEachHero = styled(Img)`
         </GroupEachRole>
         
         <GroupEachRole>
-          <DivRoleName> BRUISER </DivRoleName>
+          <DivRoleName> <IconBruiser width={"24px"} height={"24px"} /> </DivRoleName>
           <ContainerHero> 
             {dictBruiser.map((tHeroBasic) => {
         
@@ -178,7 +206,7 @@ const ImgEachHero = styled(Img)`
         </GroupEachRole>
         
         <GroupEachRole>
-          <DivRoleName> MELEE </DivRoleName>
+          <DivRoleName> <IconMelee width={"24px"} height={"24px"} /> </DivRoleName>
           <ContainerHero> 
             {dictMelee.map((tHeroBasic) => {
         
@@ -198,7 +226,7 @@ const ImgEachHero = styled(Img)`
         </GroupEachRole>
         
         <GroupEachRole>
-          <DivRoleName> RANGED </DivRoleName>
+          <DivRoleName> <IconRanged width={"24px"} height={"24px"} /> </DivRoleName>
           <ContainerHero> 
             {dictRanged.map((tHeroBasic) => {
         
@@ -218,7 +246,7 @@ const ImgEachHero = styled(Img)`
         </GroupEachRole>
         
         <GroupEachRole>
-          <DivRoleName> HEALER </DivRoleName>
+          <DivRoleName> <IconHealer width={"30px"} height={"30px"} /> </DivRoleName>
           <ContainerHero> 
             {dictHealer.map((tHeroBasic) => {
         
@@ -238,7 +266,7 @@ const ImgEachHero = styled(Img)`
         </GroupEachRole>
         
         <GroupEachRole>
-          <DivRoleName> SUPPORT </DivRoleName>
+          <DivRoleName> <IconSupport width={"24px"} height={"24px"} /> </DivRoleName>
           <ContainerHero> 
             {dictSupport.map((tHeroBasic) => {
         
@@ -264,20 +292,38 @@ const ImgEachHero = styled(Img)`
 
 }
   
-  
+/*
+     <Div> 
+        <Div> 
+          <InputSearch placeholder="search"/>  
+        </Div>
+      </Div>
+    
+      <Div> 
+        filters
+      </Div>
+*/
 
 
 function mapStateToProps(state) { 
   return { 
-    dictHeroBasic: state.basic.hots.dictHeroBasic
+    dictAllHeroBasic: state.hots.dictAllHeroBasic
     
+     , listPosition: state.comp_gallery.create.listPosition
+    
+    , whichAdding: state.comp_gallery.create.whichAdding
+    , locationAddingHero: state.comp_gallery.create.locationAddingHero
+    
+    //, locationAddingHero: state.comp_gallery.locationAddingHero
   }; 
 } 
 
 function mapDispatchToProps(dispatch) { 
   return { 
-    //readPlanTeam: (idPlanTeam) => dispatch(readPlanTeam(idPlanTeam)) 
-    //,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    replaceData2CompGallery : (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
+    ,replaceListPosition : (replacement) => dispatch(replaceListPosition(replacement))
+    
+    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
     //,replaceWorking: (which, true_false) => dispatch(replaceWorking(which, true_false))
   }; 
 }

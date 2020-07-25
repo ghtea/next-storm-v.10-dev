@@ -16,11 +16,14 @@ import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} fr
 
 import { NavLink, useHistory } from 'react-router-dom';
 
-import {Div, Input, Button, Img} from '../../styles/DefaultStyles';
+import {Div, Input, Button, Img, Textarea} from '../../styles/DefaultStyles';
 
 import ChooseHero from './Create/ChooseHero';
+import ChooseMap from './Create/ChooseMap';
+
 import PositionReady from './Create/PositionReady';
-//import MapReady from './Create/MapReady';
+import MapsReady from './Create/MapsReady';
+import TagsReady from './Create/TagsReady';
 
 import useInput from '../../tools/hooks/useInput';
 import {getTimeStamp} from '../../tools/vanilla/time';
@@ -31,8 +34,6 @@ import * as imgHero from '../../images/heroes'
 
 
 const DivCreate = styled(Div)`
-  width: calc(100% - 120px);
-  height: calc(100% - 50px);
   
   display: grid;
   align-items: start;
@@ -40,46 +41,72 @@ const DivCreate = styled(Div)`
   position: fixed;
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    grid-template-columns: 1fr;
-    grid-template-rows: minmax(240px, 360px)  minmax(360px, 480px);
+    grid-template-columns: minmax(370px, 1fr);
+    grid-template-rows: 1fr 1fr;
     grid-template-areas: 
       "A"
       "B";
     grid-gap: 20px;
     
+    width: 100%;
+    height: calc(100% - 100px);
   }
  
 
   @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
     
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(370px, 1fr) minmax(370px, 1fr);
     grid-template-rows: 1fr;
     grid-template-areas: 
       "A B";
     grid-gap: 20px;
     
+    
+    width: calc(100% - 120px);
+    height: calc(100% - 50px);
+  
   }
 `;
 
 
 const ContainerA = styled(Div)`
   grid-area: A;
-  height: 100%;
+  
   position: relative;
+  
+  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+    height: 100%;
+  }
+ 
+
+  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+    height: 100%;
+  }
 `
 
 const ContainerB = styled(Div)`
   grid-area: B;
-  height: 100%;
+  
   position: relative;
+  
+  
+  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+    height: 100%;
+  }
+ 
+
+  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+    height: 100%;
+  }
 `
+
 
 
 
 const DivA = styled(Div)`
-  overflow-y: auto;
+  overflow: auto;
   position: absolute;
-  height: 100%;
+  
   
   display: flex;
   flex-direction: column;
@@ -87,18 +114,20 @@ const DivA = styled(Div)`
   align-items: center;
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    
+    height: 100%;
   }
  
   @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    
+    height: 100%;
   }
 `
 
 const DivB = styled(Div)`
-  overflow-y: auto;
+  overflow: auto;
   position: absolute;
-  height: 100%;
+  
+  
+  
   
   display: flex;
   flex-direction: column;
@@ -106,11 +135,11 @@ const DivB = styled(Div)`
   align-items: center;
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    
+    height: 100%;
   }
  
   @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    
+    height: 100%;
   }
 `
 
@@ -121,7 +150,7 @@ const ButtonCreate = styled(Button)`
   width: 150px;
   height: 36px;
   
-  border-radius: 10px;
+  border-radius: 8px;
   
   margin-top: 10px;
   margin-bottom: 5px;
@@ -132,37 +161,26 @@ const DivCreatingComp = styled(Div)`
   height:100%;
   
   margin-top: 5px;
-  margin-bottom: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-bottom: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
   
   display: grid;
+  grid-template-columns: 70px 300px;
+  grid-template-rows: 90px 300px 70px 270px;
+  grid-template-areas: 
+    "One One"
+    "Two Three"
+    "Four Four"
+    "Five Five"
+  ;
+  align-items: start;
   
-   & > div:first-child {border-radius: 10px 10px 0 0;}
-  & > div:last-child {border-radius: 0 010px 10px;}
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    grid-template-columns: 300px;
-    grid-template-rows: 130px 60px 300px 45px 300px;
-    grid-template-areas: 
-      "One"
-      "Two"
-      "Three"
-      "Four"
-      "Five"
-  }
- 
-
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    
-    grid-template-columns: 60px 300px; /* 270 = (2+50+2)*5 */
-    grid-template-rows: 130px 300px 45px 300px;
-    grid-template-areas: 
-      "One One"
-      "Two Three"
-      "Four Four"
-      "Five Five"
-  }
+  & > div:first-child {border-radius: 10px 10px 0 0;}
+  & > div:last-child {border-radius: 0 0 10px 10px;}
+  
+  
 `
 
 
@@ -194,10 +212,17 @@ const DivOne = styled(Div)`
 // map, difficulty
 const DivTwo = styled(Div)`
   grid-area: Two;
-  
+  height: 100%;
   
   background-color: ${props => props.theme.COLOR_middle};
+  border-left: 6px solid  ${props => props.theme.COLOR_normal};
+  
   color: ${props => props.theme.color_normal};
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   
   & > div {
     
@@ -205,32 +230,29 @@ const DivTwo = styled(Div)`
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
   
-    height: 100%;
+   
     
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
   }
  
   @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
     
-    height: 100%;
+   
   
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
+    
   }
 `
 
 // list of positions (heroes)
 const DivThree = styled(Div)`
   grid-area: Three;
-  
   height: 100%;
+ 
+  overflow-x: auto;
   
   background-color: ${props => props.theme.COLOR_bg};
+  
+  border-right: 6px solid  ${props => props.theme.COLOR_normal};
+  
   color: ${props => props.theme.color_normal};
   
   display: flex;
@@ -250,8 +272,8 @@ const DivThree = styled(Div)`
 // actions 'create'
 const DivFour = styled(Div)`
   grid-area: Four;
-  
   height: 100%;
+  
   
   background-color: ${props => props.theme.COLOR_normal};
   color: ${props => props.theme.color_normal};
@@ -273,10 +295,9 @@ const DivFour = styled(Div)`
 // comments
 const DivFive = styled(Div)`
   grid-area: Five;
-  
   height: 100%;
   
-  background-color: ${props => props.theme.COLOR_middle};
+  background-color: ${props => props.theme.COLOR_normal};
   color: ${props => props.theme.color_normal};
   
   display: flex;
@@ -316,7 +337,9 @@ export const SubCreate = ({}) => {
 const InputCommon = styled(Input)`
   height: 30px;
   
-  border: 2px solid ${props => props.theme.color_very_weak};
+  background-color: ${props => props.theme.COLOR_middle};
+  
+  border: 1px solid ${props => props.theme.color_very_weak};
   margin-left: 8px;
   margin-right: 8px;
   
@@ -326,9 +349,24 @@ const InputCommon = styled(Input)`
   border-radius: 4px;
 `
 
+const InputLink = styled(InputCommon)`
+  margin-bottom: 8px;
+`
 
-const InputContentComment =  styled(InputCommon)`
-  height: 240px;
+
+const TextareaContentComment =  styled(Textarea)`
+  height: 180px;
+  
+  background-color: ${props => props.theme.COLOR_middle};
+  
+  border: 1px solid ${props => props.theme.color_very_weak};
+  margin-left: 8px;
+  margin-right: 8px;
+  
+  margin-top: 8px;
+  margin-bottom: 4px;
+
+  border-radius: 4px;
 `
 
 
@@ -351,13 +389,12 @@ const DivEachMap = styled(Div)`
    
    ,listMap
     , listPosition
+    ,listTag
   
    , whichAdding
    , locationAddingMap
    , locationAddingHero
    
-   , idHeroChosen
-   , idMapChosen
    
    
    , replaceDataCompGallery
@@ -383,7 +420,7 @@ const DivEachMap = styled(Div)`
   // information of comp
   // just use useState for simple inputs (which don't need communication with child components)
   const inputTitle = useInput(""); // {value, setValue, onChange};
-  const inputAuthor = useInput("");
+  //const inputAuthor = useInput("");
   
   const inputPassword1 = useInput("");
   const inputPassword2 = useInput("");
@@ -393,84 +430,55 @@ const DivEachMap = styled(Div)`
   const inputContentComment = useInput("");
   const inputLinkComment = useInput("");
   
-  
-  // Hero Map 선택
-  //const [maps, setMaps] = useState(["all"]);
-  //const [listPosition, setListPosition] = useState(listPositionDefault);
-  
-  //const [whichAdding, setWhichAdding] = useState("Hero"); // Hero, Map
-  
-  //const [locationAddingHero, setLocationAddingHero] = useState([0,0]);
-  //const [idHeroChosen, setIdHeroChosen] = useState("");
-  
-  //const [locationAddingMap, setLocationAddingMap] = useState([0]);
-  //const [idMapChosen, setIdMapChosen] = useState("");
-  
-  useEffect(()=>{
-    
-    //console.log("idHeroChosen is changed");
-    //console.log(idHeroChosen);
-    //console.log(whichAdding);
-    
-    if (idHeroChosen != "" && whichAdding === "Hero") {
-      let listPositionTemp = listPosition;
-      listPositionTemp[locationAddingHero[0]]["listIdHero"][locationAddingHero[1]] = idHeroChosen;
-      replaceListPosition(listPositionTemp);
-      
-      //console.log("hi")
-      //setTrigger(Date.now().toString());
-    }
-  }, [idHeroChosen])
-  
-  
+ 
   
   const onClick_ButtonCreate = async (event) => {
     
-    const comment = {
-      author: inputAuthor.value
-      , content: inputContentComment.value
-      , link: inputLinkComment.value
+    try {
+      if (inputPassword1.value === "") {
+        addRemoveNotification("error", "enter password")
+      }
+      else if (inputPassword1.value === inputPassword2.value) {
+        
+        
+        const comment = {
+          content: inputContentComment.value
+          ,link: inputLinkComment.value
+          ,password: inputPassword1.value
+        }
+        
+        let bodyRequest = {
+          
+          _id: Date.now().toString()
+          ,password: inputPassword1.value
+          
+          ,title: inputTitle.value
+          
+          ,listPosition: listPosition
+          ,listMap: listMap
+          ,listTag: listTag
+          
+          ,rating: rating
+        }
+        
+        if (comment.content !== "") {
+          bodyRequest["listComment"] = [comment];
+        }
+        
+        await axios.post(`${config.URL_API_NS}/comp/`, bodyRequest);
+        
+        addRemoveNotification("success", "composition has been created")
+        
+        
+        
+        }
+        else { 
+          addRemoveNotification("error", "2 passwords are different")
+        }
+    } catch (error) {
+      addRemoveNotification("error", "failed in creatig composition")
     }
-    
-    let bodyRequest = {
-      
-      _id: Date.now().toString()
-      ,password: "1234"
-      
-      ,title: inputTitle.value
-      ,author: inputAuthor.value
-    
-      
-      ,added: Date.now()
-      
-      ,maps: listMap
-      ,tags: ["tag1"]
-      
-      ,listPosition: listPosition
-      
-      ,rating: rating
-      ,comments: [comment]
-    }
-    
-    await axios.post(`${config.URL_API_NS}/comp/`, bodyRequest);
-    
-    /*
-    ,password: String //?
-  
-    ,title: String
-    ,author: String
-    
-    ,added: Date
-    ,links: [String] //?
-    ,tags: [String] //?
-    
-    ,listPosition:[schemaPosition]
-    
-    ,rating: schemaRating
-    ,comments: [schemaComment]
-    */
   }
-  
   
   const returnChoose = (whichAdding) => {
     switch (whichAdding) {
@@ -478,7 +486,7 @@ const DivEachMap = styled(Div)`
         return (<ChooseHero />);
         break;
       case "Map":
-        return (<Div> choose map </Div>);
+        return (<ChooseMap />);
         break;
       case "Tag":
         return (<Div> choose tag </Div>);
@@ -502,17 +510,16 @@ const DivEachMap = styled(Div)`
         
           <DivOne> 
           
-            <Div>  <InputCommon  {...inputTitle} placeholder="title of comp" />  </Div>
-            <Div> <InputCommon  {...inputAuthor} placeholder="author" />  </Div>
+            <Div>  <InputCommon  {...inputTitle} placeholder="title of composition" />  </Div>
             <Div> 
-              <InputCommon  {...inputPassword1} placeholder="password" /> 
-              <InputCommon {...inputPassword1} placeholder="password again" /> 
+              <InputCommon type="password" {...inputPassword1} placeholder="password" /> 
+              <InputCommon type="password" {...inputPassword2} placeholder="password again" /> 
             </Div>
             
           </DivOne>
         
           <DivTwo> 
-            
+            <MapsReady />
           </DivTwo>
         
           <DivThree>
@@ -530,12 +537,12 @@ const DivEachMap = styled(Div)`
           </DivThree>
           
           <DivFour> 
-            <Div> 아직 안정했다.. </Div>
+            < TagsReady />
           </DivFour>
           
           <DivFive>
-            <Div> <InputContentComment  {...inputContentComment} placeholder="comment" /> </Div>
-            <Div> <InputCommon  {...inputLinkComment} placeholder="link" /> </Div>
+            <Div> <TextareaContentComment {...inputContentComment} placeholder="comment" /> </Div>
+            <Div> <InputLink  {...inputLinkComment} placeholder="link (ex: twitch/youtube, replay match page)" /> </Div>
           </DivFive>
         
         </DivCreatingComp>
@@ -579,13 +586,16 @@ function mapStateToProps(state) {
   return { 
     listMap: state.comp_gallery.create.listMap
     , listPosition: state.comp_gallery.create.listPosition
+    , listTag: state.comp_gallery.create.listTag
     
     , whichAdding: state.comp_gallery.create.whichAdding
     , locationAddingMap: state.comp_gallery.create.locationAddingMap
     , locationAddingHero: state.comp_gallery.create.locationAddingHero
     
-    , idMapChosen: state.comp_gallery.create.idMapChosen
-    , idHeroChosen: state.comp_gallery.create.idHeroChosen
+    //, idMapChosen: state.comp_gallery.create.idMapChosen
+    //, idHeroChosen: state.comp_gallery.create.idHeroChosen
+    
+    //, triggerPosition: state.comp_gallery.create.triggerPosition
   }; 
 } 
 

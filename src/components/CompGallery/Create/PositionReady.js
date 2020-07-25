@@ -59,6 +59,8 @@ const ContainerImgEachHero = styled(Div)`
   
   position: relative;
   
+  width: 50px;
+  height: 50px;
   
   &[data-is-focused='true'] {
     border: 3px solid ${props => (props.theme.COLOR_delete) };
@@ -70,8 +72,7 @@ const ContainerImgEachHero = styled(Div)`
   }
  
   @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    width: 50px;
-    height: 50px;
+    
   } 
   
   
@@ -82,16 +83,16 @@ const ImgEachHero = styled(Img)`
   position: absolute;
   z-index:2;
   
+  object-fit: cover;
+  width: 50px;
+  height: 50px;
+  
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    object-fit: cover;
-    width: 50px;
-    height: 50px;
+
   }
  
   @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    object-fit: cover;
-    width: 50px;
-    height: 50px;
+    
   } 
 `
 const ButtonDelete = styled(Button)`
@@ -164,12 +165,11 @@ const Hero = ({
   , listPosition
   
    , whichAdding
+   
   
    , locationAddingHero
    
-   , idHeroChosen
-   
-   
+  
    , replaceDataCompGallery
    , replaceData2CompGallery
    , replaceListPosition
@@ -178,14 +178,14 @@ const Hero = ({
 }) => {
         
   
-  //const [trigger, setTrigger] = useState("");
+  const [triggerPositionReady, setTriggerPositionReady] = useState("");
   
   
   
   
   const onClick_Hero = (event, indexPosition, indexHero) => {
-    replaceData2CompGallery("locationAddingHero", [indexPosition, indexHero]);
-    replaceData2CompGallery("whichAdding", "Hero");
+    replaceData2CompGallery("create", "locationAddingHero", [indexPosition, indexHero]);
+    replaceData2CompGallery("create", "whichAdding", "Hero");
     
   }
   
@@ -238,6 +238,8 @@ const Hero = ({
 
 //
 const DivPositionReady = styled(Div)`
+  height: 100%;
+  
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -260,7 +262,7 @@ const PositionReady = ({
   
    , locationAddingHero
    
-   , idHeroChosen
+   , triggerPosition
    
    
    , replaceDataCompGallery
@@ -271,9 +273,9 @@ const PositionReady = ({
 }) => {
   
   
-  
   //const [trigger, setTrigger] = useState("");
   
+  /*
   const listIsFocusedHeroDefault = new Array(5);
   const [listIsFocusedHero, setListIsFocusedHero] = useState(listIsFocusedHeroDefault);
   const [doesHaveFocusedHero, setDoesHaveFocusedHero] = useState(false);
@@ -298,16 +300,16 @@ const PositionReady = ({
       setDoesHaveFocusedHero(false);
     }
   }, [ locationAddingHero[0], locationAddingHero[1] ])
-  
+  */
   
   
   const onClick_Plus = (event, indexPosition, indexItem) => {
-    replaceData2CompGallery("locationAddingHero", [indexPosition, indexItem]);
-    replaceData2CompGallery("whichAdding", "Hero");
+    replaceData2CompGallery("create", "locationAddingHero", [indexPosition, indexItem]);
+    replaceData2CompGallery("create", "whichAdding", "Hero");
   }
   
   const returnIsFocused = (indexPosition, indexItem) => {
-    if (indexPosition === locationAddingHero[0] && indexItem === locationAddingHero[1]) {
+    if (indexPosition === locationAddingHero[0] && indexItem === locationAddingHero[1] && whichAdding === "Hero") {
 
       return 'true';
     }
@@ -328,22 +330,32 @@ const PositionReady = ({
           indexHero={indexHero}
           indexPosition={indexPosition}
           
+          replaceData2CompGallery={replaceData2CompGallery}
+          replaceDataCompGallery={replaceDataCompGallery}
+          replaceListPosition={replaceListPosition}
+          
+          addRemoveNotification={addRemoveNotification}
+   
+          triggerPosition={triggerPosition}
+          
           dictAllHeroBasic={dictAllHeroBasic}
           returnIsFocused = {returnIsFocused}
         />
         )
       )}
       
-      
-      <DivPlus
-        onClick = {(event) => onClick_Plus(event, indexPosition, listPosition[indexPosition].length)}
-        data-is-focused = {returnIsFocused(indexPosition, listPosition[indexPosition].length)}
-      > 
-        <DivIconPlus>
-          <IconPlus width={"30px"} height={"30px"} color={"COLOR_bg"} /> 
-        </DivIconPlus>
-        
-      </DivPlus>
+      {(listPosition[indexPosition]["listIdHero"].length < 5)?
+        <DivPlus
+          onClick = {(event) => onClick_Plus(event, indexPosition, listPosition[indexPosition]["listIdHero"].length)}
+          data-is-focused = {returnIsFocused(indexPosition, listPosition[indexPosition]["listIdHero"].length)}
+        > 
+          <DivIconPlus>
+            <IconPlus width={"30px"} height={"30px"} color={"COLOR_bg"} /> 
+          </DivIconPlus>
+          
+        </DivPlus>
+      : <Div> </Div>
+      }
       
       
       
@@ -369,8 +381,9 @@ function mapStateToProps(state) {
     , locationAddingMap: state.comp_gallery.create.locationAddingMap
     , locationAddingHero: state.comp_gallery.create.locationAddingHero
     
-    , idMapChosen: state.comp_gallery.create.idMapChosen
-    , idHeroChosen: state.comp_gallery.create.idHeroChosen
+    , triggerPosition: state.comp_gallery.create.triggerPosition
+    //, idMapChosen: state.comp_gallery.create.idMapChosen
+    // , idHeroChosen: state.comp_gallery.create.idHeroChosen
   }; 
 } 
 

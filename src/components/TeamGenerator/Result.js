@@ -16,9 +16,9 @@ import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
 import {Div, Button, Input} from '../../styles/DefaultStyles';
 
 
-import IconConfirmed from '../../svgs/IconConfirmed'
-import IconPending from '../../svgs/IconPending'
-import IconInfo from '../../svgs/IconInfo'
+import IconConfirmed from '../../svgs/basic/IconConfirmed'
+import IconPending from '../../svgs/basic/IconPending'
+import IconInfo from '../../svgs/basic/IconInfo'
 import IconMagic from  '../../svgs/basic/IconMagic'
 import IconUpload from  '../../svgs/basic/IconUpload'
 import IconDelete from  '../../svgs/basic/IconDelete'

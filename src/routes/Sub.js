@@ -9,8 +9,8 @@ import { NavLink } from 'react-router-dom';
 import {Div} from '../styles/DefaultStyles';
 
 import IconLogo from '../svgs/brand/IconLogo';
-import IconSun from '../svgs/IconSun';
-import IconMoon from '../svgs/IconMoon';
+import IconSun from '../svgs/basic/IconSun';
+import IconMoon from '../svgs/basic/IconMoon';
 
 
 /*

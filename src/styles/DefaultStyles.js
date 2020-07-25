@@ -174,6 +174,25 @@ export const Input = styled.input`
  }
  
 `
+export const Textarea = styled.textarea`
+ 
+ font-family: 'Noto Sans KR', 'Noto Sans JP', sans-serif;
+
+ color: ${props => props.theme.color_strong};
+ background-color: ${props => props.theme.COLOR_normal};
+ width: 100%;
+ font-size: 1rem;
+ border: 0;
+ 
+ padding-left: 10px;
+ box-sizing: border-box;
+ 
+ &::placeholder {
+  color: ${props => props.theme.color_weak} !important;
+ }
+ 
+`
+
 /*
 following doesn't work...
 

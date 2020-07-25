@@ -16,14 +16,19 @@ const stateInitial = {
       
       listMap: []
       , listPosition: [ { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }]
+      , listTag: ["ToWin", "Kill"]
+      
       
       , whichAdding: "Hero"
       
       , locationAddingMap: [0]
       , locationAddingHero: [0,0]
       
-      , idMapChosen: ""
-      , idHeroChosen: ""
+      , triggerPosition: ""
+      , triggerMap: ""
+      //, triggerTag: ""
+      //, idMapChosen: ""
+      //, idHeroChosen: ""
       
     }
     

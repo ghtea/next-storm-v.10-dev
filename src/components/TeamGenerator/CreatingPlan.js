@@ -19,7 +19,7 @@ import useInput from '../../tools/hooks/useInput';
 import {getTimeStamp} from '../../tools/vanilla/time';
 import {generatePassword} from '../../tools/vanilla/password';
 
-import IconWorking from '../../svgs/IconWorking'
+import IconWorking from '../../svgs/basic/IconWorking'
 
 import flagNA from '../../images/flags/NA.png';
 import flagEU from '../../images/flags/EU.png';

@@ -13,6 +13,7 @@ import {Div} from '../styles/DefaultStyles';
 const DivNotification = styled(Div)`
 	
   position: fixed;
+  z-index: 100;
   
   left: 50%;
   transform: translateX(-50%);

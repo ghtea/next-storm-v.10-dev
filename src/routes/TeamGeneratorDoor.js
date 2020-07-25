@@ -164,13 +164,13 @@ const TeamGeneratorDoor = ({}) => {
       <DivD>
         
         <Div>
-          <IconPenBrush width={"72px"} height={"72px"} />
+          <IconPenBrush width={"64px"} height={"64px"} />
           <DivWho> developed & designed by </DivWho>
           <DivPeople> <A href="https://twitter.com/mbcat_hots" > @mbcat_hots </A>  </DivPeople>
         </Div>
         
         <Div>
-          <IconHandsHeart width={"80px"} height={"64px"} />
+          <IconHandsHeart width={"120px"} height={"96px"} />
           <DivWho> thanks to </DivWho>
           <DivPeople> Heroes Profile API </DivPeople>
           <DivPeople>  Madosan </DivPeople>

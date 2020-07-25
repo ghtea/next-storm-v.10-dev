@@ -82,9 +82,7 @@ const SubCompGallery = styled(Div)`
 
 const Main = styled(Div)`
   
-  width: calc(100% - 120px);
-  height: calc(100% - 50px);
-  
+ 
   position: fixed;
   
   display: flex;
@@ -96,14 +94,20 @@ const Main = styled(Div)`
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
     
-    top: 50px; /* SubCompGallery */
-  	left: 120px;
+    top: 100px; /* SubCompGallery */
+  	left: 0;
+  	
+  	width: 100%;
+    height: calc(100% - 100px);
 	}
  
   @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
     
     top: 50px; 
     left: 120px;
+    
+    width: calc(100% - 120px);
+    height: calc(100% - 50px);
     
   }
 `
