@@ -1,12 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+
+import * as config from '../config';
 
 import { connect } from "react-redux";
 import {replaceData} from "../redux/actions/basic";
 
 
 import { NavLink } from 'react-router-dom';
-import {Div} from '../styles/DefaultStyles';
+import {Div, Button} from '../styles/DefaultStyles';
 
 import IconLogo from '../svgs/brand/IconLogo';
 import IconSun from '../svgs/basic/IconSun';
@@ -28,6 +31,8 @@ const DivSub = styled(Div)`
 	background-color: ${props => props.theme.COLOR_normal};
   color: ${props => props.theme.color_strong};
   
+  
+  
   z-index: 100; 
   
   position: fixed;
@@ -40,6 +45,7 @@ const DivSub = styled(Div)`
   @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
   
   	width: 100%;
+  	min-width: 360px;
   	height: 50px; 
   	
   	flex-direction: row;
@@ -205,7 +211,22 @@ const Sub = ({match, location, replaceData, themeName}) => {
 		}
 	}
 	
+	/*
+	const onClick_LogIn = async (event) => {
+		try {
+		
+			await axios.get (`${config.URL_API_NS}/auth/bnet`);
+			
+		}
+		catch (error) {
+			console.log("error in authorize")
+		}
+	}
+	*/
 	
+	
+	
+	// <Button> <a href={`${config.URL_API_NS}/auth/bnet`}>Log In</a> </Button>
 	return (
  
 	
@@ -221,8 +242,10 @@ const Sub = ({match, location, replaceData, themeName}) => {
   	
 
 		<DivNavItem > <NavLinkNavItem to="/" exact={true}> Home </NavLinkNavItem> </DivNavItem>
+		<DivNavItem > <NavLinkNavItem to="/auth" > Auth </NavLinkNavItem> </DivNavItem>
 		<DivNavItem > <NavLinkNavItem to="/team-generator" isActive={()=>checkActive(/^(\/team-generator)/)} > Team Generator </NavLinkNavItem> </DivNavItem>
 		<DivNavItem > <NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > Comp Gallery </NavLinkNavItem> </DivNavItem>
+		
 		
 		<DivButtonToggleMode>
 		

@@ -76,6 +76,23 @@ const DivPosition = styled(Div)`
   align-items: center;
 `
 
+const DivRemaining = styled(Div)`
+  background-color: ${props => props.theme.color_very_weak};
+  color: ${props => props.theme.COLOR_normal};
+  
+  width: 80%;
+  height: 16px;
+  border-radius: 4px;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  
+  padding-bottom: 1px;
+  
+  font-size: 0.9rem;
+`
 
  const Position = ({
    dictAllHeroBasic
@@ -84,15 +101,26 @@ const DivPosition = styled(Div)`
    
    , addRemoveNotification
    
+   , option
  }) => {
   
- 
+  const listIdHero = tPosition["listIdHero"];
+  let listIdHeroShowing = [];
+  
+  switch(option){
+    case "small":
+      // 특정 position 이나 index 에 영웅이 없는 상황도 고려해야 한다.
+      listIdHeroShowing = listIdHero.filter((element, index) => !( [1,2,3,4].includes(index) ) ); 
+      break;
+  }
+  
+  const numberRemainingHero = listIdHero.length - listIdHeroShowing.length;
   
   return (
   
     <DivPosition>
     
-     {tPosition["listIdHero"].map((tIdHero)=>{
+     {listIdHeroShowing.map((tIdHero)=>{
         return (
           <Hero
             key={tIdHero}
@@ -102,6 +130,8 @@ const DivPosition = styled(Div)`
         ) 
       })
      }
+     
+     {(numberRemainingHero >= 1)? <DivRemaining> {`${numberRemainingHero}+`} </DivRemaining> : <Div> </Div>}
     
     </DivPosition>
         
@@ -116,7 +146,7 @@ const DivPosition = styled(Div)`
 function mapStateToProps(state) { 
   return { 
   dictAllHeroBasic: state.hots.dictAllHeroBasic
-    
+    , option: state.comp_gallery.gallery.option
   }; 
 } 
 

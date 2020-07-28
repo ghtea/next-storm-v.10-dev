@@ -8,6 +8,7 @@ import replaceTheme from "./redux/thunks/replaceTheme";
 import Sub from "./routes/Sub";
 import Notification from "./routes/Notification";
 import Home from "./routes/Home";
+import Auth from "./routes/Auth";
 
 import TeamGenerator from "./routes/TeamGenerator";
 import TeamGeneratorDoor from "./routes/TeamGeneratorDoor";
@@ -85,6 +86,7 @@ const App = ({themeName, replaceTheme, notification}) => {
       <DivContent>
       <Switch >
       <Route path="/" exact={true} component={Home} />
+      <Route path="/auth" component={Auth} />
       
       <Route path="/team-generator" exact={true} component={TeamGeneratorDoor} />
       <Route path="/team-generator/:idPlanTeam"  component={TeamGenerator} />

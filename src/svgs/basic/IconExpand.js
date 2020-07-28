@@ -11,7 +11,7 @@ const DivContainer = styled(Div)`
 `;
 
 
-const IconCopy = ({width, height, color="color_weak", themeName}) => {
+const IconExpand = ({width, height, color="color_very_weak", themeName}) => {
 	
 	return (
 		
@@ -24,13 +24,13 @@ const IconCopy = ({width, height, color="color_weak", themeName}) => {
 			
 			width="100%"
 			height="100%"
-			viewBox="0 0 512 512"
+			viewBox="0 0 448 512"
 			
 			fill={ themes[themeName][color] }
 			>
 			
 			<path 
-			d="M464 0H144c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h320c26.51 0 48-21.49 48-48v-48h48c26.51 0 48-21.49 48-48V48c0-26.51-21.49-48-48-48zM362 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h42v224c0 26.51 21.49 48 48 48h224v42a6 6 0 0 1-6 6zm96-96H150a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h308a6 6 0 0 1 6 6v308a6 6 0 0 1-6 6z">				
+d="M212.686 315.314L120 408l32.922 31.029c15.12 15.12 4.412 40.971-16.97 40.971h-112C10.697 480 0 469.255 0 456V344c0-21.382 25.803-32.09 40.922-16.971L72 360l92.686-92.686c6.248-6.248 16.379-6.248 22.627 0l25.373 25.373c6.249 6.248 6.249 16.378 0 22.627zm22.628-118.628L328 104l-32.922-31.029C279.958 57.851 290.666 32 312.048 32h112C437.303 32 448 42.745 448 56v112c0 21.382-25.803 32.09-40.922 16.971L376 152l-92.686 92.686c-6.248 6.248-16.379 6.248-22.627 0l-25.373-25.373c-6.249-6.248-6.249-16.378 0-22.627z">
 			</path>
 				
 		</svg>
@@ -52,4 +52,4 @@ function mapDispatchToProps(dispatch) {
 }
 */
 
-export default connect(mapStateToProps)(IconCopy);
+export default connect(mapStateToProps)(IconExpand);

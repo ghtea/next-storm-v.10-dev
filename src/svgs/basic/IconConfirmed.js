@@ -11,7 +11,7 @@ const DivContainer = styled(Div)`
 `;
 
 
-const IconConfirmed = ({width, height, themeName}) => {
+const IconConfirmed = ({width, height, color="color_success", themeName}) => {
 	
 	return (
 		
@@ -26,7 +26,7 @@ const IconConfirmed = ({width, height, themeName}) => {
 			height="100%"
 			viewBox="0 0 512 512"
 			
-			fill={ themes[themeName]["color_success"] }
+			fill={ themes[themeName][color] }
 			>
 			
 			<path 

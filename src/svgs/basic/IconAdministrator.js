@@ -11,7 +11,7 @@ const DivContainer = styled(Div)`
 `;
 
 
-const IconAdministrator = ({width, height, themeName}) => {
+const IconAdministrator = ({width, height, color="color_weak", themeName}) => {
 	
 	return (
 		
@@ -26,7 +26,7 @@ const IconAdministrator = ({width, height, themeName}) => {
 			height="100%"
 			viewBox="0 0 640 512"
 			
-			fill={ themes[themeName]["color_weak"] }
+			fill={ themes[themeName][color] }
 			>
 			
 			<path 
@@ -44,12 +44,6 @@ function mapStateToProps(state) {
   }; 
 } 
 
-/*
-function mapDispatchToProps(dispatch) { 
-  return { 
-    readPlanTeam: (idPlanTeam) => dispatch(readPlanTeam(idPlanTeam)) 
-  }; 
-}
-*/
+
 
 export default connect(mapStateToProps)(IconAdministrator);

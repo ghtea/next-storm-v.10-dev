@@ -4,6 +4,7 @@ import React, {
 }
 from 'react';
 import styled from 'styled-components';
+import { useMediaQuery } from 'react-responsive'
 
 import axios from 'axios';
 
@@ -54,135 +55,52 @@ import IconPush from '../../../svgs/tags/IconPush'
 
 
 
-const DivComp = styled(Div)
+const DivFilter = styled(Div)
 `
-  width: 300px; /* 6 + ddd + ddd + 6  */
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  width: 350px; 
   height: auto;
   
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-`
-
-
-// title, author
-const DivHeader = styled(Div)`
-
-  border-radius: 12px 12px 0 0;
-  
-  width: 100%;
-  height: 36px;
-  
-  background-color: ${props => props.theme.COLOR_normal};
-  color: ${props => props.theme.color_normal};
-  
-  display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) { 
+    top: 110px;
+  }
+
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) { 
+    top: 60px;
+  }
 `
+// 870
 
-
-
-const DivTitle = styled(Div)`
-  margin-left: 10px;
-  
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-`
-
-const DivExpand = styled(Div)`
-  width: 30px;
-  
-  margin-right: 10px;
-`
-
-
-
-
-//map, hero (position)
-const DivMain = styled(Div)
-`
-  
-  height: 70px;
-  background-color: ${props => props.theme.COLOR_middle};
-  
-  border-left: 6px solid  ${props => props.theme.COLOR_normal};
-  border-right: 6px solid  ${props => props.theme.COLOR_normal};
-  
-  color: ${props => props.theme.color_normal};
-  
-  
-`
-
-
-
-const DivListMap = styled(Div)
-`
-  height: 100%;
-  
-  background-color: ${props => props.theme.COLOR_bg};
-  color: ${props => props.theme.color_normal};
-  
-  
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-`
-
-
-const DivListPosition = styled(Div)
-`
-  height: 100%;
-  
-  background-color: ${props => props.theme.COLOR_bg};
-  color: ${props => props.theme.color_normal};
-  
+const DivFilterSize = styled(Div)`
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  align-items: flex-start;
-`
-
-
-// tag, rating
-const DivFooter = styled(Div)`
-  
-  border-radius: 0 0 12px 12px;
-  
-  height: 36px;
-  background-color: ${props => props.theme.COLOR_normal};
-  
-  padding-left: 3px;
-  padding-right: 3px;
-  
-  color: ${props => props.theme.color_normal};
-  
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  
-  & > div {
-    width: 50%;
-  }
-`
-
-
-const DivListTag = styled(Div)
-`
-  height: 100%;
-  
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
   align-items: center;
 `
+
+const DivFilterTag = styled(Div)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+`
+
+const DivFilterMap = styled(Div)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+`
+
+
 
 const Tag = styled(Div)
 `
@@ -209,25 +127,17 @@ const DivListComment = styled(Div)
 
 
 
-const Comp = ({
-    dictHeroBasic
+const Filter = ({
+  
+    dictAllHeroBasic
     , listAllMap
     , listAllTag
-    , tComp
 
     , addRemoveNotification
 
   }) => {
 
-
-    const listMap = tComp.listMap;
-    const listPosition = tComp.listPosition;
-    const listTag = tComp.listTag;
-    const listComment = tComp.listComment;
-
-    const listTagSorted = listAllTag.filter(tag => listTag.includes(tag));
-
-    console.log(listTagSorted);
+    const isBigMidScreen = useMediaQuery({ query: `(min-device-width: ${props => (props.theme.media.comp_gallery.mid_big) }px)` });
 
 
     const returnIcon = (tag) => {
@@ -251,55 +161,38 @@ const Comp = ({
 
 
     return (
-
-    < DivComp >
-
-      < DivHeader >
+      <DivFilter>
       
-        < DivTitle > {tComp["title"] } < /DivTitle> 
-        < DivExpand > < IconExpand width = { "20px" } height = { "20px" } color = { "color_very_weak" } /> </DivExpand >
-
-      < /DivHeader>
-
-
-
-      < DivMain >
-
-      < ListMap listMap = { listMap } />
-
-      < DivListPosition > {
-        listPosition.map((position, index) => {
-          const tPosition = position;
-
-          return (
-
-            < Position key = { index }
-            tPosition = { tPosition }
-            /> 
-          )
-        })
-      }
-
-      < /DivListPosition>
-
-      < /DivMain>
-
-
-      < DivFooter >
-        < DivListTag > {
-          listTagSorted.map(tag => {
-            return ( 
-              < Tag key = { tag } > { returnIcon(tag) } < /Tag>)
-          })
-        } < /DivListTag>
-  
-        < DivListRating >
-        rating < /DivListRating> 
-      < /DivFooter>
-
-
-    < /DivComp>
-
+       
+        
+        <DivFilterSize> 
+          <Div> ToWin </Div>
+          <Div> ForFun </Div>
+          <Div> Kill </Div>
+          <Div> Push </Div>
+          <Div> Early </Div>
+          <Div> Late </Div>
+          <Div> ToWin </Div>
+        </DivFilterSize>
+        
+        
+        <DivFilterTag> 
+          <Div> ToWin </Div>
+          <Div> ForFun </Div>
+          <Div> Kill </Div>
+          <Div> Push </Div>
+          <Div> Early </Div>
+          <Div> Late </Div>
+          <Div> ToWin </Div>
+        </DivFilterTag>
+        
+        
+        <DivFilterMap> 
+        
+        </DivFilterMap>
+      
+      
+      </DivFilter>
     )
 
 }
@@ -326,12 +219,13 @@ const Comp = ({
 
   function mapStateToProps(state) {
     return {
-      listAllTag: state.comp_gallery.gallery.listAllTag
       
-      ,listMap: state.comp_gallery.create.listMap
-      ,listPosition: state.comp_gallery.create.listPosition
-      ,listTag: state.comp_gallery.create.listTag
-
+      
+      dictAllHeroBasic: state.hots.dictAllHeroBasic
+      ,listAllMap: state.hots.listAllMap
+      ,listAllTag: state.comp_gallery.listAllTag
+      
+    
     };
   }
 
@@ -344,4 +238,4 @@ const Comp = ({
 
 
   export
-default connect(mapStateToProps, mapDispatchToProps)(Comp);
+default connect(mapStateToProps, mapDispatchToProps)(Filter);

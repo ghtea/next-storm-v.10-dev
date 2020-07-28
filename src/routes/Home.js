@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { withCookies, Cookies, useCookies } from 'react-cookie';
 
 import { NavLink } from 'react-router-dom';
 import {Div} from '../styles/DefaultStyles';
@@ -53,6 +53,7 @@ const NavLinkStyled = styled(NavLink)`
 
 function Home() {
   
+  // console.log(document.cookie) not work
   
   return (
     <DivHome>
@@ -64,6 +65,8 @@ function Home() {
         
         <Div> Go to </Div>
         <Div> Team Generator </Div>
+        
+        <Div> {document.cookie}</Div>
         
       </NavLinkStyled>
       

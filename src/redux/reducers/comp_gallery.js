@@ -10,6 +10,8 @@ const stateInitial = {
     gallery : {
       listComp: [] // searching
       , fComp: {} // FOCUS a comp
+      , option: "small" // small, middle, big, list
+      , listAllTag: ["ToWin", "ForFun", "Kill", "Push", "Early", "Late"]
     }
     
     , create : {

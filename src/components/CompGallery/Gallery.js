@@ -16,6 +16,7 @@ import { NavLink, useHistory } from 'react-router-dom';
 
 import {Div, Input, Button} from '../../styles/DefaultStyles';
 import Comp from './Gallery/Comp'
+import Filter from './Gallery/Filter'
 
 import useInput from '../../tools/hooks/useInput';
 import {getTimeStamp} from '../../tools/vanilla/time';
@@ -45,7 +46,7 @@ const DivListComp = styled(Div)`
   
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   
   flex-wrap: wrap;
@@ -61,6 +62,8 @@ const DivListComp = styled(Div)`
   
   )
 }
+
+ 
 
 
  const Gallery = ({
@@ -105,6 +108,8 @@ const DivListComp = styled(Div)`
   return (
   
   <DivGallery>
+  
+    <Filter />
     
     {(!readyListComp)? <Div> loading </Div>
       :

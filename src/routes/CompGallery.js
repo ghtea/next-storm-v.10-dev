@@ -54,7 +54,7 @@ const SubCompGallery = styled(Div)`
   position: fixed;
   
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     top: 50px;
     left: 0px;
     
@@ -65,12 +65,12 @@ const SubCompGallery = styled(Div)`
   	border-bottom: 1px solid ${props => props.theme.color_very_weak};
   }
 
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     top: 0px;
-    left: 0px;
+    left: 120px;
     z-index: 10;
     
-    width: 100%;
+    width: calc(100% - 120px);
   	height: 50px; 
     
     flex-direction: row;
