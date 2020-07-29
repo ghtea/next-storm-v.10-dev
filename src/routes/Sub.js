@@ -6,6 +6,9 @@ import * as config from '../config';
 
 import { connect } from "react-redux";
 import {replaceData} from "../redux/actions/basic";
+import addRemoveNotification from "../redux/thunks/addRemoveNotification";
+import {replaceDataAuth, replaceData2Auth} from "../redux/actions/auth";
+
 
 
 import { NavLink } from 'react-router-dom';
@@ -14,6 +17,7 @@ import {Div, Button} from '../styles/DefaultStyles';
 import IconLogo from '../svgs/brand/IconLogo';
 import IconSun from '../svgs/basic/IconSun';
 import IconMoon from '../svgs/basic/IconMoon';
+import storage from '../tools/vanilla/storage';
 
 
 /*
@@ -200,7 +204,13 @@ const Slider = styled(Div)`
 
 
 // img (svg) https://www.svgrepo.com/svg/154720/hexagon
-const Sub = ({match, location, replaceData, themeName}) => {
+const Sub = ({
+	match, location
+	, statusAuth, themeName
+	
+	,replaceData, addRemoveNotification
+	, replaceDataAuth, replaceData2Auth
+	}) => {
 	
 	const onClick_Slider = (event) => {
 		if (themeName === "light") {
@@ -224,6 +234,20 @@ const Sub = ({match, location, replaceData, themeName}) => {
 	}
 	*/
 	
+	const onClick_LogOut = async (event) => {
+		try {
+			const res = await axios.post(`${config.URL_API_NS}/auth-local/logout`, {withCredentials: true, credentials: 'include'});
+		}
+		catch (error) {  console.log(error); }
+		
+		storage.remove('loggedInfo');
+    //window.location.href = '/'; // 홈페이지로 새로고침
+    window.location.reload(true); // 현재페이지 새로고침
+    replaceDataAuth("status", false);
+    addRemoveNotification("success", `You've been logged out`);
+          
+	}
+	
 	
 	
 	// <Button> <a href={`${config.URL_API_NS}/auth/bnet`}>Log In</a> </Button>
@@ -246,6 +270,10 @@ const Sub = ({match, location, replaceData, themeName}) => {
 		<DivNavItem > <NavLinkNavItem to="/team-generator" isActive={()=>checkActive(/^(\/team-generator)/)} > Team Generator </NavLinkNavItem> </DivNavItem>
 		<DivNavItem > <NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > Comp Gallery </NavLinkNavItem> </DivNavItem>
 		
+		{(statusAuth)?
+			<Button onClick={onClick_LogOut}> log out </Button>
+			: <Div> logged in </Div>
+		}
 		
 		<DivButtonToggleMode>
 		
@@ -275,12 +303,17 @@ const Sub = ({match, location, replaceData, themeName}) => {
 function mapStateToProps(state) { 
   return { 
     themeName: state.basic.themeName
+    , statusAuth: state.auth.status
   }; 
 } 
 
 function mapDispatchToProps(dispatch) { 
   return { 
     replaceData: (which, newThemeName) => dispatch( replaceData(which, newThemeName) ) 
+    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    
+    ,replaceDataAuth : (which, replacement) => dispatch(replaceDataAuth(which, replacement))
+    ,replaceData2Auth : (which1, which2, replacement) => dispatch(replaceData2Auth(which1, which2, replacement))
   }; 
 }
 

@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
 import axios from 'axios';
+import queryString from 'query-string';
 
 import { connect } from "react-redux";
 import * as config from '../../config';
@@ -14,7 +15,7 @@ import {replaceDataAuth, replaceData2Auth} from "../../redux/actions/auth";
 
 import { Link, NavLink, useHistory } from 'react-router-dom';
 
-import {Div, Input, Button, Img, Textarea} from '../../styles/DefaultStyles';
+import {Div, Input, Button, Img, Textarea, A} from '../../styles/DefaultStyles';
 
 
 import useInput from '../../tools/hooks/useInput';
@@ -56,12 +57,20 @@ const LinkRegister = styled(Link)`
 
  const Login = ({
    addRemoveNotification
+   , location
  }) => {
 
   const inputEmail = useInput(""); // {value, setValue, onChange};
   const inputPassword = useInput(""); // {value, setValue, onChange};
   
   const history = useHistory(); 
+  
+  useEffect(()=>{
+    const query = queryString.parse(location.search);
+    if(query.expired !== undefined) {
+      addRemoveNotification("error", "please log in again");
+    }
+  },[])
   
   
   const onClick_Login = async (event) => {
@@ -109,8 +118,9 @@ const LinkRegister = styled(Link)`
           
           storage.set('loggedInfo', loggedInfo);
           
-          console.log(storage.get("loggedInfo"))
-          addRemoveNotification("success", `you have logined successfully`);
+          replaceDataAuth("status", true);
+          //console.log(storage.get("loggedInfo"))
+          addRemoveNotification("success", `You've been logged in`);
           
           
           
@@ -124,6 +134,26 @@ const LinkRegister = styled(Link)`
     
   }
   
+  
+  /* 블리자드 쪽 cors 설정때문에 a 요소 를 클릭해서 들어가는 걸로 하자...
+  const onClick_LoginBnet = async (event) => {
+    
+    try {
+     
+        const res = await axios.get(`https://a-ns.avantwing.com/auth-bnet/login`, {withCredentials: true, credentials: 'include'});
+        // https://www.zerocho.com/category/NodeJS/post/5e9bf5b18dcb9c001f36b275   we need extra setting for cookies
+        console.log(res)
+        
+        // 내가 지정한 오류에 속한 결과이면...
+        if (res.data.situation === "error") {
+          addRemoveNotification("error", `${res.data.message}`);
+        }
+        
+    } catch(error) {console.log(error)}
+    
+  }
+  */
+  
   return (
   
   <DivLogin>
@@ -132,6 +162,8 @@ const LinkRegister = styled(Link)`
     <InputPasswordStyled {...inputPassword}  placeholder="password" type="password" />
     
     <ButtonLogin onClick={onClick_Login}> login </ButtonLogin>
+    
+    <A href={`https://a-ns.avantwing.com/auth-bnet/login`}> with Battlenet </A>
     
     <LinkRegister to="/auth/register"> to register </LinkRegister>
     

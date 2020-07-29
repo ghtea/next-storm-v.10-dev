@@ -94,7 +94,7 @@ const App = ({
     replaceDataAuth("_id", loggedInfo._id)
     
     try {
-      const res = await axios.get(`${config.URL_API_NS}/auth-local/check`, {withCredentials: true});
+      const res = await axios.get(`${config.URL_API_NS}/auth-local/check`, {withCredentials: true, credentials: 'include'});
       console.log("seems not error!")
     } catch (e) {
       storage.remove('loggedInfo');
