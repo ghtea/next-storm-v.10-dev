@@ -1,8 +1,10 @@
 import React, {useEffect} from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import styled from 'styled-components';
+import axios from 'axios';
 
 import { connect } from "react-redux";
+import * as config from './config';
 import replaceTheme from "./redux/thunks/replaceTheme";
 
 import Sub from "./routes/Sub";
@@ -15,6 +17,10 @@ import TeamGeneratorDoor from "./routes/TeamGeneratorDoor";
 
 import CompGallery from "./routes/CompGallery";
 
+import addRemoveNotification from "./redux/thunks/addRemoveNotification";
+import {replaceData, replaceData2} from "./redux/actions/basic";
+import {replaceDataAuth, replaceData2Auth} from "./redux/actions/auth";
+import storage from './tools/vanilla/storage';
 
 
 import {ThemeProvider } from 'styled-components';
@@ -59,7 +65,12 @@ const isDarkMode = () => {
 }  
 
 
-const App = ({themeName, replaceTheme, notification}) => {
+const App = ({
+  themeName, replaceTheme, notification
+  
+  ,replaceDataAuth, replaceData2Auth
+  , addRemoveNotification
+}) => {
   
   
   useEffect(()=>{
@@ -67,6 +78,33 @@ const App = ({themeName, replaceTheme, notification}) => {
     const themeDeviceStr = isDarkMode() ? 'dark' : 'light';
     replaceTheme(themeDeviceStr);
   }, [])
+  
+  
+  useEffect( () => { 
+    (async () => {
+    
+    const loggedInfo = storage.get('loggedInfo'); // 로그인 정보를 로컬스토리지에서 가져옵니다.
+    if(!loggedInfo) {
+      console.log("no logged info");
+      return; // 로그인 정보가 없다면 여기서 멈춥니다.
+    }; 
+    
+    replaceDataAuth("status", true)
+    replaceDataAuth("email", loggedInfo.email)
+    replaceDataAuth("_id", loggedInfo._id)
+    
+    try {
+      const res = await axios.get(`${config.URL_API_NS}/auth-local/check`, {withCredentials: true});
+      console.log("seems not error!")
+    } catch (e) {
+      storage.remove('loggedInfo');
+      window.location.href = '/auth/login?expired';
+    }
+    
+    }) ()
+  
+  },[])
+  
   
   
   return (
@@ -116,6 +154,14 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) { 
   return { 
     replaceTheme: (themeName) => dispatch(replaceTheme(themeName)) 
+    
+    ,replaceDataAuth : (which, replacement) => dispatch(replaceDataAuth(which, replacement))
+    ,replaceData2Auth : (which1, which2, replacement) => dispatch(replaceData2Auth(which1, which2, replacement))
+    
+    ,replaceData : (which, replacement) => dispatch(replaceData(which, replacement))
+    ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
+    
+    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
   }; 
 }
 

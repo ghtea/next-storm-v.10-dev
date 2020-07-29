@@ -3,8 +3,9 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { sessionReducer, sessionService  } from 'redux-react-session';
+//import { sessionReducer, sessionService  } from 'redux-react-session';
 
+import auth from './reducers/auth';
 import basic from './reducers/basic';
 import hots from './reducers/hots';
 import team_generator from './reducers/team_generator';
@@ -15,12 +16,14 @@ import * as types from './actions/ActionTypes';
 
 
 const reducers = combineReducers({
-    basic: basic
-    ,hots : hots
-    ,team_generator : team_generator
-    ,comp_gallery : comp_gallery
-    
-    , session: sessionReducer // https://www.npmjs.com/package/redux-react-session
+  
+  auth: auth
+  ,basic: basic
+  ,hots : hots
+  ,team_generator : team_generator
+  ,comp_gallery : comp_gallery
+  
+  //, session: sessionReducer // https://www.npmjs.com/package/redux-react-session
 });
 
 
@@ -29,7 +32,7 @@ const store = createStore(
   applyMiddleware(thunk.withExtraArgument(axios), logger)
 )
 
-sessionService.initSessionService(store);
+//sessionService.initSessionService(store);
 
 export default store;
 

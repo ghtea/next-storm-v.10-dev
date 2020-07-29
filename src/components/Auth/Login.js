@@ -9,7 +9,7 @@ import * as config from '../../config';
 
 import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
 import {replaceData2} from "../../redux/actions/basic";
-import {replaceDataCompGallery, replaceData2CompGallery} from "../../redux/actions/comp_gallery";
+import {replaceDataAuth, replaceData2Auth} from "../../redux/actions/auth";
 
 
 import { Link, NavLink, useHistory } from 'react-router-dom';
@@ -18,6 +18,7 @@ import {Div, Input, Button, Img, Textarea} from '../../styles/DefaultStyles';
 
 
 import useInput from '../../tools/hooks/useInput';
+import storage from '../../tools/vanilla/storage';
 import {getTimeStamp} from '../../tools/vanilla/time';
 
 import IconWorking from '../../svgs/basic/IconWorking'
@@ -54,13 +55,72 @@ const LinkRegister = styled(Link)`
 
 
  const Login = ({
-   
+   addRemoveNotification
  }) => {
 
-  const InputEmail = useInput(""); // {value, setValue, onChange};
-  const InputPassword = useInput(""); // {value, setValue, onChange};
+  const inputEmail = useInput(""); // {value, setValue, onChange};
+  const inputPassword = useInput(""); // {value, setValue, onChange};
   
-  const onClick_Login = (event) => {
+  const history = useHistory(); 
+  
+  
+  const onClick_Login = async (event) => {
+    
+    try {
+      if (inputEmail.value === "") {
+        addRemoveNotification("error", "enter email")
+      }
+      /*
+      else if (inputUsername.value === "") {
+        addRemoveNotification("error", "enter username")
+      }
+      */
+      else if (inputPassword.value === "") {
+        addRemoveNotification("error", "enter passwords")
+      }
+    
+      else {
+        
+        const tUser = {
+          email: inputEmail.value
+          , password: inputPassword.value
+        }
+        
+        
+        const res = await axios.post(`https://a-ns.avantwing.com/auth-local/login`, tUser, {withCredentials: true, credentials: 'include'});
+        // https://www.zerocho.com/category/NodeJS/post/5e9bf5b18dcb9c001f36b275   we need extra setting for cookies
+        console.log(res)
+        
+        // 내가 지정한 오류에 속한 결과이면...
+        if (res.data.situation === "error") {
+          addRemoveNotification("error", `${res.data.message}`);
+        }
+        
+        // 성공시
+        else if (res.status === 200) {
+          
+          console.log(res.data);
+          
+          const loggedInfo = {
+            _id: res.data._id
+            , email: res.data.email
+          }
+          
+          
+          storage.set('loggedInfo', loggedInfo);
+          
+          console.log(storage.get("loggedInfo"))
+          addRemoveNotification("success", `you have logined successfully`);
+          
+          
+          
+          history.push('/');
+        }
+        
+        // 그 외 (에러는 못받아들이는듯)
+        else { console.log(res) };
+      }
+    } catch(error) {console.log(error)}
     
   }
   
@@ -68,8 +128,9 @@ const LinkRegister = styled(Link)`
   
   <DivLogin>
     <Div> login </Div>
-    <InputEmailStyled {...InputEmail}  placeholder="email"  />
-    <InputPasswordStyled {...InputPassword}  placeholder="password" type="password" />
+    <InputEmailStyled {...inputEmail}  placeholder="email"  />
+    <InputPasswordStyled {...inputPassword}  placeholder="password" type="password" />
+    
     <ButtonLogin onClick={onClick_Login}> login </ButtonLogin>
     
     <LinkRegister to="/auth/register"> to register </LinkRegister>
@@ -92,8 +153,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) { 
   return {
     
-    replaceDataCompGallery : (which, replacement) => dispatch(replaceDataCompGallery(which, replacement))
-    ,replaceData2CompGallery : (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
+    replaceDataAuth : (which, replacement) => dispatch(replaceDataAuth(which, replacement))
+    ,replaceData2Auth : (which1, which2, replacement) => dispatch(replaceData2Auth(which1, which2, replacement))
     
     ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
     

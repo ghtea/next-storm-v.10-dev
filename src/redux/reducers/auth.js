@@ -6,23 +6,11 @@ import * as types from '../actions/ActionTypes';
 
 const stateInitial = { 
     
+    status: false // true, false
     
-    register: {
-        
-      exists: {
-        email: false
-        ,password: false
-      }
-      
-    }
-    
-    ,login: {
-      
-      email: ''
-      ,password: ''
-      
-    }
-    
+    , how: ""        // local, social (google, blizzard) 
+    , email: ""
+    , _id: ""
     
   };
 
@@ -39,7 +27,7 @@ const auth = (
   switch (action.type) {
     
 
-    case types.REPLACE_DATA:
+    case types.REPLACE_DATA_AUTH:
       
       if ( (!!action.data) && (action.data.constructor === Array) ) {
         return {
@@ -62,7 +50,7 @@ const auth = (
       }
       
     
-    case types.REPLACE_DATA_2:
+    case types.REPLACE_DATA_2_AUTH:
       
       if ( (!!action.data) && (action.data.constructor === Array) ) {
         return {
@@ -96,19 +84,7 @@ const auth = (
       } 
         
 
-      
-      
-    case types.REPLACE_READY:
-      return {
-      	...state, 
-      	ready: {
-      	  ...state.ready,
-      	  [action.which]: action.true_false
-      	}
-      };
-      
-    
-      
+
        
       
     default:
@@ -117,4 +93,4 @@ const auth = (
 };
 
 
-export default basic;
+export default auth;

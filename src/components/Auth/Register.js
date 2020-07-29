@@ -65,20 +65,22 @@ const LinkLogin = styled(Link)`
 
   const inputEmail = useInput(""); // {value, setValue, onChange};
   
-  const inputUsername = useInput(""); 
+  //const inputUsername = useInput(""); 
   
   const inputPassword1 = useInput(""); 
   const inputPassword2 = useInput(""); 
   
   const onClick_Register = async (event) => {
     
-     try {
+    try {
       if (inputEmail.value === "") {
         addRemoveNotification("error", "enter email")
       }
+      /*
       else if (inputUsername.value === "") {
         addRemoveNotification("error", "enter username")
       }
+      */
       else if (inputPassword1.value === "" || inputPassword2.value === "") {
         addRemoveNotification("error", "enter passwords")
       }
@@ -87,25 +89,42 @@ const LinkLogin = styled(Link)`
       }
       else {
         
+        const _id = Date.now().toString() + '_' + Math.random().toString(36).substr(2, 5);
+        
+        const tUser = {
+          _id: _id
+          , email: inputEmail.value
+          , password: inputPassword1.value
+        }
+        
+        
+        const res = await axios.post(`https://a-ns.avantwing.com/auth-local/register`, tUser);
+        
+        
+        // 내가 지정한 오류에 속한 결과이면...
+        if (res.data.situation === "error") {
+          addRemoveNotification("error", `${res.data.message}`);
+        }
+        
+        // 성공시
+        else if (res.status === 200) {
+          addRemoveNotification("success", `you registered successfully`);
+        }
+        
+        // 그 외 (에러는 못받아들이는듯)
+        else { console.log(res) };
       }
+    } catch(error) {console.log(error)}
     
-    
-    if (InputPassword1 ==)
-    let registerUser = {
-      
-    }
-    
-    await axios.post(`https://a-ns.avantwing.com/auth-local/register`, tUser);
   }
   
+  /* <InputCommon {...inputUsername}  placeholder="username" /> */
   return (
   
   <DivRegister>
     <Div> register </Div>
     
     <InputCommon {...inputEmail}  placeholder="email"  />
-    
-    <InputCommon {...inputUsername}  placeholder="username" />
     
     <InputCommon {...inputPassword1}  placeholder="password" type="password" />
     <InputCommon {...inputPassword2}  placeholder="password again" type="password" />

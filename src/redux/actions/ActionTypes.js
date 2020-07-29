@@ -1,4 +1,8 @@
 
+// auth
+export const REPLACE_DATA_AUTH = "REPLACE_DATA_AUTH";
+export const REPLACE_DATA_2_AUTH = "REPLACE_DATA_2_AUTH";
+
 // basic
 export const REPLACE_READY = "REPLACE_READY";
 export const REPLACE_LOADING = "REPLACE_LOADING";
