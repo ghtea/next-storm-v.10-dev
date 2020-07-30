@@ -206,7 +206,10 @@ const Slider = styled(Div)`
 // img (svg) https://www.svgrepo.com/svg/154720/hexagon
 const Sub = ({
 	match, location
-	, statusAuth, themeName
+	
+	, statusAuth, auth     // 변화 잘 감지하기 위해서, statusAuth 만 따로 빼놓기!
+	
+	, themeName
 	
 	,replaceData, addRemoveNotification
 	, replaceDataAuth, replaceData2Auth
@@ -236,15 +239,13 @@ const Sub = ({
 	
 	const onClick_LogOut = async (event) => {
 		try {
-			const res = await axios.post(`${config.URL_API_NS}/auth-local/logout`, {withCredentials: true, credentials: 'include'});
+			const res = await axios.post(`${config.URL_API_NS}/auth-local/log-out`, {withCredentials: true, credentials: 'include'});
 		}
 		catch (error) {  console.log(error); }
 		
-		storage.remove('loggedInfo');
-    //window.location.href = '/'; // 홈페이지로 새로고침
-    window.location.reload(true); // 현재페이지 새로고침
-    replaceDataAuth("status", false);
-    addRemoveNotification("success", `You've been logged out`);
+		storage.remove('loggedUser');
+		
+    window.location.reload(true); // 현재페이지 새로고침 (?reason=... 을 넣고 싶지만, 현재의 정확한 url 모르는 상태에서 query 추가하기가 좀 복잡하다)
           
 	}
 	
@@ -266,13 +267,16 @@ const Sub = ({
   	
 
 		<DivNavItem > <NavLinkNavItem to="/" exact={true}> Home </NavLinkNavItem> </DivNavItem>
-		<DivNavItem > <NavLinkNavItem to="/auth" > Auth </NavLinkNavItem> </DivNavItem>
+		
 		<DivNavItem > <NavLinkNavItem to="/team-generator" isActive={()=>checkActive(/^(\/team-generator)/)} > Team Generator </NavLinkNavItem> </DivNavItem>
 		<DivNavItem > <NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > Comp Gallery </NavLinkNavItem> </DivNavItem>
 		
 		{(statusAuth)?
-			<Button onClick={onClick_LogOut}> log out </Button>
-			: <Div> logged in </Div>
+			<Div>
+				<Div> {auth.battletag} </Div>
+				<Button onClick={onClick_LogOut}> log out </Button>
+			</Div>
+			: <DivNavItem > <NavLinkNavItem to="/log-in" > Log In </NavLinkNavItem> </DivNavItem>
 		}
 		
 		<DivButtonToggleMode>
@@ -304,6 +308,7 @@ function mapStateToProps(state) {
   return { 
     themeName: state.basic.themeName
     , statusAuth: state.auth.status
+    , auth: state.auth
   }; 
 } 
 

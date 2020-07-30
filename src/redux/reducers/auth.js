@@ -6,11 +6,13 @@ import * as types from '../actions/ActionTypes';
 
 const stateInitial = { 
     
-    status: false // true, false
+    status: false // true =  로그인됨, false = 로그아웃 상태
     
-    , how: ""        // local, social (google, blizzard) 
-    , email: ""
+    //, how: ""        // local, social (google, blizzard) 
+    
     , _id: ""
+    , email: ""
+    , battletag: ""
     
   };
 
@@ -29,45 +31,45 @@ const auth = (
 
     case types.REPLACE_DATA_AUTH:
       
-      if ( (!!action.data) && (action.data.constructor === Array) ) {
+      if ( (!!action.replacement) && (action.replacement.constructor === Array) ) {
         return {
       	...state, 
-      	[action.which]: [...action.data]
+      	[action.which]: [...action.replacement]
         }
       }
       
-      else if ( (!!action.data) && (action.data.constructor === Object) ) {
+      else if ( (!!action.replacement) && (action.replacement.constructor === Object) ) {
         return {
       	...state, 
-      	[action.which]: {...action.data}
+      	[action.which]: {...action.replacement}
         }
       }
       else {
         return {
         	...state, 
-        	[action.which]: action.data
+        	[action.which]: action.replacement
         }
       }
       
     
     case types.REPLACE_DATA_2_AUTH:
       
-      if ( (!!action.data) && (action.data.constructor === Array) ) {
+      if ( (!!action.replacement) && (action.replacement.constructor === Array) ) {
         return {
         	...state, 
         	[action.which1]: {
         	  ...state[action.which1]
-        	  ,[action.which2]: [...action.data]
+        	  ,[action.which2]: [...action.replacement]
         	}
         }
       }
       
-      else if ( (!!action.data) && (action.data.constructor === Object) ) {
+      else if ( (!!action.replacement) && (action.replacement.constructor === Object) ) {
         return {
         	...state, 
         	[action.which1]: {
         	  ...state[action.which1]
-        	  ,[action.which2]: {...action.data}
+        	  ,[action.which2]: {...action.replacement}
         	}
         }
       }
@@ -78,7 +80,7 @@ const auth = (
         	...state, 
         	[action.which1]: {
         	  ...state[action.which1]
-        	  ,[action.which2]: action.data
+        	  ,[action.which2]: action.replacement
         	}
         }
       } 

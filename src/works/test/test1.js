@@ -1,4 +1,9 @@
-const test = async () => {
+const regexBattletag = /.*#.*/;
+const resultTestBattletag = regexBattletag.test("e333#")
+
+console.log(resultTestBattletag);
+
+/*const test = async () => {
   
   try {
     
@@ -13,3 +18,5 @@ const test = async () => {
 
 
 test();
+*/
+

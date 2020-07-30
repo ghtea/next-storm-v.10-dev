@@ -6,28 +6,28 @@ import axios from 'axios';
 import queryString from 'query-string';
 
 import { connect } from "react-redux";
-import * as config from '../../config';
+import * as config from '../config';
 
-import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
-import {replaceData2} from "../../redux/actions/basic";
-import {replaceDataAuth, replaceData2Auth} from "../../redux/actions/auth";
+import addRemoveNotification from "../redux/thunks/addRemoveNotification";
+import {replaceData2} from "../redux/actions/basic";
+import {replaceDataAuth, replaceData2Auth} from "../redux/actions/auth";
 
 
 import { Link, NavLink, useHistory } from 'react-router-dom';
 
-import {Div, Input, Button, Img, Textarea, A} from '../../styles/DefaultStyles';
+import {Div, Input, Button, Img, Textarea, A} from '../styles/DefaultStyles';
 
 
-import useInput from '../../tools/hooks/useInput';
-import storage from '../../tools/vanilla/storage';
-import {getTimeStamp} from '../../tools/vanilla/time';
+import useInput from '../tools/hooks/useInput';
+import storage from '../tools/vanilla/storage';
+import {getTimeStamp} from '../tools/vanilla/time';
 
-import IconWorking from '../../svgs/basic/IconWorking'
-
-
+import IconWorking from '../svgs/basic/IconWorking'
 
 
-const DivLogin = styled(Div)`
+
+
+const DivLogIn = styled(Div)`
   width: 300px;
   height:300px;
   
@@ -46,7 +46,7 @@ const InputPasswordStyled = styled(Input)`
   height: 30px;
 `
 
-const ButtonLogin = styled(Button)`
+const ButtonLogIn = styled(Button)`
   
 `
 const LinkRegister = styled(Link)`
@@ -55,7 +55,7 @@ const LinkRegister = styled(Link)`
 
 
 
- const Login = ({
+ const LogIn = ({
    addRemoveNotification
    , location
  }) => {
@@ -65,40 +65,36 @@ const LinkRegister = styled(Link)`
   
   const history = useHistory(); 
   
+  /*
   useEffect(()=>{
     const query = queryString.parse(location.search);
     if(query.expired !== undefined) {
       addRemoveNotification("error", "please log in again");
     }
   },[])
+  */
   
-  
-  const onClick_Login = async (event) => {
+  const onClick_LogIn = async (event) => {
     
     try {
       if (inputEmail.value === "") {
         addRemoveNotification("error", "enter email")
       }
-      /*
-      else if (inputUsername.value === "") {
-        addRemoveNotification("error", "enter username")
-      }
-      */
       else if (inputPassword.value === "") {
         addRemoveNotification("error", "enter passwords")
       }
     
       else {
         
-        const tUser = {
+        const inputUser = {
           email: inputEmail.value
           , password: inputPassword.value
         }
         
         
-        const res = await axios.post(`https://a-ns.avantwing.com/auth-local/login`, tUser, {withCredentials: true, credentials: 'include'});
+        const res = await axios.post(`https://a-ns.avantwing.com/auth-local/log-in`, inputUser, {withCredentials: true, credentials: 'include'});
         // https://www.zerocho.com/category/NodeJS/post/5e9bf5b18dcb9c001f36b275   we need extra setting for cookies
-        console.log(res)
+        //console.log(res)
         
         // 내가 지정한 오류에 속한 결과이면...
         if (res.data.situation === "error") {
@@ -110,16 +106,18 @@ const LinkRegister = styled(Link)`
           
           console.log(res.data);
           
-          const loggedInfo = {
+          const loggedUser = {
             _id: res.data._id
-            , email: res.data.email
           }
           
           
-          storage.set('loggedInfo', loggedInfo);
+          storage.set('loggedUser', loggedUser);
           
-          replaceDataAuth("status", true);
-          //console.log(storage.get("loggedInfo"))
+          replaceDataAuth("status", true)
+          replaceDataAuth("_id", res.data._id)
+          replaceDataAuth("email", res.data.email)
+          replaceDataAuth("battletag", res.data.battletagConfirmed)
+          
           addRemoveNotification("success", `You've been logged in`);
           
           
@@ -134,42 +132,21 @@ const LinkRegister = styled(Link)`
     
   }
   
-  
-  //블리자드 쪽 cors 설정때문에 a 요소 를 클릭해서 들어가는 걸로 하자...
-  const onClick_LoginBnet = async (event) => {
-    
-    try {
-     
-        const res = await axios.get(`https://a-ns.avantwing.com/auth-bnet/login`, {withCredentials: true, credentials: 'include'});
-        // https://www.zerocho.com/category/NodeJS/post/5e9bf5b18dcb9c001f36b275   we need extra setting for cookies
-        console.log(res)
-        
-        // 내가 지정한 오류에 속한 결과이면...
-        if (res.data.situation === "error") {
-          addRemoveNotification("error", `${res.data.message}`);
-        }
-        
-    } catch(error) {console.log(error)}
-    
-  }
+
   
   
   return (
   
-  <DivLogin>
-    <Div> login </Div>
+  <DivLogIn>
+    <Div>  </Div>
     <InputEmailStyled {...inputEmail}  placeholder="email"  />
     <InputPasswordStyled {...inputPassword}  placeholder="password" type="password" />
     
-    <ButtonLogin onClick={onClick_Login}> login </ButtonLogin>
+    <ButtonLogIn onClick={onClick_LogIn}> log in </ButtonLogIn>
     
-    <ButtonLogin onClick={onClick_LoginBnet}> login </ButtonLogin>
+    <LinkRegister to="/sign-up"> to Sign Up </LinkRegister>
     
-    <A href={`https://a-ns.avantwing.com/auth-bnet/login`}> with Battlenet </A>
-    
-    <LinkRegister to="/auth/register"> to register </LinkRegister>
-    
-  </DivLogin>
+  </DivLogIn>
   
   )
 
@@ -197,4 +174,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 // 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(LogIn);
