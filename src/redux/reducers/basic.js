@@ -11,11 +11,13 @@ const stateInitial = {
       ,dictAllHeroBasic: false
       ,listAllMap: false
       ,listComp: false
+      ,user: false
     }
     
     ,loading : {
       planTeam: false
       ,listComp: false
+      ,user: false
     }
     
     

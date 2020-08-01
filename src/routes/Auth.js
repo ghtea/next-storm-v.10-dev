@@ -6,9 +6,9 @@ import { Route, Switch } from "react-router-dom";
 import { NavLink } from 'react-router-dom';
 import {Div} from '../styles/DefaultStyles';
 
-import Login from '../components/Auth/Login';
-import Register from '../components/Auth/Register';
-
+import LogIn from '../components/Auth/LogIn';
+import SignUp from '../components/Auth/SignUp';
+import ApplyBattletag from '../components/Auth/ApplyBattletag';
 
 import IconSignWay from '../svgs/basic/IconSignWay';
 
@@ -37,8 +37,9 @@ function Auth() {
     <DivAuth>
       
       <Switch>
-        <Route path="/auth/login" component={Login} />
-        <Route path="/auth/register"  component={Register} />
+        <Route path="/auth/sign-up"  component={SignUp} />
+        <Route path="/auth/log-in" component={LogIn} />
+        <Route path="/auth/apply-battletag"  component={ApplyBattletag} />
       </Switch>
         
     </DivAuth>

@@ -6,22 +6,22 @@ import axios from 'axios';
 import { uuid } from 'uuidv4'
 
 import { connect } from "react-redux";
-import * as config from '../config';
+import * as config from '../../config';
 
-import addRemoveNotification from "../redux/thunks/addRemoveNotification";
-import {replaceData2} from "../redux/actions/basic";
-import {replaceDataCompGallery, replaceData2CompGallery} from "../redux/actions/comp_gallery";
+import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
+import {replaceData2} from "../../redux/actions/basic";
+import {replaceDataCompGallery, replaceData2CompGallery} from "../../redux/actions/comp_gallery";
 
 
 import { Link, NavLink, useHistory } from 'react-router-dom';
 
-import {Div, Input, Button, Img, Textarea} from '../styles/DefaultStyles';
+import {Div, Input, Button, Img, Textarea} from '../../styles/DefaultStyles';
 
 
-import useInput from '../tools/hooks/useInput';
-import {getTimeStamp} from '../tools/vanilla/time';
+import useInput from '../../tools/hooks/useInput';
+import {getTimeStamp} from '../../tools/vanilla/time';
 
-import IconWorking from '../svgs/basic/IconWorking'
+import IconWorking from '../../svgs/basic/IconWorking'
 
 
 
@@ -51,7 +51,7 @@ const InputPasswordStyled = styled(Input)`
   height: 30px;
 `
 */
-const ButtonRegister = styled(Button)`
+const ButtonSignUp = styled(Button)`
   
 `
 const LinkLogin = styled(Link)`
@@ -121,7 +121,7 @@ const LinkLogin = styled(Link)`
           
           // 성공시
           else if (res.status === 200) {
-            addRemoveNotification("success", `you registered successfully`);
+            addRemoveNotification("success", `you registered email & password`);
             
             // 배틀태그 확인하러 여행!
             window.location.href = `${config.URL_API_NS}/auth-bnet/`;
@@ -155,7 +155,7 @@ const LinkLogin = styled(Link)`
     <InputCommon {...inputBattletagPending}  placeholder="battletag#1234"/>
     
     
-    <ButtonRegister onClick={onClick_SignUp}> SIGN UP </ButtonRegister>
+    <ButtonSignUp onClick={onClick_SignUp}> SIGN UP </ButtonSignUp>
     
     <LinkLogin to="/login"> to login </LinkLogin>
     

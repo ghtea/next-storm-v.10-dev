@@ -12,9 +12,7 @@ import Sub from "./routes/Sub";
 import Notification from "./routes/Notification";
 import Home from "./routes/Home";
 
-import LogIn from "./routes/LogIn";
-import SignUp from "./routes/SignUp";
-import SetMode from "./routes/SetMode";
+import Auth from "./routes/Auth";
 
 import TeamGenerator from "./routes/TeamGenerator";
 import TeamGeneratorDoor from "./routes/TeamGeneratorDoor";
@@ -73,12 +71,14 @@ const App = ({
   themeName, replaceTheme, notification
   
   ,replaceDataAuth, replaceData2Auth
+  ,replaceData, replaceData2
+  
   , addRemoveNotification
 }) => {
   
 
   useEffect(()=>{
-    console.log(notification);
+    //console.log(notification);
     const themeDeviceStr = isDarkMode() ? 'dark' : 'light';
     replaceTheme(themeDeviceStr);
   }, [])
@@ -90,6 +90,9 @@ const App = ({
   
   useEffect( () => { 
     (async () => {
+      
+    replaceData2('loading', 'user', true);
+    replaceData2('ready', 'user', false);
     
     const loggedUser = storage.get('loggedUser'); // 로그인 정보를 로컬스토리지에서 가져옵니다.
     // 참고로 localStorage 에는 user의 _id 만 저장한다!!! 
@@ -102,6 +105,9 @@ const App = ({
       replaceDataAuth("email", "");
       replaceDataAuth("battletag", "");
       
+      replaceData2('loading', 'user', false);
+      replaceData2('ready', 'user', false);
+    
       return; // 로그인 정보가 없다면 여기서 멈춥니다.
     }; 
     
@@ -114,14 +120,18 @@ const App = ({
       
       //console.log(res)
       
-      replaceDataAuth("status", true)
       replaceDataAuth("_id", res.data._id)
       replaceDataAuth("email", res.data.email)
       replaceDataAuth("battletag", res.data.battletagConfirmed)
       
+      replaceDataAuth("status", true);  // 모두 준비되었다는 걸 알려주기도 하니깐, 맨 나중에
+      
+      replaceData2('loading', 'user', false);
+      replaceData2('ready', 'user', true);
+      
     } catch (e) { // token 정보가 잘못되었었으면 여기로 이동
       storage.remove('loggedUser');
-      window.location.href = '/login?reason=wrong-token';
+      window.location.href = '/log-in?reason=wrong-token';
     }
     
     }) ()
@@ -149,9 +159,7 @@ const App = ({
       
       <Route path="/" exact={true} component={Home} />
       
-      <Route path="/log-in" component={LogIn} />
-      <Route path="/sign-up" component={SignUp} />
-      <Route path="/set-mode" component={SetMode} />
+      <Route path="/auth" component={Auth} />
       
       <Route path="/team-generator" exact={true} component={TeamGeneratorDoor} />
       <Route path="/team-generator/:idPlanTeam"  component={TeamGenerator} />

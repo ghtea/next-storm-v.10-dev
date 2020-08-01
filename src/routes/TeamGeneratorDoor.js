@@ -85,18 +85,9 @@ const DivD = styled(Div)`
   grid-area: D;
   
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  
-  padding-bottom: 20px;
-  
-  & > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
 `
 
 
@@ -116,18 +107,6 @@ const ButtonContact = styled(Button)`
 
 
 
-const DivWho = styled(Div)`
-  color: ${props => props.theme.color_weak};
-  
-  margin-top: 3px;
-  margin-bottom: 3px;
-
-`
-
-const DivPeople = styled(Div)`
-  width: 100%;
-  
-`
 
 
 
@@ -157,25 +136,12 @@ const TeamGeneratorDoor = ({}) => {
       
       
       <DivC>
-        <Guide />
+        <SearchingPlan  /> 
       </DivC>
       
       
       <DivD>
-        
-        <Div>
-          <IconPenBrush width={"64px"} height={"64px"} />
-          <DivWho> developed & designed by </DivWho>
-          <DivPeople> <A href="https://twitter.com/mbcat_hots" > @mbcat_hots </A>  </DivPeople>
-        </Div>
-        
-        <Div>
-          <IconHandsHeart width={"120px"} height={"96px"} />
-          <DivWho> thanks to </DivWho>
-          <DivPeople> Heroes Profile API </DivPeople>
-          <DivPeople>  Madosan </DivPeople>
-        </Div>
-        
+        <Guide />
       </DivD>
       
       

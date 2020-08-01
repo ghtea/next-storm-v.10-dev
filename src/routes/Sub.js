@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
@@ -68,17 +68,141 @@ const DivSub = styled(Div)`
   
 `;
 
-const DivLogo = styled(Div)`
-	margin-top: 20px;
-	margin-bottom: 10px;
-	
+const DivProfileContainer = styled(Div)`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+		
 	@media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
   	display: none;
 	}
  
 	@media (min-width:  ${props => (props.theme.media.mid_big) }px) {
+		margin-top: 20px;
+		margin-bottom: 10px;
 	
+		width: 80px;
+		height: 80px;
+		
 	}
+`
+
+const DivProfileLoading = styled(Div)`
+	
+	background-color: ${props => props.theme.color_very_weak};
+	
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	
+	& div {
+		color: ${props => props.theme.COLOR_normal};
+		
+		width: auto;
+		height: auto;
+		margin-top: 2px;
+		margin-bottom: 2px;
+	}
+`
+
+
+const DivProfileLoggedOut = styled(Div)`
+	
+	background-color: ${props => props.theme.color_very_weak};
+	
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	
+	& a {
+		text-decoration: none;
+		
+		width: 100%;
+		height: 100%;
+		
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	& a > div {
+		color: ${props => props.theme.COLOR_normal};
+		text-decoration: none;
+		
+		width: auto;
+		height: auto;
+		margin-top: 2px;
+		margin-bottom: 2px;
+	}
+`
+
+const DivProfileLoggedIn = styled(Div)`
+	
+	background-color: ${props => props.theme.color_very_weak};
+	
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	
+	& a {
+		text-decoration: none;
+		
+		width: 100%;
+		height: 100%;
+		
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	& a > div { 
+		color: ${props => props.theme.COLOR_normal};
+
+	}
+`
+
+const NavLinkStyled = styled(NavLink)`
+	
+`
+
+const DivBattletagName = styled(Div)`
+	width: auto;
+	
+	font-size: 1rem;
+	margin-bottom: 0px;
+	
+	display: block;
+	text-algin: left;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+`
+const DivBattletagNumber = styled(Div)`
+	width: auto;
+	
+	font-size: 0.8rem;
+	margin-top: 0px;
+	
+	display: block;
+	text-algin: left;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+`
+
+const DivEmail = styled(Div)`
+	width: 70px;
+	
+	font-size: 0.8rem;
+	
+	display: block;
+	text-algin: left;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 `
 
 /*
@@ -202,18 +326,19 @@ const Slider = styled(Div)`
 
 
 
-
 // img (svg) https://www.svgrepo.com/svg/154720/hexagon
 const Sub = ({
 	match, location
 	
 	, statusAuth, auth     // 변화 잘 감지하기 위해서, statusAuth 만 따로 빼놓기!
+	, loadingUser, readyUser
 	
 	, themeName
 	
 	,replaceData, addRemoveNotification
 	, replaceDataAuth, replaceData2Auth
 	}) => {
+	
 	
 	const onClick_Slider = (event) => {
 		if (themeName === "light") {
@@ -223,6 +348,30 @@ const Sub = ({
 			replaceData("themeName", "light")
 		}
 	}
+	
+	
+	
+	
+	
+	const [battletagName, setBattletagName] = useState("");
+	const [battletagNumber, setBattletagNumber] = useState("");
+ 
+	
+	useEffect(()=>{
+		if(readyUser === true && auth.battletag) {
+			// 배틀태그를 아직 인증하지 않은 경우도 생각해야 한다. (그 경우 auth.battletag ="")
+			
+			const regexBattletag = /(#\d*)$/;
+		  const listNumberBattletag = auth.battletag.match(regexBattletag);
+		  
+		  const battletagNameTemp = auth.battletag.replace(regexBattletag, "");
+		  const battletagNumberTemp = listNumberBattletag[0];
+		  
+		  setBattletagName(battletagNameTemp)
+		  setBattletagNumber(battletagNumberTemp)
+		  //console.log(battletagName, battletagNumber);
+		}
+	}, [readyUser])
 	
 	/*
 	const onClick_LogIn = async (event) => {
@@ -237,20 +386,6 @@ const Sub = ({
 	}
 	*/
 	
-	const onClick_LogOut = async (event) => {
-		try {
-			const res = await axios.post(`${config.URL_API_NS}/auth-local/log-out`, {withCredentials: true, credentials: 'include'});
-		}
-		catch (error) {  console.log(error); }
-		
-		storage.remove('loggedUser');
-		
-    window.location.reload(true); // 현재페이지 새로고침 (?reason=... 을 넣고 싶지만, 현재의 정확한 url 모르는 상태에서 query 추가하기가 좀 복잡하다)
-          
-	}
-	
-	
-	
 	// <Button> <a href={`${config.URL_API_NS}/auth/bnet`}>Log In</a> </Button>
 	return (
  
@@ -258,11 +393,44 @@ const Sub = ({
   <DivSub>
   	
   	
-  	<DivLogo>
+  	<DivProfileContainer>
   	
-  	<IconLogo width={"50px"} height={"50px"} />
+  		{ ( function() {
+        if (loadingUser) {
+        	return (
+        		<DivProfileLoading> 
+        			<Div> loading </Div>
+        		</DivProfileLoading>
+        	);
+      	}
+      	else if (!loadingUser && !readyUser) {
+        	return (
+	        	<DivProfileLoggedOut>
+							<NavLinkStyled to="/auth/log-in" > 
+								<Div> Log In </Div> 
+							</NavLinkStyled> 
+						</DivProfileLoggedOut>
+					);
+      	}
+      	else {
+      		return (
+	      		<DivProfileLoggedIn>
+	      			<NavLinkStyled to="/" >
+	      				{(auth.battletag)?
+	      					<>
+			      				<DivBattletagName> {battletagName} </DivBattletagName>
+										<DivBattletagNumber> {battletagNumber} </DivBattletagNumber>
+									</>
+									: <DivEmail> {auth.email} </DivEmail>
+	      				}
+	      			</NavLinkStyled>
+						</DivProfileLoggedIn>
+					)
+      	}
+      	
+  		} )() }
   	
-  	</DivLogo>
+  	</DivProfileContainer>
   	
   	
 
@@ -271,13 +439,7 @@ const Sub = ({
 		<DivNavItem > <NavLinkNavItem to="/team-generator" isActive={()=>checkActive(/^(\/team-generator)/)} > Team Generator </NavLinkNavItem> </DivNavItem>
 		<DivNavItem > <NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > Comp Gallery </NavLinkNavItem> </DivNavItem>
 		
-		{(statusAuth)?
-			<Div>
-				<Div> {auth.battletag} </Div>
-				<Button onClick={onClick_LogOut}> log out </Button>
-			</Div>
-			: <DivNavItem > <NavLinkNavItem to="/log-in" > Log In </NavLinkNavItem> </DivNavItem>
-		}
+		
 		
 		<DivButtonToggleMode>
 		
@@ -309,6 +471,9 @@ function mapStateToProps(state) {
     themeName: state.basic.themeName
     , statusAuth: state.auth.status
     , auth: state.auth
+    
+    , loadingUser: state.basic.loading.user
+    , readyUser: state.basic.ready.user
   }; 
 } 
 

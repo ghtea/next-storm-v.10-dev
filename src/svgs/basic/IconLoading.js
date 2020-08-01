@@ -37,7 +37,7 @@ const DivContainer2 = styled(Div)`
 
 
 // size, w : h = 9 : 8
-const IconLoading = ({width, height, themeName}) => {
+const IconLoading = ({width, height, color="color_very_weak", themeName}) => {
 
 	return (
 		
@@ -52,7 +52,7 @@ const IconLoading = ({width, height, themeName}) => {
 			height="100%"
 			viewBox="0 0 512 512"
 			
-			fill={ themes[themeName]["color_very_weak"] }
+			fill={ themes[themeName][color] }
 			>
 			
 			
