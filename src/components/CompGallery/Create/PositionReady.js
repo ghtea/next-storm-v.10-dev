@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import * as config from '../../../config';
 
 
-import addRemoveNotification from "../../../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
 import {replaceWorking} from "../../../redux/actions/basic";
 import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} from "../../../redux/actions/comp_gallery";
 
@@ -174,7 +174,7 @@ const Hero = ({
    , replaceData2CompGallery
    , replaceListPosition
    
-   , addRemoveNotification
+   , addDeleteNotification
 }) => {
         
   
@@ -269,7 +269,7 @@ const PositionReady = ({
    , replaceData2CompGallery
    , replaceListPosition
    
-   , addRemoveNotification
+   , addDeleteNotification
 }) => {
   
   
@@ -334,7 +334,7 @@ const PositionReady = ({
           replaceDataCompGallery={replaceDataCompGallery}
           replaceListPosition={replaceListPosition}
           
-          addRemoveNotification={addRemoveNotification}
+          addDeleteNotification={addDeleteNotification}
    
           triggerPosition={triggerPosition}
           
@@ -396,7 +396,7 @@ function mapDispatchToProps(dispatch) {
     ,replaceListPosition : (replacement) => dispatch(replaceListPosition(replacement))
     
     
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }
 

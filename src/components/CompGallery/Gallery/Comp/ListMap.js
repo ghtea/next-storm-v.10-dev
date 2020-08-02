@@ -9,8 +9,8 @@ import { connect } from "react-redux";
 import * as config from '../../../../config';
 
 
-import addRemoveNotification from "../../../../redux/thunks/addRemoveNotification";
-
+import addDeleteNotification from "../../../../redux/thunks/addDeleteNotification";
+import dictCode from '../../../../others/dictCode'
 
 import {Div, Input, Button, Img, Textarea} from '../../../../styles/DefaultStyles';
 
@@ -67,7 +67,7 @@ const DivListMap = styled(Div)`
    
    ,listMap
    
-   , addRemoveNotification
+   , addDeleteNotification
    
  }) => {
   
@@ -108,7 +108,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) { 
   return { 
     
-    addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }
 

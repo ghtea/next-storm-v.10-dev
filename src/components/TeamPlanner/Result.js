@@ -8,10 +8,11 @@ import { NavLink, useParams } from 'react-router-dom';
 
 import { connect } from "react-redux";
 
-import {addResult, deleteResult} from "../../redux/actions/team_generator";
+import {addResult, deleteResult} from "../../redux/actions/team_planner";
 import readPlanTeam from "../../redux/thunks/readPlanTeam";
-import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 // https://reacttraining.com/blog/react-router-v5-1/
+import dictCode from '../../others/dictCode'
 
 import {Div, Button, Input} from '../../styles/DefaultStyles';
 
@@ -305,8 +306,11 @@ const DivRoles = styled(Div)`
 
 
 const RowPlayer = ({
-   battletag, roles, isLeader
-  , addRemoveNotification
+  language
+  
+  , battletag, roles, isLeader
+  
+  , addDeleteNotification
 }) => {
   
   const regexBattletag = /(#\d*)$/;
@@ -322,7 +326,13 @@ const RowPlayer = ({
       
       <CopyToClipboard 
         text={battletag}
-        onCopy={ () => { addRemoveNotification("success", `'${battletag}' has been copied`) } } >
+        onCopy={ () => { 
+        
+          const messageBase = dictCode['tplan02'][message][language];
+          const message = messageBase.replaceAll('BATTLETAG', battletag);
+          addDeleteNotification("tplan02", language, message, 2000); 
+          
+        } } >
         
         <DivBattletag> 
           <DivBattletagName isLeader={isLeader}> {battletagName} </DivBattletagName>
@@ -344,7 +354,14 @@ const RowPlayer = ({
 
 
 
-const TableTeam = ({objTeam, listPlayerEntry, addRemoveNotification, region}) => {
+const TableTeam = ({
+  language
+  
+  , objTeam, listPlayerEntry
+  , addDeleteNotification
+  , region
+  
+}) => {
   
   const listPlayerBattletag = objTeam.listPlayerBattletag;
   
@@ -389,10 +406,14 @@ const TableTeam = ({objTeam, listPlayerEntry, addRemoveNotification, region}) =>
          return(
             <RowPlayer 
               key={battletag}
+              
+              language={language}
+              
               battletag={battletag}
               roles={cObjPlayer.roles}
               isLeader={isLeader}
-              addRemoveNotification={addRemoveNotification} />
+              
+              addDeleteNotification={addDeleteNotification} />
            )
           
           
@@ -416,9 +437,9 @@ const TableTeam = ({objTeam, listPlayerEntry, addRemoveNotification, region}) =>
 
 
 const Result = ({
-  authority
+  authority, language
   ,idPlanTeam ,option, listPlayerEntry, listResult
-  , addRemoveNotification, addResult, deleteResult
+  , addDeleteNotification, addResult, deleteResult
 }) => {
   
   
@@ -495,7 +516,7 @@ const Result = ({
       numberTeamsResult = Math.floor(listBattletagConfirmed.length / 5);
     }
     else if (listBattletagConfirmed.length < (numberTeamsPlanned * 5)) {
-      addRemoveNotification("error", "the number of team which you have set was adjusted");
+      addDeleteNotification("error", "the number of team which you have set was adjusted");
       numberTeamsResult = Math.floor(listBattletagConfirmed.length / 5);
     }
     else {numberTeamsResult = numberTeamsPlanned}
@@ -503,7 +524,7 @@ const Result = ({
     
     // A-2
     if (numberTeamsResult === 0) {
-      addRemoveNotification("error", "need at least 5 confirmed players");
+      addDeleteNotification("error", "need at least 5 confirmed players");
     }
     else if (listBattletagConfirmedLeader.length >= numberTeamsResult * 5 ) {
       listBattletagPlaying = getRandomSubArray(listBattletagConfirmedLeader, numberTeamsPlanned * 5 );
@@ -736,14 +757,14 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
           }
         );
         
-        addRemoveNotification("success", "result has been saved!");
+        addDeleteNotification("success", "result has been saved!");
       }
       catch(error) {
-        addRemoveNotification("error", "failed in saving result");
+        addDeleteNotification("error", "failed in saving result");
       }
     }
     else {
-      addRemoveNotification("error", "there is no result yet");
+      addDeleteNotification("error", "there is no result yet");
     }
     
   }
@@ -752,7 +773,7 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
   const onClick_DeleteResult = async (event) => {
     
     if (resultShowing._id && resultShowing._id === "local") {
-      addRemoveNotification("error", "just generate another result");
+      addDeleteNotification("error", "just generate another result");
     }
     else if (resultShowing.listTeam.length) { // 표시중인 result 가 있어야 진행
       try {
@@ -768,14 +789,14 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
         );
   
         
-        addRemoveNotification("success", "result has been deleted!");
+        addDeleteNotification("success", "result has been deleted!");
       }
       catch(error) {
-        addRemoveNotification("error", "failed in deleting result");
+        addDeleteNotification("error", "failed in deleting result");
       }
     }
     else {
-      addRemoveNotification("error", "plese click result first");
+      addDeleteNotification("error", "plese click result first");
     }
     
   }
@@ -846,9 +867,12 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
       resultShowing.listTeam.map( (team, index)=>
         < TableTeam 
           key = {team.name}
+          
+          language={language}
           objTeam = {team}
           listPlayerEntry ={listPlayerEntry}
-          addRemoveNotification = {addRemoveNotification}
+          
+          addDeleteNotification = {addDeleteNotification}
           region = {region}
         /> 
       )
@@ -868,7 +892,8 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
 function mapStateToProps(state) { 
   return { 
     authority: state.basic.authority.team_generator
-    
+    , language: state.basic.language
+
     ,idPlanTeam: state.team_generator.ePlanTeam._id
     ,option: state.team_generator.ePlanTeam.option
     ,listPlayerEntry: state.team_generator.ePlanTeam.listPlayerEntry
@@ -881,7 +906,7 @@ function mapDispatchToProps(dispatch) {
   return { 
     addResult: (resultTeam) => dispatch( addResult(resultTeam) ) 
     , deleteResult: (idResult) => dispatch( deleteResult(idResult) )
-    ,  addRemoveNotification: (situation, message, time) => dispatch( addRemoveNotification(situation, message, time) )
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }
 

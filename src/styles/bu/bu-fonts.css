@@ -1,13 +1,6 @@
-import styled, {createGlobalStyle} from 'styled-components';
 
+/* https://basketdeveloper.tistory.com/67 */
 
-
- const fonts = createGlobalStyle`
- 
- 
- 
- // basic, KR & ENG
- 
  @font-face {
   font-family: 'Noto Sans KR';
   font-style: normal;
@@ -92,6 +85,4 @@ import styled, {createGlobalStyle} from 'styled-components';
     url(./fonts/Noto_Sans_JP/NotoSansJP-Bold.otf) format('opentype');
  }
  
- `
  
- export default fonts;

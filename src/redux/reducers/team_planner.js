@@ -25,7 +25,7 @@ const stateInitial = {
 
 
 
-const team_generator = (
+const team_planner = (
   
   // 기본값 설정
   state = stateInitial, 
@@ -206,7 +206,7 @@ const team_generator = (
 };
 
 
-export default team_generator;
+export default team_planner;
 
 
 /*

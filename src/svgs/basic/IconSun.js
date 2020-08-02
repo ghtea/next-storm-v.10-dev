@@ -11,7 +11,7 @@ const DivContainer = styled(Div)`
 `;
 
 
-const IconSun = ({width, height, themeName}) => {
+const IconSun = ({width, height, color="color_very_weak", themeName}) => {
 	
 	return (
 		
@@ -26,7 +26,7 @@ const IconSun = ({width, height, themeName}) => {
 			height="100%"
 			viewBox="0 0 512 512"
 			
-			fill={ themes[themeName]["color_very_weak"] }
+			fill={ themes[themeName][color] }
 			>
 			
 			<path 

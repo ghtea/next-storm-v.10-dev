@@ -7,7 +7,7 @@ import axios from 'axios';
 import { connect } from "react-redux";
 import readPlanTeam from "../../redux/thunks/readPlanTeam";
 
-import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 import {replaceWorking} from "../../redux/actions/basic";
 
 import { NavLink, useHistory } from 'react-router-dom';
@@ -136,7 +136,14 @@ const DivIconWorking = styled(Div)`
 
 
 
- const CreatingPlan = ({addRemoveNotification, loading, ready, working, readPlanTeam, replaceWorking}) => {
+ const CreatingPlan = ({
+   
+   language
+   , loading, ready, working
+   
+   , readPlanTeam, replaceWorking
+   , addDeleteNotification
+ }) => {
   
   //{value, onChange}
   const inputTitle = useInput("");
@@ -196,8 +203,9 @@ const DivIconWorking = styled(Div)`
         });
         //console.log(regionCreating);
         replaceWorking("createPlan", false);
-        addRemoveNotification("success", "new plan has been created!");
-        addRemoveNotification("tip", "please save the link!", 6000);
+        
+        addDeleteNotification("tplan31", language);
+        //addDeleteNotification("tip", "please save the link!", 6000);
         //status.createPlan = true; //  작업이 잘되었다고 표시
         
         // move after 2 seconds because of preparing time
@@ -208,11 +216,11 @@ const DivIconWorking = styled(Div)`
       }
       catch (error) {
         replaceWorking("createPlan", false)
-        addRemoveNotification("error", "plan has not been created!");
+        addDeleteNotification("tplan32", language);
         //status.createPlan = false; //  작업이 정상적으로 끝나지 않았다고 표시 (실제로 에러가 발생하지 않는다)
       }
       
-    } else { addRemoveNotification("error", "type title first"); }
+    } else { addDeleteNotification("tplan32", language); }
   }  
   
 
@@ -224,7 +232,7 @@ const DivIconWorking = styled(Div)`
         
     <DivHeader>
     
-      <DivTitle> Team Generator </DivTitle>
+      <DivTitle> Team Planner </DivTitle>
       
       
     </DivHeader>
@@ -255,9 +263,18 @@ const DivIconWorking = styled(Div)`
 		  </DivInput>
 	    
 	    <DivCaution>
-  	    <Div> enter any title first, and click start! </Div>
-        <Div> 우선 아무 제목이나 입력한 후 start! </Div>
-  	    <Div> 適当なタイトル入力してstart! </Div>
+  	    <Div> 
+  	      {(() => {
+            switch (language) {
+              case 'ko': 
+                return '우선 아무 제목이나 입력한 후 start!';
+              case 'ja': 
+                return '適当なタイトル入力してstart!';
+              default: // eng
+                return 'Enter any title first, and click start!';
+            }
+  	      })()}
+	     </Div>
 	    </DivCaution>
 	    
 	   </DivBody>
@@ -311,13 +328,15 @@ function mapStateToProps(state) {
     ready: state.basic.ready 
     ,loading: state.basic.loading
     ,working: state.basic.working
+    
+    , language: state.basic.language
   }; 
 } 
 
 function mapDispatchToProps(dispatch) { 
   return { 
-    readPlanTeam: (idPlanTeam) => dispatch(readPlanTeam(idPlanTeam)) 
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    readPlanTeam: (idPlanTeam, language) => dispatch(readPlanTeam(idPlanTeam, language)) 
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
     ,replaceWorking: (which, true_false) => dispatch(replaceWorking(which, true_false))
   }; 
 }

@@ -3,14 +3,14 @@ import dotenv from 'dotenv';
 
 import * as types from '../actions/ActionTypes';
 import { replaceReady, replaceLoading, replaceData, addNotification, removeNotification} from '../actions/basic'
-import { replacePlanTeam } from '../actions/team_generator'
+import { replacePlanTeam } from '../actions/team_planner'
 
-import addRemoveNotification from "./addRemoveNotification";
+import addDeleteNotification from "./addDeleteNotification";
 
 
 
 // functions that dispatch actions which are from return fundamental action creators
-const readPlanTeam = (idPlanTeam) => {   
+const readPlanTeam = (idPlanTeam, language) => {   
   
   return async (dispatch, getState, axios) => { 
 
@@ -35,7 +35,8 @@ const readPlanTeam = (idPlanTeam) => {
       dispatch( replaceReady("planTeam", false) );
       dispatch( replaceLoading("planTeam", false) ); 
       
-      addRemoveNotification("error", "Reading planTeam has failed", 4000);
+      
+      addDeleteNotification("tplan15", language);
       
       //dispatch( replaceRerender("planTeam") );
     } 

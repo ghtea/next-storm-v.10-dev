@@ -9,7 +9,7 @@ import readPlanTeam from "../redux/thunks/readPlanTeam";
 import {replaceRerender, replaceWorking, replaceLoading, replaceReady, replaceData} from "../redux/actions/basic";
 
 
-import addRemoveNotification from "../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../redux/thunks/addDeleteNotification";
 
 import {Div, Input, Button, A} from '../styles/DefaultStyles';
 //import Player from '../components/Player'
@@ -18,18 +18,18 @@ import IconPenBrush from '../svgs/basic/IconPenBrush'
 import IconLink from '../svgs/basic/IconLink';
 
 
-import CreatingPlan from '../components/TeamGenerator/CreatingPlan';
-import SearchingPlan from '../components/TeamGenerator/SearchingPlan';
-import Guide from '../components/TeamGenerator/Guide';
+import CreatingPlan from '../components/TeamPlanner/CreatingPlan';
+import SearchingPlan from '../components/TeamPlanner/SearchingPlan';
+import Guide from '../components/TeamPlanner/Guide';
 
-import AddingPlayer from '../components/TeamGenerator/AddingPlayer';
-import Entry from '../components/TeamGenerator/Entry';
+import AddingPlayer from '../components/TeamPlanner/AddingPlayer';
+import Entry from '../components/TeamPlanner/Entry';
 
 import useAxiosGet from '../tools/hooks/useAxiosGet';
 import useInput from '../tools/hooks/useInput';
 
 
-const DivTeamGenerator = styled(Div)`
+const DivTeamPlanner = styled(Div)`
   width: 100%;
   height: 100%;
   
@@ -110,14 +110,18 @@ const ButtonContact = styled(Button)`
 
 
 
-// https://ps.avantwing.com/team-generator/sss?ooo 들어가 보기
-const TeamGeneratorDoor = ({}) => {
+// https://ps.avantwing.com/team-Planner/sss?ooo 들어가 보기
+const TeamPlannerFront = ({
+  
+  addDeleteNotification
+  
+}) => {
   
 
     
     return (
     
-    <DivTeamGenerator>
+    <DivTeamPlanner>
       
       <DivA>
         <CreatingPlan /> 
@@ -146,12 +150,12 @@ const TeamGeneratorDoor = ({}) => {
       
       
     
-    </DivTeamGenerator>
+    </DivTeamPlanner>
     )
   
 
     
-} //TeamGenerator
+} //TeamPlanner
 
 
 
@@ -163,9 +167,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) { 
   return { 
-    
+    addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }
 
 // 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다
-export default connect(mapStateToProps, mapDispatchToProps)(TeamGeneratorDoor);
+export default connect(mapStateToProps, mapDispatchToProps)(TeamPlannerFront);

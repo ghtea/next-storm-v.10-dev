@@ -7,7 +7,9 @@ import axios from 'axios';
 import { connect } from "react-redux";
 import * as config from '../../config';
 
-import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
+import  addDeleteNotification from "../../redux/thunks/addDeleteNotification";
+import dictCode from '../../others/dictCode'
+
 import {replaceData2} from "../../redux/actions/basic";
 import {replaceDataCompGallery, replaceData2CompGallery} from "../../redux/actions/comp_gallery";
 
@@ -31,11 +33,10 @@ const DivGallery = styled(Div)`
   height:100%;
   
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   
-  flex-wrap: wrap;
 `;
 
 const DivListComp = styled(Div)`
@@ -67,13 +68,16 @@ const DivListComp = styled(Div)`
 
 
  const Gallery = ({
-   readyListComp
+   
+   language
+   
+   ,readyListComp
    ,listComp
    
    ,replaceData2CompGallery
    ,replaceData2
    
-   ,addRemoveNotification
+   ,addDeleteNotification
  }) => {
 
 
@@ -95,7 +99,7 @@ const DivListComp = styled(Div)`
         } 
         catch (error) { 
           
-          addRemoveNotification("error", `server is not working`);
+          addDeleteNotification("basic01", language);
           console.log(error) 
         }
       } // if
@@ -141,7 +145,10 @@ const DivListComp = styled(Div)`
 
 function mapStateToProps(state) { 
   return { 
-    listComp: state.comp_gallery.gallery.listComp
+    
+    language: state.basic.language
+    
+    ,listComp: state.comp_gallery.gallery.listComp
    ,readyListComp: state.basic.ready.listComp
   }; 
 } 
@@ -154,7 +161,7 @@ function mapDispatchToProps(dispatch) {
     
     ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
     
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }
 

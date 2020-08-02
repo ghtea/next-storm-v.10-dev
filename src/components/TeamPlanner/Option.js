@@ -6,9 +6,9 @@ import axios from 'axios';
 
 import { connect } from "react-redux";
 import {replaceWorking} from "../../redux/actions/basic";
-import {replaceRegion, replaceNumber} from "../../redux/actions/team_generator";
-import readPlanTeam from "../../redux/thunks/readPlanTeam";
-import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
+import {replaceRegion, replaceNumber} from "../../redux/actions/team_planner";
+//import readPlanTeam from "../../redux/thunks/readPlanTeam";
+import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 
 
 import { NavLink, useHistory } from 'react-router-dom';
@@ -124,11 +124,12 @@ const ButtonNumberSide = styled(Button)`
  const Option = ({
   
   idPlanTeam
+  
   , option
-  , authority
+  , authority, language
   
   
-  , addRemoveNotification
+  , addDeleteNotification
   , replaceRegion
   ,replaceNumber
    
@@ -137,7 +138,7 @@ const ButtonNumberSide = styled(Button)`
   
   // 관리자 권한이 필요한 버튼을 클릭했을 때!
   const onClick_NotAdministrator = (event) => {
-    addRemoveNotification("error", "You are not administrator")
+    addDeleteNotification("tplan01", language);
   }
   
 
@@ -296,6 +297,8 @@ function mapStateToProps(state) {
     ,option: state.team_generator.ePlanTeam.option
     , authority: state.basic.authority.team_generator
     
+    , language: state.basic.language
+    
     
   }; 
 } 
@@ -303,11 +306,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) { 
   return { 
     
-    addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
     ,replaceRegion: (regionName) => dispatch(replaceRegion(regionName))
     ,replaceNumber: (pairNumber, which, how) => dispatch(replaceNumber(pairNumber, which, how))
-    //,readPlanTeam: (idPlanTeam) => dispatch(readPlanTeam(idPlanTeam)) 
-
+    
   }; 
 }
 

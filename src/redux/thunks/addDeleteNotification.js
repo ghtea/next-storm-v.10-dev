@@ -1,28 +1,28 @@
 import * as types from '../actions/ActionTypes';
-import {replaceReady, replaceLoading, replaceData, addNotification, removeNotification} from '../actions/basic'
-
+import {addNotification, deleteNotification} from '../actions/basic'
+import dictCode from '../../others/dictCode';
 
 const awaitTime = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms))
 };
 
 // functions that dispatch actions which are from return fundamental action creators
-const addRemoveNotification =  (situation, message, time=3000, idNotification="none") => 
+const addDeleteNotification =  (code_situation, language, message, time) => 
   async (dispatch, getState) => {   
     
-    let idNotificationUsing;
-    if (idNotification ==="none") {
-       idNotificationUsing = Date.now().toString();
-    }
-    else {idNotificationUsing = idNotification}
+    code_situation = code_situation || Date.now().toString();
     
+    const situation_using = dictCode[code_situation]['situation'];
+    const message_using = message || dictCode[code_situation]['message'][language];
+    const idNotification_using = code_situation;
     
-    dispatch( addNotification(situation, message, idNotificationUsing) );  
+    dispatch( addNotification(situation_using, message_using, idNotification_using) );  
     
-    await awaitTime(time);
+    const time_using = time || 3000;
+    await awaitTime(time_using);
     
-    dispatch( removeNotification(idNotificationUsing) );
+    dispatch( deleteNotification(idNotification_using) );
         
 } // addRemoveNotification
     
-export default  addRemoveNotification;
+export default  addDeleteNotification;

@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import { connect } from "react-redux";
 
-import addRemoveNotification from "../../../redux/thunks/addRemoveNotification"
+import addDeleteNotification from "../../../redux/thunks/addDeleteNotification"
 import {replaceDataCompGallery, replaceData2CompGallery} from "../../../redux/actions/comp_gallery";
 
 import {Div, Input, Button, Img} from '../../../styles/DefaultStyles';
@@ -126,16 +126,19 @@ const ImgEachMap = styled(Img)`
 
 
  const ChooseMap = ({
-   listAllMap
    
-    , listMap
-    
-    , whichAdding
-    , locationAddingMap
+   language
    
-    , replaceData2CompGallery 
+   , listAllMap
    
-    , addRemoveNotification
+  , listMap
+  
+  , whichAdding
+  , locationAddingMap
+ 
+  , replaceData2CompGallery 
+ 
+  , addDeleteNotification
    
  } ) => {
   
@@ -153,7 +156,7 @@ const ImgEachMap = styled(Img)`
         replaceData2CompGallery("create", "triggerPosition", Date.now().toString());
       }
       else if ( listMap.includes(idMap) ) {
-        addRemoveNotification("error", "This map has been added already");
+        addDeleteNotification("comp11", language);
       }
     }
   
@@ -233,9 +236,11 @@ const ImgEachMap = styled(Img)`
 
 function mapStateToProps(state) { 
   return { 
-    listAllMap: state.hots.listAllMap
+    language: state.basic.language
     
-     , listMap: state.comp_gallery.create.listMap
+    , listAllMap: state.hots.listAllMap
+    
+    , listMap: state.comp_gallery.create.listMap
     
     , whichAdding: state.comp_gallery.create.whichAdding
     , locationAddingMap: state.comp_gallery.create.locationAddingMap
@@ -248,7 +253,7 @@ function mapDispatchToProps(dispatch) {
   return { 
     replaceData2CompGallery : (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
     
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
     //,replaceWorking: (which, true_false) => dispatch(replaceWorking(which, true_false))
   }; 
 }

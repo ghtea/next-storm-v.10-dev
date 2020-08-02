@@ -7,7 +7,8 @@ import axios from 'axios';
 import { connect } from "react-redux";
 import {replaceWorking} from "../../redux/actions/basic";
 import readPlanTeam from "../../redux/thunks/readPlanTeam";
-import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
+import dictCode from '../../others/dictCode'
 
 
 import { NavLink, useHistory } from 'react-router-dom';
@@ -197,11 +198,11 @@ const DivIconWorking = styled(Div)`
   //, loadingPlanTeam
   //, readyPlanTeam
   
-  , authority
+  , authority, language
   , ePlanTeam
   
   , readPlanTeam
-  , addRemoveNotification
+  , addDeleteNotification
   , replaceWorking
    
  }) => {
@@ -239,7 +240,7 @@ const DivIconWorking = styled(Div)`
         listRegionMain = res_player_add.data;
         
         //replaceWorking("addPlayer", false)
-        //addRemoveNotification("success", "player has been added!");
+        //addDeleteNotification("success", "player has been added!");
         
         await axios.put (`${process.env.REACT_APP_URL_AHR}/player/add-roles`,
           {
@@ -250,8 +251,13 @@ const DivIconWorking = styled(Div)`
         );
           
         replaceWorking("addPlayer", false)
-        addRemoveNotification("success", `'${battletag}' has been added!`);
-        readPlanTeam(idPlanTeam);  // important! need new data in redux for rernedering (ex: entry)
+        
+        const messageBase = dictCode['tplan21'][message][language];
+        const message = messageBase.replaceAll('BATTLETAG', battletag);
+        addDeleteNotification("tplan21", language, message, 2000); 
+        
+        
+        readPlanTeam(idPlanTeam, language);  // important! need new data in redux for rernedering (ex: entry)
         
         inputBattletag.setValue("");  
         //inputName.setValue("");
@@ -259,7 +265,8 @@ const DivIconWorking = styled(Div)`
       }
       catch(error) {
         replaceWorking("addPlayer", false)
-        addRemoveNotification("error", "adding player has failed");
+        
+        addDeleteNotification("tplan22", language);
         // 1. battlelog 잘못입력
         // 2. 게임수가 극히 적은 battletag
         // 3. 내 백엔드 문제
@@ -267,7 +274,7 @@ const DivIconWorking = styled(Div)`
       }
       
     } else { // 애초에 battletag를 입력 안했다면.
-      addRemoveNotification("error", "type battletag first");
+      addDeleteNotification("tplan23", language);
     }
     
     
@@ -301,11 +308,11 @@ const DivIconWorking = styled(Div)`
           );
           
         replaceWorking("addRoleGames", false)
-        addRemoveNotification("success", `${battletag}'s role info has been added!`);
+        addDeleteNotification("success", `${battletag}'s role info has been added!`);
         } 
         catch (error) { 
           replaceWorking("addRoleGames", false)
-          addRemoveNotification("error", `${battletag}'s failed in adding role info`);
+          addDeleteNotification("error", `${battletag}'s failed in adding role info`);
           console.log(error) 
         }
       }
@@ -335,7 +342,7 @@ const DivIconWorking = styled(Div)`
         
         <CopyToClipboard 
           text={`https://ps.avantwing.com/team-generator/${ePlanTeam._id}`}
-          onCopy={ () => { addRemoveNotification("success", "viewer link has been copied") } } >
+          onCopy={ () => { addDeleteNotification("tplan24", language); } } >
           
           <ButtonCopy> 
             <IconCopy width={"20px"} height={"20px"} /> 
@@ -347,7 +354,7 @@ const DivIconWorking = styled(Div)`
         { (authority === "administrator") && 
           <CopyToClipboard 
             text={`https://ps.avantwing.com/team-generator/${ePlanTeam._id}?pw=${ePlanTeam.password}`}
-            onCopy={ () => { addRemoveNotification("success", "administrator link has been copied") } } >
+            onCopy={ () => { addDeleteNotification("tplan25", language); } } >
             
             <ButtonCopy>
               <IconCopy width={"20px"} height={"20px"} /> 
@@ -429,8 +436,9 @@ function mapStateToProps(state) {
     workingAddPlayer: state.basic.working.addPlayer
     
     
-    ,authority: state.basic.authority.team_generator
-
+    , authority: state.basic.authority.team_generator
+    , language: state.basic.language
+    
     , ePlanTeam: {...state.team_generator.ePlanTeam}
     
   }; 
@@ -439,10 +447,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) { 
   return { 
     
-    addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
     ,replaceWorking: (which, true_false) => dispatch(replaceWorking(which, true_false))
     
-    ,readPlanTeam: (idPlanTeam) => dispatch(readPlanTeam(idPlanTeam)) 
+    ,readPlanTeam: (idPlanTeam, language) => dispatch(readPlanTeam(idPlanTeam, language)) 
 
   }; 
 }

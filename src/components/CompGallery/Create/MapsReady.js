@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import * as config from '../../../config';
 
 
-import addRemoveNotification from "../../../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
 import {replaceWorking} from "../../../redux/actions/basic";
 import {replaceDataCompGallery, replaceData2CompGallery} from "../../../redux/actions/comp_gallery";
 
@@ -168,7 +168,7 @@ const Map = ({
    , replaceDataCompGallery
    , replaceData2CompGallery
    
-   , addRemoveNotification
+   , addDeleteNotification
 }) => {
         
   
@@ -257,7 +257,7 @@ const MapsReady = ({
    , replaceDataCompGallery
    , replaceData2CompGallery
    
-   , addRemoveNotification
+   , addDeleteNotification
 }) => {
   
   
@@ -301,7 +301,7 @@ const MapsReady = ({
           replaceData2CompGallery={replaceData2CompGallery}
           replaceDataCompGallery={replaceDataCompGallery}
           
-          addRemoveNotification={addRemoveNotification}
+          addDeleteNotification={addDeleteNotification}
           listAllMap={listAllMap}
           
         />
@@ -350,7 +350,7 @@ function mapDispatchToProps(dispatch) {
     replaceDataCompGallery : (which, replacement) => dispatch(replaceDataCompGallery(which, replacement))
     ,replaceData2CompGallery : (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
     
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }
 

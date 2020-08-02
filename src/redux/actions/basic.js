@@ -65,9 +65,9 @@ export const addNotification = (situation, message, idNotification) => {
   }
 }
 
-export const removeNotification = (idNotification) => {
+export const deleteNotification = (idNotification) => {
   return {
-    type: types.REMOVE_NOTIFICATION,
+    type: types.DELETE_NOTIFICATION,
     idNotification: idNotification
   }
 }

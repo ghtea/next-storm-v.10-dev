@@ -9,7 +9,9 @@ import { connect } from "react-redux";
 import * as config from '../../config';
 
 
-import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
+import dictCode from '../../others/dictCode'
+
 import {replaceWorking} from "../../redux/actions/basic";
 import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} from "../../redux/actions/comp_gallery";
 
@@ -126,9 +128,6 @@ const DivB = styled(Div)`
   overflow: auto;
   position: absolute;
   
-  
-  
-  
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -167,7 +166,7 @@ const DivCreatingComp = styled(Div)`
   
   display: grid;
   grid-template-columns: 70px 300px;
-  grid-template-rows: 90px 300px 70px 270px;
+  grid-template-rows: 50px 300px 80px 250px;
   grid-template-areas: 
     "One One"
     "Two Three"
@@ -194,8 +193,8 @@ const DivOne = styled(Div)`
   color: ${props => props.theme.color_normal};
   
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   
   @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
@@ -354,7 +353,7 @@ const InputLink = styled(InputCommon)`
 `
 
 
-const TextareaContentComment =  styled(Textarea)`
+const TextareaComment =  styled(Textarea)`
   height: 180px;
   
   background-color: ${props => props.theme.COLOR_middle};
@@ -384,7 +383,12 @@ const DivEachMap = styled(Div)`
 
 
  const Create = ({
-   dictHeroBasic
+   
+   language
+   , readyUser, loadingUser
+   , auth
+   
+   ,dictHeroBasic
    ,listAllMap
    
    ,listMap
@@ -401,7 +405,7 @@ const DivEachMap = styled(Div)`
    , replaceData2CompGallery
    , replaceListPosition
    
-   , addRemoveNotification
+   , addDeleteNotification
    
  }) => {
   
@@ -413,9 +417,16 @@ const DivEachMap = styled(Div)`
   
   // error!!, Position 은 object 여야 한다?! 
   
-   
-  //const [trigger, setTrigger] = useState("");
+  const history = useHistory(); 
   
+  /*
+  useEffect(()=>{
+    if (!loadingUser && !readyUser) {
+      addDeleteNotification("auth31", language);
+      history.push('/auth/log-in');
+    }
+  },[])
+  */
   
   // information of comp
   // just use useState for simple inputs (which don't need communication with child components)
@@ -427,8 +438,8 @@ const DivEachMap = styled(Div)`
   
   const [rating, setRating] = useState({});
   
-  const inputContentComment = useInput("");
-  const inputLinkComment = useInput("");
+  const inputComment = useInput("");
+  const inputLink = useInput("");
   
  
   
@@ -436,21 +447,28 @@ const DivEachMap = styled(Div)`
     
     try {
       if (inputPassword1.value === "") {
-        addRemoveNotification("error", "enter password")
+        addDeleteNotification("error", "enter password")
       }
       else if (inputPassword1.value === inputPassword2.value) {
         
         
         const comment = {
-          content: inputContentComment.value
-          ,link: inputLinkComment.value
-          ,password: inputPassword1.value
+          content: inputComment.value
         }
+        
+        const link = {
+          content: inputLink.value
+        }
+        
+        const rating = {
+          
+        }
+        
         
         let bodyRequest = {
           
           _id: Date.now().toString()
-          ,password: inputPassword1.value
+          ,author: auth._id
           
           ,title: inputTitle.value
           
@@ -467,16 +485,17 @@ const DivEachMap = styled(Div)`
         
         await axios.post(`${config.URL_API_NS}/comp/`, bodyRequest);
         
-        addRemoveNotification("success", "composition has been created")
+        addDeleteNotification("comp01", language);
         
         
         
         }
         else { 
-          addRemoveNotification("error", "2 passwords are different")
+          console.log("2 passwords are different")
+          //addDeleteNotification("error", "2 passwords are different")
         }
     } catch (error) {
-      addRemoveNotification("error", "failed in creatig composition")
+      addDeleteNotification("comp02", language);
     }
   }
   
@@ -511,10 +530,7 @@ const DivEachMap = styled(Div)`
           <DivOne> 
           
             <Div>  <InputCommon  {...inputTitle} placeholder="title of composition" />  </Div>
-            <Div> 
-              <InputCommon type="password" {...inputPassword1} placeholder="password" /> 
-              <InputCommon type="password" {...inputPassword2} placeholder="password again" /> 
-            </Div>
+            <Div> {`${auth.battletag}`} </Div>
             
           </DivOne>
         
@@ -541,8 +557,8 @@ const DivEachMap = styled(Div)`
           </DivFour>
           
           <DivFive>
-            <Div> <TextareaContentComment {...inputContentComment} placeholder="comment" /> </Div>
-            <Div> <InputLink  {...inputLinkComment} placeholder="link (ex: twitch/youtube, replay match page)" /> </Div>
+            <Div> <TextareaComment {...inputComment} placeholder="comment" /> </Div>
+            <Div> <InputLink  {...inputLink} placeholder="link (ex: twitch/youtube, replay match page)" /> </Div>
           </DivFive>
         
         </DivCreatingComp>
@@ -583,8 +599,14 @@ const DivEachMap = styled(Div)`
 
 
 function mapStateToProps(state) { 
-  return { 
-    listMap: state.comp_gallery.create.listMap
+  return {
+    
+    auth: state.auth
+    , language: state.basic.language
+    , readyUser: state.basic.ready.user
+    , loadingUser: state.basic.loading.user
+    
+    ,listMap: state.comp_gallery.create.listMap
     , listPosition: state.comp_gallery.create.listPosition
     , listTag: state.comp_gallery.create.listTag
     
@@ -608,7 +630,7 @@ function mapDispatchToProps(dispatch) {
     ,replaceListPosition : (replacement) => dispatch(replaceListPosition(replacement))
     
     
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }
 

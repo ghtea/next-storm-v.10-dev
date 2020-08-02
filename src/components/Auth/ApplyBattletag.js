@@ -4,18 +4,21 @@ import styled from 'styled-components';
 
 import axios from 'axios';
 import queryString from 'query-string';
+import { useCookies } from 'react-cookie';
 
 import { connect } from "react-redux";
 import * as config from '../../config';
 
-import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
+import dictCode from '../../others/dictCode'
+
 import {replaceData2} from "../../redux/actions/basic";
 import {replaceDataAuth, replaceData2Auth} from "../../redux/actions/auth";
 
 
 import { Link, NavLink, useHistory } from 'react-router-dom';
 
-import {Div, Input, Button, Img, Textarea, A} from '../../styles/DefaultStyles';
+import {Div, Input, Button, Img, Textarea, A, LinkDefault, NavLinkDefault} from '../../styles/DefaultStyles';
 
 
 import useInput from '../../tools/hooks/useInput';
@@ -26,22 +29,40 @@ import IconWorking from '../../svgs/basic/IconWorking'
 
 
 
-
 const DivApplyBattletag = styled(Div)`
   width: 300px;
-  height:300px;
   
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   
+  & > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    
+    margin-top: 4px;
+    margin-bottom: 4px;
+    
+    & > div {
+      margin-top: 1px;
+      margin-bottom: 1px;
+    }
+    
+  }
+  
 `;
 
 
-const InputEmailStyled = styled(Input)`
-  height: 30px;
+
+
+const InputCommon = styled(Input)`
+  width: 100%;
 `
+
+/*
 const InputPasswordStyled = styled(Input)`
   height: 30px;
 `
@@ -53,21 +74,35 @@ const InputBattletagStyled = styled(Input)`
 const ButtonApplyBattletag = styled(Button)`
   
 `
-const LinkRegister = styled(Link)`
+*/
+
+const DivLabel = styled(Div)`
+  width: auto;
+  margin-left: 8px;
+`
+
+const Link_Common = styled(LinkDefault)`
   align-self: flex-end;
+  text-decoration: underline;
+  color: ${props => props.theme.color_weak};
+  margin-top: 1px;
+  margin-bottom: 1px;
 `
 
 
 
  const ApplyBattletag = ({
   
-  location
+  location, language
    
    , replaceDataAuth
    , replaceData2
    , addRemoveNotification
  }) => {
-
+  
+  const [cookies, setCookie, removeCookie] = useCookies(['logged']);
+  
+  
   const inputEmail = useInput(""); // {value, setValue, onChange};
   const inputPassword = useInput(""); // {value, setValue, onChange};
   const inputBattletag = useInput("");
@@ -87,13 +122,13 @@ const LinkRegister = styled(Link)`
     
     try {
       if (inputEmail.value === "") {
-        addRemoveNotification("error", "enter email")
+        addDeleteNotification("auth21", language);
       }
       else if (inputPassword.value === "") {
-        addRemoveNotification("error", "enter passwords")
+        addDeleteNotification("auth12", language);
       }
       else if (inputBattletag.value === "") {
-        addRemoveNotification("error", "enter battletag")
+        addDeleteNotification("auth22", language);
       }
     
       else {
@@ -109,44 +144,39 @@ const LinkRegister = styled(Link)`
           // https://www.zerocho.com/category/NodeJS/post/5e9bf5b18dcb9c001f36b275   we need extra setting for cookies
           //console.log(res)
           
-            // 내가 지정한 오류에 속한 결과이면...
-          if (res.data.situation === "error") {
+           // code_situation 가 존재하면 ( = 내가 지정한 오류에 속한 결과이면...)
+          if (res.data.code_situation) {
             
-            storage.remove('loggedUser');
+            const code_situation = res.data.code_situation;
             
-            replaceDataAuth("status", false);
+            replaceData2('loading', 'user', false);
+            replaceData2('ready', 'user', false);
+            
+            removeCookie('logged');
+
             replaceDataAuth("_id", "");
             replaceDataAuth("email", "");
             replaceDataAuth("battletag", "");
             
-            replaceData2('loading', 'user', false);
-            replaceData2('ready', 'user', false);
+            
           
-            addRemoveNotification("error", `${res.data.message}`);
+            addDeleteNotification(code_situation, language);
             
           }
           
           // 성공시
           else if (res.status === 200) {
             
-            console.log(res.data);
-            
-            const loggedUser = {
-              _id: res.data._id
-            }
-            
-            
-            storage.set('loggedUser', loggedUser);
+            setCookie('logged', "yes",{maxAge: 60 * 60 * 24 * 3});
             
             replaceDataAuth("_id", res.data._id)
             replaceDataAuth("email", res.data.email)
             replaceDataAuth("battletag", res.data.battletagConfirmed)
-            replaceDataAuth("status", true)
             
             replaceData2('loading', 'user', false);
             replaceData2('ready', 'user', true);
-        
-            addRemoveNotification("success", `moving to check battletag`);
+            
+            addDeleteNotification("auth23", language);
             
             // 배틀태그 확인하러 여행!
             window.location.href = `${config.URL_API_NS}/auth-bnet/`;
@@ -155,17 +185,16 @@ const LinkRegister = styled(Link)`
           
         }
         catch(error) {
-          storage.remove('loggedUser');
-          
-          replaceDataAuth("status", false);
-          replaceDataAuth("_id", "");
-          replaceDataAuth("email", "");
-          replaceDataAuth("battletag", "");
-      
           replaceData2('loading', 'user', false);
           replaceData2('ready', 'user', false);
           
-          addRemoveNotification("error", `failed in log in`);
+          removeCookie('logged');
+          
+          replaceDataAuth("_id", "");
+          replaceDataAuth("email", "");
+          replaceDataAuth("battletag", "");
+          
+          addDeleteNotification("auth24", language);
         }
         
  
@@ -180,15 +209,25 @@ const LinkRegister = styled(Link)`
   return (
   
   <DivApplyBattletag>
-    <Div>  </Div>
-    <InputEmailStyled {...inputEmail}  placeholder="email"  />
-    <InputPasswordStyled {...inputPassword}  placeholder="password" type="password" />
     
-    <InputBattletagStyled {...inputBattletag}  placeholder="battletag"  />
+    <Div> 
+      <DivLabel> Email Address </DivLabel>
+      <InputCommon {...inputEmail}  placeholder="example@gmail.com"  />
+    </Div>
     
-    <ButtonApplyBattletag onClick={onClick_ApplyBattletag}> apply battletag </ButtonApplyBattletag>
+    <Div> 
+      <DivLabel> Password </DivLabel>
+      <InputCommon {...inputPassword}  placeholder="password" type="password" />
+    </Div>
     
-    <LinkRegister to="/sign-up"> to Sign Up </LinkRegister>
+    <Div> 
+      <DivLabel> Battletag </DivLabel>
+      <InputCommon {...inputBattletag}  placeholder="exmaple#1234"  />
+    </Div>
+    
+    <Button onClick={onClick_ApplyBattletag}> APPLY BATTLETAG </Button>
+    
+    <Link_Common to="/auth/sign-up"> to Sign Up </Link_Common>
     
   </DivApplyBattletag>
   
@@ -201,7 +240,7 @@ const LinkRegister = styled(Link)`
 
 function mapStateToProps(state) { 
   return { 
-   
+    language: state.basic.language
   }; 
 } 
 
@@ -213,7 +252,7 @@ function mapDispatchToProps(dispatch) {
     
     ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
     
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }
 

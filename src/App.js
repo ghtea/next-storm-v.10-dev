@@ -1,12 +1,14 @@
 import React, {useEffect} from 'react';
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import {  BrowserRouter, Route, Switch } from "react-router-dom";
 import styled from 'styled-components';
 import axios from 'axios';
+import queryString from 'query-string';
 
 import { connect } from "react-redux";
 import * as config from './config';
 import replaceTheme from "./redux/thunks/replaceTheme";
 import { useCookies } from 'react-cookie';
+import dictCode from './others/dictCode'
 
 import Sub from "./routes/Sub";
 import Notification from "./routes/Notification";
@@ -14,21 +16,20 @@ import Home from "./routes/Home";
 
 import Auth from "./routes/Auth";
 
-import TeamGenerator from "./routes/TeamGenerator";
-import TeamGeneratorDoor from "./routes/TeamGeneratorDoor";
+import TeamPlanner from "./routes/TeamPlanner";
+import TeamPlannerFront from "./routes/TeamPlannerFront";
 
 import CompGallery from "./routes/CompGallery";
 
-import addRemoveNotification from "./redux/thunks/addRemoveNotification";
+import addDeleteNotification from "./redux/thunks/addDeleteNotification";
 import {replaceData, replaceData2} from "./redux/actions/basic";
 import {replaceDataAuth, replaceData2Auth} from "./redux/actions/auth";
-import storage from './tools/vanilla/storage';
+//import storage from './tools/vanilla/storage';
 
-
+import {language_browser_to_ISO_639_1} from './tools/vanilla/language';
 import {ThemeProvider } from 'styled-components';
 import themes from "./styles/themes"
 import { GlobalStyle, Div} from './styles/DefaultStyles';
-import fonts from './styles/fonts';
 
 
 // env 사용할때 각변수 앞에 REACT_APP_ 를 붙혀야한다 https://hello-bryan.tistory.com/134
@@ -68,42 +69,93 @@ const isDarkMode = () => {
 
 
 const App = ({
-  themeName, replaceTheme, notification
+  notification
+  
+  ,match, location, history
+  
+  , themeName, language
   
   ,replaceDataAuth, replaceData2Auth
   ,replaceData, replaceData2
   
-  , addRemoveNotification
+  , addDeleteNotification
 }) => {
   
-
+  const [cookies, setCookie, removeCookie] = useCookies(['logged', 'language', 'themeOption']);
+  
+  // check cookie 'language', 'theme'
   useEffect(()=>{
-    //console.log(notification);
-    const themeDeviceStr = isDarkMode() ? 'dark' : 'light';
-    replaceTheme(themeDeviceStr);
-  }, [])
+    
+    const language_browser = navigator.language || navigator.userLanguage;
+    console.log(language_browser);
+    const language_cookie = cookies.language;
+    
+    // https://www.metamodpro.com/browser-language-codes
+    // https://gist.github.com/wpsmith/7604842
+    if (!language_cookie && language_browser) {
+      const language_redux = language_browser_to_ISO_639_1(language_browser);
+      console.log('language_redux');
+      console.log(language_redux);
+      replaceData("language", language_redux);
+    }
+    else if (language_cookie) {
+      const language_redux = language_cookie;
+      replaceData("language", language_redux);
+    }
+    
+    const themeOption_cookie = cookies.themeOption;
+    if (themeOption_cookie === 'auto' || !themeOption_cookie) {
+      const themeName = isDarkMode() ? 'dark' : 'light';
+      replaceData("themeName", themeName);
+    }
+    else {
+      replaceData("themeName", themeOption_cookie);
+    }
+    
+  },[])
+  
+  // check query for code_situation
+  useEffect(()=>{
+    const { code_situation, ...rest } = queryString.parse(location.search);
+    
+    if (code_situation) {
+      
+      addDeleteNotification(code_situation, language);
+      
+      const search = queryString.stringify(rest);
+      history.replace({
+        ...location,
+        search
+      });
+      /*
+      const location = Object.assign({}, browserHistory.getCurrentLocation());
+      queryNames.forEach(q => delete location.query[q]);
+      browserHistory.push(location);
+      */
+    }
+    
+  },[])
   
   
-  // 새로고침 등 할때마다 
-  // 1. localstorage 확인 => 없으면 끝 (redux auth 초기화)
-  // 1. localstorage 확인 => 있으면 쿠키안의 토큰으로 재확인 => 문제 없으면 localstorage
   
+  
+  // 새로고침할 때마다, 로그인의 흔적이 있으면 감춰진 토큰 이용해서 로그인
   useEffect( () => { 
     (async () => {
       
     replaceData2('loading', 'user', true);
     replaceData2('ready', 'user', false);
     
-    const loggedUser = storage.get('loggedUser'); // 로그인 정보를 로컬스토리지에서 가져옵니다.
+    const logged = cookies.logged; // 로그인 정보를 로컬스토리지에서 가져옵니다.
     // 참고로 localStorage 에는 user의 _id 만 저장한다!!! 
     
-    if(!loggedUser) {
+    if(!logged) {
       console.log("no logged user");
       
-      replaceDataAuth("status", false);
       replaceDataAuth("_id", "");
       replaceDataAuth("email", "");
       replaceDataAuth("battletag", "");
+      replaceDataAuth("mmr", {});
       
       replaceData2('loading', 'user', false);
       replaceData2('ready', 'user', false);
@@ -118,19 +170,18 @@ const App = ({
       const res = await axios.get(`${config.URL_API_NS}/auth-local/check`, {withCredentials: true, credentials: 'include'});
       //console.log("seems not error!")
       
-      //console.log(res)
+      console.log(res.data);
       
       replaceDataAuth("_id", res.data._id)
       replaceDataAuth("email", res.data.email)
       replaceDataAuth("battletag", res.data.battletagConfirmed)
-      
-      replaceDataAuth("status", true);  // 모두 준비되었다는 걸 알려주기도 하니깐, 맨 나중에
+      replaceDataAuth("mmr", res.data.mmr)
       
       replaceData2('loading', 'user', false);
       replaceData2('ready', 'user', true);
       
     } catch (e) { // token 정보가 잘못되었었으면 여기로 이동
-      storage.remove('loggedUser');
+      removeCookie('logged');
       window.location.href = '/log-in?reason=wrong-token';
     }
     
@@ -145,7 +196,7 @@ const App = ({
     
     <ThemeProvider theme={themes[themeName]}>
     
-    
+
     <GlobalStyle/>
     
     <BrowserRouter>
@@ -161,8 +212,8 @@ const App = ({
       
       <Route path="/auth" component={Auth} />
       
-      <Route path="/team-generator" exact={true} component={TeamGeneratorDoor} />
-      <Route path="/team-generator/:idPlanTeam"  component={TeamGenerator} />
+      <Route path="/team-planner" exact={true} component={TeamPlannerFront} />
+      <Route path="/team-planner/:idPlanTeam"  component={TeamPlanner} />
       
       <Route path="/comp-gallery" component={CompGallery} />
       
@@ -181,8 +232,11 @@ const App = ({
 
 function mapStateToProps(state) { 
   return { 
-    themeName: state.basic.themeName,
     notification: state.basic.notification
+    
+    , themeName: state.basic.themeName
+    , language: state.basic.language
+   
   }; 
 } 
 
@@ -196,7 +250,7 @@ function mapDispatchToProps(dispatch) {
     ,replaceData : (which, replacement) => dispatch(replaceData(which, replacement))
     ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
     
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    ,addDeleteNotification: (code_situation, language, message, time) => dispatch( addDeleteNotification(code_situation, language, message, time))
   }; 
 }
 

@@ -8,9 +8,10 @@ import { Route, NavLink, Switch } from 'react-router-dom';
 
 import * as config from '../config';
 
-import Gallery, {SubGallery} from "../components/CompGallery/Gallery"
-import Focus, {SubFocus} from "../components/CompGallery/Focus"
-import Create, {SubCreate} from "../components/CompGallery/Create"
+import Gallery from "../components/CompGallery/Gallery"
+import Focus  from "../components/CompGallery/Focus"
+import Create  from "../components/CompGallery/Create"
+import SubCompGallery from "../components/CompGallery/SubCompGallery"
 
 import { connect } from "react-redux";
 
@@ -19,7 +20,8 @@ import {replaceData, replaceReady, replaceLoading, replaceWorking, replaceAuthor
 import {replaceDataHots, replaceData2Hots} from "../redux/actions/hots";
 
 
-import addRemoveNotification from "../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../redux/thunks/addDeleteNotification";
+import dictCode from '../others/dictCode';
 
 import {Div, Input, Button} from '../styles/DefaultStyles';
 
@@ -46,39 +48,6 @@ const DivCompGallery = styled(Div)`
 `;
 
 
-const SubCompGallery = styled(Div)`
-
-  background-color: ${props => props.theme.COLOR_middle};
-  color: ${props => props.theme.color_normal};
-  
-  position: fixed;
-  
-  
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    top: 50px;
-    left: 0px;
-    
-    width: 100%;
-  	height: 50px; 
-    
-    flex-direction: row;
-  	border-bottom: 1px solid ${props => props.theme.color_very_weak};
-  }
-
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    top: 0px;
-    left: 120px;
-    z-index: 10;
-    
-    width: calc(100% - 120px);
-  	height: 50px; 
-    
-    flex-direction: row;
-  	border-bottom: 1px solid ${props => props.theme.color_very_weak};
-  }
-  
-  
-`
 
 const Main = styled(Div)`
   
@@ -119,7 +88,7 @@ const CompGallery = ({
   
   match, location
   
-  , authority
+  , authority, language
   
   , readyDictAllHeroBasic
   , readyListAllMap
@@ -132,7 +101,7 @@ const CompGallery = ({
   , replaceData
   , replaceData2
   
-  , addRemoveNotification
+  , addDeleteNotification
   
 }) => {
   
@@ -153,7 +122,7 @@ const CompGallery = ({
         } 
         catch (error) { 
           
-          addRemoveNotification("error", `server is not working`);
+          addDeleteNotification("basic01",  language);
           console.log(error) 
         }
       }
@@ -171,7 +140,7 @@ const CompGallery = ({
         } 
         catch (error) { 
           
-          addRemoveNotification("error", `server is not working`);
+          addDeleteNotification("basic01", language);
           console.log(error) 
         }
       }
@@ -198,12 +167,12 @@ const CompGallery = ({
       
     if (!keyMasterTrying) {
       replaceAuthority("comp_gallery", "viewer");
-      //addRemoveNotification("success", "welcome viewer!");
+      //addDeleteNotification("success", "welcome viewer!");
     }
     
     else if ( listKeyMaster.includes(keyMasterTrying)  ) {
       replaceAuthority("comp_gallery", "master");
-      addRemoveNotification("success", "welcome master!");
+      addDeleteNotification("success", "welcome master!");
       
       // 여기서 해당 키로 다시 서버에서 마스터 유저 정보 가져오기
     }
@@ -212,7 +181,7 @@ const CompGallery = ({
     // if keyMaster is wrong
     else {
       replaceAuthority("comp_gallery", "viewer");
-      addRemoveNotification("error", "master key is wrong");
+      addDeleteNotification("error", "master key is wrong");
     }
     
   }, [] )
@@ -222,20 +191,14 @@ const CompGallery = ({
    return (
    <DivCompGallery>
     
-      <SubCompGallery>
-        <Switch>
-          <Route path="/comp-gallery/" exact={true} component={SubGallery} />
-          <Route path="/comp-gallery/focus"  component={SubFocus} />
-          <Route path="/comp-gallery/create"  component={SubCreate} />
-        </Switch>
-      </SubCompGallery>
+      <SubCompGallery/>
       
     {!readyDictAllHeroBasic?
       <Div> loading </Div>
      :
       <Main>
         <Switch>
-          <Route path="/comp-gallery/" exact={true} component={Gallery} />
+          <Route path="/comp-gallery" exact={true} component={Gallery} />
           <Route path="/comp-gallery/focus"  component={Focus} />
           <Route path="/comp-gallery/create"  component={Create} />
         </Switch>
@@ -255,6 +218,7 @@ const CompGallery = ({
 function mapStateToProps(state) { 
   return { 
     authority: state.basic.authority.comp_gallery
+    , language: state.basic.language
     
     , readyDictAllHeroBasic: state.basic.ready.dictAllHeroBasic
     , readyListAllMap: state.basic.ready.listAllMap
@@ -277,7 +241,7 @@ function mapDispatchToProps(dispatch) {
     ,replaceData : (which, replacement) => dispatch(replaceData(which, replacement))
     ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
     
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }
 

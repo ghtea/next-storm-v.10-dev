@@ -6,10 +6,10 @@ import * as config from '../config';
 
 import { connect } from "react-redux";
 import {replaceData} from "../redux/actions/basic";
-import addRemoveNotification from "../redux/thunks/addRemoveNotification";
 import {replaceDataAuth, replaceData2Auth} from "../redux/actions/auth";
 
-
+import addDeleteNotification from "../redux/thunks/addDeleteNotification";
+import dictCode from '../others/dictCode';
 
 import { NavLink } from 'react-router-dom';
 import {Div, Button} from '../styles/DefaultStyles';
@@ -60,9 +60,11 @@ const DivSub = styled(Div)`
 		width: 120px;
 	  height: 100%;
 	 
+	 
 		flex-direction: column;
 		justify-content: flex-start;
 		
+		/*box-shadow: 0px 0px 20px 0px ${props => props.theme.color_very_weak}; */
 		border-right: 1px solid ${props => props.theme.color_very_weak};
 	 }
   
@@ -242,9 +244,8 @@ const DivNavItem = styled(Div)`
   margin-top: 5px;
   margin-bottom: 5px;
 	
-	
-	font-size: 1.1rem;
-	line-height: 1.1rem;
+	font-size: 1rem;
+	line-height: 1rem;
 
   @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
   
@@ -330,12 +331,14 @@ const Slider = styled(Div)`
 const Sub = ({
 	match, location
 	
-	, statusAuth, auth     // 변화 잘 감지하기 위해서, statusAuth 만 따로 빼놓기!
+	, language
+	, auth     // 변화 잘 감지하기 위해서, readyUser 만 따로 빼놓기!
 	, loadingUser, readyUser
 	
 	, themeName
 	
-	,replaceData, addRemoveNotification
+	,replaceData, addDeleteNotification
+	
 	, replaceDataAuth, replaceData2Auth
 	}) => {
 	
@@ -434,10 +437,51 @@ const Sub = ({
   	
   	
 
-		<DivNavItem > <NavLinkNavItem to="/" exact={true}> Home </NavLinkNavItem> </DivNavItem>
+		<DivNavItem > 
+			<NavLinkNavItem to="/" exact={true}> 
+			{(() => {
+        switch (language) {
+          case 'ko': 
+            return '홈';
+          case 'ja': 
+            return 'ホーム';
+          default: // eng
+            return 'Home';
+        }
+      })()} 
+			</NavLinkNavItem> 
+		</DivNavItem>
 		
-		<DivNavItem > <NavLinkNavItem to="/team-generator" isActive={()=>checkActive(/^(\/team-generator)/)} > Team Generator </NavLinkNavItem> </DivNavItem>
-		<DivNavItem > <NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > Comp Gallery </NavLinkNavItem> </DivNavItem>
+		<DivNavItem > 
+			<NavLinkNavItem to="/team-planner" isActive={()=>checkActive(/^(\/team-planner)/)} > 
+			{(() => {
+        switch (language) {
+          case 'ko': 
+            return '팀 나누기';
+          case 'ja': 
+            return 'チーム分け';
+          default: // eng
+            return 'Team Planner';
+        }
+      })()} 
+	     </NavLinkNavItem> 
+	  </DivNavItem>
+		
+		
+		<DivNavItem > 
+			<NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > 
+			{(() => {
+        switch (language) {
+          case 'ko': 
+            return '조합 갤러리';
+          case 'ja': 
+            return '構成ギャラリー';
+          default: // eng
+            return 'Comp Gallery';
+        }
+      })()} 
+			</NavLinkNavItem> 
+		</DivNavItem>
 		
 		
 		
@@ -469,8 +513,12 @@ const Sub = ({
 function mapStateToProps(state) { 
   return { 
     themeName: state.basic.themeName
-    , statusAuth: state.auth.status
+    , language: state.basic.language
+    
+ 
     , auth: state.auth
+    
+    
     
     , loadingUser: state.basic.loading.user
     , readyUser: state.basic.ready.user
@@ -480,7 +528,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) { 
   return { 
     replaceData: (which, newThemeName) => dispatch( replaceData(which, newThemeName) ) 
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
     
     ,replaceDataAuth : (which, replacement) => dispatch(replaceDataAuth(which, replacement))
     ,replaceData2Auth : (which1, which2, replacement) => dispatch(replaceData2Auth(which1, which2, replacement))

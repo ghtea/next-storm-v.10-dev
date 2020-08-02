@@ -4,18 +4,22 @@ import styled from 'styled-components';
 
 import axios from 'axios';
 import { uuid } from 'uuidv4'
+import queryString from 'query-string';
+import { useCookies } from 'react-cookie';
 
 import { connect } from "react-redux";
 import * as config from '../../config';
 
-import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
+import dictCode from '../../others/dictCode'
+
 import {replaceData2} from "../../redux/actions/basic";
-import {replaceDataCompGallery, replaceData2CompGallery} from "../../redux/actions/comp_gallery";
+import {replaceDataAuth, replaceData2Auth} from "../../redux/actions/auth";
 
 
 import { Link, NavLink, useHistory } from 'react-router-dom';
 
-import {Div, Input, Button, Img, Textarea} from '../../styles/DefaultStyles';
+import {Div, Input, Button, Img, Textarea, LinkDefault, NavLinkDefault} from '../../styles/DefaultStyles';
 
 
 import useInput from '../../tools/hooks/useInput';
@@ -25,44 +29,68 @@ import IconWorking from '../../svgs/basic/IconWorking'
 
 
 
-
 const DivSignUp = styled(Div)`
   width: 300px;
-  height:300px;
   
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   
+  & > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    
+    margin-top: 4px;
+    margin-bottom: 4px;
+    
+    & > div {
+      margin-top: 1px;
+      margin-bottom: 1px;
+    }
+    
+  }
+  
 `;
 
 
+
+const DivLabel = styled(Div)`
+  width: auto;
+  margin-left: 8px;
+`
+
+
+
 const InputCommon = styled(Input)`
-  height: 30px;
-  margin-top: 2px;
-  margin-bottom: 2px;
+  width: 100%
 `
-/*
-const InputEmailStyled = styled(Input)`
-  height: 30px;
-`
-const InputPasswordStyled = styled(Input)`
-  height: 30px;
-`
-*/
+
+
+
 const ButtonSignUp = styled(Button)`
   
 `
-const LinkLogin = styled(Link)`
+
+
+const Link_Common = styled(LinkDefault)`
   align-self: flex-end;
+  text-decoration: underline;
+  color: ${props => props.theme.color_weak};
+  margin-top: 1px;
+  margin-bottom: 1px;
 `
 
 
 
  const SignUp = ({
-   addRemoveNotification
+   language
+   , addDeleteNotification
  }) => {
+
+  const [cookies, setCookie, removeCookie] = useCookies(['logged']);
 
   const inputEmail1 = useInput(""); // {value, setValue, onChange};
   const inputEmail2 = useInput(""); // {value, setValue, onChange};
@@ -72,33 +100,37 @@ const LinkLogin = styled(Link)`
   const inputPassword1 = useInput(""); 
   const inputPassword2 = useInput(""); 
   
-  const inputBattletagPending = useInput(""); 
+  const inputBattletagPending1 = useInput(""); 
+  const inputBattletagPending2 = useInput(""); 
   
   
   
   const onClick_SignUp = async (event) => {
     
     const regexBattletag = /.*#.*/;
-    const resultTestBattletag = regexBattletag.test(inputBattletagPending.value)
+    const resultTestBattletag = regexBattletag.test(inputBattletagPending1.value)
     
     try {
       if (inputEmail1.value === "" || inputEmail2.value === "") {
-        addRemoveNotification("error", "enter both emails")
+        addDeleteNotification("auth01", language);
       }
       else if (inputEmail1.value !== inputEmail2.value) {
-        addRemoveNotification("error", "2 emails are different")
+        addDeleteNotification("auth02", language);
       }
       else if (inputPassword1.value === "" || inputPassword2.value === "") {
-        addRemoveNotification("error", "enter both passwords")
+        addDeleteNotification("auth03", language);
       }
       else if (inputPassword1.value !== inputPassword2.value) {
-        addRemoveNotification("error", "2 passwords are different")
+        addDeleteNotification("auth04", language);
       }
-      else if (inputBattletagPending.value === "") {
-        addRemoveNotification("error", "enter battletag")
+      else if (inputBattletagPending1.value === "" || inputBattletagPending2.value === "") {
+        addDeleteNotification("auth05", language);
+      }
+      else if (inputBattletagPending1.value !== inputBattletagPending2.value) {
+        addDeleteNotification("auth06", language);
       }
       else if (!resultTestBattletag) {
-        addRemoveNotification("error", "add '# and numbers' to battletag")
+        addDeleteNotification("auth07", language);
       }
       
       else {
@@ -108,20 +140,23 @@ const LinkLogin = styled(Link)`
           _id: uuid()
           , email: inputEmail1.value
           , password: inputPassword1.value
-          , battletagPending: inputBattletagPending.value
+          , battletagPending: inputBattletagPending1.value
         }
         
         try {
           const res = await axios.post(`${config.URL_API_NS}/auth-local/sign-up`, inputUser);
           
-          // 내가 지정한 오류에 속한 결과이면...
-          if (res.data.situation === "error") {
-            addRemoveNotification("error", `${res.data.message}`);
+           // code_situation 가 존재하면 ( = 내가 지정한 오류에 속한 결과이면...)
+          if (res.data.code_situation) {
+            
+            const code_situation = res.data.code_situation;
+            removeCookie('logged');
+            addDeleteNotification(code_situation, language);
           }
           
           // 성공시
           else if (res.status === 200) {
-            addRemoveNotification("success", `you registered email & password`);
+            addDeleteNotification("auth08", language);
             
             // 배틀태그 확인하러 여행!
             window.location.href = `${config.URL_API_NS}/auth-bnet/`;
@@ -132,7 +167,7 @@ const LinkLogin = styled(Link)`
         }
         catch (error) {
           console.log(error);
-          addRemoveNotification("error", "failed in signing up")
+          addDeleteNotification("auth09", language);
         }
         
       } // else
@@ -144,20 +179,31 @@ const LinkLogin = styled(Link)`
   return (
   
   <DivSignUp>
-    <Div>  </Div>
+     
     
-    <InputCommon {...inputEmail1}  placeholder="email"  />
-    <InputCommon {...inputEmail2}  placeholder="email again"  />
     
-    <InputCommon {...inputPassword1}  placeholder="password" type="password" />
-    <InputCommon {...inputPassword2}  placeholder="password again" type="password" />
+    <Div>
+      <DivLabel> Email Address </DivLabel>
+      <InputCommon {...inputEmail1}  placeholder="example@gmail.com"  />
+      <InputCommon {...inputEmail2}  placeholder="again"  />
+    </Div>
     
-    <InputCommon {...inputBattletagPending}  placeholder="battletag#1234"/>
+    <Div>
+      <DivLabel> Password </DivLabel>
+      <InputCommon {...inputPassword1}  placeholder="password" type="password" />
+      <InputCommon {...inputPassword2}  placeholder="again" type="password" />
+    </Div>
+    
+    <Div>
+      <DivLabel> Battletag </DivLabel>
+      <InputCommon {...inputBattletagPending1}  placeholder="exmaple#1234"/>
+      <InputCommon {...inputBattletagPending2}  placeholder="again"/>
+    </Div>
     
     
     <ButtonSignUp onClick={onClick_SignUp}> SIGN UP </ButtonSignUp>
     
-    <LinkLogin to="/login"> to login </LinkLogin>
+    <Link_Common to="/auth/log-in"> to Log In </Link_Common>
     
   </DivSignUp>
   
@@ -170,19 +216,19 @@ const LinkLogin = styled(Link)`
 
 function mapStateToProps(state) { 
   return { 
-   
+    language: state.basic.language
   }; 
 } 
 
 function mapDispatchToProps(dispatch) { 
   return {
     
-    replaceDataCompGallery : (which, replacement) => dispatch(replaceDataCompGallery(which, replacement))
-    ,replaceData2CompGallery : (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
+    replaceDataAuth : (which, replacement) => dispatch(replaceDataAuth(which, replacement))
+    ,replaceData2Auth : (which1, which2, replacement) => dispatch(replaceData2Auth(which1, which2, replacement))
     
     ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
     
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }
 

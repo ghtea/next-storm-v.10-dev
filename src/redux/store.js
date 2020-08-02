@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 import auth from './reducers/auth';
 import basic from './reducers/basic';
 import hots from './reducers/hots';
-import team_generator from './reducers/team_generator';
+import team_planner from './reducers/team_planner';
 import comp_gallery from './reducers/comp_gallery';
 //import reducer from './reducer'
 
@@ -20,7 +20,7 @@ const reducers = combineReducers({
   auth: auth
   ,basic: basic
   ,hots : hots
-  ,team_generator : team_generator
+  ,team_planner : team_planner
   ,comp_gallery : comp_gallery
   
   //, session: sessionReducer // https://www.npmjs.com/package/redux-react-session

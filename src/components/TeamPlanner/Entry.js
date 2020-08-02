@@ -7,11 +7,14 @@ import axios from 'axios';
 import { NavLink, useParams } from 'react-router-dom';
 
 import { connect } from "react-redux";
-import {replacePlayerTags, replacePlayerStatus} from "../../redux/actions/team_generator";
-import {addNotification, removeNotification} from "../../redux/actions/basic";
+import {addNotification, deleteNotification} from "../../redux/actions/basic";
+
+import {replacePlayerTags, replacePlayerStatus} from "../../redux/actions/team_planner";
 
 import readPlanTeam from "../../redux/thunks/readPlanTeam";
-import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
+
+import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
+import dictCode from '../../others/dictCode'
 
 // https://reacttraining.com/blog/react-router-v5-1/
 
@@ -262,8 +265,9 @@ const DivStatus = styled(Div)`
 
 const RowPlayer = ({
   authority
+  , language
   ,idPlanTeam, battletag, mmr, regions, roles, statusPlayer, isLeader
-  , replacePlayerTags, replacePlayerStatus, addRemoveNotification, addNotification, removeNotification
+  , replacePlayerTags, replacePlayerStatus,  addDeleteNotification, addNotification, deleteNotification
 }) => {
   
   // for icon which depends on variable
@@ -274,7 +278,7 @@ const RowPlayer = ({
   
   // 관리자 권한이 필요한 버튼을 클릭했을 때!
   const onClick_NotAdministrator = (event) => {
-    addRemoveNotification("error", "You are not administrator")
+     addDeleteNotification("tplan01", language);
   }
   
   
@@ -379,8 +383,8 @@ const RowPlayer = ({
   
 /*
 onMouseEnter={(event)=>{
-          removeNotification("tip-leader");
-          addRemoveNotification("tip", "leaders join teams first, being separated into different teams", undefined,  "tip-leader")
+          deleteNotification("tip-leader");
+           addDeleteNotification("tip", "leaders join teams first, being separated into different teams", undefined,  "tip-leader")
           }
         }
         onMouseLeave={(event)=>removeNotification("tip-leader")}
@@ -414,7 +418,13 @@ onMouseEnter={(event)=>{
       
       <CopyToClipboard 
         text={battletag}
-        onCopy={ () => { addRemoveNotification("success", `'${battletag}' has been copied`) } } >
+        onCopy={ () => {  
+          
+          const messageBase = dictCode['tplan02'][message][language];
+          const message = messageBase.replaceAll('BATTLETAG', battletag);
+          addDeleteNotification("tplan02", language, message, 2000); 
+          
+        } } >
         
         <DivBattletag> 
           <DivBattletagName> {battletagName} </DivBattletagName>
@@ -462,27 +472,27 @@ onMouseEnter={(event)=>{
 /*
 onMouseEnter={ (event)=>
           { 
-            removeNotification("tip-pending");
-            removeNotification("tip-confirmed");
-            addRemoveNotification("tip", "pending players can't join teams", undefined, "tip-pending");    
-            addRemoveNotification("tip", "only confirmed players can join teams", undefined, "tip-confirmed");     
+            deleteNotification("tip-pending");
+            deleteNotification("tip-confirmed");
+             addDeleteNotification("tip", "pending players can't join teams", undefined, "tip-pending");    
+             addDeleteNotification("tip", "only confirmed players can join teams", undefined, "tip-confirmed");     
           }
         }
         
         onMouseLeave={(event)=>
           {
-            removeNotification("tip-pending");
-            removeNotification("tip-confirmed");
+            deleteNotification("tip-pending");
+            deleteNotification("tip-confirmed");
           }
         }
 */
 
 
 const Entry = ({
-  authority
+  authority, language
   ,idPlanTeam, listPlayerEntry, option
   
-  , replacePlayerTags, replacePlayerStatus, addRemoveNotification, addNotification, removeNotification
+  , replacePlayerTags, replacePlayerStatus,  addDeleteNotification, addNotification, deleteNotification
   
 }) => {
   
@@ -539,11 +549,11 @@ const Entry = ({
       
       <Div
         onMouseEnter={(event)=>{
-          removeNotification("tip-confirmed");
-          addRemoveNotification("tip", "only confirmed players can join teams", undefined,  "tip-confirmed");
+            deleteNotification("tplan03");
+            addDeleteNotification("tplan03",  language);
           }
         }
-        onMouseLeave={(event)=>removeNotification("tip-confirmed")}
+        onMouseLeave={(event)=>deleteNotification("tplan03")}
         
       > 
         <IconConfirmed width={"20px"} height={"20px"} /> {` : ${listPlayerConfirmed.length}`} 
@@ -551,22 +561,22 @@ const Entry = ({
       
       <Div
         onMouseEnter={(event)=>{
-          removeNotification("tip-pending");
-          addRemoveNotification("tip", "pending players can't join teams", undefined, "tip-pending")
+          deleteNotification("tplan04");
+           addDeleteNotification("tplan04", language);
           }
         }
-        onMouseLeave={(event)=>removeNotification("tip-pending")}
+        onMouseLeave={(event)=>deleteNotification("tplan04")}
       >  
         <IconPending width={"20px"} height={"20px"} /> {` : ${listPlayerEntry.length - listPlayerConfirmed.length}`} 
       </Div>
       
       <Div
         onMouseEnter={(event)=>{
-          removeNotification("tip-leader");
-          addRemoveNotification("tip", "leaders join teams first, being separated into different teams", undefined,  "tip-leader")
+          deleteNotification("tplan05");
+          addDeleteNotification("tplan05",  language);
           }
         }
-        onMouseLeave={(event)=>removeNotification("tip-leader")}
+        onMouseLeave={(event)=>deleteNotification("tplan05")}
       >  
         <IconLeader width={"23px"} height={"18px"} isFilled={true} /> {` : ${listPlayerConfirmedLeader.length}`} 
       </Div>
@@ -596,6 +606,7 @@ const Entry = ({
           key={ `${player._id}_${(new Date().getTime()).toString()}` }
           
           authority={authority}
+          language={language}
           idPlanTeam={idPlanTeam}
           
           battletag={player._id} 
@@ -611,10 +622,10 @@ const Entry = ({
           
           replacePlayerTags = {replacePlayerTags}
           replacePlayerStatus = {replacePlayerStatus}
-          addRemoveNotification = {addRemoveNotification}
+           addDeleteNotification = { addDeleteNotification}
           
           addNotification = {addNotification}
-          removeNotification = {removeNotification}
+          deleteNotification = {deleteNotification}
         />)
       }
       ) 
@@ -636,6 +647,8 @@ const Entry = ({
 function mapStateToProps(state) { 
   return { 
     authority: state.basic.authority.team_generator
+    , language : state.basic.language
+    
     ,listPlayerEntry: [...state.team_generator.ePlanTeam.listPlayerEntry]
     ,idPlanTeam: state.team_generator.ePlanTeam._id
     ,option: state.team_generator.ePlanTeam.option
@@ -647,10 +660,10 @@ function mapDispatchToProps(dispatch) {
   return { 
     replacePlayerTags: (battletag, tag, true_false) => dispatch(replacePlayerTags(battletag, tag, true_false))
     ,replacePlayerStatus: (battletag, status) => dispatch(replacePlayerStatus(battletag, status))
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
     
-    ,addNotification: (situation, message, idNotification) => dispatch(addNotification(situation, message, idNotification))
-    ,removeNotification: (idNotification) => dispatch(removeNotification(idNotification))
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
+    , addNotification: (situation, message, idNotification) => dispatch(addNotification(situation, message, idNotification))
+    , deleteNotification: (idNotification) => dispatch(deleteNotification(idNotification))
   }; 
 }
 

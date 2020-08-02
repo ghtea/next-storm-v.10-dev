@@ -1,13 +1,12 @@
 import styled, {createGlobalStyle} from 'styled-components';
+import { Link, NavLink } from 'react-router-dom';
 
 
 
  export const GlobalStyle = createGlobalStyle`
- 
- 
+
   html, body, #root {
-  
-    
+
     
     background-color: ${props => props.theme.COLOR_bg};
     color: ${props => props.theme.color_normal};
@@ -135,6 +134,23 @@ export const Img = styled.img`
 
  export const Button = styled.button`
   
+  font-size: 1rem;
+  
+  width: auto;
+  height: 2.4rem;
+  
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-right: 0.8rem;
+  padding-left: 0.8rem;
+  
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+  margin-right: 0.3rem;
+  margin-left: 0.3rem;
+  
+  border-radius: 0.5rem;
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -143,37 +159,51 @@ export const Img = styled.img`
   color: ${props => props.theme.color_strong};
   background-color: ${props => props.theme.COLOR_normal};
   
-  /*font-weight: normal;  */
- 
-	 cursor: pointer;
-	
   border: 0;
-		font-size: 1rem;
-		
-		width: auto;
-		height: auto;
-		
-		box-sizing: border-box;
-		
-	
+  
+  
+  /*border: 1px solid ${props => props.theme.color_very_weak};*/
+  
+  /*box-shadow: 1px 1px 6px ${props => props.theme.color_very_weak}, -1px -1px 6px ${props => props.theme.color_very_weak};*/
+  /*font-weight: normal;  */
+  
+  cursor: pointer;
+
+  
+  
+  box-sizing: border-box;
+
 `
 
 export const Input = styled.input`
 
- color: ${props => props.theme.color_strong};
- background-color: ${props => props.theme.COLOR_normal};
- width: 100%;
- font-size: 1rem;
- border: 0;
- 
- padding-left: 10px;
- box-sizing: border-box;
- 
- &::placeholder {
-  color: ${props => props.theme.color_weak} !important;
- }
+color: ${props => props.theme.color_strong};
+background-color: ${props => props.theme.COLOR_normal};
+
+width: auto;
+height: 2.4rem;
+
+font-size: 1rem;
+
+padding-right: 0.8rem;
+padding-left: 0.8rem;
+
+margin-top: 5px;
+margin-bottom: 5px;
+margin-right: 2px;
+margin-left: 2px;
+
+border-radius: 0.5rem;
+
+border: 0;
+box-sizing: border-box;
+
+&::placeholder {
+ color: ${props => props.theme.color_weak} !important;
+}
  
 `
+
 export const Textarea = styled.textarea`
  
  font-family: 'Noto Sans KR', 'Noto Sans JP', sans-serif;
@@ -210,7 +240,16 @@ export const A = styled.a`
 	color: ${props => props.theme.color_normal};
 	text-decoration: none;
 	
-		
+`
+
+export const LinkDefault = styled(Link)`
+	color: ${props => props.theme.color_normal};
+	text-decoration: none;
+`
+
+export const NavLinkDefault = styled(NavLink)`
+	color: ${props => props.theme.color_normal};
+	text-decoration: none;
 `
 
 

@@ -2,8 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { connect } from "react-redux";
-import {addNotification, removeNotification} from "../redux/actions/basic";
-import addRemoveNotification from "../redux/thunks/addRemoveNotification";
+import {addNotification, deleteNotification} from "../redux/actions/basic";
+
+import addDeleteNotification from "../redux/thunks/addDeleteNotification";
+import dictCode from '../others/dictCode'
 
 
 import {Div} from '../styles/DefaultStyles';
@@ -90,9 +92,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) { 
   return { 
-    addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
-    ,addNotification: (situation, message, idNotification) => dispatch( addNotification(situation, message, idNotification) )
-    ,removeNotification: (idNotification) => dispatch(removeNotification(idNotification))
+    addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
+    , addNotification: (situation, message, idNotification) => dispatch(addNotification(situation, message, idNotification))
+    , deleteNotification: (idNotification) => dispatch(deleteNotification(idNotification))
   }; 
 }
 

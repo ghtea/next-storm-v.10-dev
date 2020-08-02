@@ -10,7 +10,8 @@ import readPlanTeam from "../redux/thunks/readPlanTeam";
 //import {replaceRerender} from "../redux/store";
 import {replaceData, replaceReady, replaceLoading, replaceWorking, replaceAuthority} from "../redux/actions/basic";
 
-import addRemoveNotification from "../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../redux/thunks/addDeleteNotification";
+import dictCode from '../others/dictCode';
 
 
 import {Div, Input, Button} from '../styles/DefaultStyles';
@@ -19,19 +20,19 @@ import IconLoading from '../svgs/basic/IconLoading'
 
 
 
-import CreatingPlan from '../components/TeamGenerator/CreatingPlan';
-import SearchingPlan from '../components/TeamGenerator/SearchingPlan';
+import CreatingPlan from '../components/TeamPlanner/CreatingPlan';
+import SearchingPlan from '../components/TeamPlanner/SearchingPlan';
 
-import AddingPlayer from '../components/TeamGenerator/AddingPlayer';
-import Entry from '../components/TeamGenerator/Entry';
-import Option from '../components/TeamGenerator/Option';
-import Result from '../components/TeamGenerator/Result';
+import AddingPlayer from '../components/TeamPlanner/AddingPlayer';
+import Entry from '../components/TeamPlanner/Entry';
+import Option from '../components/TeamPlanner/Option';
+import Result from '../components/TeamPlanner/Result';
 
 import useAxiosGet from '../tools/hooks/useAxiosGet';
 import useInput from '../tools/hooks/useInput';
 
 
-const DivTeamGenerator = styled(Div)`
+const DivTeamPlanner = styled(Div)`
   width: 100%;
   height: 100%;
   
@@ -112,10 +113,10 @@ const Loading = () => {
 }
 
 
-// https://ps.avantwing.com/team-generator/sss?ooo 들어가 보기
-const TeamGenerator = ({
+// https://ps.avantwing.com/team-Planner/sss?ooo 들어가 보기
+const TeamPlanner = ({
   match, location
-  , authority
+  , authority, language
   , loadingPlanTeam
   , readyPlanTeam
   , idPlanTeam, passwordPlanTeam
@@ -125,7 +126,7 @@ const TeamGenerator = ({
   , readPlanTeam
   , replaceData
   ,replaceAuthority
-  , addRemoveNotification
+  , addDeleteNotification
 }) => {
   
   //const [rerender, SetRerender] = useState("");
@@ -135,7 +136,7 @@ const TeamGenerator = ({
   const idPlanTeamTrying = match.params.idPlanTeam;
   
   useEffect(()=>{
-    readPlanTeam(idPlanTeamTrying);
+    readPlanTeam(idPlanTeamTrying, language);
   }, []);
   
   
@@ -144,10 +145,11 @@ const TeamGenerator = ({
     if (isFirstRun.current) {isFirstRun.current = false; return; }
     
     if (!loadingPlanTeam && !readyPlanTeam)  {  // (readyPlanTeam === false)
-      replaceAuthority("team_generator", "unknown");
-      addRemoveNotification("error", "plan id is wrong");
+      replaceAuthority("team_Planner", "unknown");
       
-      history.push(`/team-generator`);
+      addDeleteNotification("tplan06", language);
+      
+      history.push(`/team-Planner`);
     }
   }, [loadingPlanTeam]);
   
@@ -166,21 +168,21 @@ const TeamGenerator = ({
     if (!loadingPlanTeam && readyPlanTeam && (authority === "viewer") ) {
       
       if (!passwordPlanTeamTrying) {
-        replaceAuthority("team_generator", "viewer");
-        addRemoveNotification("success", "welcome viewer!");
+        replaceAuthority("team_Planner", "viewer");
+        //addDeleteNotification("success", "welcome viewer!");
       }
       
       else if ( passwordPlanTeamTrying === passwordPlanTeam ) {
-        replaceAuthority("team_generator", "administrator");
-        addRemoveNotification("success", "welcome administrator!");
+        replaceAuthority("team_Planner", "administrator");
+        addDeleteNotification("tplan13", language);
       }
       
       // 문제 정상적인 비번인데, 정보를 받는 과정에서 잠시동안 두 비번이 불일치 하는것으로 나와서 => plan 생성시에 조금 지연후에 이곳 페이지로 이동하는 등 시도 중
       // 정안되면 비번 틀린거는 알람이 아니라 일반 표시로 하기..
       // if password is wrong
       else {
-        replaceAuthority("team_generator", "viewer");
-        addRemoveNotification("error", "password is wrong");
+        replaceAuthority("team_Planner", "viewer");
+        addDeleteNotification("tplan14", language);
       }
       
     }
@@ -196,7 +198,7 @@ const TeamGenerator = ({
   
   if (loadingPlanTeam || !readyPlanTeam) {
     return (
-      <DivTeamGenerator>
+      <DivTeamPlanner>
         
         <DivA style={{alignSelf:  "center"}} >
           < Loading />
@@ -216,13 +218,13 @@ const TeamGenerator = ({
           < Loading />
         </DivD>
         
-      </DivTeamGenerator>
+      </DivTeamPlanner>
     )
   } 
   
   else  { // (!loadingPlanTeam && readyPlanTeam) 
    return (
-   <DivTeamGenerator>
+   <DivTeamPlanner>
       
       <DivA>
         <AddingPlayer />
@@ -242,22 +244,23 @@ const TeamGenerator = ({
         <Result /> 
       </DivD>
     
-    </DivTeamGenerator>
+    </DivTeamPlanner>
     )
   }
 
  
     
-} //TeamGenerator
+} //TeamPlanner
 
 
 
 function mapStateToProps(state) { 
   return { 
-    authority: state.basic.authority.team_generator
+    authority: state.basic.authority.team_Planner
+    , language: state.basic.language
     
-    ,idPlanTeam: state.team_generator.ePlanTeam._id
-    ,passwordPlanTeam: state.team_generator.ePlanTeam.password
+    ,idPlanTeam: state.team_Planner.ePlanTeam._id
+    ,passwordPlanTeam: state.team_Planner.ePlanTeam.password
     
     , loadingPlanTeam: state.basic.loading.planTeam
     , readyPlanTeam: state.basic.ready.planTeam
@@ -271,16 +274,16 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) { 
   return { 
-    readPlanTeam: (idPlanTeam) => dispatch(readPlanTeam(idPlanTeam)) 
+    readPlanTeam: (idPlanTeam, language) => dispatch(readPlanTeam(idPlanTeam, language)) 
     //,replaceRerender: (which) => dispatch(replaceRerender(which))
     ,replaceData: (which, newData) => dispatch(replaceData(which, newData))
     ,replaceLoading: (which, true_false) => dispatch(replaceLoading(which, true_false)) 
     ,replaceReady: (which, true_false) => dispatch(replaceReady(which, true_false)) 
     ,replaceAuthority: (which, authority) => dispatch(replaceAuthority(which, authority))
     
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }
 
 // 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다
-export default connect(mapStateToProps, mapDispatchToProps)(TeamGenerator);
+export default connect(mapStateToProps, mapDispatchToProps)(TeamPlanner);

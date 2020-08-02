@@ -12,6 +12,8 @@ const stateInitial = {
       ,listAllMap: false
       ,listComp: false
       ,user: false
+      
+      ,mmrUser: false
     }
     
     ,loading : {
@@ -24,6 +26,8 @@ const stateInitial = {
     ,working : {
       createPlan: false
       
+      ,updateMmr: false
+      
       ,addPlayer: false
       ,putPlayerMmr: false
       ,addPlayerToListPlayerEntry: false
@@ -34,7 +38,9 @@ const stateInitial = {
     
     
     ,themeName: "light"
-    
+    ,language: "en" 
+    // en English, ko Korean, ja Japanese // read from cookie
+    // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
   
     ,authority: {
       team_generator: "viewer" // "administrator" "viewer"
@@ -175,7 +181,7 @@ const basic = (
       
       
     
-    case types.REMOVE_NOTIFICATION:
+    case types.DELETE_NOTIFICATION:
       return {
       	...state, 
       	notification: state.notification.filter(element => element.idNotification !== action.idNotification)

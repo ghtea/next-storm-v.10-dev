@@ -16,7 +16,8 @@ from "react-redux";
 import * as config from '../../../config';
 
 
-import addRemoveNotification from "../../../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
+import dictCode from '../../../others/dictCode'
 
 import {
   replaceDataCompGallery, replaceData2CompGallery, replaceListPosition
@@ -57,9 +58,11 @@ import IconPush from '../../../svgs/tags/IconPush'
 
 const DivFilter = styled(Div)
 `
+  /*
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
+  */
   
   width: 350px; 
   height: auto;
@@ -68,6 +71,7 @@ const DivFilter = styled(Div)
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   
   @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) { 
     top: 110px;
@@ -79,29 +83,68 @@ const DivFilter = styled(Div)
 `
 // 870
 
-const DivFilterSize = styled(Div)`
+
+const DivFilterItem = styled(Div)`
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
+  
+  margin-top: 3px;
+  margin-bottom: 3px;
+  margin-right: 3px;
+  margin-left: 3px;
 `
 
-const DivFilterTag = styled(Div)`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
+
+const DivFilterSize = styled(DivFilterItem)`
+  
+`
+
+const DivFilterTag = styled(DivFilterItem)`
+  
 `
 
 const DivFilterMap = styled(Div)`
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
+  
+  flex-wrap: wrap;
 `
 
 
+const ButtonMap = styled(Button)`
+  
+  font-size: 0.8rem;
+  
+  width: 70px;
+  height: 2.0rem;
+  
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-right: 2px;
+  margin-left: 2px;
+  
+  border-radius: 0.3rem;
+  
+  
+  & > div {
+    display: block;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+  }
+  
+`
 
+
+/*
 const Tag = styled(Div)
 `
   width: 32px;
@@ -114,6 +157,7 @@ const Tag = styled(Div)
   justify-content: center;
   align-items: center;
 `
+*/
 
 const DivListRating = styled(Div)
 `
@@ -132,15 +176,27 @@ const Filter = ({
     dictAllHeroBasic
     , listAllMap
     , listAllTag
+    
+    , readyListAllMap
 
-    , addRemoveNotification
+    , addDeleteNotification
 
   }) => {
 
     const isBigMidScreen = useMediaQuery({ query: `(min-device-width: ${props => (props.theme.media.comp_gallery.mid_big) }px)` });
+    
+    const [listMapStandardRanked, setListMapStandardRanked] = useState([]);
+    
+    useEffect(()=>{
+      if(readyListAllMap === true) {
+        let listMapStandardRankedTemp = listAllMap.filter(element => element.type === "standard" && element.rankedRotation === true);
+        setListMapStandardRanked(listMapStandardRankedTemp);
+      }
+    },[readyListAllMap])
 
 
-    const returnIcon = (tag) => {
+
+    const returnIconTag = (tag) => {
         switch (tag) {
           case "ToWin":
             return ( < IconSerious width = { "24px" } height = { "24px" } color = {  "color_weak" } />)
@@ -157,8 +213,8 @@ const Filter = ({
 
           }
       }
-
-
+    
+    
 
     return (
       <DivFilter>
@@ -166,29 +222,33 @@ const Filter = ({
        
         
         <DivFilterSize> 
-          <Div> ToWin </Div>
-          <Div> ForFun </Div>
-          <Div> Kill </Div>
-          <Div> Push </Div>
-          <Div> Early </Div>
-          <Div> Late </Div>
-          <Div> ToWin </Div>
+          <Button> Duo </Button>
+          <Button> Trio  </Button>
+          <Button> Full Team  </Button>
         </DivFilterSize>
         
         
         <DivFilterTag> 
-          <Div> ToWin </Div>
-          <Div> ForFun </Div>
-          <Div> Kill </Div>
-          <Div> Push </Div>
-          <Div> Early </Div>
-          <Div> Late </Div>
-          <Div> ToWin </Div>
+        
+          <Div> {returnIconTag("ToWin")} </Div>
+          <Div> {returnIconTag("ForFun")} </Div>
+          
+          <Div> {returnIconTag("Kill")} </Div>
+          <Div> {returnIconTag("Push")} </Div>
+          
+          <Div> {returnIconTag("Early")} </Div>
+          <Div> {returnIconTag("Late")} </Div>
+          
         </DivFilterTag>
         
         
-        <DivFilterMap> 
-        
+        <DivFilterMap>
+          {(readyListAllMap)? listMapStandardRanked.map(element=>(
+              <ButtonMap key={element.name}> <Div>{element.name}</Div> </ButtonMap>
+            ))
+            :
+            <Div> loading...  </Div>
+          }
         </DivFilterMap>
       
       
@@ -225,6 +285,8 @@ const Filter = ({
       ,listAllMap: state.hots.listAllMap
       ,listAllTag: state.comp_gallery.listAllTag
       
+      ,readyListAllMap: state.basic.ready.listAllMap
+      
     
     };
   }
@@ -232,7 +294,7 @@ const Filter = ({
   function mapDispatchToProps(dispatch) {
     return {
 
-      addRemoveNotification: (situation, message, time, idNotification) => dispatch(addRemoveNotification(situation, message, time, idNotification))
+     addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
     };
   }
 

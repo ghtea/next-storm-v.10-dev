@@ -8,17 +8,23 @@ import { NavLink } from 'react-router-dom';
 import * as config from '../config';
 import { connect } from "react-redux";
 import readPlanTeam from "../redux/thunks/readPlanTeam";
+import { useCookies } from 'react-cookie';
 
-import {replaceRerender, replaceWorking, replaceLoading, replaceReady, replaceData} from "../redux/actions/basic";
+import addDeleteNotification from "../redux/thunks/addDeleteNotification";
+import dictCode from '../others/dictCode';
+
+import {replaceData, replaceData2} from "../redux/actions/basic";
+import {replaceDataAuth, replaceData2Auth} from "../redux/actions/auth";
 
 
-import addRemoveNotification from "../redux/thunks/addRemoveNotification";
-
-import {Div, Input, Button, A} from '../styles/DefaultStyles';
+import {Div, Input, Button, A, LinkDefault} from '../styles/DefaultStyles';
 //import Player from '../components/Player'
 import IconHandHeart from '../svgs/basic/IconHandHeart'
 import IconPenBrush from '../svgs/basic/IconPenBrush'
 import IconLink from '../svgs/basic/IconLink';
+import IconSun from '../svgs/basic/IconSun';
+import IconMoon from '../svgs/basic/IconMoon';
+import IconMoonSun from '../svgs/basic/IconMoonSun';
 
 
 //import Guide from '../components/Home/Guide';
@@ -111,20 +117,48 @@ const DivD = styled(Div)`
   }
 `
 
+const DivIdentification = styled(Div)`
+  font-size: 1.6rem;
+  margin: 4px;
+  font-weight: bold;
+`
 
-const ButtonContact = styled(Button)`
-  margin-top: 5px;
-  
-  width: 160px;
-  height: 30px;
-  
-  border-radius: 9px;
+const DivThemes = styled(Div)`
   
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
 `
+
+const ButtonChooseTheme = styled(Button)`
+  height: 36px;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const DivLanguages = styled(Div)`
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`
+
+const ButtonChooseLanguage = styled(Button)`
+  padding-top: 0px;
+  padding-bottom: 0px;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+
+
 
 
 
@@ -141,13 +175,33 @@ const DivPeople = styled(Div)`
   
 `
 
+const isDarkMode = () => {
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}  
+
 
 
 const Home= ({
-  statusAuth
+  readyUser
   , auth
   
+  , theme
+  , language
+  
+  , addDeleteNotification
+  , replaceData
+  , replaceData2
+  
+  , replaceDataAuth
+  
 }) => {
+  
+  const [cookies, setCookie, removeCookie] = useCookies(['logged', 'language', 'themeOption']);
 
 
   const onClick_LogOut = async (event) => {
@@ -156,10 +210,56 @@ const Home= ({
 		}
 		catch (error) {  console.log(error); }
 		
-		storage.remove('loggedUser');
+		removeCookie('logged'); // 사실 무조건 로그인 가능하다. (그래서 위의 catch 에서 알림 설정 안한다)
+		
+		replaceData2('loading', 'user', false);
+    replaceData2('ready', 'user', false);
+    
+    removeCookie('logged');
+    
+    replaceDataAuth("_id", "");
+    replaceDataAuth("email", "");
+    replaceDataAuth("battletag", "");
+    replaceDataAuth("mmr", {});
 		
     window.location.reload(true); // 현재페이지 새로고침 (?reason=... 을 넣고 싶지만, 현재의 정확한 url 모르는 상태에서 query 추가하기가 좀 복잡하다)
-          
+	}
+	
+	
+	const onClick_ChangeTheme = (event, themeOption) => {
+	  setCookie('themeOption', themeOption,{maxAge: 60 * 60 * 24 * 30});
+	  if (themeOption === 'auto') {
+      const themeName = isDarkMode() ? 'dark' : 'light';
+      replaceData("themeName", themeName);
+    }
+    else {
+      replaceData("themeName", themeOption);
+    }
+	}
+	
+	const onClick_ChangeLanguage = (event, language) => {
+	  setCookie('language', language,{maxAge: 60 * 60 * 24 * 30});
+    replaceData("language", language);
+	}
+	
+	const onClick_UpdateMmr = async (event) => {
+	  try {
+	    replaceData2("ready", "mmrUser", false);
+	    replaceData2("working", "updateMmr", true);
+	    
+      const res = await axios.post (`${process.env.REACT_APP_URL_AHR}/auth-local/update-mmr`, {
+        _id: auth._id
+        ,battletag: auth.battletag
+      });
+      
+      console.log(res.data);
+      replaceData2("working", "updateMmr", false);
+      replaceData2("ready", "mmrUser", true);
+      
+      addDeleteNotification("alocal42", language);
+	    
+		}
+		catch (error) {  addDeleteNotification("alocal41", language); }
 	}
     
     return (
@@ -168,15 +268,20 @@ const Home= ({
       
       <DivA>
         
-        {(statusAuth)?
+        {(readyUser)?
   				<Div>
-  					<Div> Hello, {(auth.battletag)? auth.battletag : auth.email} </Div>
-  					<Button onClick={onClick_LogOut}> log out </Button>
+  					<DivIdentification> {(auth.battletag)? auth.battletag : auth.email} </DivIdentification>
+  					
+  					<Button onClick={onClick_LogOut}> LOG OUT </Button>
+  					{(auth.battletag)? 
+  					  <Button onClick={onClick_UpdateMmr}> Update Mmr </Button>
+  					  : <LinkDefault to="/auth/apply-battletag"> Apply Battletag </LinkDefault> 
+  					}
+  					
   				</Div>
   				:  
   				<Div>
-  				  <Div> Hello </Div>
-  				  <NavLink to="/auth/log-in" > Log In </NavLink> 
+  				  <LinkDefault to="/auth/log-in" > Log In </LinkDefault> 
   				</Div>
   			}
 			
@@ -184,19 +289,58 @@ const Home= ({
       </DivA>
       
       <DivB>
-        <Div> if you have forgotten url, contact me </Div>
+      
+        <DivThemes>
+          <ButtonChooseTheme onClick={(event) => onClick_ChangeTheme(event, 'light')} > 
+            <IconSun width={"30px"} height={"30px"} color="color_weak" />
+            <Div> light </Div>
+          </ButtonChooseTheme>
+          
+          <ButtonChooseTheme onClick={(event) => onClick_ChangeTheme(event, 'dark')} > 
+            <IconMoon width={"30px"} height={"30px"} color="color_weak" />
+            <Div> dark </Div>
+          </ButtonChooseTheme>
+          
+          <ButtonChooseTheme onClick={(event) => onClick_ChangeTheme(event, 'auto')} > 
+            <IconMoonSun width={"36px"} height={"36px"} color="color_weak" />
+            <Div> auto </Div>
+          </ButtonChooseTheme>
+        </DivThemes>
         
-        <ButtonContact> 
-          <IconLink width={"20px"} height={"20px"} />
-          <A href="https://twitter.com/mbcat_hots" > @mbcat_hots </A>  
-        </ButtonContact>
+        <DivLanguages>
+          <ButtonChooseLanguage onClick={(event) => onClick_ChangeLanguage(event, 'en')} > 
+            <Div>  English </Div>
+          </ButtonChooseLanguage>
+          
+          <ButtonChooseLanguage onClick={(event) => onClick_ChangeLanguage(event, 'ko')} > 
+            <Div> 한국어 </Div>
+          </ButtonChooseLanguage>
+          
+          <ButtonChooseLanguage onClick={(event) => onClick_ChangeLanguage(event, 'ja')} > 
+            <Div> 日本語 </Div>
+          </ButtonChooseLanguage>
+        </DivLanguages>
         
       </DivB>
       
       
       
       <DivC>
-        
+        {(() => {
+          switch (language) {
+            case 'ko': 
+              return '안녕, 테스터';
+            case 'ja': 
+              return 'こんにちは、テスター';
+            default: // eng
+              return 'Hello, Tester';
+          }
+	      })()}
+	      
+	      <Div>
+	      {(readyUser&&auth.mmr)? JSON.stringify(auth.mmr) : "no data or logged out" }
+	      </Div>
+	      
       </DivC>
       
       
@@ -230,14 +374,24 @@ const Home= ({
 
 function mapStateToProps(state) { 
   return { 
-    statusAuth: state.auth.status
+    readyUser: state.basic.ready.user
     , auth: state.auth
+    
+    , theme: state.basic.theme
+    , language: state.basic.language
   }; 
 } 
 
 function mapDispatchToProps(dispatch) { 
   return { 
     
+    replaceData : (which, replacement) => dispatch(replaceData(which, replacement))
+    ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
+    
+    , replaceDataAuth : (which, replacement) => dispatch(replaceDataAuth(which, replacement))
+    ,replaceData2Auth : (which1, which2, replacement) => dispatch(replaceData2Auth(which1, which2, replacement))
+    
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }
 

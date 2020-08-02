@@ -15,7 +15,8 @@ from "react-redux";
 import * as config from '../../../config';
 
 
-import addRemoveNotification from "../../../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
+import dictCode from '../../../others/dictCode'
 
 import {
   replaceDataCompGallery, replaceData2CompGallery, replaceListPosition
@@ -215,7 +216,7 @@ const Comp = ({
     , listAllTag
     , tComp
 
-    , addRemoveNotification
+    , addDeleteNotification
 
   }) => {
 
@@ -338,7 +339,7 @@ const Comp = ({
   function mapDispatchToProps(dispatch) {
     return {
 
-      addRemoveNotification: (situation, message, time, idNotification) => dispatch(addRemoveNotification(situation, message, time, idNotification))
+     addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
     };
   }
 

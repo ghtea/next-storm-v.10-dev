@@ -6,14 +6,12 @@ import * as types from '../actions/ActionTypes';
 
 const stateInitial = { 
     
-    status: false // true =  로그인됨, false = 로그아웃 상태
-    
-    //, how: ""        // local, social (google, blizzard) 
-    
-    , _id: ""
+    _id: ""
     , email: ""
     , battletag: ""
     
+    , mmr: {}
+  
   };
 
 

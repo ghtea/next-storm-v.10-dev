@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 import { connect } from "react-redux";
-import addRemoveNotification from "../../redux/thunks/addRemoveNotification";
+import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 import {replaceWorking} from "../../redux/actions/basic";
 
 import { NavLink, useHistory } from 'react-router-dom';
@@ -27,7 +27,7 @@ const DivSearchingPlan = styled(Div)`
 
 
 
- const SearchingPlan = ({addRemoveNotification, loading, ready, working, replaceWorking}) => {
+ const SearchingPlan = ({addDeleteNotification, loading, ready, working, replaceWorking}) => {
   
   
 
@@ -55,7 +55,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) { 
   return { 
-    addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
+    
     ,replaceWorking: (which, true_false) => dispatch(replaceWorking(which, true_false))
   }; 
 }

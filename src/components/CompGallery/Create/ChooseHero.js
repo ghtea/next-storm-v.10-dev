@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import { connect } from "react-redux";
 
-import addRemoveNotification from "../../../redux/thunks/addRemoveNotification"
+import addDeleteNotification from "../../../redux/thunks/addDeleteNotification"
 import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} from "../../../redux/actions/comp_gallery";
 
 import {Div, Input, Button, Img} from '../../../styles/DefaultStyles';
@@ -121,8 +121,11 @@ const ImgEachHero = styled(Img)`
 
 
  const ChooseHero = ({
-   dictAllHeroBasic
    
+  language
+   
+    , dictAllHeroBasic
+     
     , listPosition
     
     , whichAdding
@@ -131,7 +134,7 @@ const ImgEachHero = styled(Img)`
     , replaceData2CompGallery 
     , replaceListPosition
     
-    , addRemoveNotification
+    , addDeleteNotification
    
  } ) => {
   
@@ -152,10 +155,10 @@ const ImgEachHero = styled(Img)`
         replaceData2CompGallery("create", "triggerPosition", Date.now().toString());
       }
       else if ( listPosition[locationAddingHero[0]]["listIdHero"].includes(idHero) ) {
-        addRemoveNotification("error", "This hero is already in current position");
+        addDeleteNotification("comp12", language);
       }
       else if ( listPosition[locationAddingHero[0]]["listIdHero"].lenght === 5) {
-        addRemoveNotification("error", "Max number for each position is 5");
+        addDeleteNotification("comp13", language);
       }
     }
   
@@ -307,9 +310,12 @@ const ImgEachHero = styled(Img)`
 
 function mapStateToProps(state) { 
   return { 
-    dictAllHeroBasic: state.hots.dictAllHeroBasic
     
-     , listPosition: state.comp_gallery.create.listPosition
+    language: state.basic.language
+    
+    , dictAllHeroBasic: state.hots.dictAllHeroBasic
+    
+    , listPosition: state.comp_gallery.create.listPosition
     
     , whichAdding: state.comp_gallery.create.whichAdding
     , locationAddingHero: state.comp_gallery.create.locationAddingHero
@@ -323,7 +329,7 @@ function mapDispatchToProps(dispatch) {
     replaceData2CompGallery : (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
     ,replaceListPosition : (replacement) => dispatch(replaceListPosition(replacement))
     
-    ,addRemoveNotification: (situation, message, time, idNotification) => dispatch( addRemoveNotification(situation, message, time, idNotification) )
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
     //,replaceWorking: (which, true_false) => dispatch(replaceWorking(which, true_false))
   }; 
 }
