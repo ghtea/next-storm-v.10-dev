@@ -38,11 +38,11 @@ const DivCompGallery = styled(Div)`
   justify-content: flex-start;
   align-items: center;
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
   }
 
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     
   }
 `;
@@ -61,7 +61,7 @@ const Main = styled(Div)`
   
   
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
     top: 100px; /* SubCompGallery */
   	left: 0;
@@ -70,7 +70,7 @@ const Main = styled(Div)`
     height: calc(100% - 100px);
 	}
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     
     top: 50px; 
     left: 120px;
@@ -134,8 +134,12 @@ const CompGallery = ({
           
           const {data} = await axios.get (`${config.URL_API_NS}/map/`);
           
-          replaceDataHots("listAllMap", data)
-          replaceData2("ready", "listAllMap", true)
+          replaceDataHots("listAllMap", data);
+          replaceData2("ready", "listAllMap", true);
+          
+          let listMapStandardRankedTemp = data.filter(element => element.type === "standard" && element.rankedRotation === true);
+          replaceDataHots( "listMapStandardRanked", listMapStandardRankedTemp );
+          replaceData2("ready", "listMapStandardRanked", true);
           
         } 
         catch (error) { 

@@ -22,7 +22,7 @@ import {replaceDataHots, replaceData2Hots} from "../../redux/actions/hots";
 import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 import dictCode from '../../others/dictCode';
 
-import {Div, Input, Button} from '../../styles/DefaultStyles';
+import {Div, Input, Button, NavLinkDefault} from '../../styles/DefaultStyles';
 
 import IconLoading from '../../svgs/basic/IconLoading'
 
@@ -30,7 +30,7 @@ import IconLoading from '../../svgs/basic/IconLoading'
 
 const DivSubCompGalleryBack = styled(Div)`
 
-  background-color: ${props => props.theme.COLOR_middle};
+  /*background-color: ${props => props.theme.COLOR_middle};*/
   color: ${props => props.theme.color_normal};
   
   
@@ -45,7 +45,7 @@ const DivSubCompGalleryBack = styled(Div)`
   	height: 50px; 
     
     flex-direction: row;
-  	border-bottom: 1px solid ${props => props.theme.color_very_weak};
+  	/*border-bottom: 1px solid ${props => props.theme.color_very_weak};*/
   }
 
   @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
@@ -57,7 +57,7 @@ const DivSubCompGalleryBack = styled(Div)`
   	height: 50px; 
     
     flex-direction: row;
-  	border-bottom: 1px solid ${props => props.theme.color_very_weak};
+  	/*border-bottom: 1px solid ${props => props.theme.color_very_weak};*/
   }
   
 `
@@ -65,11 +65,10 @@ const DivSubCompGalleryBack = styled(Div)`
 const DivSubCompGallery = styled(Div)`
   
   width: 100%;
-  max-width: 900px;
   
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   
   @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
@@ -81,18 +80,25 @@ const DivSubCompGallery = styled(Div)`
   }
 `
 
-const ButtonNavLink = styled(Button)`
+const NavLinkStyled = styled(NavLinkDefault)`
+  
+  font-size: 1.2rem;
+  
+  
   width: 60px;
+  
+  
   margin-left: 8px;
+  &:first-child { margin-left: 16px; }
+  
   margin-right: 8px;
   
-  border: 1px solid ${props => props.theme.color_normal};
-  background-color: transparent ;
+ /*border-bottom: 1px solid ${props => props.theme.color_normal};*/
   
-  & > a {
-    text-decoration: none;
-    color: ${props => props.theme.color_normal};
-  }
+
+  text-decoration: none;
+  color: ${props => props.theme.color_normal};
+
   
 `
 
@@ -125,12 +131,16 @@ const SubCompGallery = ({
    return (
     <DivSubCompGalleryBack>
       <DivSubCompGallery>
-      
-        <ButtonNavLink>
-          <NavLink to="/comp-gallery" > 
-    				<Div> Gallery </Div> 
-    			</NavLink> 
-    		</ButtonNavLink>
+
+        <NavLinkStyled to="/comp-gallery" > 
+  				<Div> Gallery </Div> 
+  			</NavLinkStyled> 
+  		
+ 
+        <NavLinkStyled to="/comp-gallery/create" > 
+  				<Div> Create </Div> 
+  			</NavLinkStyled> 
+    
     		
     		<DivMain>
           <Switch>
@@ -140,11 +150,6 @@ const SubCompGallery = ({
           </Switch>
         </DivMain>
         
-        <ButtonNavLink>
-          <NavLink to="/comp-gallery/create" > 
-    				<Div> Create </Div> 
-    			</NavLink> 
-    		</ButtonNavLink>
         
       </DivSubCompGallery>
     </DivSubCompGalleryBack>

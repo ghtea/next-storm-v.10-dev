@@ -9,7 +9,10 @@ const stateInitial = {
     ready : {
       planTeam: false
       ,dictAllHeroBasic: false
+      
       ,listAllMap: false
+      , listMapStandardRanked: false
+      
       ,listComp: false
       ,user: false
       
@@ -43,8 +46,7 @@ const stateInitial = {
     // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
   
     ,authority: {
-      team_generator: "viewer" // "administrator" "viewer"
-      , comp_gallery: "viewer" // "master" "viewer"
+      team_planner: "viewer" // "administrator" "viewer"
     }
     
    

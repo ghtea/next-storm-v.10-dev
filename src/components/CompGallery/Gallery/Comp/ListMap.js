@@ -40,11 +40,14 @@ const DivMap = styled(Div)`
 const Map = ({
   listAllMap
   ,tIdMap
+  ,tNameMap
 }) => {
+  
+  
   
   return (
     <DivMap>
-      {tIdMap}
+      {tNameMap}
     </DivMap>
   )
 }
@@ -78,10 +81,13 @@ const DivListMap = styled(Div)`
     <DivListMap>
     
      {listMap.map((tIdMap)=>{
+      const tMap = listAllMap.find(element => element._id === tIdMap);
+      const tNameMap = tMap.name
         return (
           <Map
             key={tIdMap}
             tIdMap={tIdMap}
+            tNameMap={tNameMap}
             listAllMap={listAllMap}
           />
         ) 

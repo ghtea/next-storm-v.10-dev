@@ -7,9 +7,8 @@ import * as types from '../actions/ActionTypes';
 const stateInitial = { 
     
       dictAllHeroBasic: {}
-      , listAllMap : [
-          
-        ]
+      , listAllMap : [ ]
+      , listMapStandardRanked : []
     
   };
 

@@ -42,11 +42,11 @@ const DivEachMap = styled(Div)`
   }
   
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     
   } 
   
@@ -65,11 +65,11 @@ const ContainerImgEachMap = styled(Div)`
     border-radius: 6px 6px 0 0;
   }
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     width: 50px;
     height: 50px;
   } 
@@ -82,13 +82,13 @@ const ImgEachMap = styled(Img)`
   position: absolute;
   z-index:2;
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     object-fit: cover;
     width: 50px;
     height: 50px;
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     object-fit: cover;
     width: 50px;
     height: 50px;
@@ -111,12 +111,12 @@ const BackgroundEachHero = styled(Div)`
   border-radius: 50px;
   position: absolute;
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     width: 50px;
     height: 50px;
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     width: 50px;
     height: 50px;
   } 
@@ -134,11 +134,11 @@ const DivPlus = styled(Div)`
     background-color: ${props => (props.theme.COLOR_save) };
   }
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     
   } 
 `

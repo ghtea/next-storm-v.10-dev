@@ -99,14 +99,15 @@ const Link_Common = styled(LinkDefault)`
   
   const history = useHistory(); 
   
-  /*
+  const [destination, setDestination] = useState("/");
+  
   useEffect(()=>{
     const query = queryString.parse(location.search);
-    if(query.expired !== undefined) {
-      addDeleteNotification("error", "please log in again");
+    if(query.destination !== undefined) {
+      setDestination(query.destination);
     }
   },[])
-  */
+  
   
   const onClick_LogIn = async (event) => {
     
@@ -175,7 +176,7 @@ const Link_Common = styled(LinkDefault)`
             replaceData2('loading', 'user', false);
             replaceData2('ready', 'user', true);
         
-            history.push('/');
+            history.push(destination);
             addDeleteNotification("auth13", language);
           }
           

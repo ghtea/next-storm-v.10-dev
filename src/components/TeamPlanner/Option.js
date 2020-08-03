@@ -81,7 +81,7 @@ const DivRegion = styled(Div)`
 const ButtonRegion = styled(Button)`
   width: auto;
   height: auto;
-  
+  padding: 0;
   background-color: transparent;
   
   
@@ -292,10 +292,10 @@ const ButtonNumberSide = styled(Button)`
 function mapStateToProps(state) { 
   return { 
    
-    idPlanTeam: state.team_generator.ePlanTeam._id
+    idPlanTeam: state.team_planner.ePlanTeam._id
   
-    ,option: state.team_generator.ePlanTeam.option
-    , authority: state.basic.authority.team_generator
+    ,option: state.team_planner.ePlanTeam.option
+    , authority: state.basic.authority.team_planner
     
     , language: state.basic.language
     

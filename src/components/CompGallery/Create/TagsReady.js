@@ -27,6 +27,8 @@ import IconSlow from '../../../svgs/tags/IconSlow'
 
 //
 const DivTagsReady = styled(Div)`
+  height: 100%;
+  
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;

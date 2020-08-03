@@ -19,9 +19,7 @@ import * as config from '../../../config';
 import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
 import dictCode from '../../../others/dictCode'
 
-import {
-  replaceDataCompGallery, replaceData2CompGallery, replaceListPosition
-}
+import { replaceDataCompGallery, replaceData2CompGallery, replaceListPosition }
 from "../../../redux/actions/comp_gallery";
 
 
@@ -49,10 +47,16 @@ import IconExpand from '../../../svgs/basic/IconExpand'
 
 import IconFun from '../../../svgs/tags/IconFun'
 import IconSerious from '../../../svgs/tags/IconSerious'
-import IconFast from '../../../svgs/tags/IconFast'
-import IconSlow from '../../../svgs/tags/IconSlow'
+
 import IconKill from '../../../svgs/tags/IconKill'
 import IconPush from '../../../svgs/tags/IconPush'
+
+import IconCombo from '../../../svgs/tags/IconCombo'
+import IconTheme from '../../../svgs/tags/IconTheme'
+
+import IconFast from '../../../svgs/tags/IconFast'
+import IconSlow from '../../../svgs/tags/IconSlow'
+
 
 
 
@@ -64,54 +68,65 @@ const DivFilter = styled(Div)
   transform: translateX(-50%);
   */
   
-  width: 350px; 
-  height: auto;
+  width: 100%; 
+  height: 100%;
   
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  flex-wrap: wrap;
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) { 
-    top: 110px;
-  }
-
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) { 
-    top: 60px;
-  }
+  
 `
 // 870
 
 
-const DivFilterItem = styled(Div)`
+const DivFilterEachGroup = styled(Div)`
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   
-  margin-top: 3px;
-  margin-bottom: 3px;
-  margin-right: 3px;
-  margin-left: 3px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `
 
 
-const DivFilterSize = styled(DivFilterItem)`
+const ButtonSize = styled(Button)`
+  width: auto;
   
-`
-
-const DivFilterTag = styled(DivFilterItem)`
+  height: 30px;
   
+  margin-top: 1px;
+  margin-bottom: 1px;
+  margin-right: 2px;
+  margin-left: 2px;
+  
+  background-color: ${props => (props.active)? props.theme.COLOR_normal : 'transparent'};
+  color:  ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
+  border: 1px solid ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
 `
 
-const DivFilterMap = styled(Div)`
+
+
+const DivTagPair = styled(Div)`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+`
+
+const ButtonTag = styled(Button)`
+  width: 40px;
+  height: 30px;
   
-  flex-wrap: wrap;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  margin-right: 2px;
+  margin-left: 2px;
+  
+  background-color: ${props => (props.active)? props.theme.COLOR_normal : 'transparent'};
+  border: 1px solid ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
 `
 
 
@@ -119,18 +134,22 @@ const ButtonMap = styled(Button)`
   
   font-size: 0.8rem;
   
-  width: 70px;
-  height: 2.0rem;
+  width: 130px;
+  height: 30px;
   
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 5px;
+  padding-right: 5px;
   
   margin-top: 2px;
   margin-bottom: 2px;
   margin-right: 2px;
   margin-left: 2px;
   
-  border-radius: 0.3rem;
+  background-color: ${props => (props.active)? props.theme.COLOR_normal : 'transparent'};
+  color:  ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
+  border: 1px solid ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
   
   
   & > div {
@@ -138,9 +157,8 @@ const ButtonMap = styled(Button)`
     text-align: left;
     overflow: hidden;
     white-space: nowrap;
-    text-overflow: clip;
+    text-overflow: ellipsis;
   }
-  
 `
 
 
@@ -175,41 +193,56 @@ const Filter = ({
   
     dictAllHeroBasic
     , listAllMap
+    , listMapStandardRanked
+    
     , listAllTag
     
     , readyListAllMap
-
+    , readyListMapStandardRanked
+    
+    , filterSize
+    , filterTag
+    , filterMap
+    
+    , replaceData2CompGallery
+    
     , addDeleteNotification
 
   }) => {
-
-    const isBigMidScreen = useMediaQuery({ query: `(min-device-width: ${props => (props.theme.media.comp_gallery.mid_big) }px)` });
     
-    const [listMapStandardRanked, setListMapStandardRanked] = useState([]);
+    const isBigMidScreen = useMediaQuery({ query: `(min-device-width: ${props => (props.theme.media.mid_big) }px)` });
+    
+    //const [listMapStandardRanked, setListMapStandardRanked] = useState([]);
     
     useEffect(()=>{
-      if(readyListAllMap === true) {
-        let listMapStandardRankedTemp = listAllMap.filter(element => element.type === "standard" && element.rankedRotation === true);
-        setListMapStandardRanked(listMapStandardRankedTemp);
+      if(readyListMapStandardRanked === true) {
+        replaceData2CompGallery("gallery", "filterMap", readyListMapStandardRanked );
       }
-    },[readyListAllMap])
+    },[readyListMapStandardRanked])
 
 
 
     const returnIconTag = (tag) => {
         switch (tag) {
           case "ToWin":
-            return ( < IconSerious width = { "24px" } height = { "24px" } color = {  "color_weak" } />)
+            return ( < IconSerious width = { "20px" } height = { "20px" } color = {  "color_weak" } />)
           case "ForFun":
-            return ( < IconFun width = { "24px" } height = { "24px" }  color = { "color_weak" } />)
+            return ( < IconFun width = { "20px" } height = { "20px" }  color = { "color_weak" } />)
+            
           case "Kill":
-            return ( < IconKill width = { "24px" } height = { "24px" } color = { "color_weak" } />)
+            return ( < IconKill width = { "20px" } height = { "20px" } color = { "color_weak" } />)
           case "Push":
-            return ( < IconPush width = {  "23px" } height = {  "23px" } color = {  "color_weak" } />)
+            return ( < IconPush width = {  "19px" } height = {  "19px" } color = {  "color_weak" } />)
+            
+          case "Combo":
+            return ( < IconCombo width = { "20px" } height = { "20px" } color = { "color_weak" } />)
+          case "Theme":
+            return ( < IconTheme width = {  "19px" } height = {  "19px" } color = {  "color_weak" } />)
+            
           case "Early":
-            return ( < IconFast width = { "27px" } height = { "27px" } color = { "color_weak"  } />)
-        case "Late":
-          return ( < IconSlow width = { "24px" } height = { "24px" } color = { "color_weak" } />)
+            return ( < IconFast width = { "23px" } height = { "23px" } color = { "color_weak"  } />)
+          case "Late":
+            return ( < IconSlow width = { "20px" } height = { "20px" } color = { "color_weak" } />)
 
           }
       }
@@ -221,35 +254,46 @@ const Filter = ({
       
        
         
-        <DivFilterSize> 
-          <Button> Duo </Button>
-          <Button> Trio  </Button>
-          <Button> Full Team  </Button>
-        </DivFilterSize>
+        <DivFilterEachGroup> 
+          <ButtonSize> Duo </ButtonSize>
+          <ButtonSize> Trio  </ButtonSize>
+          <ButtonSize> Full Team  </ButtonSize>
+        </DivFilterEachGroup>
         
         
-        <DivFilterTag> 
-        
-          <Div> {returnIconTag("ToWin")} </Div>
-          <Div> {returnIconTag("ForFun")} </Div>
+        <DivFilterEachGroup> 
           
-          <Div> {returnIconTag("Kill")} </Div>
-          <Div> {returnIconTag("Push")} </Div>
+          <DivTagPair>
+            <ButtonTag> {returnIconTag("ToWin")} </ButtonTag>
+            <ButtonTag> {returnIconTag("ForFun")} </ButtonTag>
+          </DivTagPair>
           
-          <Div> {returnIconTag("Early")} </Div>
-          <Div> {returnIconTag("Late")} </Div>
+          <DivTagPair>
+            <ButtonTag> {returnIconTag("Kill")} </ButtonTag>
+            <ButtonTag> {returnIconTag("Push")} </ButtonTag>
+          </DivTagPair>
           
-        </DivFilterTag>
+          <DivTagPair>
+            <ButtonTag> {returnIconTag("Combo")} </ButtonTag>
+            <ButtonTag> {returnIconTag("Theme")} </ButtonTag>
+          </DivTagPair>
+          
+          <DivTagPair>
+            <ButtonTag> {returnIconTag("Early")} </ButtonTag>
+            <ButtonTag> {returnIconTag("Late")} </ButtonTag>
+          </DivTagPair>
+          
+        </DivFilterEachGroup>
         
         
-        <DivFilterMap>
-          {(readyListAllMap)? listMapStandardRanked.map(element=>(
-              <ButtonMap key={element.name}> <Div>{element.name}</Div> </ButtonMap>
+        <DivFilterEachGroup>
+          {(readyListMapStandardRanked)? listMapStandardRanked.map(element=>(
+              <ButtonMap key={element.name} > <Div>{element.name}</Div> </ButtonMap>
             ))
             :
             <Div> loading...  </Div>
           }
-        </DivFilterMap>
+        </DivFilterEachGroup>
       
       
       </DivFilter>
@@ -283,9 +327,12 @@ const Filter = ({
       
       dictAllHeroBasic: state.hots.dictAllHeroBasic
       ,listAllMap: state.hots.listAllMap
-      ,listAllTag: state.comp_gallery.listAllTag
+      , listMapStandardRanked:  state.hots.listMapStandardRanked
+      
+      ,listAllTag: state.comp_gallery.gallery.listAllTag
       
       ,readyListAllMap: state.basic.ready.listAllMap
+      , readyListMapStandardRanked: state.basic.ready.listMapStandardRanked
       
     
     };
@@ -293,8 +340,11 @@ const Filter = ({
 
   function mapDispatchToProps(dispatch) {
     return {
-
-     addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
+    
+    replaceDataCompGallery : (which, replacement) => dispatch(replaceDataCompGallery(which, replacement))
+    ,replaceData2CompGallery : (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
+    
+    ,addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
     };
   }
 

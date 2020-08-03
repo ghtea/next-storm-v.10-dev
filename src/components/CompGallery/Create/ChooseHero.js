@@ -38,11 +38,11 @@ const DivChooseHero = styled(Div)`
   align-items: center;
 
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     
   }
 `
@@ -93,11 +93,11 @@ const DivEachHero = styled(Div)`
   margin: 2px;
    width: 40px;
     height: 40px;
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
    
   } 
 `
@@ -108,12 +108,12 @@ const ImgEachHero = styled(Img)`
   width: 40px;
   height: 40px;
     
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
     
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
 
 
   } 

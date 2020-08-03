@@ -202,27 +202,33 @@ const Home= ({
 }) => {
   
   const [cookies, setCookie, removeCookie] = useCookies(['logged', 'language', 'themeOption']);
-
-
+  
+  /*
+  // 로그아웃 시도후 내가 만든 흔적 쿠키가 완전히 사라져야 새로고침!
+  useEffect(()=>{
+    if (!cookies.logged) {
+      window.location.reload(true); // 현재페이지 새로고침
+    }
+  }, [cookies.logged])
+  */
+  
   const onClick_LogOut = async (event) => {
 		try {
 			const res = await axios.post(`${config.URL_API_NS}/auth-local/log-out`, {withCredentials: true, credentials: 'include'});
 		}
 		catch (error) {  console.log(error); }
 		
-		removeCookie('logged'); // 사실 무조건 로그인 가능하다. (그래서 위의 catch 에서 알림 설정 안한다)
+		removeCookie('logged'); // 사실 무조건 로그아웃 가능하다. (그래서 위의 catch 에서 알림 설정 안한다)
 		
 		replaceData2('loading', 'user', false);
     replaceData2('ready', 'user', false);
-    
-    removeCookie('logged');
     
     replaceDataAuth("_id", "");
     replaceDataAuth("email", "");
     replaceDataAuth("battletag", "");
     replaceDataAuth("mmr", {});
-		
-    window.location.reload(true); // 현재페이지 새로고침 (?reason=... 을 넣고 싶지만, 현재의 정확한 url 모르는 상태에서 query 추가하기가 좀 복잡하다)
+    
+    window.location.reload(true);
 	}
 	
 	

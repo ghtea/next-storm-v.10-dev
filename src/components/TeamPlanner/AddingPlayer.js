@@ -436,10 +436,10 @@ function mapStateToProps(state) {
     workingAddPlayer: state.basic.working.addPlayer
     
     
-    , authority: state.basic.authority.team_generator
+    , authority: state.basic.authority.team_planner
     , language: state.basic.language
     
-    , ePlanTeam: {...state.team_generator.ePlanTeam}
+    , ePlanTeam: {...state.team_planner.ePlanTeam}
     
   }; 
 } 

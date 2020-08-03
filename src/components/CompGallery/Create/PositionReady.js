@@ -42,15 +42,6 @@ const DivEachHero = styled(Div)`
   }
   
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
-    
-  } 
-  
-  
 `
 
 const ContainerImgEachHero = styled(Div)`
@@ -67,11 +58,11 @@ const ContainerImgEachHero = styled(Div)`
     border-radius: 6px 6px 0 0;
   }
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     
   } 
   
@@ -87,11 +78,11 @@ const ImgEachHero = styled(Img)`
   width: 50px;
   height: 50px;
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
 
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     
   } 
 `
@@ -101,7 +92,7 @@ const ButtonDelete = styled(Button)`
   
   width: 50px;
   height: 20px;
-  
+  margin: 0;
   border-radius: 0 0 6px 6px;
   
   &:focus {outline:none;}
@@ -112,12 +103,12 @@ const BackgroundEachHero = styled(Div)`
   border-radius: 50px;
   position: absolute;
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     width: 50px;
     height: 50px;
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     width: 50px;
     height: 50px;
   } 
@@ -135,11 +126,11 @@ const DivPlus = styled(Div)`
     background-color: ${props => (props.theme.COLOR_save) };
   }
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     
   } 
 `

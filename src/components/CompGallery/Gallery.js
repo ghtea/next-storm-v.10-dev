@@ -33,17 +33,37 @@ const DivGallery = styled(Div)`
   height:100%;
   
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: flex-start;
   align-items: center;
   
 `;
 
-const DivListComp = styled(Div)`
+
+const ContainerFilter = styled(Div)`
+  width: 180px;;
+  height: 100%;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+`
+
+const ContainerListComp = styled(Div)`
   width: 100%;
   height: 100%;
   
-  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+`
+
+
+const DivListComp = styled(Div)`
+  width: 100%;
+  height: 100%;
   
   display: flex;
   flex-direction: row;
@@ -113,25 +133,29 @@ const DivListComp = styled(Div)`
   
   <DivGallery>
   
-    <Filter />
+    <ContainerFilter>
+      <Filter />
+    </ContainerFilter>  
     
-    {(!readyListComp)? <Div> loading </Div>
-      :
-      <DivListComp>
+    <ContainerListComp>
+      {(!readyListComp)? <Div> loading </Div>
+        :
+        <DivListComp>
+        
+          {listComp.map( (comp, index) => {
+            
+            return (
+              <Comp 
+                key={index}
+                tComp = {comp}
+              />
+            )
+            }) //map
+          }
       
-        {listComp.map( (comp, index) => {
-          
-          return (
-            <Comp 
-              key={index}
-              tComp = {comp}
-            />
-          )
-          }) //map
-        }
-    
-      </DivListComp>
-    }
+        </DivListComp>
+      }
+    </ContainerListComp>
     
     
   </DivGallery>

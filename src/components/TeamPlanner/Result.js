@@ -891,13 +891,13 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
 
 function mapStateToProps(state) { 
   return { 
-    authority: state.basic.authority.team_generator
+    authority: state.basic.authority.team_planner
     , language: state.basic.language
 
-    ,idPlanTeam: state.team_generator.ePlanTeam._id
-    ,option: state.team_generator.ePlanTeam.option
-    ,listPlayerEntry: state.team_generator.ePlanTeam.listPlayerEntry
-    ,listResult: state.team_generator.ePlanTeam.listResult
+    ,idPlanTeam: state.team_planner.ePlanTeam._id
+    ,option: state.team_planner.ePlanTeam.option
+    ,listPlayerEntry: state.team_planner.ePlanTeam.listPlayerEntry
+    ,listResult: state.team_planner.ePlanTeam.listResult
    
   }; 
 } 

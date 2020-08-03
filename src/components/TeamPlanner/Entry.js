@@ -646,12 +646,12 @@ const Entry = ({
 
 function mapStateToProps(state) { 
   return { 
-    authority: state.basic.authority.team_generator
+    authority: state.basic.authority.team_planner
     , language : state.basic.language
     
-    ,listPlayerEntry: [...state.team_generator.ePlanTeam.listPlayerEntry]
-    ,idPlanTeam: state.team_generator.ePlanTeam._id
-    ,option: state.team_generator.ePlanTeam.option
+    ,listPlayerEntry: [...state.team_planner.ePlanTeam.listPlayerEntry]
+    ,idPlanTeam: state.team_planner.ePlanTeam._id
+    ,option: state.team_planner.ePlanTeam.option
     
   }; 
 } 

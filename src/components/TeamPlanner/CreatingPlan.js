@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import React, {useState} from 'react';
 import styled from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
 
 import axios from 'axios';
 
@@ -101,6 +102,7 @@ const InputTitle = styled(Input)`
 const ButtonRegion = styled(Button)`
   width: auto;
   height: auto;
+  padding: 0;
   
   background-color: transparent;
 `
@@ -182,7 +184,7 @@ const DivIconWorking = styled(Div)`
   const onClick_ButtonCreatePlan = async (event) => {
     
   if (inputTitle.value) {
-      const idPlanTeam = getTimeStamp();
+      const idPlanTeam = uuidv4();
       const pwPlanTeam = generatePassword(8);  // ex: "5y7o"
       
       
@@ -195,11 +197,12 @@ const DivIconWorking = styled(Div)`
       
       try {
         replaceWorking("createPlan", true);
+        
         await axios.post (`${process.env.REACT_APP_URL_AHR}/plan-team`, {
           _id: idPlanTeam
-          ,password: pwPlanTeam
-          ,title: titlePlanTeam
-          ,region: regionCreating
+          , password: pwPlanTeam
+          , title: titlePlanTeam
+          , region: regionCreating
         });
         //console.log(regionCreating);
         replaceWorking("createPlan", false);
@@ -212,7 +215,7 @@ const DivIconWorking = styled(Div)`
         //window.location = `/team-generator/${idPlanTeam}?pw=${pwPlanTeam}`;
         //setTimeout( ()=>{history.push(`/team-generator/${idPlanTeam}?pw=${pwPlanTeam}`)} , 2000)
         
-        history.push(`/team-generator/${idPlanTeam}?pw=${pwPlanTeam}`)
+        history.push(`/team-planner/${idPlanTeam}?pw=${pwPlanTeam}`)
       }
       catch (error) {
         replaceWorking("createPlan", false)

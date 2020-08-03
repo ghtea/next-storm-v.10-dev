@@ -12,11 +12,38 @@ const comp = {
 	, "comp02": { // 
 		situation: "error"
 		, message: {
-			en: `Failed in creating comp`
+			en: `Failed in creating composition`
 			,ko: `조합을 생성하지 못했습니다`
 			,ja: `構成を作成できませんでした`
 		}
 	}
+	
+	
+	, "comp03": { // 
+		situation: "error"
+		, message: {
+			en: `Please enter title of composition`
+			,ko: `조합의 제목을 입력해주세요`
+			,ja: `構成のタイトルを入力してください`
+		}
+	}
+	, "comp04": { // 
+		situation: "error"
+		, message: {
+			en: `Composition must consist of 2/3/5 heroes`
+			,ko: `조합은 2/3/5 명의 영웅으로 이루어져야 합니다`
+			,ja: `構成は2/3/5名の英雄でなければなりません`
+		}
+	}
+	, "comp05": { // 
+		situation: "error"
+		, message: {
+			en: `Please select a maps`
+			,ko: `맵을 선택해주세요`
+			,ja: `マップを選択してください`
+		}
+	}
+	
 	
 
 	, "comp11": { // 

@@ -7,10 +7,7 @@ import styled from 'styled-components';
 
 import axios from 'axios';
 
-import {
-  connect
-}
-from "react-redux";
+import { connect } from "react-redux";
 
 import * as config from '../../../config';
 
@@ -327,6 +324,7 @@ const Comp = ({
 
   function mapStateToProps(state) {
     return {
+      
       listAllTag: state.comp_gallery.gallery.listAllTag
       
       ,listMap: state.comp_gallery.create.listMap

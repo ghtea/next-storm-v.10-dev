@@ -1,5 +1,6 @@
 import {getTimeStamp} from '../../tools/vanilla/time'
 import {toggleArrayElement} from '../../tools/vanilla/array'
+import storage from '../../tools/vanilla/storage';
 
 import * as types from '../actions/ActionTypes';
 
@@ -11,7 +12,12 @@ const stateInitial = {
       listComp: [] // searching
       , fComp: {} // FOCUS a comp
       , option: "small" // small, middle, big, list
-      , listAllTag: ["ToWin", "ForFun", "Kill", "Push", "Early", "Late"]
+      
+      , listAllTag: ["ToWin", "ForFun", "Kill", "Push", "Combo", "Theme", "Early", "Late"]
+      
+      , filterSize: [2,3,5]
+      , filterTag: ["ToWin", "ForFun", "Kill", "Push", "Combo", "Theme", "Early", "Late"]
+      , filterMap: []
     }
     
     , create : {
@@ -53,7 +59,7 @@ const comp_gallery = (
       if ( (!!action.replacement) && (action.replacement.constructor === Array) ) {
         return {
       	...state, 
-      	[action.which]: [...action.data]
+      	[action.which]: [...action.replacement]
         }
       }
       
@@ -74,8 +80,10 @@ const comp_gallery = (
     
     case types.REPLACE_DATA_2_COMP_GALLERY:
       
+      let replacementState = {};
       if ( (!!action.replacement) && (action.replacement.constructor === Array) ) {
-        return {
+        
+        replacementState = {
         	...state, 
         	[action.which1]: {
         	  ...state[action.which1]
@@ -85,7 +93,7 @@ const comp_gallery = (
       }
       
       else if ( (!!action.replacement) && (action.replacement.constructor === Object) ) {
-        return {
+        replacementState = {
         	...state, 
         	[action.which1]: {
         	  ...state[action.which1]
@@ -93,10 +101,9 @@ const comp_gallery = (
         	}
         }
       }
-        
       
       else {
-        return {
+        replacementState = {
         	...state, 
         	[action.which1]: {
         	  ...state[action.which1]
@@ -104,6 +111,13 @@ const comp_gallery = (
         	}
         }
       }
+       
+      // 작성중 comp 안날라가게!
+      if (action.which1 === "create") {
+        storage.set("comp-creating", replacementState["create"]);
+      }
+      
+      return replacementState;
     // REPLACE_DATA_2_HOTS
       
       

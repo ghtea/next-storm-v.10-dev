@@ -44,11 +44,11 @@ const DivEachMap = styled(Div)`
   }
   
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     
   } 
   
@@ -71,11 +71,11 @@ const ContainerImgEachMap = styled(Div)`
   
   
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
 
   } 
   
@@ -99,11 +99,11 @@ const ImgEachMap = styled(Img)`
   position: absolute;
   z-index:0;
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
  
   } 
 `
@@ -112,6 +112,7 @@ const ButtonDelete = styled(Button)`
   color: ${props => (props.theme.color_delete) };
   background-color: ${props => (props.theme.COLOR_delete) };
   
+  margin: 0;
   width: 54px;
   height: 20px;
   
@@ -130,11 +131,11 @@ const DivPlus = styled(Div)`
     background-color: ${props => (props.theme.COLOR_save) };
   }
   
-  @media (max-width: ${props => (props.theme.media.comp_gallery.mid_big -1) }px ) {
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
     
   }
  
-  @media (min-width:  ${props => (props.theme.media.comp_gallery.mid_big) }px) {
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
     
   } 
 `
@@ -229,6 +230,8 @@ const Map = ({
 
 //
 const DivMapsReady = styled(Div)`
+  width: 60px;
+  
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

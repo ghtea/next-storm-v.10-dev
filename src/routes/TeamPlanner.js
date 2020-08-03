@@ -136,6 +136,7 @@ const TeamPlanner = ({
   const idPlanTeamTrying = match.params.idPlanTeam;
   
   useEffect(()=>{
+    console.log(idPlanTeamTrying);
     readPlanTeam(idPlanTeamTrying, language);
   }, []);
   
@@ -145,11 +146,11 @@ const TeamPlanner = ({
     if (isFirstRun.current) {isFirstRun.current = false; return; }
     
     if (!loadingPlanTeam && !readyPlanTeam)  {  // (readyPlanTeam === false)
-      replaceAuthority("team_Planner", "unknown");
+      replaceAuthority("team_planner", "unknown");
       
       addDeleteNotification("tplan06", language);
       
-      history.push(`/team-Planner`);
+      history.push(`/team-planner`);
     }
   }, [loadingPlanTeam]);
   
@@ -168,12 +169,12 @@ const TeamPlanner = ({
     if (!loadingPlanTeam && readyPlanTeam && (authority === "viewer") ) {
       
       if (!passwordPlanTeamTrying) {
-        replaceAuthority("team_Planner", "viewer");
+        replaceAuthority("team_planner", "viewer");
         //addDeleteNotification("success", "welcome viewer!");
       }
       
       else if ( passwordPlanTeamTrying === passwordPlanTeam ) {
-        replaceAuthority("team_Planner", "administrator");
+        replaceAuthority("team_planner", "administrator");
         addDeleteNotification("tplan13", language);
       }
       
@@ -181,7 +182,7 @@ const TeamPlanner = ({
       // 정안되면 비번 틀린거는 알람이 아니라 일반 표시로 하기..
       // if password is wrong
       else {
-        replaceAuthority("team_Planner", "viewer");
+        replaceAuthority("team_planner", "viewer");
         addDeleteNotification("tplan14", language);
       }
       
@@ -256,11 +257,11 @@ const TeamPlanner = ({
 
 function mapStateToProps(state) { 
   return { 
-    authority: state.basic.authority.team_Planner
+    authority: state.basic.authority.team_planner
     , language: state.basic.language
     
-    ,idPlanTeam: state.team_Planner.ePlanTeam._id
-    ,passwordPlanTeam: state.team_Planner.ePlanTeam.password
+    ,idPlanTeam: state.team_planner.ePlanTeam._id
+    ,passwordPlanTeam: state.team_planner.ePlanTeam.password
     
     , loadingPlanTeam: state.basic.loading.planTeam
     , readyPlanTeam: state.basic.ready.planTeam
