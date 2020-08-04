@@ -7,30 +7,30 @@ import axios from 'axios';
 import { NavLink, useParams } from 'react-router-dom';
 
 import { connect } from "react-redux";
-import {addNotification, deleteNotification} from "../../redux/actions/basic";
+import {addNotification, deleteNotification} from "../../../redux/actions/basic";
 
-import {replacePlayerTags, replacePlayerStatus} from "../../redux/actions/team_planner";
+import {replacePlayerTags, replacePlayerStatus} from "../../../redux/actions/team_planner";
 
-import readPlanTeam from "../../redux/thunks/readPlanTeam";
+import readPlanTeam from "../../../redux/thunks/readPlanTeam";
 
-import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
-import dictCode from '../../others/dictCode'
+import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
+import dictCode from '../../../others/dictCode'
 
 // https://reacttraining.com/blog/react-router-v5-1/
 
-import {Div} from '../../styles/DefaultStyles';
+import {Div} from '../../../styles/DefaultStyles';
 
 
-import IconConfirmed from '../../svgs/basic/IconConfirmed'
-import IconPending from '../../svgs/basic/IconPending'
-import IconInfo from '../../svgs/basic/IconInfo'
-import IconLeader from '../../svgs/basic/IconLeader'
+import IconConfirmed from '../../../svgs/basic/IconConfirmed'
+import IconPending from '../../../svgs/basic/IconPending'
+import IconInfo from '../../../svgs/basic/IconInfo'
+import IconLeader from '../../../svgs/basic/IconLeader'
 
-import IconTank from '../../svgs/roles/IconTank'
-import IconBruiser from '../../svgs/roles/IconBruiser'
-import IconMeleeAssassin from '../../svgs/roles/IconMeleeAssassin'
-import IconRangedAssassin from '../../svgs/roles/IconRangedAssassin'
-import IconHealer from '../../svgs/roles/IconHealer'
+import IconTank from '../../../svgs/roles/IconTank'
+import IconBruiser from '../../../svgs/roles/IconBruiser'
+import IconMeleeAssassin from '../../../svgs/roles/IconMeleeAssassin'
+import IconRangedAssassin from '../../../svgs/roles/IconRangedAssassin'
+import IconHealer from '../../../svgs/roles/IconHealer'
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 // 이상하게 dotenv.config() 안해도 된다 (오히려 하면 에러 발생...)
@@ -420,8 +420,8 @@ onMouseEnter={(event)=>{
         text={battletag}
         onCopy={ () => {  
           
-          const messageBase = dictCode['tplan02'][message][language];
-          const message = messageBase.replaceAll('BATTLETAG', battletag);
+          const messageBase = dictCode['tplan02']['message'][language];
+          const message = messageBase.replace('BATTLETAG', battletag);
           addDeleteNotification("tplan02", language, message, 2000); 
           
         } } >

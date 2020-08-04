@@ -100,7 +100,7 @@ const tplan = {
 		, message: {
 			en: `'BATTLETAG' has been added!`
 			,ko: `'BATTLETAG'님이 추가되었습니다!`
-			,ja: `'BATTLETAG'様が追加されましたす`
+			,ja: `'BATTLETAG'様が追加されました`
 		}
 	}
 	, "tplan22": { // 
@@ -163,6 +163,74 @@ const tplan = {
 			,ja: `まずプランのタイトルを入力してください`
 		}
 	}
+	
+	
+	
+	, "tplan41": { //
+		situation: "error"
+		, message: {
+			en: `The number of team which you have set was adjusted`
+			,ko: `설정한 팀 수가 조정되었습니다`
+			,ja: `設定したチーム数が調整されました`
+		}
+	}
+	, "tplan42": { //
+		situation: "error"
+		, message: {
+			en: `We need at least 5 confirmed players`
+			,ko: `적어도 5명의 확정된 플레이어가 필요합니다`
+			,ja: `確定したプレイヤーが少なくとも5名必要です`
+		}
+	}
+	, "tplan43": { //
+		situation: "success"
+		, message: {
+			en: `The result has been saved`
+			,ko: `결과가 성공적으로 저장되었습니다!`
+			,ja: `結果を保存しました！`
+		}
+	}
+	, "tplan44": { //
+		situation: "error"
+		, message: {
+			en: `Failed to save result`
+			,ko: `결과를 저장하지 못했습니다`
+			,ja: `結果の保存に失敗しました`
+		}
+	}
+	, "tplan45": { //
+		situation: "error"
+		, message: {
+			en: `The results have not been made yet`
+			,ko: `아직 결과가 만들어지지 않았습니다`
+			,ja: `まだ結果が作られていません`
+		}
+	}
+	, "tplan46": { //
+		situation: "error"
+		, message: {
+			en: `Generate another result to replace the local one`
+			,ko: `다른 결과를 생성해서 로컬 결과를 대체하세요`
+			,ja: `別の結果を作成してローカル結果を代替してください`
+		}
+	}
+	, "tplan47": { //
+		situation: "error"
+		, message: {
+			en: `Failed to delete result`
+			,ko: `결과를 삭제하지 못했습니다`
+			,ja: `結果の削除に失敗しました`
+		}
+	}
+	, "tplan48": { //
+		situation: "error"
+		, message: {
+			en: `Please select the results to delete first`
+			,ko: `먼저 삭제할 결과를 선택해 주세요`
+			,ja: `まず削除したい結果を選択してください`
+		}
+	}
+	
 	
 	
 }

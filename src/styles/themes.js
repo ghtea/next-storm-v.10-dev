@@ -26,17 +26,27 @@ const common = {
     ,COLOR_delete: '#d00000'
     
     
-    
+    //https://getbootstrap.com/docs/4.0/layout/overview/#responsive-breakpoints
+    // https://docs.adobe.com/content/help/en/target/using/experiences/vec/mobile-viewports.html
     ,media: {
         
-        small_mid: 420 // 
-        ,mid_big: 920 // 120 + 400 * 2
+        // 360 ~ ( min-width를 360으로 잡는다)
         
-        /*
-        ,comp_gallery :{
-            mid_big: 870 // 860 = 120 + 370 * 2
-        }
-        */
+        // mobile(normal): 360~576           default (mobile first)
+        // mobile(horizon): 576~768          @media (min-width: 576px)
+        
+        // tablet(vertical): 768~992         @media (min-width: 768px)
+        // tablet(horison) or monitor: 992~  @media (min-width: 992px)
+        
+        sm: 576
+        , md: 768
+        , lg: 992
+        , xl: 1200 // 참고로만, 아직 이용할 생각 X
+        // 360, 740 (768), 1000
+        
+        ,small_mid: 360 // 
+        ,mid_big: 800 // 400 * 2
+        
     }
     
 }

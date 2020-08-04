@@ -5,16 +5,16 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 import { connect } from "react-redux";
-import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
-import {replaceWorking} from "../../redux/actions/basic";
+import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
+import {replaceWorking} from "../../../redux/actions/basic";
 
 import { NavLink, useHistory } from 'react-router-dom';
 
-import {Div, Input, Button, A} from '../../styles/DefaultStyles';
+import {Div, Input, Button, A} from '../../../styles/DefaultStyles';
 
 
-import useInput from '../../tools/hooks/useInput';
-import IconWorking from '../../svgs/basic/IconWorking'
+import useInput from '../../../tools/hooks/useInput';
+import IconWorking from '../../../svgs/basic/IconWorking'
 
 
 const DivSearchingPlan = styled(Div)`

@@ -5,31 +5,31 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 import { connect } from "react-redux";
-import {replaceWorking} from "../../redux/actions/basic";
-import {replaceRegion, replaceNumber} from "../../redux/actions/team_planner";
+import {replaceWorking} from "../../../redux/actions/basic";
+import {replaceRegion, replaceNumber} from "../../../redux/actions/team_planner";
 //import readPlanTeam from "../../redux/thunks/readPlanTeam";
-import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
+import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
 
 
 import { NavLink, useHistory } from 'react-router-dom';
 
-import {Div, Input, Button} from '../../styles/DefaultStyles';
+import {Div, Input, Button} from '../../../styles/DefaultStyles';
 
 
-import useInput from '../../tools/hooks/useInput';
-import {getTimeStamp} from '../../tools/vanilla/time';
+import useInput from '../../../tools/hooks/useInput';
+import {getTimeStamp} from '../../../tools/vanilla/time';
 
-import IconWorking from '../../svgs/basic/IconWorking'
-import IconCopy from '../../svgs/basic/IconCopy'
-import IconMinus from '../../svgs/basic/IconMinus'
-import IconPlus from '../../svgs/basic/IconPlus'
+import IconWorking from '../../../svgs/basic/IconWorking'
+import IconCopy from '../../../svgs/basic/IconCopy'
+import IconMinus from '../../../svgs/basic/IconMinus'
+import IconPlus from '../../../svgs/basic/IconPlus'
 
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
-import flagNA from '../../images/flags/NA.png';
-import flagEU from '../../images/flags/EU.png';
-import flagKR from '../../images/flags/KR.png';
-import flagCN from '../../images/flags/CN.png';
+import flagNA from '../../../images/flags/NA.png';
+import flagEU from '../../../images/flags/EU.png';
+import flagKR from '../../../images/flags/KR.png';
+import flagCN from '../../../images/flags/CN.png';
 
 
 // STYLES

@@ -5,25 +5,25 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 import { connect } from "react-redux";
-import {replaceWorking} from "../../redux/actions/basic";
-import readPlanTeam from "../../redux/thunks/readPlanTeam";
-import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
-import dictCode from '../../others/dictCode'
+import {replaceWorking} from "../../../redux/actions/basic";
+import readPlanTeam from "../../../redux/thunks/readPlanTeam";
+import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
+import dictCode from '../../../others/dictCode'
 
 
 import { NavLink, useHistory } from 'react-router-dom';
 
-import {Div, Input, Button, A} from '../../styles/DefaultStyles';
+import {Div, Input, Button, A} from '../../../styles/DefaultStyles';
 
 
-import useInput from '../../tools/hooks/useInput';
-import {getTimeStamp} from '../../tools/vanilla/time';
+import useInput from '../../../tools/hooks/useInput';
+import {getTimeStamp} from '../../../tools/vanilla/time';
 
-import IconWorking from '../../svgs/basic/IconWorking';
-import IconCopy from '../../svgs/basic/IconCopy';
-import IconAdministrator from '../../svgs/basic/IconAdministrator';
-import IconViewer from '../../svgs/basic/IconViewer';
-import IconLink from '../../svgs/basic/IconLink';
+import IconWorking from '../../../svgs/basic/IconWorking';
+import IconCopy from '../../../svgs/basic/IconCopy';
+import IconAdministrator from '../../../svgs/basic/IconAdministrator';
+import IconViewer from '../../../svgs/basic/IconViewer';
+import IconLink from '../../../svgs/basic/IconLink';
 
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
@@ -252,8 +252,12 @@ const DivIconWorking = styled(Div)`
           
         replaceWorking("addPlayer", false)
         
-        const messageBase = dictCode['tplan21'][message][language];
-        const message = messageBase.replaceAll('BATTLETAG', battletag);
+        console.log("ddd")
+        const messageBase = dictCode['tplan21']['message'][language];
+        console.log(messageBase)
+        const message = messageBase.replace('BATTLETAG', battletag);
+        
+        console.log(message)
         addDeleteNotification("tplan21", language, message, 2000); 
         
         
@@ -270,6 +274,7 @@ const DivIconWorking = styled(Div)`
         // 1. battlelog 잘못입력
         // 2. 게임수가 극히 적은 battletag
         // 3. 내 백엔드 문제
+        // 4. 내 프론트엔드 문제...
         
       }
       

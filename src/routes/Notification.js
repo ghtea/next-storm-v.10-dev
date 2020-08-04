@@ -15,7 +15,7 @@ import {Div} from '../styles/DefaultStyles';
 const DivNotification = styled(Div)`
 	
   position: fixed;
-  z-index: 100;
+  z-index: 200;
   
   left: 50%;
   transform: translateX(-50%);
@@ -29,6 +29,7 @@ const DivNotification = styled(Div)`
   
   	width: 100%;
   	max-width: 360px;
+  	
   	height: auto;
   	
   	top: 60px;
@@ -38,7 +39,7 @@ const DivNotification = styled(Div)`
 		width: 360px;
 	  height: auto;
 	  
-	  top: 10px;
+	  top: 60px;
 	 
 		
 	 }

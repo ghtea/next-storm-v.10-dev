@@ -17,7 +17,6 @@ import Home from "./routes/Home";
 import Auth from "./routes/Auth";
 
 import TeamPlanner from "./routes/TeamPlanner";
-import TeamPlannerFront from "./routes/TeamPlannerFront";
 
 import CompGallery from "./routes/CompGallery";
 
@@ -37,23 +36,18 @@ import { GlobalStyle, Div} from './styles/DefaultStyles';
 const DivContent = styled(Div)`
   
   width: 100%;
-  height: 100%;
   
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    margin-top: 50px; /* height of sub */
-  	
+  margin-top: 50px; /* height of sub */
+  
+	@media (min-width:  ${props => (props.theme.media.md) }px) {
+	 margin-top: 60px; /* height of sub */
 	}
- 
-	 @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-	  margin-left: 120px; /* width of sub */
-	 
-		
-	 }
+  
   
 `;
 
@@ -205,6 +199,8 @@ const App = ({
       <Route path="/" component={Sub} />
       <Route path="/" component={Notification} />
       
+      
+      
       <DivContent>
       <Switch >
       
@@ -212,13 +208,14 @@ const App = ({
       
       <Route path="/auth" component={Auth} />
       
-      <Route path="/team-planner" exact={true} component={TeamPlannerFront} />
-      <Route path="/team-planner/:idPlanTeam"  component={TeamPlanner} />
+      <Route path="/team-planner" component={TeamPlanner} />
       
       <Route path="/comp-gallery" component={CompGallery} />
       
       </Switch >
       </DivContent>
+      
+      
       
     </BrowserRouter>
     

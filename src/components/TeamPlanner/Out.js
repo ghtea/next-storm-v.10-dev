@@ -4,34 +4,31 @@ import axios from 'axios';
 import queryString from 'query-string';
 
 import { connect } from "react-redux";
-import readPlanTeam from "../redux/thunks/readPlanTeam";
+import readPlanTeam from "../../redux/thunks/readPlanTeam";
 
-import {replaceRerender, replaceWorking, replaceLoading, replaceReady, replaceData} from "../redux/actions/basic";
+import {replaceRerender, replaceWorking, replaceLoading, replaceReady, replaceData} from "../../redux/actions/basic";
 
 
-import addDeleteNotification from "../redux/thunks/addDeleteNotification";
+import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 
-import {Div, Input, Button, A} from '../styles/DefaultStyles';
+import {Div, Input, Button, A} from '../../styles/DefaultStyles';
 //import Player from '../components/Player'
-import IconHandsHeart from '../svgs/basic/IconHandsHeart'
-import IconPenBrush from '../svgs/basic/IconPenBrush'
-import IconLink from '../svgs/basic/IconLink';
+import IconHandsHeart from '../../svgs/basic/IconHandsHeart'
+import IconPenBrush from '../../svgs/basic/IconPenBrush'
+import IconLink from '../../svgs/basic/IconLink';
 
 
-import CreatingPlan from '../components/TeamPlanner/CreatingPlan';
-import SearchingPlan from '../components/TeamPlanner/SearchingPlan';
-import Guide from '../components/TeamPlanner/Guide';
+import CreatingPlan from './Out/CreatingPlan';
+import SearchingPlan from './Out/SearchingPlan';
+import Guide from './Out/Guide';
 
-import AddingPlayer from '../components/TeamPlanner/AddingPlayer';
-import Entry from '../components/TeamPlanner/Entry';
 
-import useAxiosGet from '../tools/hooks/useAxiosGet';
-import useInput from '../tools/hooks/useInput';
+import useAxiosGet from '../../tools/hooks/useAxiosGet';
+import useInput from '../../tools/hooks/useInput';
 
 
 const DivTeamPlanner = styled(Div)`
   width: 100%;
-  height: 100%;
   
   & > div {
     margin-left: 10px;
@@ -64,6 +61,9 @@ const DivTeamPlanner = styled(Div)`
 
 const DivA = styled(Div)`
   grid-area: A;
+  
+  width: 100%;
+  height: 100%;
 `
 const DivB = styled(Div)`
   grid-area: B;

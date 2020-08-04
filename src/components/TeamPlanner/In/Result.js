@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import React, {useState, useEffect} from 'react';
-import useInput from '../../tools/hooks/useInput';
+import useInput from '../../../tools/hooks/useInput';
 
 import styled from 'styled-components';
 import axios from 'axios';
@@ -8,32 +8,32 @@ import { NavLink, useParams } from 'react-router-dom';
 
 import { connect } from "react-redux";
 
-import {addResult, deleteResult} from "../../redux/actions/team_planner";
-import readPlanTeam from "../../redux/thunks/readPlanTeam";
-import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
+import {addResult, deleteResult} from "../../../redux/actions/team_planner";
+import readPlanTeam from "../../../redux/thunks/readPlanTeam";
+import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
 // https://reacttraining.com/blog/react-router-v5-1/
-import dictCode from '../../others/dictCode'
+import dictCode from '../../../others/dictCode'
 
-import {Div, Button, Input} from '../../styles/DefaultStyles';
-
-
-import IconConfirmed from '../../svgs/basic/IconConfirmed'
-import IconPending from '../../svgs/basic/IconPending'
-import IconInfo from '../../svgs/basic/IconInfo'
-import IconMagic from  '../../svgs/basic/IconMagic'
-import IconUpload from  '../../svgs/basic/IconUpload'
-import IconDelete from  '../../svgs/basic/IconDelete'
+import {Div, Button, Input} from '../../../styles/DefaultStyles';
 
 
-import IconTank from '../../svgs/roles/IconTank'
-import IconBruiser from '../../svgs/roles/IconBruiser'
-import IconMeleeAssassin from '../../svgs/roles/IconMeleeAssassin'
-import IconRangedAssassin from '../../svgs/roles/IconRangedAssassin'
-import IconHealer from '../../svgs/roles/IconHealer'
+import IconConfirmed from '../../../svgs/basic/IconConfirmed'
+import IconPending from '../../../svgs/basic/IconPending'
+import IconInfo from '../../../svgs/basic/IconInfo'
+import IconMagic from  '../../../svgs/basic/IconMagic'
+import IconUpload from  '../../../svgs/basic/IconUpload'
+import IconDelete from  '../../../svgs/basic/IconDelete'
+
+
+import IconTank from '../../../svgs/roles/IconTank'
+import IconBruiser from '../../../svgs/roles/IconBruiser'
+import IconMeleeAssassin from '../../../svgs/roles/IconMeleeAssassin'
+import IconRangedAssassin from '../../../svgs/roles/IconRangedAssassin'
+import IconHealer from '../../../svgs/roles/IconHealer'
 
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
-import {getRandomSubArray} from  '../../tools/vanilla/array'
+import {getRandomSubArray} from  '../../../tools/vanilla/array'
 
 
 const DivResult = styled(Div)`
@@ -516,7 +516,7 @@ const Result = ({
       numberTeamsResult = Math.floor(listBattletagConfirmed.length / 5);
     }
     else if (listBattletagConfirmed.length < (numberTeamsPlanned * 5)) {
-      addDeleteNotification("error", "the number of team which you have set was adjusted");
+      addDeleteNotification("tplan41", language);
       numberTeamsResult = Math.floor(listBattletagConfirmed.length / 5);
     }
     else {numberTeamsResult = numberTeamsPlanned}
@@ -524,7 +524,7 @@ const Result = ({
     
     // A-2
     if (numberTeamsResult === 0) {
-      addDeleteNotification("error", "need at least 5 confirmed players");
+      addDeleteNotification("tplan42", language);
     }
     else if (listBattletagConfirmedLeader.length >= numberTeamsResult * 5 ) {
       listBattletagPlaying = getRandomSubArray(listBattletagConfirmedLeader, numberTeamsPlanned * 5 );
@@ -757,14 +757,14 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
           }
         );
         
-        addDeleteNotification("success", "result has been saved!");
+        addDeleteNotification("tplan43", language);
       }
       catch(error) {
-        addDeleteNotification("error", "failed in saving result");
+        addDeleteNotification("tplan44", language);
       }
     }
     else {
-      addDeleteNotification("error", "there is no result yet");
+      addDeleteNotification("tplan45", language);
     }
     
   }
@@ -773,7 +773,7 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
   const onClick_DeleteResult = async (event) => {
     
     if (resultShowing._id && resultShowing._id === "local") {
-      addDeleteNotification("error", "just generate another result");
+      addDeleteNotification("tplan46", language);
     }
     else if (resultShowing.listTeam.length) { // 표시중인 result 가 있어야 진행
       try {
@@ -789,14 +789,13 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
         );
   
         
-        addDeleteNotification("success", "result has been deleted!");
       }
       catch(error) {
-        addDeleteNotification("error", "failed in deleting result");
+        addDeleteNotification("tplan47", language);
       }
     }
     else {
-      addDeleteNotification("error", "plese click result first");
+      addDeleteNotification("tplan48", language);
     }
     
   }

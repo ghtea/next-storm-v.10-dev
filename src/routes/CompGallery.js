@@ -51,32 +51,20 @@ const DivCompGallery = styled(Div)`
 
 const Main = styled(Div)`
   
- 
-  position: fixed;
-  
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   
+  width: 100%;
   
+  margin-top: 100px; 
+  /*height: calc(100% - 100px);*/
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
+  @media (min-width:  ${props => (props.theme.media.md) }px) {
     
-    top: 100px; /* SubCompGallery */
-  	left: 0;
-  	
-  	width: 100%;
-    height: calc(100% - 100px);
-	}
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    
-    top: 50px; 
-    left: 120px;
-    
-    width: calc(100% - 120px);
-    height: calc(100% - 50px);
+    margin-top: 120px; 
+    /*height: calc(100% - 120px);*/
     
   }
 `
@@ -197,7 +185,7 @@ const CompGallery = ({
     
       <SubCompGallery/>
       
-    {!readyDictAllHeroBasic?
+    {(!readyDictAllHeroBasic || !readyListAllMap)?
       <Div> loading </Div>
      :
       <Main>

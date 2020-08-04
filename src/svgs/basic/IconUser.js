@@ -11,7 +11,7 @@ const DivContainer = styled(Div)`
 `;
 
 
-const IconInfo = ({width, height, color="color_very_weak", themeName}) => {
+const IconUser = ({width, height, color="color_weak", themeName}) => {
 	
 	return (
 		
@@ -24,14 +24,14 @@ const IconInfo = ({width, height, color="color_very_weak", themeName}) => {
 			
 			width="100%"
 			height="100%"
-			viewBox="0 0 512 512"
+			viewBox="0 0 496 512"
 			
 			fill={ themes[themeName][color] }
 			>
 			
 			<path 
-				d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z">
-				</path>
+d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z">
+			</path>
 				
 		</svg>
 	</DivContainer>
@@ -52,4 +52,4 @@ function mapDispatchToProps(dispatch) {
 }
 */
 
-export default connect(mapStateToProps)(IconInfo);
+export default connect(mapStateToProps)(IconUser);

@@ -76,7 +76,9 @@ const DivFilter = styled(Div)
   justify-content: flex-start;
   align-items: center;
   
-  
+  & > div { margin-top: 10px; margin-bottom: 10px; }
+  & > div:first-child {margin-top: 20px;}
+  & > div:last-child {margin-bottom: 20px;}
 `
 // 870
 
@@ -87,22 +89,40 @@ const DivFilterEachGroup = styled(Div)`
   justify-content: flex-start;
   align-items: center;
   
-  margin-top: 10px;
-  margin-bottom: 10px;
+  
+  
+  & > div:nth-child(1) {  /* 'tags' , 'maps' */
+    color: ${props =>  props.theme.color_normal };
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  & > div:nth-child(2) {   /* buttons */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
 `
 
 
 const ButtonSize = styled(Button)`
   width: auto;
   
-  height: 30px;
+  height: 26px;
   
-  margin-top: 1px;
-  margin-bottom: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
+  
+  margin-top: 2px;
+  margin-bottom: 2px;
   margin-right: 2px;
   margin-left: 2px;
   
-  background-color: ${props => (props.active)? props.theme.COLOR_normal : 'transparent'};
+  background-color: ${props => (props.active)? props.theme.COLOR_normal : props.theme.COLOR_middle};
   color:  ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
   border: 1px solid ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
 `
@@ -120,12 +140,12 @@ const ButtonTag = styled(Button)`
   width: 40px;
   height: 30px;
   
-  margin-top: 1px;
-  margin-bottom: 1px;
+  margin-top: 2px;
+  margin-bottom: 2px;
   margin-right: 2px;
   margin-left: 2px;
   
-  background-color: ${props => (props.active)? props.theme.COLOR_normal : 'transparent'};
+  background-color: ${props => (props.active)? props.theme.COLOR_normal : props.theme.COLOR_middle};
   border: 1px solid ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
 `
 
@@ -134,8 +154,10 @@ const ButtonMap = styled(Button)`
   
   font-size: 0.8rem;
   
-  width: 130px;
-  height: 30px;
+  width: auto;
+  max-width: 130px;
+  
+  height: 28px;
   
   padding-top: 1px;
   padding-bottom: 1px;
@@ -147,7 +169,7 @@ const ButtonMap = styled(Button)`
   margin-right: 2px;
   margin-left: 2px;
   
-  background-color: ${props => (props.active)? props.theme.COLOR_normal : 'transparent'};
+  background-color: ${props => (props.active)? props.theme.COLOR_normal : props.theme.COLOR_middle};
   color:  ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
   border: 1px solid ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
   
@@ -190,8 +212,9 @@ const DivListComment = styled(Div)
 
 
 const Filter = ({
-  
-    dictAllHeroBasic
+    language
+    
+    , dictAllHeroBasic
     , listAllMap
     , listMapStandardRanked
     
@@ -252,16 +275,20 @@ const Filter = ({
     return (
       <DivFilter>
       
-       
-        
-        <DivFilterEachGroup> 
-          <ButtonSize> Duo </ButtonSize>
-          <ButtonSize> Trio  </ButtonSize>
-          <ButtonSize> Full Team  </ButtonSize>
+        <DivFilterEachGroup>
+          <Div> Size </Div>
+          <Div> 
+            <ButtonSize> 2 players </ButtonSize>
+            <ButtonSize> 3 players  </ButtonSize>
+            <ButtonSize> Full Team  </ButtonSize>
+          </Div>
         </DivFilterEachGroup>
         
         
-        <DivFilterEachGroup> 
+        
+        <DivFilterEachGroup>
+          <Div> Tags </Div>
+        <Div> 
           
           <DivTagPair>
             <ButtonTag> {returnIconTag("ToWin")} </ButtonTag>
@@ -283,16 +310,20 @@ const Filter = ({
             <ButtonTag> {returnIconTag("Late")} </ButtonTag>
           </DivTagPair>
           
+        </Div>
         </DivFilterEachGroup>
         
         
         <DivFilterEachGroup>
+          <Div> Map </Div>
+        <Div>
           {(readyListMapStandardRanked)? listMapStandardRanked.map(element=>(
-              <ButtonMap key={element.name} > <Div>{element.name}</Div> </ButtonMap>
+              <ButtonMap key={element.name[language].short} > <Div>{element.name[language].full}</Div> </ButtonMap>
             ))
             :
             <Div> loading...  </Div>
           }
+        </Div>
         </DivFilterEachGroup>
       
       
@@ -324,8 +355,8 @@ const Filter = ({
   function mapStateToProps(state) {
     return {
       
-      
-      dictAllHeroBasic: state.hots.dictAllHeroBasic
+      language: state.basic.language
+      , dictAllHeroBasic: state.hots.dictAllHeroBasic
       ,listAllMap: state.hots.listAllMap
       , listMapStandardRanked:  state.hots.listMapStandardRanked
       

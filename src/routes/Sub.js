@@ -15,8 +15,15 @@ import { NavLink } from 'react-router-dom';
 import {Div, Button} from '../styles/DefaultStyles';
 
 import IconLogo from '../svgs/brand/IconLogo';
+
+import IconLoading from '../svgs/basic/IconLoading';
+import IconLogIn from '../svgs/basic/IconLogIn';
+import IconUser from '../svgs/basic/IconUser';
+
+
 import IconSun from '../svgs/basic/IconSun';
 import IconMoon from '../svgs/basic/IconMoon';
+
 import storage from '../tools/vanilla/storage';
 
 
@@ -35,8 +42,7 @@ const DivSub = styled(Div)`
 	background-color: ${props => props.theme.COLOR_normal};
   color: ${props => props.theme.color_strong};
   
-  
-  
+
   z-index: 100; 
   
   position: fixed;
@@ -44,149 +50,126 @@ const DivSub = styled(Div)`
   left:0px;
   
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  
+  border-bottom: 1px solid ${props => props.theme.color_very_weak};
+  
+  /* mobile first, 360~*/
+  width: 100%;
+	min-width: 360px;
+	height: 50px; 
   
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-  
-  	width: 100%;
-  	min-width: 360px;
-  	height: 50px; 
-  	
-  	flex-direction: row;
-  	border-bottom: 1px solid ${props => props.theme.color_very_weak};
+	@media (min-width:  ${props => (props.theme.media.md) }px) {
+	  height: 60px; 
 	}
- 
-	@media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-		width: 120px;
-	  height: 100%;
-	 
-	 
-		flex-direction: column;
-		justify-content: flex-start;
+	
+	
+	/* https://techbug.tistory.com/215 */
+	& > *:nth-child(1) { 
+		margin-left: 10px; 
+		margin-right: 5px;
 		
-		/*box-shadow: 0px 0px 20px 0px ${props => props.theme.color_very_weak}; */
-		border-right: 1px solid ${props => props.theme.color_very_weak};
-	 }
+		width: calc( (100%-40px)*0.2 );
+	}
+	
+	& > *:nth-child(2) { 
+		margin-left: 5px; 
+		margin-right: 5px;
+		width: calc((100%-40px)*0.4);
+	}
+	
+	
+	& > *:nth-child(3) { 
+		margin-left: 5px; 
+		margin-right: 10px; 
+		width: calc((100%-40px)*0.2);
+	}
   
 `;
 
-const DivProfileContainer = styled(Div)`
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-		
-	@media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-  	display: none;
+
+const ContainerProfile = styled(Div)`
+	height:100%;
+	display: none;
+	
+	
+	@media (min-width: ${props => props.theme.media.md}px ) {
+  	display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
 	}
  
-	@media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-		margin-top: 20px;
-		margin-bottom: 10px;
 	
-		width: 80px;
-		height: 80px;
-		
-	}
-`
-
-const DivProfileLoading = styled(Div)`
-	
-	background-color: ${props => props.theme.color_very_weak};
-	
-	width: 100%;
-	height: 100%;
-	border-radius: 50%;
-	
-	& div {
-		color: ${props => props.theme.COLOR_normal};
-		
-		width: auto;
-		height: auto;
-		margin-top: 2px;
-		margin-bottom: 2px;
-	}
-`
-
-
-const DivProfileLoggedOut = styled(Div)`
-	
-	background-color: ${props => props.theme.color_very_weak};
-	
-	width: 100%;
-	height: 100%;
-	border-radius: 50%;
-	
-	& a {
-		text-decoration: none;
-		
-		width: 100%;
-		height: 100%;
-		
+	& > * {
 		display: flex;
-		flex-direction: column;
-		justify-content: center;
+		flex-direction: row;
+		justify-content: flex-start;
 		align-items: center;
+		
+		& > * {
+			margin-left: 3px;
+			margin-right: 3px;
+		}
+		
 	}
 	
-	& a > div {
-		color: ${props => props.theme.COLOR_normal};
+	& > a {
+		color:  ${props => props.theme.color_normal };
 		text-decoration: none;
-		
-		width: auto;
-		height: auto;
-		margin-top: 2px;
-		margin-bottom: 2px;
+		font-weight: bold;
 	}
+	
 `
 
-const DivProfileLoggedIn = styled(Div)`
-	
-	background-color: ${props => props.theme.color_very_weak};
-	
-	width: 100%;
-	height: 100%;
-	border-radius: 50%;
-	
-	& a {
-		text-decoration: none;
-		
-		width: 100%;
-		height: 100%;
-		
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-	}
-	
-	& a > div { 
-		color: ${props => props.theme.COLOR_normal};
-
-	}
+const DivIconProfile = styled(Div)`
+	width: 40px;
+	height: 40px;
 `
+
+const GroupNavItem = styled(Div)`
+	width: auto;
+
+`
+
 
 const NavLinkStyled = styled(NavLink)`
 	
+`
+
+const DivBattletag = styled(Div)`
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	
+	& > div {
+		margin-left: 2px;
+		margin-right: 2px;
+	}
 `
 
 const DivBattletagName = styled(Div)`
 	width: auto;
 	
 	font-size: 1rem;
-	margin-bottom: 0px;
 	
 	display: block;
 	text-algin: left;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	
+	
 `
 const DivBattletagNumber = styled(Div)`
 	width: auto;
+	padding-top: 1px;
 	
 	font-size: 0.8rem;
-	margin-top: 0px;
 	
 	display: block;
 	text-algin: left;
@@ -207,45 +190,18 @@ const DivEmail = styled(Div)`
 	text-overflow: ellipsis;
 `
 
-/*
-const DivTitle = styled(Div)`
-	
-	height: 160px;
-	
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	
-	text-align: center;
-	font-size: 1.3rem;
-	font-family: 'Noto Sans KR', 'Noto Sans JP', sans-serif;
-	font-weight: medium;
-	
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-  	display: none;
-	}
- 
-	@media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-	
-	}
-`
-*/
+
 
 
 const DivNavItem = styled(Div)`
 	
-	width:100%;
-	height: auto; 
-	
-	padding-top: 5px;
-  padding-bottom: 5px;
+	height: 100%; 
   
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-right: 10px;
+  margin-left: 10px;
 	
 	font-size: 1rem;
-	line-height: 1rem;
+	/* line-height: 1rem; */
 
   @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
   
@@ -259,8 +215,8 @@ const DivNavItem = styled(Div)`
 const activeClassName = 'nav-link-active';
 
 const NavLinkNavItem = styled(NavLink).attrs({ activeClassName })`
-  width: 90%;
-  height: auto;
+  width: auto;
+  height: 100%;
   
   
 	color: ${props => props.theme.color_normal};
@@ -276,7 +232,8 @@ const NavLinkNavItem = styled(NavLink).attrs({ activeClassName })`
 	
 	&.${activeClassName} {
 		color: ${props => props.theme.color_active};
-		font-weight: medium;
+		font-weight: bold;
+		border-bottom: 2px solid ${props => props.theme.color_active};
 	}
 	
 `;
@@ -287,10 +244,36 @@ const checkActive = (regex) => {
 }
 
 
-const DivButtonToggleMode = styled(Div)`
-	height: 120px;
+
+
+const GroupButton = styled(Div)`
+	
 `
 
+
+const DivLanguage = styled(Div)`
+	height: 36px;
+	width: 36px;
+	
+	border-radius: 50%;
+	border: 1px solid ${props => props.theme.color_very_weak};
+	background-color: ${props => props.theme.COLOR_normal};
+	
+	cursor: pointer;
+`
+
+const DivTheme = styled(Div)`
+	height: 36px;
+	width: 36px;
+	
+	border-radius: 50%;
+	border: 1px solid ${props => props.theme.color_very_weak};
+	background-color: ${props => props.theme.COLOR_normal};
+	
+	cursor: pointer;
+`
+
+/*
 const ContainerSlider = styled(Div)`
 
 	position: relative;
@@ -321,6 +304,7 @@ const Slider = styled(Div)`
 	transform: ${props => (props.theme.name === "light")? 'translateX(0)' : 'translateX(36px)'};
 	
 `
+*/
 //transform: ${ props => (props.themeName === "light")? 'translateX(0)' : 'translateX(36px)'};
 
 
@@ -396,99 +380,119 @@ const Sub = ({
   <DivSub>
   	
   	
-  	<DivProfileContainer>
+  	<ContainerProfile>
   	
   		{ ( function() {
         if (loadingUser) {
         	return (
-        		<DivProfileLoading> 
-        			<Div> loading </Div>
-        		</DivProfileLoading>
+        		<Div>
+	        		<DivIconProfile> <IconLoading width={"25px"} height={"25px"} color={"color_weak"} /> </DivIconProfile>
+	        		<Div> loading </Div>
+	        	</Div>
         	);
       	}
       	else if (!loadingUser && !readyUser) {
         	return (
-	        	<DivProfileLoggedOut>
-							<NavLinkStyled to="/auth/log-in" > 
-								<Div> Log In </Div> 
-							</NavLinkStyled> 
-						</DivProfileLoggedOut>
+						<NavLinkStyled to="/auth/log-in" > 
+							<DivIconProfile> <IconLogIn width={"25px"} height={"25px"} color={"color_weak"} /> </DivIconProfile>
+							<Div> Log In </Div> 
+						</NavLinkStyled> 
+
 					);
       	}
       	else {
       		return (
-	      		<DivProfileLoggedIn>
-	      			<NavLinkStyled to="/" >
-	      				{(auth.battletag)?
-	      					<>
-			      				<DivBattletagName> {battletagName} </DivBattletagName>
-										<DivBattletagNumber> {battletagNumber} </DivBattletagNumber>
-									</>
-									: <DivEmail> {auth.email} </DivEmail>
-	      				}
-	      			</NavLinkStyled>
-						</DivProfileLoggedIn>
+  			<NavLinkStyled to="/" >
+  					<DivIconProfile> <IconUser width={"40px"} height={"40px"} color={"color_weak"} /> </DivIconProfile>
+  				{(auth.battletag)?
+    				<DivBattletag> <DivBattletagName> {battletagName} </DivBattletagName> <DivBattletagNumber> {battletagNumber} </DivBattletagNumber> </DivBattletag> 
+					: <DivEmail> {auth.email} </DivEmail>
+  				}
+  			</NavLinkStyled>
 					)
       	}
       	
   		} )() }
   	
-  	</DivProfileContainer>
+  	</ContainerProfile>
   	
   	
-
-		<DivNavItem > 
-			<NavLinkNavItem to="/" exact={true}> 
-			{(() => {
-        switch (language) {
-          case 'ko': 
-            return '홈';
-          case 'ja': 
-            return 'ホーム';
-          default: // eng
-            return 'Home';
-        }
-      })()} 
-			</NavLinkNavItem> 
-		</DivNavItem>
-		
-		<DivNavItem > 
-			<NavLinkNavItem to="/team-planner" isActive={()=>checkActive(/^(\/team-planner)/)} > 
-			{(() => {
-        switch (language) {
-          case 'ko': 
-            return '팀 나누기';
-          case 'ja': 
-            return 'チーム分け';
-          default: // eng
-            return 'Team Planner';
-        }
-      })()} 
-	     </NavLinkNavItem> 
-	  </DivNavItem>
-		
-		
-		<DivNavItem > 
-			<NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > 
-			{(() => {
-        switch (language) {
-          case 'ko': 
-            return '조합 갤러리';
-          case 'ja': 
-            return '構成ギャラリー';
-          default: // eng
-            return 'Comp Gallery';
-        }
-      })()} 
-			</NavLinkNavItem> 
-		</DivNavItem>
-		
-		
-		
-		<DivButtonToggleMode>
-		
-			<ContainerSlider onClick={onClick_Slider} >
+		<GroupNavItem>
+			<DivNavItem > 
+				<NavLinkNavItem to="/" exact={true}> 
+				{(() => {
+	        switch (language) {
+	          case 'ko': 
+	            return '홈';
+	          case 'ja': 
+	            return 'ホーム';
+	          default: // eng
+	            return 'Home';
+	        }
+	      })()} 
+				</NavLinkNavItem> 
+			</DivNavItem>
 			
+			<DivNavItem > 
+				<NavLinkNavItem to="/team-planner" isActive={()=>checkActive(/^(\/team-planner)/)} > 
+				{(() => {
+	        switch (language) {
+	          case 'ko': 
+	            return '팀 나누기';
+	          case 'ja': 
+	            return 'チーム分け';
+	          default: // eng
+	            return 'Team Planner';
+	        }
+	      })()} 
+		     </NavLinkNavItem> 
+		  </DivNavItem>
+			
+			
+			<DivNavItem > 
+				<NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > 
+				{(() => {
+	        switch (language) {
+	          case 'ko': 
+	            return '조합 갤러리';
+	          case 'ja': 
+	            return '構成ギャラリー';
+	          default: // eng
+	            return 'Comp Gallery';
+	        }
+	      })()} 
+				</NavLinkNavItem> 
+			</DivNavItem>
+		</GroupNavItem>
+		
+		
+		
+		
+		
+		<GroupButton>
+			
+			
+			<Div> {language} </Div>
+			
+			<Div
+				style= {{ transform: `${ props => (props.themeName === "dark")? 'translateX(0)' : 'translateX(36px)'}` }}
+			>
+				{
+					(themeName === 'light')? <IconSun width={"25px"} height={"25px"} /> : <IconMoon width={"25px"} height={"25px"} /> 
+				}
+			</Div>
+			
+			
+		</GroupButton>
+		
+	</DivSub>
+	
+	)
+}
+
+/*
+
+<ContainerSlider onClick={onClick_Slider} >
 				<Slider >
 					
 					<Div
@@ -500,16 +504,9 @@ const Sub = ({
 					</Div>
 					
 				</Slider>
-				
 			</ContainerSlider>
-			
-		</DivButtonToggleMode>
-		
-	</DivSub>
-	
-	)
-}
 
+*/
 function mapStateToProps(state) { 
   return { 
     themeName: state.basic.themeName

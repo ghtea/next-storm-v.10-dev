@@ -6,26 +6,26 @@ import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
 import { connect } from "react-redux";
-import readPlanTeam from "../../redux/thunks/readPlanTeam";
+import readPlanTeam from "../../../redux/thunks/readPlanTeam";
 
-import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
-import {replaceWorking} from "../../redux/actions/basic";
+import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
+import {replaceWorking} from "../../../redux/actions/basic";
 
 import { NavLink, useHistory } from 'react-router-dom';
 
-import {Div, Input, Button} from '../../styles/DefaultStyles';
+import {Div, Input, Button} from '../../../styles/DefaultStyles';
 
 
-import useInput from '../../tools/hooks/useInput';
-import {getTimeStamp} from '../../tools/vanilla/time';
-import {generatePassword} from '../../tools/vanilla/password';
+import useInput from '../../../tools/hooks/useInput';
+import {getTimeStamp} from '../../../tools/vanilla/time';
+import {generatePassword} from '../../../tools/vanilla/password';
 
-import IconWorking from '../../svgs/basic/IconWorking'
+import IconWorking from '../../../svgs/basic/IconWorking'
 
-import flagNA from '../../images/flags/NA.png';
-import flagEU from '../../images/flags/EU.png';
-import flagKR from '../../images/flags/KR.png';
-import flagCN from '../../images/flags/CN.png';
+import flagNA from '../../../images/flags/NA.png';
+import flagEU from '../../../images/flags/EU.png';
+import flagKR from '../../../images/flags/KR.png';
+import flagCN from '../../../images/flags/CN.png';
 
 //import {ahr} from '../api';
 /*
@@ -35,8 +35,6 @@ dotenv.config({
 */
 
 const DivCreatingPlan = styled(Div)`
-  grid-area: add;
-  height:100%;
   
   display: flex;
   flex-direction: column;

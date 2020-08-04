@@ -41,7 +41,7 @@ const DivGallery = styled(Div)`
 
 
 const ContainerFilter = styled(Div)`
-  width: 180px;;
+  width: 180px;
   height: 100%;
   
   display: flex;
@@ -51,7 +51,7 @@ const ContainerFilter = styled(Div)`
 `
 
 const ContainerListComp = styled(Div)`
-  width: 100%;
+  width: calc(100%-180px);
   height: 100%;
   
   display: flex;

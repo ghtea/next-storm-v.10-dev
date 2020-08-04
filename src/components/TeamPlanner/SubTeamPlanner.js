@@ -8,9 +8,11 @@ import { Route, NavLink, Switch } from 'react-router-dom';
 
 import * as config from '../../config';
 
+/*
 import {SubGallery} from "./Gallery"
 import {SubFocus} from "./Focus"
 import {SubCreate} from "./Create"
+*/
 
 import { connect } from "react-redux";
 
@@ -40,15 +42,15 @@ const DivSubCompGalleryBack = styled(Div)`
   
 
   top: 50px;
-  width: 360px;
+  width: 100%;
   height: 40px; 
     
 
 
   @media (min-width:  ${props => (props.theme.media.md) }px) {
     top: 70px;
-  	height: 40px; 
     border-radius: 25px;
+    width: 740px;
   }
   
 `
@@ -124,13 +126,7 @@ const SubCompGallery = ({
   			</NavLinkStyled> 
     
     		
-    		<DivMain>
-          <Switch>
-            <Route path="/comp-gallery" exact={true} component={SubGallery} />
-            <Route path="/comp-gallery/focus"  component={SubFocus} />
-            <Route path="/comp-gallery/create"  component={SubCreate} />
-          </Switch>
-        </DivMain>
+    		
         
         
       </DivSubCompGallery>
@@ -138,6 +134,15 @@ const SubCompGallery = ({
     )
 }
   
+  /*
+  <DivMain>
+          <Switch>
+            <Route path="/comp-gallery" exact={true} component={SubGallery} />
+            <Route path="/comp-gallery/focus"  component={SubFocus} />
+            <Route path="/comp-gallery/create"  component={SubCreate} />
+          </Switch>
+        </DivMain>
+  */
  
     
 

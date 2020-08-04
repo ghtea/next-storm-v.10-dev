@@ -26,6 +26,8 @@ import * as imgHero from '../../../../images/heroes'
 
 
 const DivMap = styled(Div)`
+  font-size: 0.9rem;
+  
   width: 60px;
   height: 36px;
   
@@ -47,7 +49,7 @@ const Map = ({
   
   return (
     <DivMap>
-      {tNameMap}
+      {tNameMap.short}
     </DivMap>
   )
 }
@@ -65,7 +67,10 @@ const DivListMap = styled(Div)`
 
 
  const ListMap = ({
-   dictHeroBasic
+   
+   language
+   
+   ,dictHeroBasic
    ,listAllMap
    
    ,listMap
@@ -82,7 +87,9 @@ const DivListMap = styled(Div)`
     
      {listMap.map((tIdMap)=>{
       const tMap = listAllMap.find(element => element._id === tIdMap);
-      const tNameMap = tMap.name
+      
+      const tNameMap = tMap.name[language]
+      
         return (
           <Map
             key={tIdMap}
@@ -108,6 +115,7 @@ function mapStateToProps(state) {
   return { 
     listAllMap: state.hots.listAllMap
     
+    , language: state.basic.language
   }; 
 } 
 

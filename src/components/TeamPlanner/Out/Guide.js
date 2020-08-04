@@ -5,11 +5,11 @@ import styled from 'styled-components';
 
 import { NavLink, useHistory } from 'react-router-dom';
 
-import {Div, Input, Button} from '../../styles/DefaultStyles';
+import {Div, Input, Button} from '../../../styles/DefaultStyles';
 
 
 
-import IconPlus from '../../svgs/basic/IconPlus'
+import IconPlus from '../../../svgs/basic/IconPlus'
 
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
