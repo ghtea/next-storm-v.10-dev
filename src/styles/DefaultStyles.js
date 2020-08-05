@@ -17,9 +17,9 @@ import { Link, NavLink } from 'react-router-dom';
     width: 100%;
     min-width: 360px !important;
     
-    /* height:100% 은 안된다!, 기본적으로 auto 로 하고, 중간에서 고정값을 부여하고 그 아래에서부터 100% 등 사용하자! */
+    height: 100%;
     
-    /*height: 100%;*/
+    /* ?? 잘모르겠다..... height:100% 은 안된다!, 기본적으로 auto 로 하고, 중간에서 고정값을 부여하고 그 아래에서부터 100% 등 사용하자! */
     /* 이상하게 위의 heigth 100% 는 나중에 쓰여지는 css에 의해서 묻혀지지 않는다 !important를 써도... */
     
     margin:0;

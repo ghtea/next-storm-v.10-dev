@@ -263,22 +263,22 @@ const Comp = ({
 
       < DivMain >
 
-      < ListMap listMap = { listMap } />
-
-      < DivListPosition > {
-        listPosition.map((position, index) => {
-          const tPosition = position;
-
-          return (
-
-            < Position key = { index }
-            tPosition = { tPosition }
-            /> 
-          )
-        })
-      }
-
-      < /DivListPosition>
+        < ListMap listMap = { listMap } />
+  
+        < DivListPosition > {
+          listPosition.map((position, index) => {
+            const tPosition = position;
+  
+            return (
+  
+              < Position key = { index }
+              tPosition = { tPosition }
+              /> 
+            )
+          })
+        }
+  
+        < /DivListPosition>
 
       < /DivMain>
 

@@ -232,6 +232,8 @@ const Home= ({
 	}
 	
 	
+	
+	
 	const onClick_ChangeTheme = (event, themeOption) => {
 	  setCookie('themeOption', themeOption,{maxAge: 60 * 60 * 24 * 30});
 	  if (themeOption === 'auto') {
@@ -247,6 +249,8 @@ const Home= ({
 	  setCookie('language', language,{maxAge: 60 * 60 * 24 * 30});
     replaceData("language", language);
 	}
+	
+	
 	
 	const onClick_UpdateMmr = async (event) => {
 	  try {
@@ -298,12 +302,12 @@ const Home= ({
       
         <DivThemes>
           <ButtonChooseTheme onClick={(event) => onClick_ChangeTheme(event, 'light')} > 
-            <IconSun width={"30px"} height={"30px"} color="color_weak" />
+            <IconSun width={"32px"} height={"32px"} color="color_weak" />
             <Div> light </Div>
           </ButtonChooseTheme>
           
           <ButtonChooseTheme onClick={(event) => onClick_ChangeTheme(event, 'dark')} > 
-            <IconMoon width={"30px"} height={"30px"} color="color_weak" />
+            <IconMoon width={"25px"} height={"25px"} color="color_weak" />
             <Div> dark </Div>
           </ButtonChooseTheme>
           

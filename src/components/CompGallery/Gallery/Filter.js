@@ -62,35 +62,43 @@ import IconSlow from '../../../svgs/tags/IconSlow'
 
 const DivFilter = styled(Div)
 `
-  /*
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  */
   
-  width: 100%; 
+  width: 360px; 
+  
   height: 100%;
+  overflow-y: auto;
   
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
   
-  & > div { margin-top: 10px; margin-bottom: 10px; }
-  & > div:first-child {margin-top: 20px;}
-  & > div:last-child {margin-bottom: 20px;}
+  @media (min-width:  ${props => (props.theme.media.md) }px) {
+	  flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
+    
+    height: 100%;
+    
+    & > div { margin-top: 10px; margin-bottom: 10px; }
+    & > div:first-child {margin-top: 20px;}
+    & > div:last-child {margin-bottom: 20px;}
+	}
 `
 // 870
 
 
 const DivFilterEachGroup = styled(Div)`
+  width: 110px; /* mobile first */
+
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  
-  
-  
+
   & > div:nth-child(1) {  /* 'tags' , 'maps' */
     color: ${props =>  props.theme.color_normal };
     font-size: 1.1rem;
@@ -104,6 +112,10 @@ const DivFilterEachGroup = styled(Div)`
     justify-content: flex-start;
     align-items: center;
   }
+  
+  @media (min-width:  ${props => (props.theme.media.md) }px) {
+	  width: 100%;
+	}
 `
 
 

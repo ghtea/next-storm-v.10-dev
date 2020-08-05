@@ -287,42 +287,6 @@ const DivIconWorking = styled(Div)`
 }
   
   
-/*
-
-<DivCreatingPlan>
-        
-    <DivHeader>
-      <DivTitle> Team Generator </DivTitle>
-      
-      <DivId> add battletag first to start </DivId>
-    </DivHeader>
-    
-    <DivBody>
-	   
-		    <DivInputAdd>
-		      <InputBattletag {...inputBattletag} placeholder="battletag#1234" />
-		      
-          {working.putPlayerMmr ? 
-	        <ButtonAddFirst> 
-  	        <DivIconWorking>
-              <IconWorking 
-                width={"27px"}
-                height={"24px"}
-              />  
-            </DivIconWorking>
-	        </ButtonAddFirst> 
-	       : <ButtonAddFirst onClick = {onClick_ButtonAddFirst} > Add </ButtonAddFirst> }
-        
-        
-		    </DivInputAdd>
-		    
-	    
-	   </DivBody>
-  
-  </DivCreatingPlan>
-
-*/
-
 
 function mapStateToProps(state) { 
   return { 

@@ -43,9 +43,11 @@ const DivContent = styled(Div)`
   align-items: center;
   
   margin-top: 50px; /* height of sub */
+  height: calc(100vh - 50px);
   
 	@media (min-width:  ${props => (props.theme.media.md) }px) {
 	 margin-top: 60px; /* height of sub */
+	 height: calc(100vh - 60px);
 	}
   
   
@@ -97,12 +99,16 @@ const App = ({
       replaceData("language", language_redux);
     }
     
+    
+    
     const themeOption_cookie = cookies.themeOption;
     if (themeOption_cookie === 'auto' || !themeOption_cookie) {
       const themeName = isDarkMode() ? 'dark' : 'light';
+      replaceData("themeOption", 'auto');
       replaceData("themeName", themeName);
     }
     else {
+      replaceData("themeOption", themeOption_cookie);
       replaceData("themeName", themeOption_cookie);
     }
     

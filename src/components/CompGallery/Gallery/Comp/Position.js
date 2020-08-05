@@ -92,6 +92,7 @@ const DivRemaining = styled(Div)`
   padding-bottom: 1px;
   
   font-size: 0.9rem;
+  font-weight: bold;
 `
 
  const Position = ({

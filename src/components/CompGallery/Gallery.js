@@ -1,56 +1,91 @@
 import dotenv from 'dotenv';
-import React, {useState, useEffect} from 'react';
+import React, {
+  useState, useEffect
+}
+from 'react';
 import styled from 'styled-components';
 
 import axios from 'axios';
 
-import { connect } from "react-redux";
+import {
+  connect
+}
+from "react-redux";
 import * as config from '../../config';
 
-import  addDeleteNotification from "../../redux/thunks/addDeleteNotification";
+import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 import dictCode from '../../others/dictCode'
 
-import {replaceData2} from "../../redux/actions/basic";
-import {replaceDataCompGallery, replaceData2CompGallery} from "../../redux/actions/comp_gallery";
+import {
+  replaceData2
+}
+from "../../redux/actions/basic";
+import {
+  replaceDataCompGallery, replaceData2CompGallery
+}
+from "../../redux/actions/comp_gallery";
 
 
-import { NavLink, useHistory } from 'react-router-dom';
+import {
+  NavLink, useHistory
+}
+from 'react-router-dom';
 
-import {Div, Input, Button} from '../../styles/DefaultStyles';
+import {
+  Div, Input, Button
+}
+from '../../styles/DefaultStyles';
 import Comp from './Gallery/Comp'
 import Filter from './Gallery/Filter'
 
 import useInput from '../../tools/hooks/useInput';
-import {getTimeStamp} from '../../tools/vanilla/time';
+import {
+  getTimeStamp
+}
+from '../../tools/vanilla/time';
 
 import IconWorking from '../../svgs/basic/IconWorking'
 
 
 
 
-const DivGallery = styled(Div)`
+const DivGallery = styled(Div)
+`
   width: 100%;
-  height:100%;
-  
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  
-`;
-
-
-const ContainerFilter = styled(Div)`
-  width: 180px;
   height: 100%;
   
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  
+  @media (min-width:  ${props => (props.theme.media.md) }px) {
+	  flex-direction: row;
+	}
+`;
+
+
+const ContainerFilter = styled(Div)
+`
+  width: 100%; 
+	height: 240px;
+	
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  
+  @media (min-width:  ${props => (props.theme.media.md) }px) {
+	  width: 180px;
+    height: 100%;
+    
+	}
 `
 
-const ContainerListComp = styled(Div)`
+
+
+const ContainerListComp = styled(Div)
+`
   width: calc(100%-180px);
   height: 100%;
   
@@ -61,7 +96,8 @@ const ContainerListComp = styled(Div)`
 `
 
 
-const DivListComp = styled(Div)`
+const DivListComp = styled(Div)
+`
   width: 100%;
   height: 100%;
   
@@ -74,119 +110,121 @@ const DivListComp = styled(Div)`
 `;
 
 
- export const SubGallery = ({}) => {
-  
-  return (
-  <Div>
+export const SubGallery = ({}) => {
+
+  return ( < Div >
     search!
-  </Div>
-  
+    < /Div>
+
   )
 }
 
- 
 
 
- const Gallery = ({
-   
-   language
-   
-   ,readyListComp
-   ,listComp
-   
-   ,replaceData2CompGallery
-   ,replaceData2
-   
-   ,addDeleteNotification
- }) => {
+
+const Gallery = ({
+
+  language
+
+  , readyListComp, listComp
+
+  , replaceData2CompGallery, replaceData2
+
+  , addDeleteNotification
+}) => {
 
 
-  useEffect( () => { 
-    
-    (async () => {
-    
+  useEffect(() => {
+
+    (async() => {
+
       // 내 서버에서 comp 여러개 가져오기
-      if (!readyListComp ) {
-        
+      if (!readyListComp) {
+
         console.log("hi")
-        try { 
-          
-          const {data} = await axios.get (`${config.URL_API_NS}/comp/`);
-          
+        try {
+
+          const {
+            data
+          } = await axios.get(`${config.URL_API_NS}/comp/`);
+
           replaceData2CompGallery("gallery", "listComp", data);
           replaceData2("ready", "listComp", true);
-          
-        } 
-        catch (error) { 
-          
+
+        } catch (error) {
+
           addDeleteNotification("basic01", language);
-          console.log(error) 
+          console.log(error)
         }
       } // if
-      
-    }) () // async
-  
-  },[])
 
-  
+    })() // async
+
+  }, [])
+
+
   return (
-  
-  <DivGallery>
-  
-    <ContainerFilter>
-      <Filter />
-    </ContainerFilter>  
-    
-    <ContainerListComp>
-      {(!readyListComp)? <Div> loading </Div>
-        :
-        <DivListComp>
-        
-          {listComp.map( (comp, index) => {
-            
-            return (
-              <Comp 
-                key={index}
-                tComp = {comp}
-              />
-            )
+
+    < DivGallery >
+
+    < ContainerFilter >
+    < Filter / >
+    < /ContainerFilter>  
+
+    < ContainerListComp > {
+      (!readyListComp) ? < Div > loading < /Div>:
+        < DivListComp >
+
+        {
+          listComp.map((comp, index) => {
+
+              return ( < Comp key = {
+                  index
+                }
+                tComp = {
+                  comp
+                }
+                />
+              )
             }) //map
-          }
-      
-        </DivListComp>
-      }
-    </ContainerListComp>
-    
-    
-  </DivGallery>
-  
+        }
+
+      < /DivListComp>
+    } < /ContainerListComp>
+
+
+    < /DivGallery>
+
   )
 
 }
-  
-  
 
 
-function mapStateToProps(state) { 
-  return { 
-    
-    language: state.basic.language
-    
-    ,listComp: state.comp_gallery.gallery.listComp
-   ,readyListComp: state.basic.ready.listComp
-  }; 
-} 
 
-function mapDispatchToProps(dispatch) { 
+
+function mapStateToProps(state) {
   return {
-    
-    replaceDataCompGallery : (which, replacement) => dispatch(replaceDataCompGallery(which, replacement))
-    ,replaceData2CompGallery : (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
-    
-    ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
-    
-    , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
-  }; 
+
+    language: state.basic.language
+
+    ,
+    listComp: state.comp_gallery.gallery.listComp,
+    readyListComp: state.basic.ready.listComp
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+
+    replaceDataCompGallery: (which, replacement) => dispatch(replaceDataCompGallery(which, replacement)),
+    replaceData2CompGallery: (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
+
+    ,
+    replaceData2: (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
+
+    ,
+    addDeleteNotification: (code_situation, language, message, time) => dispatch(addDeleteNotification(code_situation, language, message, time))
+  };
 }
 
 // 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다

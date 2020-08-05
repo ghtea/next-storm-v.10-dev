@@ -30,64 +30,52 @@ import useInput from '../../tools/hooks/useInput';
 const DivTeamPlanner = styled(Div)`
   width: 100%;
   
-  & > div {
-    margin-left: 10px;
-    margin-right: 10px;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 240px 240px 400px 400px;
-    grid-template-areas: 
-      "A"
-      "B"
-      "C"
-      "D"
-  }
- 
-
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 300px 1fr;
-    grid-template-areas: 
-      "A B"
-      "C D";
-  }
-
+  /*240px 240px 480px 480px;*/
+  
 `;
 
-
 const DivA = styled(Div)`
-  grid-area: A;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   
-  width: 100%;
-  height: 100%;
+  height: 480px; /* 240 * 2 */
+  
+  @media (min-width: ${props => props.theme.media.md }px ) {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    
+    height: 240px; 
+  
+  }
+  
+  & > div {
+    border-bottom: 2px solid ${props => props.theme.color_very_weak};
+    height: 100%;
+  }
 `
+
 const DivB = styled(Div)`
-  grid-area: B;
-  
-  flex-direction: column;
-`
-
-const DivC = styled(Div)`
-  grid-area: C;
-  
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   
-`
-
-const DivD = styled(Div)`
-  grid-area: D;
+  height: auto;
   
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  @media (min-width: ${props => props.theme.media.md }px ) {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    
+  }
 `
 
 
@@ -127,28 +115,12 @@ const TeamPlannerFront = ({
         <CreatingPlan /> 
       </DivA>
       
+      
+      
       <DivB>
-        <Div> if you have forgotten url, contact me </Div>
-        
-        <ButtonContact> 
-          <IconLink width={"20px"} height={"20px"} />
-          <A href="https://twitter.com/mbcat_hots" > @mbcat_hots </A>  
-        </ButtonContact>
-        
-      </DivB>
-      
-      
-      
-      <DivC>
         <SearchingPlan  /> 
-      </DivC>
-      
-      
-      <DivD>
         <Guide />
-      </DivD>
-      
-      
+      </DivB>
     
     </DivTeamPlanner>
     )

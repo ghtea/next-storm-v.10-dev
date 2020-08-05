@@ -41,6 +41,8 @@ const stateInitial = {
     
     
     ,themeName: "light"
+    ,themeOption: "auto" // 처음 App mount 할때 쿠키를 이용해서 themeOption 을 설정하고 이후부터는 읽는 것은 redux store 의 themeOption 을 이용한다! 물론 변경할때는 cookie의 것도 같이 변경!
+    
     ,language: "en" 
     // en English, ko Korean, ja Japanese // read from cookie
     // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes

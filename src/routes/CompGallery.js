@@ -31,7 +31,7 @@ import IconLoading from '../svgs/basic/IconLoading'
 
 const DivCompGallery = styled(Div)`
   width: 100%;
-  
+  height: 100%; /* App의 DivContent 에서 height: calc(100vh - 50px); 로 설정해놨다 */
   
   display: flex;
   flex-direction: column;
@@ -57,14 +57,15 @@ const Main = styled(Div)`
   align-items: center;
   
   width: 100%;
+  height: 100%;
   
-  margin-top: 100px; 
+  margin-top: 50px; 
   /*height: calc(100% - 100px);*/
   
   @media (min-width:  ${props => (props.theme.media.md) }px) {
     
-    margin-top: 120px; 
-    /*height: calc(100% - 120px);*/
+    margin-top: 60px; 
+    /*height: calc(100vh - 120px);*/
     
   }
 `
