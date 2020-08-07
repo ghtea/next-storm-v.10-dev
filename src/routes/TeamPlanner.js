@@ -30,6 +30,7 @@ import IconLoading from '../svgs/basic/IconLoading'
 
 const Container = styled(Div)`
   width: 100%;
+  height: 100%;
   
   display: flex;
   flex-direction: column;
@@ -51,12 +52,10 @@ const Main = styled(Div)`
   width: 100%;
   
   margin-top: 100px; 
-  /*height: calc(100% - 100px);*/
   
   @media (min-width:  ${props => (props.theme.media.md) }px) {
     
-    margin-top: 120px; 
-    /*height: calc(100% - 120px);*/
+    margin-top: 120px;
     
   }
 `

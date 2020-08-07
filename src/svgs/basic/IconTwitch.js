@@ -11,7 +11,7 @@ const DivContainer = styled(Div)`
 `;
 
 
-const IconLink = ({width, height, color="color_very_weak", themeName}) => {
+const IconTwitch = ({width, height, color="color_very_weak", themeName}) => {
 	
 	return (
 		
@@ -30,7 +30,7 @@ const IconLink = ({width, height, color="color_very_weak", themeName}) => {
 			>
 			
 			<path 
-d="M497.6,0,334.4.17A14.4,14.4,0,0,0,320,14.57V47.88a14.4,14.4,0,0,0,14.69,14.4l73.63-2.72,2.06,2.06L131.52,340.49a12,12,0,0,0,0,17l23,23a12,12,0,0,0,17,0L450.38,101.62l2.06,2.06-2.72,73.63A14.4,14.4,0,0,0,464.12,192h33.31a14.4,14.4,0,0,0,14.4-14.4L512,14.4A14.4,14.4,0,0,0,497.6,0ZM432,288H416a16,16,0,0,0-16,16V458a6,6,0,0,1-6,6H54a6,6,0,0,1-6-6V118a6,6,0,0,1,6-6H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V304A16,16,0,0,0,432,288Z">
+d="M391.17,103.47H352.54v109.7h38.63ZM285,103H246.37V212.75H285ZM120.83,0,24.31,91.42V420.58H140.14V512l96.53-91.42h77.25L487.69,256V0ZM449.07,237.75l-77.22,73.12H294.61l-67.6,64v-64H140.14V36.58H449.07Z">
 			</path>
 				
 		</svg>
@@ -45,4 +45,4 @@ function mapStateToProps(state) {
 } 
 
 
-export default connect(mapStateToProps)(IconLink);
+export default connect(mapStateToProps)(IconTwitch);

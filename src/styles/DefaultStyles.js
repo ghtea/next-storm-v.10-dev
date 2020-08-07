@@ -5,8 +5,28 @@ import { Link, NavLink } from 'react-router-dom';
 
  export const GlobalStyle = createGlobalStyle`
 
+ /* strong, span, */
+ 
+ html,body,div,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,
+ samp,small,strike,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,
+ fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video 
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+
   html, body, #root {
 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-shrink: 0;
+    flex-grow: 0;
     
     background-color: ${props => props.theme.COLOR_bg};
     color: ${props => props.theme.color_normal};
@@ -17,7 +37,7 @@ import { Link, NavLink } from 'react-router-dom';
     width: 100%;
     min-width: 360px !important;
     
-    height: 100%;
+    height: 100vh;
     
     /* ?? 잘모르겠다..... height:100% 은 안된다!, 기본적으로 auto 로 하고, 중간에서 고정값을 부여하고 그 아래에서부터 100% 등 사용하자! */
     /* 이상하게 위의 heigth 100% 는 나중에 쓰여지는 css에 의해서 묻혀지지 않는다 !important를 써도... */
@@ -35,29 +55,6 @@ import { Link, NavLink } from 'react-router-dom';
    
   }
   
- 
- @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-  #root {
-  
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-    
-  }
- }
- 
-
- @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-  #root {
-  
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-  
-  }
- }
   
   
  table, caption, tbody, tfoot, thead, tr, th, td {
@@ -115,9 +112,12 @@ import { Link, NavLink } from 'react-router-dom';
 
 export const Div = styled.div`
  display: flex;
- flex-direction: row;
+ flex-direction: column;
  justify-content: center;
  align-items: center;
+ 
+ flex-shrink: 0;
+ flex-grow: 0;
   
  width: 100%;
  /*height: 100%;*/

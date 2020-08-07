@@ -54,9 +54,6 @@ import IconPush from '../../../svgs/tags/IconPush'
 import IconCombo from '../../../svgs/tags/IconCombo'
 import IconTheme from '../../../svgs/tags/IconTheme'
 
-import IconFast from '../../../svgs/tags/IconFast'
-import IconSlow from '../../../svgs/tags/IconSlow'
-
 
 
 
@@ -68,11 +65,10 @@ const DivFilter = styled(Div)
   height: 100%;
   overflow-y: auto;
   
-  display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-evenly;
   align-items: flex-start;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 
   
   @media (min-width:  ${props => (props.theme.media.md) }px) {
@@ -92,31 +88,86 @@ const DivFilter = styled(Div)
 
 
 const DivFilterEachGroup = styled(Div)`
-  width: 110px; /* mobile first */
+  witdh: 100%; /* mobile first */
 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-start;
   align-items: center;
 
-  & > div:nth-child(1) {  /* 'tags' , 'maps' */
+  @media (min-width:  ${props => (props.theme.media.md) }px) {
+	  width: 100%;
+	  
+	  display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+	}
+	
+	& > div:nth-child(1) {  /* 'tags' , 'maps' */
     color: ${props =>  props.theme.color_normal };
     font-size: 1.1rem;
     margin-bottom: 5px;
     font-weight: bold;
+    width: auto;
   }
+`
+
+
+const DivFilterSize = styled(DivFilterEachGroup)`
+  
   
   & > div:nth-child(2) {   /* buttons */
-    display: flex;
-    flex-direction: column;
+    witdh: auto;
+    
+    flex-direction: row;
     justify-content: flex-start;
-    align-items: center;
+    
+    @media (min-width:  ${props => (props.theme.media.md) }px) {
+      flex-direction: column;
+	  }
   }
+`
+
+const DivFilterTag = styled(DivFilterEachGroup)`
+  
+  & > div:nth-child(2) {   /* buttons */
+    witdh: auto;
+    
+    flex-direction: row;
+    justify-content: flex-start;
+    
+    @media (min-width:  ${props => (props.theme.media.md) }px) {
+      flex-direction: column;
+	  }
+  }
+`
+
+const DivFilterMap = styled(DivFilterEachGroup)`
+ 
+  flex-direction: column;
+  justify-content: flex-start;
   
   @media (min-width:  ${props => (props.theme.media.md) }px) {
-	  width: 100%;
-	}
+    flex-direction: column;
+  }
+ 
+ 
+  & > div:nth-child(2), div:nth-child(3) {   /* buttons set */
+    witdh: 100%;
+    
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    
+    @media (min-width:  ${props => (props.theme.media.md) }px) {
+      flex-direction: column;
+	  }
+  }
 `
+
+
 
 
 const ButtonSize = styled(Button)`
@@ -142,6 +193,8 @@ const ButtonSize = styled(Button)`
 
 
 const DivTagPair = styled(Div)`
+  witdh: auto;
+  
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -273,11 +326,7 @@ const Filter = ({
             return ( < IconCombo width = { "20px" } height = { "20px" } color = { "color_weak" } />)
           case "Theme":
             return ( < IconTheme width = {  "19px" } height = {  "19px" } color = {  "color_weak" } />)
-            
-          case "Early":
-            return ( < IconFast width = { "23px" } height = { "23px" } color = { "color_weak"  } />)
-          case "Late":
-            return ( < IconSlow width = { "20px" } height = { "20px" } color = { "color_weak" } />)
+    
 
           }
       }
@@ -287,21 +336,22 @@ const Filter = ({
     return (
       <DivFilter>
       
-        <DivFilterEachGroup>
+        <DivFilterSize>
           <Div> Size </Div>
           <Div> 
             <ButtonSize> 2 players </ButtonSize>
             <ButtonSize> 3 players  </ButtonSize>
             <ButtonSize> Full Team  </ButtonSize>
           </Div>
-        </DivFilterEachGroup>
+        </DivFilterSize>
         
         
         
-        <DivFilterEachGroup>
+        <DivFilterTag>
+        
           <Div> Tags </Div>
-        <Div> 
           
+        <Div> 
           <DivTagPair>
             <ButtonTag> {returnIconTag("ToWin")} </ButtonTag>
             <ButtonTag> {returnIconTag("ForFun")} </ButtonTag>
@@ -316,27 +366,30 @@ const Filter = ({
             <ButtonTag> {returnIconTag("Combo")} </ButtonTag>
             <ButtonTag> {returnIconTag("Theme")} </ButtonTag>
           </DivTagPair>
-          
-          <DivTagPair>
-            <ButtonTag> {returnIconTag("Early")} </ButtonTag>
-            <ButtonTag> {returnIconTag("Late")} </ButtonTag>
-          </DivTagPair>
-          
         </Div>
-        </DivFilterEachGroup>
+        
+        </DivFilterTag>
         
         
-        <DivFilterEachGroup>
+        <DivFilterMap>
           <Div> Map </Div>
-        <Div>
-          {(readyListMapStandardRanked)? listMapStandardRanked.map(element=>(
-              <ButtonMap key={element.name[language].short} > <Div>{element.name[language].full}</Div> </ButtonMap>
-            ))
-            :
-            <Div> loading...  </Div>
-          }
-        </Div>
-        </DivFilterEachGroup>
+          
+          <Div>
+            <ButtonMap> all </ButtonMap>
+            <ButtonMap> 2 lines </ButtonMap>
+            <ButtonMap> 3 lines </ButtonMap>
+          </Div>
+          
+          <Div>
+            {(readyListMapStandardRanked)? listMapStandardRanked.map(element=>(
+                <ButtonMap key={element.name[language].short} > <Div>{element.name[language].full}</Div> </ButtonMap>
+              ))
+              :
+              <Div> loading...  </Div>
+            }
+          </Div>
+          
+        </DivFilterMap>
       
       
       </DivFilter>
@@ -345,29 +398,13 @@ const Filter = ({
 }
 
 
-/*
-
-< DivListComment > {
-          tComp["listComment"].map((comment, index) => {
-            const tComment = comment;
-  
-            return (
-  
-              < Div 
-                key = { index }
-                tComment = { tComment }
-              />
-            )
-          })
-        } < /DivListComment>
-
-*/
 
 
   function mapStateToProps(state) {
     return {
       
       language: state.basic.language
+      
       , dictAllHeroBasic: state.hots.dictAllHeroBasic
       ,listAllMap: state.hots.listAllMap
       , listMapStandardRanked:  state.hots.listMapStandardRanked

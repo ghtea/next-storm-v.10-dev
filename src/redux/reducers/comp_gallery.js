@@ -13,16 +13,16 @@ const stateInitial = {
       , fComp: {} // FOCUS a comp
       , option: "small" // small, middle, big, list
       
-      , listAllTag: ["ToWin", "ForFun", "Kill", "Push", "Combo", "Theme", "Early", "Late"]
+      , listAllTag: ["ToWin", "ForFun", "Kill", "Push", "Combo", "Theme"] //, "Early", "Late"
       
       , filterSize: [2,3,5]
-      , filterTag: ["ToWin", "ForFun", "Kill", "Push", "Combo", "Theme", "Early", "Late"]
+      , filterTag: ["ToWin", "ForFun", "Kill", "Push", "Combo", "Theme"] //, "Early", "Late"
       , filterMap: []
     }
     
     , create : {
       
-      listMap: []
+      listIdMap: []
       , listPosition: [ { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }]
       , listTag: ["ToWin", "Kill"]
       

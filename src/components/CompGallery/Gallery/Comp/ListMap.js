@@ -28,11 +28,13 @@ import * as imgHero from '../../../../images/heroes'
 const DivMap = styled(Div)`
   font-size: 0.9rem;
   
-  width: 60px;
-  height: 36px;
+  width: auto;
+  height: 30px;
+  margin-left: 2px;
+  margin-right: 2px;
   
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   
@@ -55,25 +57,27 @@ const Map = ({
 }
 
 
-const DivListMap = styled(Div)`
-  width: 60px;
+const DivlistMap = styled(Div)`
+  overflow: auto;
+  
+  width: 100%;
   height: 100%;
   
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-start;
   align-items: center;
 `
 
 
- const ListMap = ({
+ const listMap = ({
    
    language
    
    ,dictHeroBasic
    ,listAllMap
    
-   ,listMap
+   ,listIdMap
    
    , addDeleteNotification
    
@@ -83,9 +87,9 @@ const DivListMap = styled(Div)`
   
   return (
   
-    <DivListMap>
+    <DivlistMap>
     
-     {listMap.map((tIdMap)=>{
+     {listIdMap.map((tIdMap)=>{
       const tMap = listAllMap.find(element => element._id === tIdMap);
       
       const tNameMap = tMap.name[language]
@@ -101,7 +105,7 @@ const DivListMap = styled(Div)`
       })
      }
     
-    </DivListMap>
+    </DivlistMap>
         
   )
 
@@ -127,5 +131,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListMap);
+export default connect(mapStateToProps, mapDispatchToProps)(listMap);
 

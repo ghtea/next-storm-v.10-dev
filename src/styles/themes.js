@@ -26,7 +26,7 @@ const common = {
     ,COLOR_delete: '#d00000'
     
     
-    //https://getbootstrap.com/docs/4.0/layout/overview/#responsive-breakpoints
+    // https://getbootstrap.com/docs/4.0/layout/overview/#responsive-breakpoints
     // https://docs.adobe.com/content/help/en/target/using/experiences/vec/mobile-viewports.html
     ,media: {
         
@@ -86,7 +86,7 @@ const themes =  {
         
         
         ,COLOR_normal: 'hsl(240, 5%, 10%)'   // 5% 씩
-        ,COLOR_middle: 'hsl(240, 5%, 5%)'
+        ,COLOR_middle: 'hsl(240, 5%, 6%)'
         ,COLOR_bg: 'hsl(240, 5%, 0%)'
         
     

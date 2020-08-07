@@ -30,6 +30,7 @@ import * as imgHero from '../../../images/heroes'
 
 const DivEachHero = styled(Div)`
 
+  
   margin: 2px;
   
   display: flex;
@@ -169,7 +170,7 @@ const Hero = ({
 }) => {
         
   
-  const [triggerPositionReady, setTriggerPositionReady] = useState("");
+  const [triggerPositionReady, setTriggerPositionReady] = useState(0);
   
   
   
@@ -183,10 +184,16 @@ const Hero = ({
   
   
   const onClick_ButtonDelete = (event, indexPosition, idHero) => {
+   
     let listPositionTemp = listPosition;
     listPositionTemp[indexPosition]["listIdHero"] = listPositionTemp[indexPosition]["listIdHero"].filter(tIdHero => tIdHero !== idHero);
     
     replaceListPosition(listPositionTemp);
+    
+    setTriggerPositionReady(triggerPositionReady + 1);
+    
+    replaceData2CompGallery("create", "locationAddingHero", [indexPosition, listPosition[indexPosition]['listIdHero'].length]);
+    replaceData2CompGallery("create", "whichAdding", "Hero");
   }
   
   
@@ -229,12 +236,16 @@ const Hero = ({
 
 //
 const DivPositionReady = styled(Div)`
-  height: 100%;
+
+  width: 50px;
   
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  
+  margin-left: 3px;
+  margin-right: 3px;
 `
 
 
@@ -319,7 +330,10 @@ const PositionReady = ({
           key={idHero}
           idHero={idHero}
           indexHero={indexHero}
+          
+          
           indexPosition={indexPosition}
+          listPosition={listPosition}
           
           replaceData2CompGallery={replaceData2CompGallery}
           replaceDataCompGallery={replaceDataCompGallery}

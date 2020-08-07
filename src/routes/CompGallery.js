@@ -38,12 +38,8 @@ const DivCompGallery = styled(Div)`
   justify-content: flex-start;
   align-items: center;
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    
-  }
-
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    
+  @media (min-width:  ${props => props.theme.media.md }px) {
+    height: 100%; 
   }
 `;
 
@@ -53,7 +49,7 @@ const Main = styled(Div)`
   
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   
   width: 100%;
@@ -64,8 +60,11 @@ const Main = styled(Div)`
   
   @media (min-width:  ${props => (props.theme.media.md) }px) {
     
+    
     margin-top: 60px; 
     /*height: calc(100vh - 120px);*/
+    
+    overflow: auto; /* important!!! */
     
   }
 `
@@ -187,7 +186,7 @@ const CompGallery = ({
       <SubCompGallery/>
       
     {(!readyDictAllHeroBasic || !readyListAllMap)?
-      <Div> loading </Div>
+      <Main> <IconLoading width={"160px"} height={"160px"} color={"color_very_weak"} /> </Main>
      :
       <Main>
         <Switch>

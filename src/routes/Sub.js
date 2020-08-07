@@ -61,6 +61,8 @@ const DivSub = styled(Div)`
 
 
 const DivSub_Md = styled(Div)`
+	width: 100%;
+	
 	display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -75,6 +77,8 @@ const DivSubMd_ = styled(Div)`
 	display: none;
   
 	@media (min-width:  ${props => (props.theme.media.md) }px) {
+		width: 100%;
+		
 	  display: flex;
 	  flex-direction: row;
 	  justify-content: space-between;
@@ -86,18 +90,17 @@ const DivSubMd_ = styled(Div)`
 // small
 const DivProfile_Md = styled(Div)`
 	margin-left: 10px;
-	margin-right: 5px;
+	
 	width: 40px;
 `
 const DivNav_Md = styled(Div)`
-	margin-left: 5px;
-	margin-right: 5px;
 	
-	width: calc(100% -40px - 300px);
+	width: calc(100% - 80px - 20px);
 `
 const DivButton_Md = styled(Div)`
-	margin-left: 5px;
+
 	margin-right: 10px;
+	
 	width: 40px;
 `
 
@@ -105,86 +108,22 @@ const DivButton_Md = styled(Div)`
 // big
 const DivProfileMd_ = styled(Div)`
 	margin-left: 10px;
-	margin-right: 5px;
+
 	width: 150px;
 `
 const DivNavMd_ = styled(Div)`
-	margin-left: 5px;
-	margin-right: 5px;
 	
-	width: calc(100% -40px - 80px);
+	width: calc(100% - 300px - 20px); /* minus(-) needs space around it !!!  ex: -20px not work... */
 `
 // 전체가 360 ~ 768 이니깐
 // 240 ~ 648
 
 const DivButtonMd_ = styled(Div)`
-	margin-left: 5px;
+	
 	margin-right: 10px;
+	
 	width: 150px;
 `
-
-/*
-const DivSub = styled(Div)`
-	
-	background-color: ${props => props.theme.COLOR_normal};
-  color: ${props => props.theme.color_strong};
-  
-
-  z-index: 100; 
-  
-  position: fixed;
-  top: 0px;
-  left:0px;
-  
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  
-  border-bottom: 1px solid ${props => props.theme.color_very_weak};
-  
-  
-  width: 100%;
-	min-width: 360px;
-	height: 50px; 
-  
-  
-	@media (min-width:  ${props => (props.theme.media.md) }px) {
-	  height: 60px; 
-	}
-	
-	
-
-	& > *:nth-child(1) { 
-		margin-left: 10px; 
-		margin-right: 5px;
-		
-		width: 40px; 
-	}
-	
-	& > *:nth-child(2) { 
-		margin-left: 5px; 
-		margin-right: 5px;
-		width: calc((100%-40px)*0.4);
-	}
-	
-	
-	& > *:nth-child(3) { 
-		margin-left: 5px; 
-		margin-right: 10px; 
-		width: calc((100%-40px)*0.2);
-	}
-  
-  
-  @media (min-width:  ${props => (props.theme.media.md) }px) {
-  
-	  & > *:nth-child(1) {
-			width: 40px; 
-	  }
-	  
-	}
-`;
-*/
 
 
 

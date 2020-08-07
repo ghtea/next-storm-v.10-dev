@@ -18,12 +18,14 @@ import {Div, Input, Button, Img} from '../../../styles/DefaultStyles';
 
 import IconFun from '../../../svgs/tags/IconFun'
 import IconSerious from '../../../svgs/tags/IconSerious'
+
 import IconKill from '../../../svgs/tags/IconKill'
 import IconPush from '../../../svgs/tags/IconPush'
+
 import IconCombo from '../../../svgs/tags/IconCombo'
 import IconTheme from '../../../svgs/tags/IconTheme'
-import IconFast from '../../../svgs/tags/IconFast'
-import IconSlow from '../../../svgs/tags/IconSlow'
+//import IconFast from '../../../svgs/tags/IconFast'
+//import IconSlow from '../../../svgs/tags/IconSlow'
 
 //
 const DivTagsReady = styled(Div)`
@@ -188,7 +190,7 @@ const TagsReady = ({
   }
   
   
-  
+  /*
   // only Early or Late or nothing
   const onClick_Tag_Early = (event) => {
     let listTagTemp = listTag;
@@ -213,7 +215,7 @@ const TagsReady = ({
     }
     replaceData2CompGallery("create", "listTag", listTagTemp);
   }
-  
+  */
   
   
   
@@ -233,12 +235,12 @@ const TagsReady = ({
   else { dictColorTag["Combo"] = "color_very_weak" }
   if (listTag.includes("Theme") ) { dictColorTag["Theme"] = "color_active" }
   else { dictColorTag["Theme"] = "color_very_weak" }
-  
+  /*
   if (listTag.includes("Early") ) { dictColorTag["Early"] = "color_active" }
   else { dictColorTag["Early"] = "color_very_weak" }
   if (listTag.includes("Late") ) { dictColorTag["Late"] = "color_active" }
   else { dictColorTag["Late"] = "color_very_weak" }
-  
+  */
   
   
   
@@ -303,7 +305,16 @@ const TagsReady = ({
       </DivEachGroup>
       
       
-      <DivEachGroup>
+      
+      
+      
+    </DivTagsReady>
+  )
+}
+
+
+/*
+<DivEachGroup>
       
         <ButtonTag  onClick={onClick_Tag_Early} > 
           <DivIcon> <IconFast width={"30px"}  height={"30px"} color={dictColorTag.Early} /> </DivIcon> 
@@ -316,14 +327,7 @@ const TagsReady = ({
         </ButtonTag>
       
       </DivEachGroup>
-      
-      
-    </DivTagsReady>
-  )
-}
-
-
-
+*/
 
 
   

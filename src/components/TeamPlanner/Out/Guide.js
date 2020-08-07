@@ -22,12 +22,17 @@ const DivGuide = styled(Div)`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  
+  position: relative
 `;
 
 
 
 const DivGuideTitle = styled(Div)`
   margin-top: 20px;
+  margin-bottom: 10px;
+  height: 20px;
+  
   font-size: 1.2rem;
   font-weight: bold;
 `
@@ -39,21 +44,26 @@ const DivBody = styled(Div)`
   width: 100%;
   max-width: 450px;
   
-  margin-top: 20px;
-  margin-left: 10px;
-  margin-right: 10px;
+  padding-top: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
   
 	display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   
-  overflow-x: auto;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  /* https://stackoverflow.com/questions/32689686/overlapping-css-flexbox-items-in-safari */
+  -webkit-flex: 0; 
+  flex-shrink: 0;
+  
 `
 
 const Part = styled(Div)`
-  
-  
+
   margin-top: 6px;
   margin-bottom: 6px;
   

@@ -15,16 +15,10 @@ import * as config from '../../../config';
 import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
 import dictCode from '../../../others/dictCode'
 
-import {
-  replaceDataCompGallery, replaceData2CompGallery, replaceListPosition
-}
-from "../../../redux/actions/comp_gallery";
+import { replaceDataCompGallery, replaceData2CompGallery, replaceListPosition } from "../../../redux/actions/comp_gallery";
 
 
-import {
-  Div, Input, Button, Img, Textarea
-}
-from '../../../styles/DefaultStyles';
+import { Div, Input, Button, Img, Textarea } from '../../../styles/DefaultStyles';
 
 import ListMap from './Comp/ListMap';
 import Position from './Comp/Position';
@@ -32,10 +26,7 @@ import Position from './Comp/Position';
 //import TagsReady from './Create/TagsReady';
 
 import useInput from '../../../tools/hooks/useInput';
-import {
-  getTimeStamp
-}
-from '../../../tools/vanilla/time';
+import { getTimeStamp } from '../../../tools/vanilla/time';
 
 import * as imgHero from '../../../images/heroes'
 import * as imgMap from '../../../images/maps'
@@ -43,12 +34,22 @@ import * as imgMap from '../../../images/maps'
 
 import IconExpand from '../../../svgs/basic/IconExpand'
 
+import IconLink from '../../../svgs/basic/IconLink'
+import IconVideo from '../../../svgs/basic/IconVideo'
+import IconComment from '../../../svgs/basic/IconComment'
+
+
 import IconFun from '../../../svgs/tags/IconFun'
 import IconSerious from '../../../svgs/tags/IconSerious'
-import IconFast from '../../../svgs/tags/IconFast'
-import IconSlow from '../../../svgs/tags/IconSlow'
+
+import IconCombo from '../../../svgs/tags/IconCombo'
+import IconTheme from '../../../svgs/tags/IconTheme'
+
 import IconKill from '../../../svgs/tags/IconKill'
 import IconPush from '../../../svgs/tags/IconPush'
+
+import IconUser from '../../../svgs/basic/IconUser'
+import IconHeart from '../../../svgs/basic/IconHeart'
 
 
 
@@ -56,6 +57,8 @@ const DivComp = styled(Div)
 `
   width: 300px; /* 6 + ddd + ddd + 6  */
   height: auto;
+  
+  margin: 10px;
   
   display: flex;
   flex-direction: column;
@@ -67,36 +70,69 @@ const DivComp = styled(Div)
 // title, author
 const DivHeader = styled(Div)`
 
-  border-radius: 12px 12px 0 0;
+  border-radius: 15px 15px 0 0;
   
   width: 100%;
-  height: 36px;
+  height: 45px;
   
   background-color: ${props => props.theme.COLOR_normal};
   color: ${props => props.theme.color_normal};
   
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
   
+  display: grid;
+  grid-template-rows: 50px;
+  grid-template-columns: minmax(auto, 150px) minmax(80px, 1fr) 30px;
+  grid-template-areas:
+    "title tags button";
+
 `
 
 
 
 const DivTitle = styled(Div)`
-  margin-left: 10px;
+  grid-area: title;
   
+  padding: 3px;
+  line-height: 1.1rem;
+  
+  display: block;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`
+
+const DivListTag = styled(Div)
+`
+  grid-area: tags;
+  
+  overflow: hidden;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
 `
 
-const DivExpand = styled(Div)`
-  width: 30px;
+const Tag = styled(Div)
+`
+  width: 32px;
+  height: 32px;
+  margin-left: 1px;
+  margin-right: 1px;
   
-  margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`
+
+const DivExpand = styled(Div)`
+  grid-area: button;
+  
+  /* justify-self: flex-end; not available yet */
+
 `
 
 
@@ -105,27 +141,27 @@ const DivExpand = styled(Div)`
 //map, hero (position)
 const DivMain = styled(Div)
 `
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   
-  height: 70px;
+  background-color: ${props => props.theme.COLOR_normal};
+  
+  border: 10px solid  ${props => props.theme.COLOR_normal};
+  
+  color: ${props => props.theme.color_normal};
+`
+
+
+
+const ContainerListMap = styled(Div)
+`
+  height: 50px;
+  
   background-color: ${props => props.theme.COLOR_middle};
-  
-  border-left: 6px solid  ${props => props.theme.COLOR_normal};
-  border-right: 6px solid  ${props => props.theme.COLOR_normal};
-  
   color: ${props => props.theme.color_normal};
-  
-  
-`
-
-
-
-const DivListMap = styled(Div)
-`
-  height: 100%;
-  
-  background-color: ${props => props.theme.COLOR_bg};
-  color: ${props => props.theme.color_normal};
-  
+  border-radius: 9px 9px 0 0;
   
   display: flex;
   flex-direction: column;
@@ -136,10 +172,11 @@ const DivListMap = styled(Div)
 
 const DivListPosition = styled(Div)
 `
-  height: 100%;
+  height: 70px;
   
-  background-color: ${props => props.theme.COLOR_bg};
+  background-color: ${props => props.theme.COLOR_middle};
   color: ${props => props.theme.color_normal};
+  border-radius: 0 0 9px 9px;
   
   display: flex;
   flex-direction: row;
@@ -151,13 +188,11 @@ const DivListPosition = styled(Div)
 // tag, rating
 const DivFooter = styled(Div)`
   
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 15px 15px;
   
-  height: 36px;
+  height: 55px;
   background-color: ${props => props.theme.COLOR_normal};
   
-  padding-left: 3px;
-  padding-right: 3px;
   
   color: ${props => props.theme.color_normal};
   
@@ -166,50 +201,77 @@ const DivFooter = styled(Div)`
   justify-content: space-between;
   align-items: center;
   
-  & > div {
+  &> div:nth-child(1) {
+    width: 25%;
+  }
+  &> div:nth-child(2) {
     width: 50%;
+  }
+  &> div:nth-child(3) {
+    width: 25%;
   }
 `
 
 
-const DivListTag = styled(Div)
+const DivUser = styled(Div)`
+
+  border-right: 4px solid ${props => props.theme.COLOR_bg};
+  
+  & > div {
+    background-color: #fec84e;
+
+    background-image: linear-gradient(315deg, #fec84e 0%, #ffdea8 74%);
+    
+    width: 40px;
+    height: 40px;
+    
+    border-radius: 50%;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
 `
-  height: 100%;
+
+
+const DivOthers = styled(Div)
+` 
+  width: 180px;
   
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-evenly;
   align-items: center;
+  
+  & > div {
+    width: auto;
+  }
+
 `
 
-const Tag = styled(Div)
-`
-  width: 32px;
-  height: 32px;
-  margin-left: 3px;
-  margin-right: 3px;
-  
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`
+const DivLike = styled(Div)`
 
-const DivListRating = styled(Div)
-`
+  border-left: 4px solid ${props => props.theme.COLOR_bg};
   
+  & > div {
+    
+    width: 40px;
+    height: 40px;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
 `
-const DivListComment = styled(Div)
-`
-  
-`
-
 
 
 
 const Comp = ({
-    dictHeroBasic
-    , listAllMap
+  
+  
+   listAllMap
     , listAllTag
     , tComp
 
@@ -218,7 +280,7 @@ const Comp = ({
   }) => {
 
 
-    const listMap = tComp.listMap;
+    const listIdMap = tComp.listIdMap;
     const listPosition = tComp.listPosition;
     const listTag = tComp.listTag;
     const listComment = tComp.listComment;
@@ -231,17 +293,19 @@ const Comp = ({
     const returnIcon = (tag) => {
         switch (tag) {
           case "ToWin":
-            return ( < IconSerious width = { "24px" } height = { "24px" } color = {  "color_weak" } />)
+            return (<IconSerious width = { "24px" } height = { "24px" } color = {  "color_weak" } />)
           case "ForFun":
-            return ( < IconFun width = { "24px" } height = { "24px" }  color = { "color_weak" } />)
+            return (<IconFun width = { "24px" } height = { "24px" }  color = { "color_weak" } />)
+            
           case "Kill":
-            return ( < IconKill width = { "24px" } height = { "24px" } color = { "color_weak" } />)
+            return (<IconKill width = { "22px" } height = { "22px" } color = { "color_weak" } />)
           case "Push":
-            return ( < IconPush width = {  "23px" } height = {  "23px" } color = {  "color_weak" } />)
-          case "Early":
-            return ( < IconFast width = { "27px" } height = { "27px" } color = { "color_weak"  } />)
-        case "Late":
-          return ( < IconSlow width = { "24px" } height = { "24px" } color = { "color_weak" } />)
+            return (<IconPush width = {  "23px" } height = {  "23px" } color = {  "color_weak" } />)
+      
+          case "Combo":
+            return (<IconCombo width = { "24px" } height = { "24px" } color = { "color_weak" } />)
+          case "Theme":
+            return (<IconTheme width = {  "24px" } height = {  "24px" } color = {  "color_weak" } />)
 
           }
       }
@@ -250,53 +314,89 @@ const Comp = ({
 
     return (
 
-    < DivComp >
+   <DivComp>
 
-      < DivHeader >
+     <DivHeader>
+        
+       <DivTitle> {tComp["title"] }</DivTitle> 
+        
+       <DivListTag> 
+       { listTagSorted.map(tag => {
+            return ( 
+             <Tag key = { tag }> { returnIcon(tag) }</Tag>)
+          })
+        }
+        </DivListTag>
+        
+       <DivExpand><IconExpand width = { "24px" } height = { "24px" } color = { "color_very_weak" } /> </DivExpand>
+
+     </DivHeader>
+
+
+
+     <DivMain>
       
-        < DivTitle > {tComp["title"] } < /DivTitle> 
-        < DivExpand > < IconExpand width = { "20px" } height = { "20px" } color = { "color_very_weak" } /> </DivExpand >
-
-      < /DivHeader>
-
-
-
-      < DivMain >
-
-        < ListMap listMap = { listMap } />
-  
-        < DivListPosition > {
+      <ContainerListMap>
+        <ListMap listIdMap = { listIdMap } />
+      </ContainerListMap>
+      
+       <DivListPosition> {
           listPosition.map((position, index) => {
             const tPosition = position;
   
             return (
   
-              < Position key = { index }
+             <Position key = { index }
               tPosition = { tPosition }
               /> 
             )
           })
         }
   
-        < /DivListPosition>
+       </DivListPosition>
 
-      < /DivMain>
-
-
-      < DivFooter >
-        < DivListTag > {
-          listTagSorted.map(tag => {
-            return ( 
-              < Tag key = { tag } > { returnIcon(tag) } < /Tag>)
-          })
-        } < /DivListTag>
-  
-        < DivListRating >
-        rating < /DivListRating> 
-      < /DivFooter>
+     </DivMain>
 
 
-    < /DivComp>
+     <DivFooter>
+      
+      <DivUser >
+        <Div>
+          <IconUser width = { "32px" } height = { "32px" } color = { "color_weak" } />
+        </Div>
+      </DivUser>
+      
+      
+      <DivOthers>
+      
+        <Div> 
+          <IconComment width = { "18px" } height = { "18px" } color = { "color_very_weak" } />
+        </Div>
+        
+        
+        <Div> 
+          <IconVideo width = { "20px" } height = { "20px" } color = { "color_very_weak" } />
+        </Div>
+        
+        
+        <Div> 
+          <IconLink width = { "18px" } height = { "18px" } color = { "color_very_weak" } />
+        </Div>
+        
+        
+      </DivOthers>
+      
+      
+      <DivLike>
+        <Div>
+          <IconHeart width = { "25x" } height = { "25px" } color = { "color_very_weak" } filled={true} />
+        </Div>
+      </DivLike> 
+        
+     </DivFooter>
+
+
+   </DivComp>
 
     )
 
@@ -305,19 +405,19 @@ const Comp = ({
 
 /*
 
-< DivListComment > {
+< DivListComment> {
           tComp["listComment"].map((comment, index) => {
             const tComment = comment;
   
             return (
   
-              < Div 
+             <Div 
                 key = { index }
                 tComment = { tComment }
               />
             )
           })
-        } < /DivListComment>
+        }</DivListComment>
 
 */
 
@@ -327,9 +427,8 @@ const Comp = ({
       
       listAllTag: state.comp_gallery.gallery.listAllTag
       
-      ,listMap: state.comp_gallery.create.listMap
-      ,listPosition: state.comp_gallery.create.listPosition
-      ,listTag: state.comp_gallery.create.listTag
+      ,listAllMap: state.hots.listAllMap
+      
 
     };
   }

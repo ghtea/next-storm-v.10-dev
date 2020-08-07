@@ -67,7 +67,7 @@ const Hero = ({
 
 
 const DivPosition = styled(Div)`
-  width: 48px;
+  width: 46px;
   height: 100%;
   
   display: flex;

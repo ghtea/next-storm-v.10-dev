@@ -20,6 +20,8 @@ import * as imgMap from '../../../images/maps'
 
 
 const DivChooseMap = styled(Div)`
+  height: auto;
+  
   margin-top: 20px;
   margin-bottom: 20px;
 
@@ -28,14 +30,6 @@ const DivChooseMap = styled(Div)`
   justify-content: flex-start;
   align-items: center;
 
-  
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    
-  }
 `
 
 
@@ -45,29 +39,35 @@ const InputSearch = styled(Input)`
 `
 
 const DivGroups = styled(Div)`
+  height: auto;
+  width: 100%;
+  
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
 `
 
-const GroupSameLines = styled(Div)`
+
+
+const GroupMaps = styled(Div)`
   margin-top: 5px;
   margin-bottom: 5px;
+  
+  height: auto;
   
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: stretch;
-  
-  padding: 5px;
 `
 
 
 
 const DivLineNumber = styled(Div)`
   width: 50px;
-  background-color: ${props => props.theme.COLOR_middle};
+  background-color: ${props => props.theme.COLOR_normal};
+  border-radius: 12px 0 0 12px;
   
   display: flex;
   flex-direction: column;
@@ -78,6 +78,13 @@ const DivLineNumber = styled(Div)`
 `
 
 const ContainerMap = styled(Div)`
+
+  width: calc(100% - 50px);
+  padding: 9px;
+  
+  background-color: ${props => props.theme.COLOR_middle};
+  border-radius: 0 12px 12px 0;
+  
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -94,34 +101,26 @@ const ContainerMap = styled(Div)`
 */
 const DivEachMap = styled(Div)`
 
-  margin: 2px;
+  margin: 6px;
   
-  width: 114px;
-  height: 64px;
+  width: 89px;
+  height: 50px;
   
-  
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    
+  & > div { /* for sets */
+    height: 100%;
+    border: 2px solid ${props => props.theme.color_weak};
+    border-radius: 8px;
   }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-
-  } 
 `
+
+
 const ImgEachMap = styled(Img)`
   border-radius: 8px;
   
   object-fit: cover;
-  width: 114px;
-  height: 64px;
+  width: 89px;
+  height: 50px;
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-
-  } 
 `
 
 
@@ -131,7 +130,7 @@ const ImgEachMap = styled(Img)`
    
    , listAllMap
    
-  , listMap
+  , listIdMap
   
   , whichAdding
   , locationAddingMap
@@ -141,23 +140,45 @@ const ImgEachMap = styled(Img)`
   , addDeleteNotification
    
  } ) => {
-  
-    const dict2LineMap = listAllMap.filter(objMap => objMap.lines === 2 && objMap.playable === true);
-    const dict3LineMap = listAllMap.filter(objMap => objMap.lines === 3 && objMap.playable === true);
     
     
-    const onClick_Map = (event, idMap) => {
-      if (whichAdding === "Map" && !(listMap.includes(idMap)) ) {
-        let listMapTemp = listMap;
-        listMapTemp[locationAddingMap[0]] = idMap;
-        
-        replaceData2CompGallery("create", "listMap", listMapTemp);
-        
-        replaceData2CompGallery("create", "triggerPosition", Date.now().toString());
+    // type: "standard", playable:true , ( rankedRotation:true )
+    
+    const listShowingMap = listAllMap.filter(objMap => objMap.type === "standard" && objMap.playable === true );
+    
+    const list2LineMap = listShowingMap.filter(objMap => objMap.lines === 2 );
+    const list3LineMap = listShowingMap.filter(objMap => objMap.lines === 3 );
+    
+    const listIdAllMap = listShowingMap.map(element=> element._id);
+    const listId2LineMap = list2LineMap.map(element=> element._id);
+    const listId3LineMap = list2LineMap.map(element=> element._id);
+    
+    const onClick_Map = (event, set, idMap) => {
+      
+      if (set === "all"){
+        replaceData2CompGallery("create", "listIdMap", listIdAllMap);
       }
-      else if ( listMap.includes(idMap) ) {
-        addDeleteNotification("comp11", language);
+      else if (set === "2lines"){
+        replaceData2CompGallery("create", "listIdMap", listId2LineMap);
       }
+      else if (set === "3lines"){
+        replaceData2CompGallery("create", "listIdMap", listId3LineMap);
+      }
+      
+      else if (set === "manual") {
+        if (whichAdding === "Map" && !(listIdMap.includes(idMap)) ) {
+          let listIdMapTemp = listIdMap;
+          listIdMapTemp[locationAddingMap[0]] = idMap;
+          
+          replaceData2CompGallery("create", "listIdMap", listIdMapTemp);
+          
+          replaceData2CompGallery("create", "triggerPosition", Date.now().toString());
+        }
+        else if ( listIdMap.includes(idMap) ) {
+          addDeleteNotification("comp11", language);
+        }
+      }
+      
     }
   
   return (
@@ -167,10 +188,30 @@ const ImgEachMap = styled(Img)`
       
       <DivGroups>
         
-        <GroupSameLines>
+        <GroupMaps>
+          <DivLineNumber> <Div> set </Div> </DivLineNumber>
+          <ContainerMap> 
+            
+            <DivEachMap  onClick={(event)=> onClick_Map(event, "all", null)} > 
+              <Div> all  </Div> 
+            </DivEachMap>
+            
+            <DivEachMap  onClick={(event)=> onClick_Map(event, "2lines", null)} > 
+              <Div> 2 lines </Div> 
+            </DivEachMap>
+            
+            <DivEachMap  onClick={(event)=> onClick_Map(event, "3lines", null)} > 
+              <Div> 3 lines </Div> 
+            </DivEachMap>
+           
+          </ContainerMap>
+        </GroupMaps>
+        
+        
+        <GroupMaps>
           <DivLineNumber> <Div> 2 </Div> <Div> lines </Div> </DivLineNumber>
           <ContainerMap> 
-            {dict2LineMap.map((tMap) => {
+            {list2LineMap.map((tMap) => {
         
               const idMap = tMap["_id"]
               const nameImg = `map${tMap._id}`
@@ -180,19 +221,20 @@ const ImgEachMap = styled(Img)`
               
                 <DivEachMap 
                   key={idMap}
-                  onClick={(event)=> onClick_Map(event, idMap)}
+                  onClick={(event)=> onClick_Map(event, "manual", idMap)}
                 > 
                   <ImgEachMap src={imgMap[nameImg]} />
                 </DivEachMap>
               )
             })}
           </ContainerMap>
-        </GroupSameLines>
+        </GroupMaps>
         
-        <GroupSameLines>
+        
+        <GroupMaps>
           <DivLineNumber> <Div> 3 </Div> <Div> lines </Div> </DivLineNumber>
           <ContainerMap> 
-            {dict3LineMap.map((tMap) => {
+            {list3LineMap.map((tMap) => {
         
               const idMap = tMap["_id"]
               const nameImg = `map${tMap._id}`
@@ -201,14 +243,14 @@ const ImgEachMap = styled(Img)`
               
                 <DivEachMap 
                   key={idMap}
-                  onClick={(event)=> onClick_Map(event, idMap)}  
+                  onClick={(event)=> onClick_Map(event, "manual", idMap)}  
                 > 
                   <ImgEachMap src={imgMap[nameImg]} />
                 </DivEachMap>
               )
             })}
           </ContainerMap>
-        </GroupSameLines>
+        </GroupMaps>
         
         
         
@@ -240,7 +282,7 @@ function mapStateToProps(state) {
     
     , listAllMap: state.hots.listAllMap
     
-    , listMap: state.comp_gallery.create.listMap
+    , listIdMap: state.comp_gallery.create.listIdMap
     
     , whichAdding: state.comp_gallery.create.whichAdding
     , locationAddingMap: state.comp_gallery.create.locationAddingMap

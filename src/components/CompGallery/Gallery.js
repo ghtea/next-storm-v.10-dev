@@ -1,48 +1,28 @@
 import dotenv from 'dotenv';
-import React, {
-  useState, useEffect
-}
-from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import axios from 'axios';
+import queryString from 'query-string';
 
-import {
-  connect
-}
-from "react-redux";
+import { connect } from "react-redux";
 import * as config from '../../config';
 
 import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 import dictCode from '../../others/dictCode'
 
-import {
-  replaceData2
-}
-from "../../redux/actions/basic";
-import {
-  replaceDataCompGallery, replaceData2CompGallery
-}
-from "../../redux/actions/comp_gallery";
+import { replaceData2 } from "../../redux/actions/basic";
+import { replaceDataCompGallery, replaceData2CompGallery } from "../../redux/actions/comp_gallery";
 
 
-import {
-  NavLink, useHistory
-}
-from 'react-router-dom';
+import {  NavLink, useHistory } from 'react-router-dom';
 
-import {
-  Div, Input, Button
-}
-from '../../styles/DefaultStyles';
+import { Div, Input, Button } from '../../styles/DefaultStyles';
 import Comp from './Gallery/Comp'
 import Filter from './Gallery/Filter'
 
 import useInput from '../../tools/hooks/useInput';
-import {
-  getTimeStamp
-}
-from '../../tools/vanilla/time';
+import {  getTimeStamp } from '../../tools/vanilla/time';
 
 import IconWorking from '../../svgs/basic/IconWorking'
 
@@ -86,7 +66,7 @@ const ContainerFilter = styled(Div)
 
 const ContainerListComp = styled(Div)
 `
-  width: calc(100%-180px);
+  width: calc(100% - 180px);
   height: 100%;
   
   display: flex;
@@ -125,8 +105,9 @@ export const SubGallery = ({}) => {
 const Gallery = ({
 
   language
-
-  , readyListComp, listComp
+  
+  , listComp
+  , readyListComp, loadingListComp
 
   , replaceData2CompGallery, replaceData2
 
@@ -141,15 +122,18 @@ const Gallery = ({
       // 내 서버에서 comp 여러개 가져오기
       if (!readyListComp) {
 
-        console.log("hi")
         try {
-
+          
+          replaceData2("ready", "listComp", false);
+          replaceData2("loading", "listComp", true);
+          
           const {
             data
           } = await axios.get(`${config.URL_API_NS}/comp/`);
 
           replaceData2CompGallery("gallery", "listComp", data);
           replaceData2("ready", "listComp", true);
+          replaceData2("loading", "listComp", false);
 
         } catch (error) {
 
@@ -163,16 +147,46 @@ const Gallery = ({
   }, [])
 
 
+  const onClick_Filtered = async (event) => {
+    try {
+      
+      const filterSize = [2, 3]; // 이 리스트 항목 중 하나의 값을 가져야한다
+      const filterMap = ['2', '3']; // 이 리스트의 모든 항목을 가져야 한다
+      const filterTag = ['ToWin', 'Kill']; // 이 리스트의 모든 항목을 가져야 한다
+      
+      const query = queryString.stringify({
+        filterSize: filterSize
+        , filterMap: filterMap
+        , filterTag: filterTag
+      });
+      
+      replaceData2("ready", "listComp", false);
+      replaceData2("loading", "listComp", true);
+          
+      const { data } = await axios.get(`${config.URL_API_NS}/comp/filtered?` + query );
+
+      replaceData2CompGallery("gallery", "listComp", data);
+      replaceData2("ready", "listComp", true);
+      replaceData2("loading", "listComp", false);
+
+    } catch (error) {
+
+      addDeleteNotification("basic01", language);
+      console.log(error)
+    }
+  }
+  
   return (
 
     < DivGallery >
 
     < ContainerFilter >
-    < Filter / >
+      <Button onClick={onClick_Filtered} > search </Button>
+      < Filter / >
     < /ContainerFilter>  
 
     < ContainerListComp > {
-      (!readyListComp) ? < Div > loading < /Div>:
+      (loadingListComp) ? < Div > loading < /Div>:
         < DivListComp >
 
         {
@@ -207,9 +221,10 @@ function mapStateToProps(state) {
 
     language: state.basic.language
 
-    ,
-    listComp: state.comp_gallery.gallery.listComp,
-    readyListComp: state.basic.ready.listComp
+    , listComp: state.comp_gallery.gallery.listComp
+    , readyListComp: state.basic.ready.listComp
+    , loadingListComp: state.basic.loading.listComp
+    
   };
 }
 

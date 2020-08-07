@@ -20,6 +20,8 @@ import {Div, Input, Button, Img} from '../../../styles/DefaultStyles';
 //import {getTimeStamp} from '../../../tools/vanilla/time';
 
 import IconPlus from '../../../svgs/basic/IconPlus'
+import IconMinusCircle from '../../../svgs/basic/IconMinusCircle'
+
 import * as imgMap from '../../../images/maps'
 
 
@@ -28,30 +30,22 @@ import * as imgMap from '../../../images/maps'
 
 const DivEachMap = styled(Div)`
   
+  width: auto;
+  
   &:first-child {
-    margin-top: 6px;
+    margin-left: 6px;
   }
   
   margin: 3px;
-  
+
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-start;
   align-items: center;
   
   &:nth-child(n+2) img {
     opacity: 0.8;
   }
-  
-  
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    
-  } 
-  
   
 `
 
@@ -66,18 +60,9 @@ const ContainerImgEachMap = styled(Div)`
   
   &[data-is-focused='true'] > div:first-child{
     border: 3px solid ${props => (props.theme.COLOR_delete) };
-    border-radius: 6px 6px 0 0;
+    /*border-right: 0;*/
+    border-radius: 6px  0 0 6px;
   }
-  
-  
-  
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-
-  } 
   
   
 `
@@ -99,13 +84,7 @@ const ImgEachMap = styled(Img)`
   position: absolute;
   z-index:0;
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
- 
-  } 
+   
 `
 
 const ButtonDelete = styled(Button)`
@@ -113,10 +92,10 @@ const ButtonDelete = styled(Button)`
   background-color: ${props => (props.theme.COLOR_delete) };
   
   margin: 0;
-  width: 54px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   
-  border-radius: 0 0 6px 6px;
+  border-radius: 0 6px 6px 0;
   
   &:focus {outline:none;}
 `
@@ -131,13 +110,6 @@ const DivPlus = styled(Div)`
     background-color: ${props => (props.theme.COLOR_save) };
   }
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    
-  } 
 `
 
 const DivIconPlus = styled(Div)`
@@ -158,7 +130,7 @@ const Map = ({
   
   , listAllMap
   
-  , listMap
+  , listIdMap
   
    , whichAdding
    
@@ -184,10 +156,10 @@ const Map = ({
   
   
   const onClick_ButtonDelete = (event, idMap) => {
-    let listMapTemp = listMap;
-    listMapTemp = listMapTemp.filter(tIdMap => tIdMap !== idMap);
+    let listIdMapTemp = listIdMap;
+    listIdMapTemp = listIdMapTemp.filter(tIdMap => tIdMap !== idMap);
     
-    replaceData2CompGallery("create", "listMap", listMapTemp);
+    replaceData2CompGallery("create", "listIdMap", listIdMapTemp);
   }
   
   
@@ -216,9 +188,9 @@ const Map = ({
       </ContainerImgEachMap>
       { (isFocused==='true')? 
         <ButtonDelete
-          onClick={(event)=>onClick_ButtonDelete(event, indexMap)}
+          onClick={(event)=>onClick_ButtonDelete(event, idMap)}
         > 
-          delete 
+          <IconMinusCircle width={"20px"} height={"20px"} color={"COLOR_bg"} /> 
         </ButtonDelete> 
         : <> </> 
         }
@@ -230,10 +202,10 @@ const Map = ({
 
 //
 const DivMapsReady = styled(Div)`
-  width: 60px;
+  height: 100%;
   
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-start;
   align-items: center;
 `
@@ -248,7 +220,7 @@ const MapsReady = ({
   
   , listAllMap
   
-  , listMap
+  , listIdMap
   
    , whichAdding
   
@@ -285,7 +257,7 @@ const MapsReady = ({
   return (
   
     <DivMapsReady>
-      {listMap.map((idMap, indexMap) => 
+      {listIdMap.map((idMap, indexMap) => 
         (
         <Map 
           key={idMap}
@@ -296,7 +268,7 @@ const MapsReady = ({
           
           triggerMap={triggerMap}
           
-          //listMap={listMap}
+          listIdMap={listIdMap}
           
           //locationAddingMap={locationAddingMap}
           
@@ -313,11 +285,11 @@ const MapsReady = ({
       
       
       <DivPlus
-        onClick = {(event) => onClick_Plus(event, listMap.length)}
-        data-is-focused = {returnIsFocused(listMap.length)}
+        onClick = {(event) => onClick_Plus(event, listIdMap.length)}
+        data-is-focused = {returnIsFocused(listIdMap.length)}
       > 
         <DivIconPlus>
-          <IconPlus width={"24px"} height={"24px"} color={"COLOR_normal"} /> 
+          <IconPlus width={"24px"} height={"24px"} color={"COLOR_bg"} /> 
         </DivIconPlus>
         
       </DivPlus>
@@ -339,7 +311,7 @@ function mapStateToProps(state) {
   return { 
     listAllMap: state.hots.listAllMap
     
-    , listMap: state.comp_gallery.create.listMap
+    , listIdMap: state.comp_gallery.create.listIdMap
     
     , whichAdding: state.comp_gallery.create.whichAdding
     , locationAddingMap: state.comp_gallery.create.locationAddingMap

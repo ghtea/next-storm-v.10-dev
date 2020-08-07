@@ -36,18 +36,40 @@ import storage from '../tools/vanilla/storage';
 
 
 const DivHome = styled(Div)`
+  width: 100%;
   height: 100%;
   
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  & > div {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  
+  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 240px 240px 400px 400px;
+    grid-template-areas: 
+      "A"
+      "B"
+      "C"
+      "D"
+  }
+ 
+
+  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 300px 1fr;
+    grid-template-areas: 
+      "A B"
+      "C D";
+  }
 
 `;
 
 
 const DivA = styled(Div)`
-  height: 240px;
+  grid-area: A;
   
   display: flex;
   flex-direction: column;
@@ -61,27 +83,39 @@ const DivA = styled(Div)`
     align-items: center;
   }
 `
-
 const DivB = styled(Div)`
+  grid-area: B;
+  
+  flex-direction: column;
+`
+
+const DivC = styled(Div)`
+  grid-area: C;
   
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   
+`
+
+const DivD = styled(Div)`
+  grid-area: D;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  
+  padding-bottom: 20px;
+  
   & > div {
-    width: auto;
-    margin-left: 10px;
-    margin-right: 10px;
-    
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
 `
-
-
 
 const DivIdentification = styled(Div)`
   font-size: 1.6rem;
@@ -89,9 +123,6 @@ const DivIdentification = styled(Div)`
   font-weight: bold;
 `
 
-
-
-/*
 const DivThemes = styled(Div)`
   
   display: flex;
@@ -126,7 +157,7 @@ const ButtonChooseLanguage = styled(Button)`
   justify-content: space-between;
   align-items: center;
 `
-*/
+
 
 
 
@@ -202,7 +233,7 @@ const Home= ({
 	
 	
 	
-	/*
+	
 	const onClick_ChangeTheme = (event, themeOption) => {
 	  setCookie('themeOption', themeOption,{maxAge: 60 * 60 * 24 * 30});
 	  if (themeOption === 'auto') {
@@ -218,7 +249,7 @@ const Home= ({
 	  setCookie('language', language,{maxAge: 60 * 60 * 24 * 30});
     replaceData("language", language);
 	}
-	*/
+	
 	
 	
 	const onClick_UpdateMmr = async (event) => {
@@ -269,34 +300,7 @@ const Home= ({
       
       <DivB>
       
-
-        <Div>
-          <IconPenBrush width={"64px"} height={"64px"} color="color_weak" />
-          <DivWho> developed & designed by </DivWho>
-          <DivPeople> <A href="https://twitter.com/mbcat_hots" > @mbcat_hots </A>  </DivPeople>
-        </Div>
-        
-        <Div>
-          <IconHandHeart width={"56px"} height={"64px"} color="color_weak" />
-          <DivWho> thanks to </DivWho>
-          <DivPeople> Heroes Profile API </DivPeople>
-          <DivPeople>  Madosan </DivPeople>
-        </Div>
-        
-      </DivB>
-      
-      
-    
-    </DivHome>
-    )
-  
-
-    
-} //Home
-
-
-/*
-<DivThemes>
+        <DivThemes>
           <ButtonChooseTheme onClick={(event) => onClick_ChangeTheme(event, 'light')} > 
             <IconSun width={"32px"} height={"32px"} color="color_weak" />
             <Div> light </Div>
@@ -326,7 +330,56 @@ const Home= ({
             <Div> 日本語 </Div>
           </ButtonChooseLanguage>
         </DivLanguages>
-*/
+        
+      </DivB>
+      
+      
+      
+      <DivC>
+        {(() => {
+          switch (language) {
+            case 'ko': 
+              return '안녕, 테스터';
+            case 'ja': 
+              return 'こんにちは、テスター';
+            default: // eng
+              return 'Hello, Tester';
+          }
+	      })()}
+	      
+	      <Div>
+	      {(readyUser&&auth.mmr)? JSON.stringify(auth.mmr) : "no data or logged out" }
+	      </Div>
+	      
+      </DivC>
+      
+      
+      <DivD>
+        
+        <Div>
+          <IconPenBrush width={"64px"} height={"64px"} color="color_weak" />
+          <DivWho> developed & designed by </DivWho>
+          <DivPeople> <A href="https://twitter.com/mbcat_hots" > @mbcat_hots </A>  </DivPeople>
+        </Div>
+        
+        <Div>
+          <IconHandHeart width={"56px"} height={"64px"} color="color_weak" />
+          <DivWho> thanks to </DivWho>
+          <DivPeople> Heroes Profile API </DivPeople>
+          <DivPeople>  Madosan </DivPeople>
+        </Div>
+        
+      </DivD>
+      
+      
+    
+    </DivHome>
+    )
+  
+
+    
+} //Home
+
 
 
 function mapStateToProps(state) { 

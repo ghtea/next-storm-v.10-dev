@@ -33,114 +33,71 @@ import TagsReady from './Create/TagsReady';
 import useInput from '../../tools/hooks/useInput';
 import {getTimeStamp} from '../../tools/vanilla/time';
 
-import IconPlus from '../../svgs/basic/IconPlus'
+import IconPlus from '../../svgs/basic/IconPlus';
+import IconVideo from '../../svgs/basic/IconVideo';
+import IconLink from '../../svgs/basic/IconLink';
+
 import * as imgHero from '../../images/heroes'
 
 
 
 const DivCreate = styled(Div)`
   
-  display: grid;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   
-  position: fixed;
-  
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    grid-template-columns: minmax(370px, 1fr);
-    grid-template-rows: 1fr 1fr;
-    grid-template-areas: 
-      "A"
-      "B";
-    grid-gap: 20px;
+  width: 100%;
+  height: 100%;
+ 
+  @media (min-width:  ${props => (props.theme.media.md) }px) {
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
     
     width: 100%;
-    height: calc(100% - 100px);
-  }
- 
-
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    
-    grid-template-columns: minmax(370px, 1fr) minmax(370px, 1fr);
-    grid-template-rows: 1fr;
-    grid-template-areas: 
-      "A B";
-    grid-gap: 20px;
-    
-    
-    width: calc(100% - 120px);
-    height: calc(100% - 50px);
+    max-width: 900px;
   
   }
 `;
 
 
-const ContainerA = styled(Div)`
-  grid-area: A;
-  
-  position: relative;
-  
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    height: 100%;
-  }
- 
-
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    height: 100%;
-  }
-`
-
-const ContainerB = styled(Div)`
-  grid-area: B;
-  
-  position: relative;
-  
-  
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    height: 100%;
-  }
- 
-
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    height: 100%;
-  }
-`
-
-
-
 
 const DivA = styled(Div)`
-  overflow: auto;
-  position: absolute;
   
-  
+ 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    height: 100%;
-  }
+  width: 100%;
+  height: 360px;
  
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
+  @media (min-width:  ${props => props.theme.media.md }px) {
+    width: 380px;      /*  768 = 380 * 2 + 8 */
+    padding-right: 2px;
     height: 100%;
   }
 `
 
 const DivB = styled(Div)`
-  overflow: auto;
-  position: absolute;
+  
   
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    height: 100%;
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
+  width: 100%;
+  height: 360px; /* 맨 아래니깐 자유롭게*/
+  
+  @media (min-width:  ${props => props.theme.media.md }px) {
+    width: 380px;      /*  768 = 380 * 2 + 8 */
+    padding-left: 2px;
     height: 100%;
   }
 `
@@ -149,17 +106,17 @@ const DivB = styled(Div)`
 
 //
 const ButtonCreate = styled(Button)`
-  width: 150px;
-  height: 36px;
+  width: 90px;
+  height: 30px;
   
-  border-radius: 8px;
+  border-radius: 9px;
   
   margin-top: 10px;
   margin-bottom: 5px;
 `
 
 const DivCreatingComp = styled(Div)`
-  width: 360px;
+  width: 300px;
   height: auto;
   
   margin-top: 5px;
@@ -172,8 +129,8 @@ const DivCreatingComp = styled(Div)`
   justify-content: center;
   align-items: center;
   
-  & > div:first-child {border-radius: 10px 10px 0 0;}
-  & > div:last-child {border-radius: 0 0 10px 10px;}
+  & > div:first-child {border-radius: 12px 12px 0 0;}
+  & > div:last-child {border-radius: 0 0 12px 12px;}
   
 `
 
@@ -181,7 +138,7 @@ const DivCreatingComp = styled(Div)`
 // title, author
 const DivOne = styled(Div)`
   
-  height: 50px;
+  height: 60px;
   
   background-color: ${props => props.theme.COLOR_normal};
   color: ${props => props.theme.color_normal};
@@ -190,55 +147,60 @@ const DivOne = styled(Div)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    
-  }
+
 `
 
 // 정렬 방식 고민중 https://css-tricks.com/vertically-center-multi-lined-text/
 
 // maps + positions
 const DivTwo = styled(Div)`
-  height: 200px;
   
-  background-color: ${props => props.theme.COLOR_middle};
-  border-left: 6px solid  ${props => props.theme.COLOR_normal};
+  background-color: ${props => props.theme.COLOR_normal};
+  
+  border: 10px solid  ${props => props.theme.COLOR_normal};
+
   
   color: ${props => props.theme.color_normal};
   
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   
-  & > div {
-    
+  & > div:nth-child(1) {
+    height: 60px;
+  }
+  
+  & > div:nth-child(2) {
+    height: 200px;
   }
   
 `
 
 
+const ContainerMapsReady = styled(Div)`
+  
+  background-color: ${props => props.theme.COLOR_middle};
+  border-radius: 9px 9px 0 0;
+  overflow-x: auto;
+`
 
 const DivPositionsReady = styled(Div)`
-  width: 300px;
-  height: 100%;
- 
-  overflow-x: auto;
   
-  background-color: ${props => props.theme.COLOR_bg};
   
-  border-right: 6px solid  ${props => props.theme.COLOR_normal};
+  background-color: ${props => props.theme.COLOR_middle};
+  
+  border-radius: 0 0 9px 9px;
+  
+  overflow: auto;
+  
+  flex-shrink: 0;
   
   color: ${props => props.theme.color_normal};
   
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: flex-start;
 `
 
@@ -263,6 +225,7 @@ const DivFour = styled(Div)`
   height: 180px;
   
   background-color: ${props => props.theme.COLOR_normal};
+  border: 10px solid  ${props => props.theme.COLOR_normal};
   color: ${props => props.theme.color_normal};
   
   display: flex;
@@ -272,7 +235,7 @@ const DivFour = styled(Div)`
  
 `
 
-// links
+// video, link
 const DivFive = styled(Div)`
   height: 90px;
   
@@ -283,7 +246,16 @@ const DivFive = styled(Div)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
- 
+  
+  & > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    
+    & > *:nth-child(1) { width: 40px; margin-left: 10px;}
+    & > *:nth-child(2) { width: 230px; margin-right: 10px;}
+  }
 `
 
 
@@ -321,9 +293,11 @@ const InputCommon = styled(Input)`
   border-radius: 4px;
 `
 
-const InputLink = styled(InputCommon)`
-  margin-top: 2px;
-  margin-bottom: 2px;
+const InputVideoLink = styled(InputCommon)`
+  margin-top: 4px;
+  margin-bottom: 4px;
+  margin-left: 4px;
+  margin-right: 4px;
 `
 
 
@@ -343,12 +317,8 @@ const TextareaComment =  styled(Textarea)`
 `
 
 
-// Two
-const DivEachMap = styled(Div)`
-  width: auto;
-  margin-left: auto;
-  margin-right: auto;
-`
+
+
 
 
 
@@ -365,7 +335,7 @@ const DivEachMap = styled(Div)`
    ,dictHeroBasic
    ,listAllMap
    
-   ,listMap
+   ,listIdMap
     , listPosition
     ,listTag
   
@@ -399,7 +369,7 @@ const DivEachMap = styled(Div)`
     if (compCreating) {
       console.log(typeof(compCreating))
       console.log(compCreating)
-      //replaceDataCompGallery("create", compCreating);
+      replaceDataCompGallery("create", compCreating);
     }
   },[])
   
@@ -415,9 +385,8 @@ const DivEachMap = styled(Div)`
   const [rating, setRating] = useState({});
   
   const inputComment = useInput("");
-  
-  const inputLink1 = useInput("");
-  const inputLink2 = useInput("");
+  const inputVideo = useInput("");
+  const inputLink = useInput("");
   
  
   
@@ -425,13 +394,19 @@ const DivEachMap = styled(Div)`
     
     try {
       
-      let size = 0;
+      let listExistingPosition = [];
+      // 비어있는 position 들은 제거
       for (const position of listPosition) {
-        if (position["listIdHero"].length > 0) {
-          size = size + 1;
+        if (position.listIdHero.length >0) {
+          listExistingPosition.push(position);
         }
       }
-      console.log(size)
+      
+      let size = listExistingPosition.length;
+      
+      const listIdMainHero = listExistingPosition.map(element => element.listIdHero[0]);
+      const setIdMainHero = new Set(listIdMainHero)
+
       
       if (!readyUser) {
         addDeleteNotification("auth31", language);
@@ -449,18 +424,25 @@ const DivEachMap = styled(Div)`
         addDeleteNotification("comp04", language);
       }
       
-      else if ( listMap.length === 0 ) {
+      else if ( listIdMap.length === 0 ) {
         addDeleteNotification("comp05", language);
       }
+      else if ( listIdMainHero.length !== setIdMainHero.size ) {
+        addDeleteNotification("comp06", language);
+      }
+      
+    
       
       else  {
-      
+        
         const idComp = uuidv4();
+        
         const idComment = uuidv4();
-        const idLink1 = uuidv4();
-        const idLink2 = uuidv4();
+        const idVideo = uuidv4();
+        const idLink = uuidv4();
       
-      
+        
+        
         const commentRequest = {
           
           _id: idComment
@@ -473,30 +455,31 @@ const DivEachMap = styled(Div)`
           // , listLike:
         }
         
-        const link1Request = {
-          
-          _id: idLink1
+        const videoRequest = {
+          _id: idVideo
           , subject: {_id: idComp, model: "Comp"}
           
           , author: auth._id
           
-          , type: "" // video, guide, 
-          , content: inputLink1.value
+          , content: inputVideo.value
           
           //, listLike: [String] 
         }
         
-        const link2Request = {
-          _id: idLink2
+        
+        const linkRequest = {
+          
+          _id: idLink
           , subject: {_id: idComp, model: "Comp"}
           
           , author: auth._id
           
-          , type: "" // video, guide, 
-          , content: inputLink2.value
+          , content: inputLink.value
           
           //, listLike: [String] 
         }
+        
+        
         
        
         let bodyRequest = {};
@@ -509,11 +492,12 @@ const DivEachMap = styled(Div)`
           ,title: inputTitle.value
           
           ,listPosition: listPosition
-          ,listMap: listMap
+          ,listIdMap: listIdMap
           ,listTag: listTag
           
-          ,listComment: []
-          ,listLink: []
+          ,listIdComment: []
+          ,listIdVideo: []
+          ,listIdLink: []
           
           ,listLike: []
         }
@@ -526,14 +510,14 @@ const DivEachMap = styled(Div)`
           compRequest["listComment"].push(idComment);
         }
         
-        if (link1Request.content !== "") {
-          bodyRequest["link1"] = link1Request;
-          compRequest["listLink"].push(idLink1);
+        if (videoRequest.content !== "") {
+          bodyRequest["video"] = videoRequest;
+          compRequest["listLink"].push(idVideo);
         }
         
-        if (link2Request.content !== "") {
-          bodyRequest["link2"] = link2Request;
-          compRequest["listLink"].push(idLink2);
+        if (linkRequest.content !== "") {
+          bodyRequest["link"] = linkRequest;
+          compRequest["listLink"].push(idLink);
         }
         
         bodyRequest["comp"] = compRequest
@@ -566,26 +550,37 @@ const DivEachMap = styled(Div)`
   return (
   
   <DivCreate>
-    <ContainerA>
+
       <DivA> 
         
         <ButtonCreate
           onClick={(event) => onClick_ButtonCreate(event)}
         >
-          CREATE
+          Publish
         </ButtonCreate>
       
         <DivCreatingComp>
         
+        
+        
           <DivOne> 
-          
             <Div>  <InputCommon  {...inputTitle} placeholder="title of composition" />  </Div>
             <Div> {`${auth.battletag}`} </Div>
-            
           </DivOne>
+          
+          
+          
+          <DivThree> 
+            < TagsReady />
+          </DivThree>
+        
+        
         
           <DivTwo> 
-            <MapsReady />
+            
+            <ContainerMapsReady>
+              <MapsReady />
+            </ContainerMapsReady>
             
             <DivPositionsReady>
               {[0,1,2,3,4].map((element, index) => {
@@ -600,32 +595,40 @@ const DivEachMap = styled(Div)`
                 ) 
               })}
             </DivPositionsReady>
+            
           </DivTwo>
         
-          <DivThree> 
-            < TagsReady />
-          </DivThree>
+          
           
           <DivFour> 
             <Div> <TextareaComment {...inputComment} placeholder="comment" /> </Div>
           </DivFour>
           
           <DivFive>
-            <Div> <InputLink  {...inputLink1} placeholder="link (ex: twitch, youtube)" /> </Div>
-            <Div> <InputLink  {...inputLink2} placeholder="link (ex: screenshot, guide)" /> </Div>
+          
+            <Div> 
+              <Div> <IconVideo width={'20px'}  height={'20px'} color={'color_very_weak'} /> </Div>
+              <InputVideoLink  {...inputVideo} placeholder="link (ex: twitch, youtube)" /> 
+            </Div>
+            
+            <Div> 
+              <Div> <IconLink width={'20px'}  height={'20px'} color={'color_very_weak'} /> </Div>
+              <InputVideoLink  {...inputLink} placeholder="link (ex: guide, screenshot)" /> 
+            </Div>
+            
           </DivFive>
         
         </DivCreatingComp>
         
       
       </DivA>
-    </ContainerA>
+
     
-    <ContainerB>
+
       <DivB>
         {returnChoose(whichAdding)} 
       </DivB>
-    </ContainerB>
+
   </DivCreate>
   
   )
@@ -637,8 +640,8 @@ const DivEachMap = styled(Div)`
               
               idMapChosen={idMapChosen}
               
-              listMap={listMap} 
-              setListMapForChild={setListMapForChild} 
+              listIdMap={listIdMap} 
+              setlistIdMapForChild={setlistIdMapForChild} 
               
               listAllMap={listAllMap} 
               
@@ -660,7 +663,7 @@ function mapStateToProps(state) {
     , readyUser: state.basic.ready.user
     , loadingUser: state.basic.loading.user
     
-    ,listMap: state.comp_gallery.create.listMap
+    ,listIdMap: state.comp_gallery.create.listIdMap
     , listPosition: state.comp_gallery.create.listPosition
     , listTag: state.comp_gallery.create.listTag
     

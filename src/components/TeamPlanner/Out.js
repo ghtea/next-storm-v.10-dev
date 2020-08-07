@@ -35,7 +35,6 @@ const DivTeamPlanner = styled(Div)`
   justify-content: flex-start;
   align-items: center;
   
-  /*240px 240px 480px 480px;*/
   
 `;
 
@@ -70,30 +69,20 @@ const DivB = styled(Div)`
   
   height: auto;
   
+  & > div {
+    width: 100%;
+  }
+  
   @media (min-width: ${props => props.theme.media.md }px ) {
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
     
+    & > div {
+      width: 50%;
+    }
   }
 `
-
-
-const ButtonContact = styled(Button)`
-  margin-top: 5px;
-  
-  width: 160px;
-  height: 30px;
-  
-  border-radius: 9px;
-  
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-`
-
-
 
 
 

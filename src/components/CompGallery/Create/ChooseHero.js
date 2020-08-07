@@ -26,11 +26,9 @@ import * as imgHero from '../../../images/heroes'
 
 
 const DivChooseHero = styled(Div)`
-
+  
   margin-top: 20px;
   margin-bottom: 20px;
- 
-  max-width: 540px;
   
   display: flex;
   flex-direction: column;
@@ -38,13 +36,6 @@ const DivChooseHero = styled(Div)`
   align-items: center;
 
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    
-  }
 `
 
 
@@ -54,15 +45,16 @@ const InputSearch = styled(Input)`
 `
 
 const GroupEachRole = styled(Div)`
+  height: auto;
+  
   margin-top: 5px;
   margin-bottom: 5px;
   
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  height: 100%;
+  align-items: stretch;
   
-  padding: 5px;
 `
 
 
@@ -73,33 +65,35 @@ const DivRoles = styled(Div)`
   align-items: center;
 `
 
+
 const DivRoleName = styled(Div)`
-  height: 100%;
-  width: 50px;
-  background-color: ${props => props.theme.COLOR_middle};
+  width: 40px;
+  background-color: ${props => props.theme.COLOR_normal};
+  border-radius: 12px 0 0 12px;
 `
 
 const ContainerHero = styled(Div)`
+  width: calc(100% - 40px);
+  padding: 6px;
+  
+  background-color: ${props => props.theme.COLOR_middle};
+  border-radius: 0 12px 12px 0;
+  
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
   
   flex-wrap: wrap;
+  
 `
 
 const DivEachHero = styled(Div)`
 
-  margin: 2px;
-   width: 40px;
-    height: 40px;
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-   
-  } 
+  margin: 3px;
+  width: 40px;
+  height: 40px;
+
 `
 const ImgEachHero = styled(Img)`
   border-radius: 50%;
@@ -108,15 +102,7 @@ const ImgEachHero = styled(Img)`
   width: 40px;
   height: 40px;
     
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
 
-
-  } 
 `
 
 
@@ -147,19 +133,29 @@ const ImgEachHero = styled(Img)`
     
     
     const onClick_Hero = (event, idHero) => {
-      if (whichAdding === "Hero" && !(listPosition[locationAddingHero[0]]["listIdHero"].includes(idHero)) && listPosition[locationAddingHero[0]]["listIdHero"].length < 5) {
+      
+      const listIdMainHero = listPosition.map(element => element.listIdHero[0])
+      
+      if ( listPosition[locationAddingHero[0]]["listIdHero"].includes(idHero) ) {
+        addDeleteNotification("comp12", language);
+      }
+      else if ( listIdMainHero.includes(idHero) && locationAddingHero[1] === 0 ) {
+        // 이미 존재하는 포지션의 메인 영웅이 다른 포지션의 메인 포지션으로 추가되려고 할때 
+        addDeleteNotification("comp14", language);
+      }
+      else if ( listPosition[locationAddingHero[0]]["listIdHero"].lenght === 5) {
+        addDeleteNotification("comp13", language);
+      }
+        
+        
+      else if (whichAdding === "Hero" && listPosition[locationAddingHero[0]]["listIdHero"].length < 5) {
         let listPositionTemp = listPosition;
         listPositionTemp[locationAddingHero[0]]["listIdHero"][locationAddingHero[1]] = idHero;
         replaceListPosition(listPositionTemp);
         
         replaceData2CompGallery("create", "triggerPosition", Date.now().toString());
       }
-      else if ( listPosition[locationAddingHero[0]]["listIdHero"].includes(idHero) ) {
-        addDeleteNotification("comp12", language);
-      }
-      else if ( listPosition[locationAddingHero[0]]["listIdHero"].lenght === 5) {
-        addDeleteNotification("comp13", language);
-      }
+      
     }
   
   return (

@@ -11,7 +11,7 @@ const DivContainer = styled(Div)`
 `;
 
 
-const IconDelete = ({width, height, themeName}) => {
+const IconDelete = ({width, height, color="color_weak", themeName}) => {
 	
 	return (
 		
@@ -26,7 +26,7 @@ const IconDelete = ({width, height, themeName}) => {
 			height="100%"
 			viewBox="0 0 448 512"
 			
-			fill={ themes[themeName]["color_weak"] }
+			fill={ themes[themeName][color] }
 			>
 			
 			<path 

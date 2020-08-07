@@ -38,16 +38,16 @@ const DivSubCompGalleryBack = styled(Div)`
   flex-direction: row;
   z-index: 10;
   
-
   top: 50px;
-  width: 360px;
+  width: 100%;
   height: 40px; 
     
 
 
   @media (min-width:  ${props => (props.theme.media.md) }px) {
     top: 70px;
-  	height: 40px; 
+    
+    width: ${props => (props.theme.media.md) }px;
     border-radius: 25px;
   }
   
