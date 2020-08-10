@@ -14,6 +14,12 @@ const stateInitial = {
       , listMapStandardRanked: false
       
       ,listComp: false
+      
+      ,focusingComp: false
+      ,focusingCompBonus: false
+      
+      ,listVideo: false
+      
       ,user: false
       
       ,mmrUser: false
@@ -21,7 +27,13 @@ const stateInitial = {
     
     ,loading : {
       planTeam: false
+      
       ,listComp: false
+      ,focusingComp: false
+      ,focusingCompBonus: false
+      
+      ,listVideo: false
+      
       ,user: false
     }
     

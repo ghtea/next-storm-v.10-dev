@@ -16,6 +16,14 @@ const auth = {
 			,ja: `二つのメールアドレスが違います`
 		}
 	}
+	, "auth021": { // 
+		situation: "error"
+		, message: {
+			en: `Please enter your email correctly`
+			,ko: `이메일을 제대로 입력하세요`
+			,ja: `メールアドレスを正しく入力してください`
+		}
+	}
 	
 	, "auth03": { // 
 		situation: "error"
@@ -61,9 +69,9 @@ const auth = {
 	, "auth08": { // 
 		situation: "success"
 		, message: {
-			en: `You have signed up (email address and password)`
-			,ko: `성공적으로 회원가입했습니다 (이메일 주소, 비밀번호)`
-			,ja: `会員加入に成功しました(メールアドレスとパスワード)`
+			en: `You have signed up (we're going to certify the battletag)`
+			,ko: `성공적으로 회원가입했습니다 (배틀태그를 인증하러 갑니다)`
+			,ja: `会員加入に成功しました(バトルタグを認証しに行きます)`
 		}
 	}
 	, "auth09": { // 

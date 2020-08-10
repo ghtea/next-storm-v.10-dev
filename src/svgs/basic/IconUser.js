@@ -7,7 +7,11 @@ import {Div} from '../../styles/DefaultStyles';
 
 
 const DivContainer = styled(Div)`
+	width: ${props=>props.width};
+	height: ${props=>props.height};
 	
+	background-color: #33ff33;
+	border-radius: 3px;
 `;
 
 
@@ -15,7 +19,7 @@ const IconUser = ({width, height, color="color_weak", themeName}) => {
 	
 	return (
 		
-	<DivContainer style= {{ width: `${width}`, height:`${height}` }} >
+	<DivContainer width={width} height={height} >
 		<svg 
 			
 			className="icon usingHover Info"

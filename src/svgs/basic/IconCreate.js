@@ -11,14 +11,14 @@ const DivContainer = styled(Div)`
 `;
 
 
-const IconMagic = ({width, height, color="color_active", themeName}) => {
+const IconCreate = ({width, height, color="color_weak", themeName}) => {
 	
 	return (
 		
 	<DivContainer style= {{ width: `${width}`, height:`${height}` }} >
 		<svg 
 			
-			className="icon magic"
+			className="icon"
 			xmlns="http://www.w3.org/2000/svg" 
 			
 			
@@ -30,7 +30,7 @@ const IconMagic = ({width, height, color="color_active", themeName}) => {
 			>
 			
 			<path 
-	d="M497.94 76.28l-62.22-62.22C426.34 4.69 414.06 0 401.78 0c-12.29 0-24.57 4.69-33.94 14.06L14.06 367.84c-18.75 18.75-18.75 49.14 0 67.88l62.22 62.22c9.37 9.37 21.66 14.06 33.94 14.06 12.28 0 24.57-4.69 33.94-14.06l353.77-353.78c18.76-18.74 18.76-49.13.01-67.88zM110.23 464L48 401.78l223.9-223.93 62.24 62.24L110.23 464zm257.85-257.86l-62.24-62.24L401.73 48h.05L464 110.22l-95.92 95.92zM432 288l-26.66 53.33L352 368l53.34 26.67L432 448l26.66-53.33L512 368l-53.34-26.67L432 288zM224 96l16-32 32-16-32-16-16-32-16 32-32 16 32 16 16 32zM80 160l26.66-53.33L160 80l-53.34-26.67L80 0 53.34 53.33 0 80l53.34 26.67L80 160z">
+d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z">
 			</path>
 				
 		</svg>
@@ -52,4 +52,4 @@ function mapDispatchToProps(dispatch) {
 }
 */
 
-export default connect(mapStateToProps)(IconMagic);
+export default connect(mapStateToProps)(IconCreate);

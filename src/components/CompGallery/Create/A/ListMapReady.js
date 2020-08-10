@@ -6,38 +6,50 @@ import axios from 'axios';
 
 import { connect } from "react-redux";
 
-import * as config from '../../../config';
+import * as config from '../../../../config';
 
 
-import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
-import {replaceWorking} from "../../../redux/actions/basic";
-import {replaceDataCompGallery, replaceData2CompGallery} from "../../../redux/actions/comp_gallery";
+import addDeleteNotification from "../../../../redux/thunks/addDeleteNotification";
+import {replaceWorking} from "../../../../redux/actions/basic";
+import {replaceDataCompGallery, replaceData2CompGallery} from "../../../../redux/actions/comp_gallery";
 
-import {Div, Input, Button, Img} from '../../../styles/DefaultStyles';
-
-
-//import useInput from '../../../tools/hooks/useInput';
-//import {getTimeStamp} from '../../../tools/vanilla/time';
-
-import IconPlus from '../../../svgs/basic/IconPlus'
-import IconMinusCircle from '../../../svgs/basic/IconMinusCircle'
-
-import * as imgMap from '../../../images/maps'
+import {Div, Input, Button, Img} from '../../../../styles/DefaultStyles';
 
 
+//import useInput from '../../../../tools/hooks/useInput';
+import {areEqualSets} from '../../../../tools/vanilla/set';
+
+import IconPlus from '../../../../svgs/basic/IconPlus'
+import IconMinusCircle from '../../../../svgs/basic/IconMinusCircle'
+
+import * as imgMap from '../../../../images/maps'
 
 
+
+const DivSummaryMap = styled(Div)`
+  width: 72px;
+  height: 30px;
+  
+  margin: 3px;
+  margin-left: 6px;
+  
+  border: 2px solid ${props => props.theme.color_weak };
+  border-radius: 6px;
+  
+  font-size: 0.9rem;
+  line-height: 0.9rem;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
 
 const DivEachMap = styled(Div)`
   
   width: auto;
-  
-  &:first-child {
-    margin-left: 6px;
-  }
-  
   margin: 3px;
-
+  
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -235,7 +247,34 @@ const MapsReady = ({
    , addDeleteNotification
 }) => {
   
+  const listShowingMap = listAllMap.filter(objMap => objMap.type === "standard" && objMap.playable === true );
+  const list2LineMap = listShowingMap.filter(objMap => objMap.lines === 2 );
+  const list3LineMap = listShowingMap.filter(objMap => objMap.lines === 3 );
   
+  const listIdAllMap = listShowingMap.map(element=> element._id);
+  const listId2LineMap = list2LineMap.map(element=> element._id);
+  const listId3LineMap = list3LineMap.map(element=> element._id);
+  
+  const setIdAllMap = new Set(listIdAllMap);
+  const setId2LineMap = new Set(listId2LineMap);
+  const setId3LineMap = new Set(listId3LineMap);
+  
+  
+    
+  const [summary, setSummary] = useState(``);
+  
+  useEffect(()=>{
+    const numberCurrentMap = listIdMap.length;
+    const setIdMap = new Set(listIdMap);
+    
+    if ( areEqualSets(setIdMap, setIdAllMap)  ) { setSummary("all maps") }
+    else if ( areEqualSets(setIdMap, setId2LineMap) ) { setSummary("2 lines") }
+    else if ( areEqualSets(setIdMap, setId3LineMap)  ) { setSummary("3 lines") }
+    else {
+      setSummary(`${numberCurrentMap} maps`)
+    }
+    
+  }, [listIdMap])
   
   const onClick_Plus = (event, indexItem) => {
     replaceData2CompGallery("create", "locationAddingMap", [indexItem]);
@@ -257,6 +296,12 @@ const MapsReady = ({
   return (
   
     <DivMapsReady>
+    
+      <DivSummaryMap>
+        <Div> { summary } </Div>
+      </DivSummaryMap>
+    
+    
       {listIdMap.map((idMap, indexMap) => 
         (
         <Map 
@@ -283,16 +328,17 @@ const MapsReady = ({
         )
       )}
       
-      
-      <DivPlus
-        onClick = {(event) => onClick_Plus(event, listIdMap.length)}
-        data-is-focused = {returnIsFocused(listIdMap.length)}
-      > 
-        <DivIconPlus>
-          <IconPlus width={"24px"} height={"24px"} color={"COLOR_bg"} /> 
-        </DivIconPlus>
-        
-      </DivPlus>
+      {(summary !=='all maps') &&
+        <DivPlus
+          onClick = {(event) => onClick_Plus(event, listIdMap.length)}
+          data-is-focused = {returnIsFocused(listIdMap.length)}
+        > 
+          <DivIconPlus>
+            <IconPlus width={"24px"} height={"24px"} color={"COLOR_bg"} /> 
+          </DivIconPlus>
+          
+        </DivPlus>
+      }
       
       
       

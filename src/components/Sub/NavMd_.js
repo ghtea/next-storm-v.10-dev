@@ -101,7 +101,20 @@ const NavMd_ = ({
       }
     })()} 
 		</NavLinkNavItem> 
-
+    
+    
+    <NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > 
+		{(() => {
+      switch (language) {
+        case 'ko': 
+          return '조합 갤러리';
+        case 'ja': 
+          return '構成ギャラリー';
+        default: // eng
+          return 'Comp Gallery';
+      }
+    })()} 
+		</NavLinkNavItem> 
 
 		<NavLinkNavItem to="/team-planner" isActive={()=>checkActive(/^(\/team-planner)/)} > 
 		{(() => {
@@ -115,20 +128,7 @@ const NavMd_ = ({
       }
     })()} 
      </NavLinkNavItem> 
-
-
-		<NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > 
-		{(() => {
-      switch (language) {
-        case 'ko': 
-          return '조합 갤러리';
-        case 'ja': 
-          return '構成ギャラリー';
-        default: // eng
-          return 'Comp Gallery';
-      }
-    })()} 
-		</NavLinkNavItem> 
+	
 
 	</DivNavMd_>
 	

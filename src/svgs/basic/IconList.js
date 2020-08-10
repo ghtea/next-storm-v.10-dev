@@ -11,14 +11,14 @@ const DivContainer = styled(Div)`
 `;
 
 
-const IconMagic = ({width, height, color="color_active", themeName}) => {
+const IconList = ({width, height, color="color_weak", themeName}) => {
 	
 	return (
 		
 	<DivContainer style= {{ width: `${width}`, height:`${height}` }} >
 		<svg 
 			
-			className="icon magic"
+			className="icon"
 			xmlns="http://www.w3.org/2000/svg" 
 			
 			
@@ -30,7 +30,7 @@ const IconMagic = ({width, height, color="color_active", themeName}) => {
 			>
 			
 			<path 
-	d="M497.94 76.28l-62.22-62.22C426.34 4.69 414.06 0 401.78 0c-12.29 0-24.57 4.69-33.94 14.06L14.06 367.84c-18.75 18.75-18.75 49.14 0 67.88l62.22 62.22c9.37 9.37 21.66 14.06 33.94 14.06 12.28 0 24.57-4.69 33.94-14.06l353.77-353.78c18.76-18.74 18.76-49.13.01-67.88zM110.23 464L48 401.78l223.9-223.93 62.24 62.24L110.23 464zm257.85-257.86l-62.24-62.24L401.73 48h.05L464 110.22l-95.92 95.92zM432 288l-26.66 53.33L352 368l53.34 26.67L432 448l26.66-53.33L512 368l-53.34-26.67L432 288zM224 96l16-32 32-16-32-16-16-32-16 32-32 16 32 16 16 32zM80 160l26.66-53.33L160 80l-53.34-26.67L80 0 53.34 53.33 0 80l53.34 26.67L80 160z">
+d="M80 368H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm0-320H16A16 16 0 0 0 0 64v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16V64a16 16 0 0 0-16-16zm0 160H16a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h64a16 16 0 0 0 16-16v-64a16 16 0 0 0-16-16zm416 176H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16z">
 			</path>
 				
 		</svg>
@@ -52,4 +52,4 @@ function mapDispatchToProps(dispatch) {
 }
 */
 
-export default connect(mapStateToProps)(IconMagic);
+export default connect(mapStateToProps)(IconList);

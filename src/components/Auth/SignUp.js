@@ -117,6 +117,10 @@ const Link_Common = styled(LinkDefault)`
       else if (inputEmail1.value !== inputEmail2.value) {
         addDeleteNotification("auth02", language);
       }
+      else if ( !(/\S+@\S+\.\S+/).test(inputEmail1.value) ){
+        addDeleteNotification("auth021", language);
+      }
+      
       else if (inputPassword1.value === "" || inputPassword2.value === "") {
         addDeleteNotification("auth03", language);
       }

@@ -60,10 +60,9 @@ import IconTheme from '../../../svgs/tags/IconTheme'
 const DivFilter = styled(Div)
 `
   
-  width: 360px; 
   
-  height: 100%;
   overflow-y: auto;
+  height: calc(100% - 30px);
   
   flex-direction: column;
   justify-content: space-evenly;

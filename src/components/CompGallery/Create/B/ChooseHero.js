@@ -6,29 +6,27 @@ import axios from 'axios';
 
 import { connect } from "react-redux";
 
-import addDeleteNotification from "../../../redux/thunks/addDeleteNotification"
-import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} from "../../../redux/actions/comp_gallery";
+import addDeleteNotification from "../../../../redux/thunks/addDeleteNotification"
+import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} from "../../../../redux/actions/comp_gallery";
 
-import {Div, Input, Button, Img} from '../../../styles/DefaultStyles';
+import {Div, Input, Button, Img} from '../../../../styles/DefaultStyles';
 
 
-import useInput from '../../../tools/hooks/useInput';
-import {getTimeStamp} from '../../../tools/vanilla/time';
+import useInput from '../../../../tools/hooks/useInput';
+import {getTimeStamp} from '../../../../tools/vanilla/time';
 
-import IconTank from '../../../svgs/roles/IconTank'
-import IconBruiser from '../../../svgs/roles/IconBruiser'
-import IconMelee from '../../../svgs/roles/IconMeleeAssassin'
-import IconRanged from '../../../svgs/roles/IconRangedAssassin'
-import IconHealer from '../../../svgs/roles/IconHealer'
-import IconSupport from '../../../svgs/roles/IconSupport'
+import IconTank from '../../../../svgs/roles/IconTank'
+import IconBruiser from '../../../../svgs/roles/IconBruiser'
+import IconMelee from '../../../../svgs/roles/IconMeleeAssassin'
+import IconRanged from '../../../../svgs/roles/IconRangedAssassin'
+import IconHealer from '../../../../svgs/roles/IconHealer'
+import IconSupport from '../../../../svgs/roles/IconSupport'
 
-import * as imgHero from '../../../images/heroes'
+import * as imgHero from '../../../../images/heroes'
 
 
 const DivChooseHero = styled(Div)`
   
-  margin-top: 20px;
-  margin-bottom: 20px;
   
   display: flex;
   flex-direction: column;

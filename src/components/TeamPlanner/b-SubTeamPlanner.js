@@ -4,9 +4,15 @@ import dotenv from 'dotenv';
 import styled from 'styled-components';
 import axios from 'axios';
 import queryString from 'query-string';
-import { Route, NavLink, Switch, useLocation } from 'react-router-dom';
+import { Route, NavLink, Switch } from 'react-router-dom';
 
 import * as config from '../../config';
+
+/*
+import {SubGallery} from "./Gallery"
+import {SubFocus} from "./Focus"
+import {SubCreate} from "./Create"
+*/
 
 import { connect } from "react-redux";
 
@@ -20,101 +26,77 @@ import dictCode from '../../others/dictCode';
 
 import {Div, Input, Button, NavLinkDefault} from '../../styles/DefaultStyles';
 
-import IconLoading from '../../svgs/basic/IconLoading';
-
-import IconList from '../../svgs/basic/IconList';
-import IconCreate from '../../svgs/basic/IconCreate';
+import IconLoading from '../../svgs/basic/IconLoading'
 
 
 
-const DivSubTeamPlanner = styled(Div)`
+const DivSubCompGalleryBack = styled(Div)`
 
-  background-color: ${props => props.theme.COLOR_normal};
-  border-bottom: 1px solid ${props => props.theme.color_very_weak};
+  background-color: ${props => props.theme.COLOR_middle};
   color: ${props => props.theme.color_normal};
   
   
   position: fixed;
-  
-  display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  
   z-index: 10;
   
+
   top: 50px;
-  
   width: 100%;
-  /*max-width: 360px;*/
-  
   height: 40px; 
     
 
 
   @media (min-width:  ${props => (props.theme.media.md) }px) {
     top: 70px;
-    width: auto;
-    border: 1px solid ${props => props.theme.color_very_weak};
     border-radius: 25px;
+    width: 740px;
   }
   
 `
 
-
-const activeClassName = 'nav-link-active';
-
-
-const NavLinkStyled = styled(NavLinkDefault).attrs({ activeClassName })`
+const DivSubCompGallery = styled(Div)`
   
-  font-size: 1rem;
-  
-  width: auto;
-  
-  margin-left: 8px;
-  margin-right: 8px;
-  
-  &:first-child { margin-left: 16px; }
-  &:last-child { margin-right: 16px; }
-  
-  color: ${props => props.theme.color_weak};
+  width: 100%;
   
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-	
-	
-	&.${activeClassName} {
-		color: ${props => props.theme.color_active};
-		font-weight: bold;
-	}
-	
-	
-	& > div {
-	  width: auto;
-	  margin-left: 3px;
-    margin-right: 3px;
-    
-	}
-	
-`;
+  
+`
 
-
-
-const checkActive = (regex) => {
-  return regex.test(window.location.pathname);
-}
-
-
-
-
-
-const SubTeamPlanner = ({
+const NavLinkStyled = styled(NavLinkDefault)`
+  
+  font-size: 1rem;
+  
+  width: 60px;
   
   
+  margin-left: 8px;
+  &:first-child { margin-left: 16px; }
   
-  authority, language
+  margin-right: 8px;
+  
+ /*border-bottom: 1px solid ${props => props.theme.color_normal};*/
+
+  text-decoration: none;
+  color: ${props => props.theme.color_normal};
+`
+
+
+
+const DivMain = styled(Div)`
+  
+`
+
+
+
+const SubCompGallery = ({
+  
+  match, location
+  
+  , authority, language
  
   
   //, replaceAuthority
@@ -129,55 +111,29 @@ const SubTeamPlanner = ({
   
 }) => {
   
-  const location = useLocation();
   
    return (
-     
-    <DivSubTeamPlanner>
-    
-      <NavLinkStyled to="/team-planner" exact={true}>
-        <IconList width={"24px"} height={"24px"} color={(location.pathname==="/team-planner")?"color_active": "color_very_weak"} />
-				<Div> 
-				  
-				  {(() => {
-            switch (language) {
-              case 'ko': 
-                return '플랜 목록';
-              case 'ja': 
-                return 'プランリスト';
-              default: // eng
-                return 'Plan List';
-            }
-          })()} 
-				
-				</Div> 
-			</NavLinkStyled> 
+    <DivSubCompGalleryBack>
+      <DivSubCompGallery>
 
-      
-			
-    </DivSubTeamPlanner>
-      
+        <NavLinkStyled to="/team-planner" > 
+  				<Div> List  </Div> 
+  			</NavLinkStyled> 
+        
+      </DivSubCompGallery>
+    </DivSubCompGalleryBack>
     )
 }
-
-/*
-
-<NavLinkStyled to="/team-planner/${}" isActive={()=>checkActive(/^(\/comp-gallery\/create)/)} > 
-        <IconCreate width={"22px"} height={"22px"} color={(location.pathname==="/team-planner" && )?"color_active": "color_very_weak"} />
-				<Div> Create </Div> 
-			</NavLinkStyled> 
-			
-*/
-
-/*
-<DivMain>
+  
+  /*
+  <DivMain>
           <Switch>
             <Route path="/comp-gallery" exact={true} component={SubGallery} />
             <Route path="/comp-gallery/focus"  component={SubFocus} />
             <Route path="/comp-gallery/create"  component={SubCreate} />
           </Switch>
         </DivMain>
-*/
+  */
  
     
 
@@ -202,5 +158,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 // 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다
-export default connect(mapStateToProps, mapDispatchToProps)(SubTeamPlanner);
+export default connect(mapStateToProps, mapDispatchToProps)(SubCompGallery);
 

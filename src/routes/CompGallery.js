@@ -9,6 +9,7 @@ import { Route, NavLink, Switch } from 'react-router-dom';
 import * as config from '../config';
 
 import Gallery from "../components/CompGallery/Gallery"
+import Videos from "../components/CompGallery/Videos"
 import Focus  from "../components/CompGallery/Focus"
 import Create  from "../components/CompGallery/Create"
 import SubCompGallery from "../components/CompGallery/SubCompGallery"
@@ -25,13 +26,13 @@ import dictCode from '../others/dictCode';
 
 import {Div, Input, Button} from '../styles/DefaultStyles';
 
-import IconLoading from '../svgs/basic/IconLoading'
+import Loading from '../components/_/Loading'
 
 
 
 const DivCompGallery = styled(Div)`
   width: 100%;
-  height: 100%; /* App의 DivContent 에서 height: calc(100vh - 50px); 로 설정해놨다 */
+  /* height: 100%;  App의 DivContent 에서 height: calc(100vh - 50px); 로 설정해놨다 */
   
   display: flex;
   flex-direction: column;
@@ -39,9 +40,11 @@ const DivCompGallery = styled(Div)`
   align-items: center;
   
   @media (min-width:  ${props => props.theme.media.md }px) {
-    height: 100%; 
+    
   }
 `;
+
+
 
 
 
@@ -49,18 +52,19 @@ const Main = styled(Div)`
   
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   
-  width: 100%;
-  height: 100%;
+  width: 360px; /* 여기서 부터 360 고정! */ 
+  height: auto;
+  
   
   margin-top: 50px; 
-  /*height: calc(100% - 100px);*/
+  
   
   @media (min-width:  ${props => (props.theme.media.md) }px) {
     
-    
+    width: 100%;
     margin-top: 60px; 
     /*height: calc(100vh - 120px);*/
     
@@ -101,6 +105,7 @@ const CompGallery = ({
       if (!readyDictAllHeroBasic ) {
         
         try { 
+          replaceData2("ready", "dictAllHeroBasic", false)
           
           const {data} = await axios.get (`${config.URL_API_NS}/hero-basic/`);
           
@@ -119,6 +124,8 @@ const CompGallery = ({
       if (!readyListAllMap ) {
         
         try { 
+          replaceData2("ready", "listMapStandardRanked", false);
+          replaceData2("ready", "listAllMap", false);
           
           const {data} = await axios.get (`${config.URL_API_NS}/map/`);
           
@@ -186,12 +193,13 @@ const CompGallery = ({
       <SubCompGallery/>
       
     {(!readyDictAllHeroBasic || !readyListAllMap)?
-      <Main> <IconLoading width={"160px"} height={"160px"} color={"color_very_weak"} /> </Main>
+      <Main> <Loading /> </Main>
      :
       <Main>
         <Switch>
           <Route path="/comp-gallery" exact={true} component={Gallery} />
-          <Route path="/comp-gallery/focus"  component={Focus} />
+          <Route path="/comp-gallery/focus/:idComp"  component={Focus} />
+          <Route path="/comp-gallery/videos"  component={Videos} />
           <Route path="/comp-gallery/create"  component={Create} />
         </Switch>
       </Main>

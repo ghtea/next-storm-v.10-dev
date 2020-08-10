@@ -31,7 +31,7 @@ const DivMore = styled(Div)`
 	
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: flex-start;
 	align-items: center;
 `
 
@@ -54,8 +54,8 @@ const activeClassName = 'nav-link-active';
 
 
 const NavLinkNavItem = styled(NavLink).attrs({ activeClassName })`
-  width: auto;
-  height: 100%;
+  width: 100%;
+  height: 100px;
   
   margin-right: 10px;
   margin-left: 10px;
@@ -121,6 +121,20 @@ const More = ({
     })()} 
 		</NavLinkNavItem> 
 
+    
+    <NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > 
+		{(() => {
+      switch (language) {
+        case 'ko': 
+          return '조합 갤러리';
+        case 'ja': 
+          return '構成ギャラリー';
+        default: // eng
+          return 'Comp Gallery';
+      }
+    })()} 
+		</NavLinkNavItem> 
+
 
 		<NavLinkNavItem to="/team-planner" isActive={()=>checkActive(/^(\/team-planner)/)} > 
 		{(() => {
@@ -136,18 +150,6 @@ const More = ({
      </NavLinkNavItem> 
 
 
-		<NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > 
-		{(() => {
-      switch (language) {
-        case 'ko': 
-          return '조합 갤러리';
-        case 'ja': 
-          return '構成ギャラリー';
-        default: // eng
-          return 'Comp Gallery';
-      }
-    })()} 
-		</NavLinkNavItem> 
   
   </GroupNav>
 

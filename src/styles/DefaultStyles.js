@@ -47,8 +47,22 @@ import { Link, NavLink } from 'react-router-dom';
     
   }
   
+  body::-webkit-scrollbar, div::-webkit-scrollbar {
+    width: 12px;               /* width of the entire scrollbar */
+    height: 12px; 
+  }
   
+  body::-webkit-scrollbar-track, div::-webkit-scrollbar-track {
+    background-color: ${props => props.theme.color_very_weak};        /* color of the tracking area */
+    /*border: 2px solid ${props => props.theme.COLOR_middle};  */
+  }
   
+  body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
+    background-color: ${props => props.theme.COLOR_normal};     /* color of the scroll thumb */
+    /* border-radius: 4px;       roundness of the scroll thumb */
+    border: 1px solid ${props => props.theme.color_very_weak};  
+  }
+    
   /* layout */
   #root {
    
@@ -156,22 +170,23 @@ export const Img = styled.img`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  
+  flex-shrink: 0;
+  flex-grow: 0;
     
   color: ${props => props.theme.color_strong};
   background-color: ${props => props.theme.COLOR_normal};
   
   border: 0;
   
+  /* working, https://webisfree.com/2019-02-08/[css]-outline%EC%9D%84-%EB%91%A5%EA%B8%80%EA%B2%8C-%ED%91%9C%ED%98%84%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EC%9D%80-radius */
+  &:focus, &:active {
+   outline: 2px solid ${props => props.theme.color_very_weak};
+  }
   
-  /*border: 1px solid ${props => props.theme.color_very_weak};*/
-  
-  /*box-shadow: 1px 1px 6px ${props => props.theme.color_very_weak}, -1px -1px 6px ${props => props.theme.color_very_weak};*/
-  /*font-weight: normal;  */
   
   cursor: pointer;
 
-  
-  
   box-sizing: border-box;
 
 `

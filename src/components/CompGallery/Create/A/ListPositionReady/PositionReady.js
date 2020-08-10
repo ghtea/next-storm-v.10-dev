@@ -6,23 +6,23 @@ import axios from 'axios';
 
 import { connect } from "react-redux";
 
-import * as config from '../../../config';
+import * as config from '../../../../../config';
 
 
-import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
-import {replaceWorking} from "../../../redux/actions/basic";
-import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} from "../../../redux/actions/comp_gallery";
+import addDeleteNotification from "../../../../../redux/thunks/addDeleteNotification";
+import {replaceWorking} from "../../../../../redux/actions/basic";
+import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} from "../../../../../redux/actions/comp_gallery";
 
 
-import {Div, Input, Button, Img} from '../../../styles/DefaultStyles';
+import {Div, Input, Button, Img} from '../../../../../styles/DefaultStyles';
 
 
 
-import useInput from '../../../tools/hooks/useInput';
-import {getTimeStamp} from '../../../tools/vanilla/time';
+import useInput from '../../../../../tools/hooks/useInput';
+import {getTimeStamp} from '../../../../../tools/vanilla/time';
 
-import IconPlus from '../../../svgs/basic/IconPlus'
-import * as imgHero from '../../../images/heroes'
+import IconPlus from '../../../../../svgs/basic/IconPlus'
+import * as imgHero from '../../../../../images/heroes'
 
 
 
@@ -59,14 +59,6 @@ const ContainerImgEachHero = styled(Div)`
     border-radius: 6px 6px 0 0;
   }
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    
-  } 
-  
   
 `
 const ImgEachHero = styled(Img)`
@@ -79,14 +71,9 @@ const ImgEachHero = styled(Img)`
   width: 50px;
   height: 50px;
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-
-  }
- 
-  @media (min-width:  ${props => (props.theme.media.mid_big) }px) {
-    
-  } 
 `
+
+
 const ButtonDelete = styled(Button)`
   color: ${props => (props.theme.color_delete) };
   background-color: ${props => (props.theme.COLOR_delete) };

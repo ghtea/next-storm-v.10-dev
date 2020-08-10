@@ -226,7 +226,7 @@ const Home= ({
 	    replaceData2("ready", "mmrUser", false);
 	    replaceData2("working", "updateMmr", true);
 	    
-      const res = await axios.post (`${process.env.REACT_APP_URL_AHR}/auth-local/update-mmr`, {
+      const res = await axios.post (`${process.env.REACT_APP_URL_AHR}/user/update-mmr`, {
         _id: auth._id
         ,battletag: auth.battletag
       });

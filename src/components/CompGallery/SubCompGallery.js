@@ -4,13 +4,10 @@ import dotenv from 'dotenv';
 import styled from 'styled-components';
 import axios from 'axios';
 import queryString from 'query-string';
-import { Route, NavLink, Switch } from 'react-router-dom';
+import { Route, NavLink, Switch, useLocation } from 'react-router-dom';
 
 import * as config from '../../config';
 
-import {SubGallery} from "./Gallery"
-import {SubFocus} from "./Focus"
-import {SubCreate} from "./Create"
 
 import { connect } from "react-redux";
 
@@ -24,77 +21,102 @@ import dictCode from '../../others/dictCode';
 
 import {Div, Input, Button, NavLinkDefault} from '../../styles/DefaultStyles';
 
-import IconLoading from '../../svgs/basic/IconLoading'
+import IconLoading from '../../svgs/basic/IconLoading';
 
+import IconGallery from '../../svgs/basic/IconGallery';
+import IconVideo from '../../svgs/basic/IconVideo';
+import IconCreate from '../../svgs/basic/IconCreate';
 
+const DivSubCompGallery = styled(Div)`
 
-const DivSubCompGalleryBack = styled(Div)`
-
-  background-color: ${props => props.theme.COLOR_middle};
+  background-color: ${props => props.theme.COLOR_normal};
+  border-bottom: 1px solid ${props => props.theme.color_very_weak};
   color: ${props => props.theme.color_normal};
   
   
   position: fixed;
+  
+  display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  
   z-index: 10;
   
   top: 50px;
+  
   width: 100%;
+  /*max-width: 360px;*/
+  
   height: 40px; 
     
 
 
   @media (min-width:  ${props => (props.theme.media.md) }px) {
     top: 70px;
+    width: auto;
     
-    width: ${props => (props.theme.media.md) }px;
+    border: 1px solid ${props => props.theme.color_very_weak};
+    
     border-radius: 25px;
   }
   
 `
 
-const DivSubCompGallery = styled(Div)`
-  
-  width: 100%;
-  
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  
-`
 
-const NavLinkStyled = styled(NavLinkDefault)`
+const activeClassName = 'nav-link-active';
+
+
+const NavLinkStyled = styled(NavLinkDefault).attrs({ activeClassName })`
   
   font-size: 1rem;
   
-  width: 60px;
-  
+  width: auto;
   
   margin-left: 8px;
-  &:first-child { margin-left: 16px; }
-  
   margin-right: 8px;
   
- /*border-bottom: 1px solid ${props => props.theme.color_normal};*/
-
-  text-decoration: none;
-  color: ${props => props.theme.color_normal};
-`
-
-
-
-const DivMain = styled(Div)`
+  &:first-child { margin-left: 16px; }
+  &:last-child { margin-right: 16px; }
   
-`
+  color: ${props => props.theme.color_weak};
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+	
+	
+	&.${activeClassName} {
+		color: ${props => props.theme.color_active};
+		font-weight: bold;
+	}
+	
+	
+	& > div {
+	  width: auto;
+	  margin-left: 3px;
+    margin-right: 3px;
+    
+	}
+	
+`;
+
+
+
+const checkActive = (regex) => {
+  return regex.test(window.location.pathname);
+}
+
+
 
 
 
 const SubCompGallery = ({
   
-  match, location
   
-  , authority, language
+  
+  authority, language
  
   
   //, replaceAuthority
@@ -109,35 +131,76 @@ const SubCompGallery = ({
   
 }) => {
   
+  const location = useLocation();
   
    return (
-    <DivSubCompGalleryBack>
-      <DivSubCompGallery>
-
-        <NavLinkStyled to="/comp-gallery" > 
-  				<Div> Gallery </Div> 
-  			</NavLinkStyled> 
-  		
- 
-        <NavLinkStyled to="/comp-gallery/create" > 
-  				<Div> Create </Div> 
-  			</NavLinkStyled> 
+     
+    <DivSubCompGallery>
     
-    		
-    		<DivMain>
+      <NavLinkStyled to="/comp-gallery" exact={true}>
+        <IconGallery width={"24px"} height={"24px"} color={(location.pathname==="/comp-gallery")?"color_active": "color_very_weak"} />
+				<Div> 
+				  {(() => {
+            switch (language) {
+              case 'ko': 
+                return '갤러리';
+              case 'ja': 
+                return 'ギャラリー';
+              default: // eng
+                return 'Gallery';
+            }
+          })()}  
+        </Div> 
+			</NavLinkStyled> 
+			
+			
+			<NavLinkStyled to="/comp-gallery/videos" isActive={()=>checkActive(/^(\/comp-gallery\/videos)/)} > 
+        <IconVideo width={"22px"} height={"22px"} color={(location.pathname==="/comp-gallery/videos")?"color_active": "color_very_weak"} />
+				<Div> 
+				  {(() => {
+            switch (language) {
+              case 'ko': 
+                return '동영상';
+              case 'ja': 
+                return '動画';
+              default: // eng
+                return 'Videos';
+            }
+          })()}  
+        </Div> 
+			</NavLinkStyled> 
+
+
+      <NavLinkStyled to="/comp-gallery/create" isActive={()=>checkActive(/^(\/comp-gallery\/create)/)} > 
+        <IconCreate width={"22px"} height={"22px"} color={(location.pathname==="/comp-gallery/create")?"color_active": "color_very_weak"} />
+				<Div> 
+				  {(() => {
+            switch (language) {
+              case 'ko': 
+                return '만들기';
+              case 'ja': 
+                return '作成';
+              default: // eng
+                return 'Create';
+            }
+          })()}  
+				</Div> 
+			</NavLinkStyled> 
+			
+    </DivSubCompGallery>
+      
+    )
+}
+
+/*
+<DivMain>
           <Switch>
             <Route path="/comp-gallery" exact={true} component={SubGallery} />
             <Route path="/comp-gallery/focus"  component={SubFocus} />
             <Route path="/comp-gallery/create"  component={SubCreate} />
           </Switch>
         </DivMain>
-        
-        
-      </DivSubCompGallery>
-    </DivSubCompGalleryBack>
-    )
-}
-  
+*/
  
     
 

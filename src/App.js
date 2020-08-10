@@ -43,11 +43,10 @@ const DivContent = styled(Div)`
   align-items: center;
   
   margin-top: 50px; /* height of sub */
-  height: calc(100vh - 50px);
   
 	@media (min-width:  ${props => (props.theme.media.md) }px) {
 	 margin-top: 60px; /* height of sub */
-	 height: calc(100vh - 60px);
+	 
 	}
   
   

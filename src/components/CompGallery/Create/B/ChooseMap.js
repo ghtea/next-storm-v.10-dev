@@ -6,25 +6,22 @@ import axios from 'axios';
 
 import { connect } from "react-redux";
 
-import addDeleteNotification from "../../../redux/thunks/addDeleteNotification"
-import {replaceDataCompGallery, replaceData2CompGallery} from "../../../redux/actions/comp_gallery";
+import addDeleteNotification from "../../../../redux/thunks/addDeleteNotification"
+import {replaceDataCompGallery, replaceData2CompGallery} from "../../../../redux/actions/comp_gallery";
 
-import {Div, Input, Button, Img} from '../../../styles/DefaultStyles';
-
-
-import useInput from '../../../tools/hooks/useInput';
-import {getTimeStamp} from '../../../tools/vanilla/time';
+import {Div, Input, Button, Img} from '../../../../styles/DefaultStyles';
 
 
-import * as imgMap from '../../../images/maps'
+import useInput from '../../../../tools/hooks/useInput';
+import {getTimeStamp} from '../../../../tools/vanilla/time';
+
+
+import * as imgMap from '../../../../images/maps'
 
 
 const DivChooseMap = styled(Div)`
   height: auto;
   
-  margin-top: 20px;
-  margin-bottom: 20px;
-
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -101,7 +98,7 @@ const ContainerMap = styled(Div)`
 */
 const DivEachMap = styled(Div)`
 
-  margin: 6px;
+  margin: 4px;
   
   width: 89px;
   height: 50px;
@@ -145,13 +142,12 @@ const ImgEachMap = styled(Img)`
     // type: "standard", playable:true , ( rankedRotation:true )
     
     const listShowingMap = listAllMap.filter(objMap => objMap.type === "standard" && objMap.playable === true );
-    
     const list2LineMap = listShowingMap.filter(objMap => objMap.lines === 2 );
     const list3LineMap = listShowingMap.filter(objMap => objMap.lines === 3 );
     
     const listIdAllMap = listShowingMap.map(element=> element._id);
     const listId2LineMap = list2LineMap.map(element=> element._id);
-    const listId3LineMap = list2LineMap.map(element=> element._id);
+    const listId3LineMap = list3LineMap.map(element=> element._id);
     
     const onClick_Map = (event, set, idMap) => {
       

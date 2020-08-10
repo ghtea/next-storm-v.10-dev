@@ -32,7 +32,7 @@ import IconWorking from '../../svgs/basic/IconWorking'
 const DivGallery = styled(Div)
 `
   width: 100%;
-  height: 100%;
+  
   
   display: flex;
   flex-direction: column;
@@ -47,8 +47,12 @@ const DivGallery = styled(Div)
 
 const ContainerFilter = styled(Div)
 `
+  position: static;
+  
   width: 100%; 
 	height: 240px;
+	
+	margin-bottom: 10px;
 	
   display: flex;
   flex-direction: column;
@@ -56,48 +60,57 @@ const ContainerFilter = styled(Div)
   align-items: center;
   
   @media (min-width:  ${props => (props.theme.media.md) }px) {
-	  width: 180px;
-    height: 100%;
+    margin: 0px;
     
+    position: fixed;
+    top: 120px;
+    left: 0;
+    overflow: auto;
+    
+	  width: 180px;
+	  
+	  height: auto;
+	  max-height: calc(100vh - 120px);
+	  
 	}
+`
+
+const ButtonFilter = styled(Button)`
+  height: 30px;
+  margin-top: 5px;
+  margin-left: 5px;
 `
 
 
 
 const ContainerListComp = styled(Div)
 `
-  width: calc(100% - 180px);
-  height: 100%;
   
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  
+  @media (min-width:  ${props => (props.theme.media.md) }px) {
+    margin-left: 180px;
+	  width: calc(100% - 180px);
+	}
 `
 
 
 const DivListComp = styled(Div)
 `
   width: 100%;
-  height: 100%;
   
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   
   flex-wrap: wrap;
 `;
 
 
-export const SubGallery = ({}) => {
-
-  return ( < Div >
-    search!
-    < /Div>
-
-  )
-}
 
 
 
@@ -181,9 +194,12 @@ const Gallery = ({
     < DivGallery >
 
     < ContainerFilter >
-      <Button onClick={onClick_Filtered} > search </Button>
+    
+      <ButtonFilter onClick={onClick_Filtered} > search </ButtonFilter>
       < Filter / >
+      
     < /ContainerFilter>  
+    
 
     < ContainerListComp > {
       (loadingListComp) ? < Div > loading < /Div>:

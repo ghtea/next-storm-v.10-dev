@@ -4,28 +4,28 @@ import styled from 'styled-components';
 
 import { connect } from "react-redux";
 
-import * as config from '../../../config';
+import * as config from '../../../../config';
 
 
-import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
-import {replaceWorking} from "../../../redux/actions/basic";
-import {replaceDataCompGallery, replaceData2CompGallery} from "../../../redux/actions/comp_gallery";
+import addDeleteNotification from "../../../../redux/thunks/addDeleteNotification";
+import {replaceWorking} from "../../../../redux/actions/basic";
+import {replaceDataCompGallery, replaceData2CompGallery} from "../../../../redux/actions/comp_gallery";
 
-import {Div, Input, Button, Img} from '../../../styles/DefaultStyles';
+import {Div, Input, Button, Img} from '../../../../styles/DefaultStyles';
 
 
-//import useInput from '../../../tools/hooks/useInput';
+//import useInput from '../../../../tools/hooks/useInput';
 
-import IconFun from '../../../svgs/tags/IconFun'
-import IconSerious from '../../../svgs/tags/IconSerious'
+import IconFun from '../../../../svgs/tags/IconFun'
+import IconSerious from '../../../../svgs/tags/IconSerious'
 
-import IconKill from '../../../svgs/tags/IconKill'
-import IconPush from '../../../svgs/tags/IconPush'
+import IconKill from '../../../../svgs/tags/IconKill'
+import IconPush from '../../../../svgs/tags/IconPush'
 
-import IconCombo from '../../../svgs/tags/IconCombo'
-import IconTheme from '../../../svgs/tags/IconTheme'
-//import IconFast from '../../../svgs/tags/IconFast'
-//import IconSlow from '../../../svgs/tags/IconSlow'
+import IconCombo from '../../../../svgs/tags/IconCombo'
+import IconTheme from '../../../../svgs/tags/IconTheme'
+//import IconFast from '../../../../svgs/tags/IconFast'
+//import IconSlow from '../../../../svgs/tags/IconSlow'
 
 //
 const DivTagsReady = styled(Div)`

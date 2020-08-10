@@ -74,6 +74,10 @@ const DivPosition = styled(Div)`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  
+  & > div:nth-child(2), & > div:nth-child(3) {
+    height: 16px;
+  }
 `
 
 const DivRemaining = styled(Div)`
@@ -81,7 +85,7 @@ const DivRemaining = styled(Div)`
   color: ${props => props.theme.COLOR_normal};
   
   width: 80%;
-  height: 16px;
+  
   border-radius: 4px;
   
   display: flex;

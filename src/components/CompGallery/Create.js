@@ -23,14 +23,17 @@ import { NavLink, useHistory } from 'react-router-dom';
 
 import {Div, Input, Button, Img, Textarea} from '../../styles/DefaultStyles';
 
-import ChooseHero from './Create/ChooseHero';
-import ChooseMap from './Create/ChooseMap';
+import ChooseHero from './Create/B/ChooseHero';
+import ChooseMap from './Create/B/ChooseMap';
 
-import PositionReady from './Create/PositionReady';
-import MapsReady from './Create/MapsReady';
-import TagsReady from './Create/TagsReady';
+
+import ListMapReady from './Create/A/ListMapReady';
+import ListTagReady from './Create/A/ListTagReady';
+import PositionReady from './Create/A/ListPositionReady/PositionReady';
 
 import useInput from '../../tools/hooks/useInput';
+import useInput_CompGallery from '../../tools/hooks/useInput_CompGallery';
+
 import {getTimeStamp} from '../../tools/vanilla/time';
 
 import IconPlus from '../../svgs/basic/IconPlus';
@@ -50,6 +53,7 @@ const DivCreate = styled(Div)`
   
   width: 100%;
   height: 100%;
+  overflow: hidden;
  
   @media (min-width:  ${props => (props.theme.media.md) }px) {
     
@@ -74,13 +78,23 @@ const DivA = styled(Div)`
   justify-content: flex-start;
   align-items: center;
   
-  width: 100%;
+  width: 360px;      /*  768  */
   height: 360px;
- 
+  overflow: auto;
+  
+  margin-top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5px;
+
+  
   @media (min-width:  ${props => props.theme.media.md }px) {
-    width: 380px;      /*  768 = 380 * 2 + 8 */
-    padding-right: 2px;
     height: 100%;
+    margin: 5px;
+  }
+  
+  & > div {
+    margin: 5px;
   }
 `
 
@@ -92,13 +106,23 @@ const DivB = styled(Div)`
   justify-content: flex-start;
   align-items: center;
   
-  width: 100%;
-  height: 360px; /* 맨 아래니깐 자유롭게*/
+  width: 360px;      /*  768  */
+  /*height: 360px;  맨 아래니깐 자유롭게*/
+ 
+  margin-top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5px;
+  
+  
   
   @media (min-width:  ${props => props.theme.media.md }px) {
-    width: 380px;      /*  768 = 380 * 2 + 8 */
-    padding-left: 2px;
     height: 100%;
+    margin: 5px;
+  }
+  
+  & > div {
+    margin: 5px;
   }
 `
 
@@ -106,23 +130,19 @@ const DivB = styled(Div)`
 
 //
 const ButtonCreate = styled(Button)`
+  background-color: ${props => props.theme.color_active};
+  color: ${props => props.theme.COLOR_normal};
+  
   width: 90px;
   height: 30px;
   
   border-radius: 9px;
   
-  margin-top: 10px;
-  margin-bottom: 5px;
 `
 
 const DivCreatingComp = styled(Div)`
-  width: 300px;
-  height: auto;
   
-  margin-top: 5px;
-  margin-bottom: 20px;
-  margin-left: 5px;
-  margin-right: 5px;
+  height: auto;
   
   display: flex;
   flex-direction: column;
@@ -185,7 +205,7 @@ const ContainerMapsReady = styled(Div)`
   overflow-x: auto;
 `
 
-const DivPositionsReady = styled(Div)`
+const DivListPositionReady = styled(Div)`
   
   
   background-color: ${props => props.theme.COLOR_middle};
@@ -222,7 +242,8 @@ const DivThree = styled(Div)`
 
 // comments
 const DivFour = styled(Div)`
-  height: 180px;
+  height: auto;
+  min-height: 100px;
   
   background-color: ${props => props.theme.COLOR_normal};
   border: 10px solid  ${props => props.theme.COLOR_normal};
@@ -335,9 +356,14 @@ const TextareaComment =  styled(Textarea)`
    ,dictHeroBasic
    ,listAllMap
    
-   ,listIdMap
-    , listPosition
-    ,listTag
+  , title
+  , listIdMap
+  , listPosition
+  , listTag
+  
+  , comment
+  , video
+  
   
    , whichAdding
    , locationAddingMap
@@ -374,19 +400,27 @@ const TextareaComment =  styled(Textarea)`
   },[])
   
   
+  // 입력중인 내용을 redux -> localstorage 저장하기 위해서!
+  const useInput_redux_CompGallery = (value, which1, which2) => {
+  
+  	const onChange = event => {
+  		console.log(event.target.value)
+  		replaceData2CompGallery(which1, which2, event.target.value);
+  	}
+  	return {value, onChange};
+  }
+  
+  
   // information of comp
   // just use useState for simple inputs (which don't need communication with child components)
-  const inputTitle = useInput(""); // {value, setValue, onChange};
+  const inputTitle = useInput_redux_CompGallery(title, "create", "title"); // {value, setValue, onChange};
   //const inputAuthor = useInput("");
   
   const inputPassword1 = useInput("");
   const inputPassword2 = useInput("");
   
-  const [rating, setRating] = useState({});
-  
-  const inputComment = useInput("");
-  const inputVideo = useInput("");
-  const inputLink = useInput("");
+  const inputComment = useInput_redux_CompGallery(comment, "create", "comment");
+  const inputVideo = useInput_redux_CompGallery(video, "create", "video");
   
  
   
@@ -439,8 +473,7 @@ const TextareaComment =  styled(Textarea)`
         
         const idComment = uuidv4();
         const idVideo = uuidv4();
-        const idLink = uuidv4();
-      
+        
         
         
         const commentRequest = {
@@ -467,24 +500,13 @@ const TextareaComment =  styled(Textarea)`
         }
         
         
-        const linkRequest = {
-          
-          _id: idLink
-          , subject: {_id: idComp, model: "Comp"}
-          
-          , author: auth._id
-          
-          , content: inputLink.value
-          
-          //, listLike: [String] 
-        }
-        
+
         
         
        
         let bodyRequest = {};
         
-        const compRequest = {
+        let compRequest = {
           
           _id: idComp
           ,author: auth._id
@@ -492,33 +514,33 @@ const TextareaComment =  styled(Textarea)`
           ,title: inputTitle.value
           
           ,listPosition: listPosition
+          
           ,listIdMap: listIdMap
           ,listTag: listTag
           
           ,listIdComment: []
           ,listIdVideo: []
-          ,listIdLink: []
           
           ,listLike: []
         }
         
         
         
+        console.log(commentRequest.content);
+        console.log(idComment);
+        console.log(compRequest["listIdComment"]);
         
         if (commentRequest.content !== "") {
+          compRequest["listIdComment"]=[idComment];
           bodyRequest["comment"] = commentRequest;
-          compRequest["listComment"].push(idComment);
         }
         
         if (videoRequest.content !== "") {
+          compRequest["listIdVideo"]=[idVideo];
           bodyRequest["video"] = videoRequest;
-          compRequest["listLink"].push(idVideo);
         }
         
-        if (linkRequest.content !== "") {
-          bodyRequest["link"] = linkRequest;
-          compRequest["listLink"].push(idLink);
-        }
+        
         
         bodyRequest["comp"] = compRequest
         
@@ -559,30 +581,27 @@ const TextareaComment =  styled(Textarea)`
           Publish
         </ButtonCreate>
       
+      
+      
         <DivCreatingComp>
-        
         
         
           <DivOne> 
             <Div>  <InputCommon  {...inputTitle} placeholder="title of composition" />  </Div>
-            <Div> {`${auth.battletag}`} </Div>
           </DivOne>
           
-          
-          
           <DivThree> 
-            < TagsReady />
+            < ListTagReady />
           </DivThree>
-        
         
         
           <DivTwo> 
             
             <ContainerMapsReady>
-              <MapsReady />
+              <ListMapReady />
             </ContainerMapsReady>
             
-            <DivPositionsReady>
+            <DivListPositionReady>
               {[0,1,2,3,4].map((element, index) => {
                 return (
                 
@@ -594,7 +613,7 @@ const TextareaComment =  styled(Textarea)`
                     />
                 ) 
               })}
-            </DivPositionsReady>
+            </DivListPositionReady>
             
           </DivTwo>
         
@@ -609,11 +628,6 @@ const TextareaComment =  styled(Textarea)`
             <Div> 
               <Div> <IconVideo width={'20px'}  height={'20px'} color={'color_very_weak'} /> </Div>
               <InputVideoLink  {...inputVideo} placeholder="link (ex: twitch, youtube)" /> 
-            </Div>
-            
-            <Div> 
-              <Div> <IconLink width={'20px'}  height={'20px'} color={'color_very_weak'} /> </Div>
-              <InputVideoLink  {...inputLink} placeholder="link (ex: guide, screenshot)" /> 
             </Div>
             
           </DivFive>
@@ -666,6 +680,10 @@ function mapStateToProps(state) {
     ,listIdMap: state.comp_gallery.create.listIdMap
     , listPosition: state.comp_gallery.create.listPosition
     , listTag: state.comp_gallery.create.listTag
+    
+    , title: state.comp_gallery.create.title
+    , comment : state.comp_gallery.create.comment
+    , video: state.comp_gallery.create.video
     
     , whichAdding: state.comp_gallery.create.whichAdding
     , locationAddingMap: state.comp_gallery.create.locationAddingMap
