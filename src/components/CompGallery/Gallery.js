@@ -22,9 +22,6 @@ import Comp from './Gallery/Comp'
 import Filter from './Gallery/Filter'
 
 import useInput from '../../tools/hooks/useInput';
-import {  getTimeStamp } from '../../tools/vanilla/time';
-
-import IconWorking from '../../svgs/basic/IconWorking'
 
 
 
@@ -45,41 +42,6 @@ const DivGallery = styled(Div)
 `;
 
 
-const ContainerFilter = styled(Div)
-`
-  position: static;
-  
-  width: 100%; 
-	height: 240px;
-	
-	margin-bottom: 10px;
-	
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  
-  @media (min-width:  ${props => (props.theme.media.md) }px) {
-    margin: 0px;
-    
-    position: fixed;
-    top: 120px;
-    left: 0;
-    overflow: auto;
-    
-	  width: 180px;
-	  
-	  height: auto;
-	  max-height: calc(100vh - 120px);
-	  
-	}
-`
-
-const ButtonFilter = styled(Button)`
-  height: 30px;
-  margin-top: 5px;
-  margin-left: 5px;
-`
 
 
 
@@ -104,10 +66,14 @@ const DivListComp = styled(Div)
   
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   
   flex-wrap: wrap;
+  
+  @media (min-width:  ${props => (props.theme.media.md) }px) {
+    justify-content: flex-start;
+  }
 `;
 
 
@@ -160,46 +126,13 @@ const Gallery = ({
   }, [])
 
 
-  const onClick_Filtered = async (event) => {
-    try {
-      
-      const filterSize = [2, 3]; // 이 리스트 항목 중 하나의 값을 가져야한다
-      const filterMap = ['2', '3']; // 이 리스트의 모든 항목을 가져야 한다
-      const filterTag = ['ToWin', 'Kill']; // 이 리스트의 모든 항목을 가져야 한다
-      
-      const query = queryString.stringify({
-        filterSize: filterSize
-        , filterMap: filterMap
-        , filterTag: filterTag
-      });
-      
-      replaceData2("ready", "listComp", false);
-      replaceData2("loading", "listComp", true);
-          
-      const { data } = await axios.get(`${config.URL_API_NS}/comp/filtered?` + query );
-
-      replaceData2CompGallery("gallery", "listComp", data);
-      replaceData2("ready", "listComp", true);
-      replaceData2("loading", "listComp", false);
-
-    } catch (error) {
-
-      addDeleteNotification("basic01", language);
-      console.log(error)
-    }
-  }
+  
   
   return (
 
     < DivGallery >
 
-    < ContainerFilter >
-    
-      <ButtonFilter onClick={onClick_Filtered} > search </ButtonFilter>
-      < Filter / >
-      
-    < /ContainerFilter>  
-    
+      <Filter />
 
     < ContainerListComp > {
       (loadingListComp) ? < Div > loading < /Div>:
@@ -250,11 +183,9 @@ function mapDispatchToProps(dispatch) {
     replaceDataCompGallery: (which, replacement) => dispatch(replaceDataCompGallery(which, replacement)),
     replaceData2CompGallery: (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
 
-    ,
-    replaceData2: (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
+    , replaceData2: (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
 
-    ,
-    addDeleteNotification: (code_situation, language, message, time) => dispatch(addDeleteNotification(code_situation, language, message, time))
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(addDeleteNotification(code_situation, language, message, time))
   };
 }
 

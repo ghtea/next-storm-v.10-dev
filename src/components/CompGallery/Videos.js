@@ -71,7 +71,7 @@ const Videos = ({
   , addDeleteNotification
 }) => {
 
-
+  
   useEffect(() => {
 
     (async() => {

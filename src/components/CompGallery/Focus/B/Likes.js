@@ -64,7 +64,7 @@ const Likes = ({
 
     <DivLikes>
       
-      <Div> <IconHeart width = { "25x" } height = { "25px" } color = { "color_very_weak" } filled={true} /> </Div>
+      <Div> <IconHeart width = { "25x" } height = { "25px" }  filled={true} /> </Div>
       <Div> 6 players like this comp </Div>
 
     </DivLikes>

@@ -13,13 +13,17 @@ import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 import dictCode from '../../others/dictCode';
 
 import { NavLink } from 'react-router-dom';
+import themes from "../../styles/themes"
 import {Div, Button, A, NavLinkDefault} from '../../styles/DefaultStyles';
 
-import IconLogo from '../../svgs/brand/IconLogo';
+import UserPublic from '../_/UserPublic';
+
+import IconProfile from "../_/Profile/Icon";
+import borders from "../../profile/borders";
+
 
 import IconLoading from '../../svgs/basic/IconLoading';
 import IconLogIn from '../../svgs/basic/IconLogIn';
-import IconUser from '../../svgs/basic/IconUser';
 
 
 
@@ -85,8 +89,18 @@ const DivProfileMd_ = styled(Div)`
 `
 
 const DivIconProfile = styled(Div)`
-	width: 40px;
-	height: 40px;
+  
+  width: ${props => props.size};
+  height: ${props => props.size};
+  
+  ${props => borders[props.border]}
+  border-radius: 6px; 
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  
 `
 
 
@@ -154,7 +168,7 @@ const ProfileMd_ = ({
 	match, location
 	
 	, language
-	, auth     // 변화 잘 감지하기 위해서, readyUser 만 따로 빼놓기!
+	, user     // 변화 잘 감지하기 위해서, readyUser 만 따로 빼놓기!
 	, loadingUser, readyUser
 	
 	, themeName
@@ -171,13 +185,13 @@ const ProfileMd_ = ({
  
 	
 	useEffect(()=>{
-		if(readyUser === true && auth.battletag) {
-			// 배틀태그를 아직 인증하지 않은 경우도 생각해야 한다. (그 경우 auth.battletag ="")
+		if(readyUser === true && user.battletag) {
+			// 배틀태그를 아직 인증하지 않은 경우도 생각해야 한다. (그 경우 user.battletag ="")
 			
 			const regexBattletag = /(#\d*)$/;
-		  const listNumberBattletag = auth.battletag.match(regexBattletag);
+		  const listNumberBattletag = user.battletag.match(regexBattletag);
 		  
-		  const battletagNameTemp = auth.battletag.replace(regexBattletag, "");
+		  const battletagNameTemp = user.battletag.replace(regexBattletag, "");
 		  const battletagNumberTemp = listNumberBattletag[0];
 		  
 		  setBattletagName(battletagNameTemp)
@@ -212,12 +226,21 @@ const ProfileMd_ = ({
 				);
     	}
     	else {
+    		
     		return (
 			<NavLinkStyled to="/" >
-					<DivIconProfile> <IconUser width={"40px"} height={"40px"} color={"color_weak"} /> </DivIconProfile>
-				{(auth.battletag)?
+			
+					<DivIconProfile size={"40px"} border={user.profile.listIdBorder[0]} > 
+						<IconProfile 
+              width = { "34px" } height = { "34px" } 
+              shape={user.profile.listIdShape[0]} 
+              palette={user.profile.listIdPalette[0]} 
+            />
+          </DivIconProfile>
+          
+				{(user.battletag)?
   				<DivBattletag> <DivBattletagName> {battletagName} </DivBattletagName> <DivBattletagNumber> {battletagNumber} </DivBattletagNumber> </DivBattletag> 
-				: <DivEmail> {auth.email} </DivEmail>
+				: <DivEmail> {user.email} </DivEmail>
 				}
 			</NavLinkStyled>
 				)
@@ -236,7 +259,7 @@ function mapStateToProps(state) {
     themeName: state.basic.themeName
     , language: state.basic.language
     
-    , auth: state.auth
+    , user: state.auth.user
     
 
     , loadingUser: state.basic.loading.user

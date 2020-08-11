@@ -350,8 +350,10 @@ const TextareaComment =  styled(Textarea)`
  const Create = ({
    
    language
+   
+   , user
    , readyUser, loadingUser
-   , auth
+   
    
    ,dictHeroBasic
    ,listAllMap
@@ -404,7 +406,7 @@ const TextareaComment =  styled(Textarea)`
   const useInput_redux_CompGallery = (value, which1, which2) => {
   
   	const onChange = event => {
-  		console.log(event.target.value)
+  		//console.log(event.target.value)
   		replaceData2CompGallery(which1, which2, event.target.value);
   	}
   	return {value, onChange};
@@ -481,7 +483,7 @@ const TextareaComment =  styled(Textarea)`
           _id: idComment
           , subject: {_id: idComp, model: "Comp"}
           
-          , author: auth._id
+          , author: user._id
           
           //, language: String
           , content: inputComment.value
@@ -492,7 +494,7 @@ const TextareaComment =  styled(Textarea)`
           _id: idVideo
           , subject: {_id: idComp, model: "Comp"}
           
-          , author: auth._id
+          , author: user._id
           
           , content: inputVideo.value
           
@@ -509,7 +511,7 @@ const TextareaComment =  styled(Textarea)`
         let compRequest = {
           
           _id: idComp
-          ,author: auth._id
+          ,author: user._id
           
           ,title: inputTitle.value
           
@@ -521,7 +523,7 @@ const TextareaComment =  styled(Textarea)`
           ,listIdComment: []
           ,listIdVideo: []
           
-          ,listLike: []
+          ,listUserLike: []
         }
         
         
@@ -672,8 +674,9 @@ const TextareaComment =  styled(Textarea)`
 function mapStateToProps(state) { 
   return {
     
-    auth: state.auth
-    , language: state.basic.language
+    language: state.basic.language
+    
+    , user: state.auth.user
     , readyUser: state.basic.ready.user
     , loadingUser: state.basic.loading.user
     

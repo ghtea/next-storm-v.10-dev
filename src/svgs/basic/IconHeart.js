@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
 import themes from "../../styles/themes"
@@ -11,7 +11,22 @@ const DivContainer = styled(Div)`
 `;
 
 
-const IconHeart = ({width, height, color="color_very_weak", themeName, filled=false}) => {
+const IconHeart = ({width, height, color, themeName, filled=false}) => {
+	
+	const [fillHeart, setFillHeart] = useState("");
+	
+	useEffect( () => {
+		if (!color) {
+			color=[ "color_normal", "color_very_weak"];
+		}
+		
+		if (filled) {
+      setFillHeart( themes[themeName][ color[0] ] )
+    }
+    else {
+      setFillHeart( themes[themeName][ color[1] ] )
+    }
+	})
 	
 	return (
 		
@@ -26,7 +41,7 @@ const IconHeart = ({width, height, color="color_very_weak", themeName, filled=fa
 			height="100%"
 			viewBox="0 0 512 512"
 			
-			fill={ themes[themeName][color] }
+			fill={ fillHeart }
 			>
 		
 		{filled? 

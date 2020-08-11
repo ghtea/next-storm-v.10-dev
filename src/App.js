@@ -151,10 +151,7 @@ const App = ({
     if(!logged) {
       console.log("no logged user");
       
-      replaceDataAuth("_id", "");
-      replaceDataAuth("email", "");
-      replaceDataAuth("battletag", "");
-      replaceDataAuth("mmr", {});
+      replaceDataAuth("user", {});
       
       replaceData2('loading', 'user', false);
       replaceData2('ready', 'user', false);
@@ -171,17 +168,14 @@ const App = ({
       
       console.log(res.data);
       
-      replaceDataAuth("_id", res.data._id)
-      replaceDataAuth("email", res.data.email)
-      replaceDataAuth("battletag", res.data.battletagConfirmed)
-      replaceDataAuth("mmr", res.data.mmr)
+      replaceDataAuth("user", res.data);
       
       replaceData2('loading', 'user', false);
       replaceData2('ready', 'user', true);
       
     } catch (e) { // token 정보가 잘못되었었으면 여기로 이동
       removeCookie('logged');
-      window.location.href = '/log-in?reason=wrong-token';
+      window.location.href = '/auth/log-in?reason=wrong-token';
     }
     
     }) ()

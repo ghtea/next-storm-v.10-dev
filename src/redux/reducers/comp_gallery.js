@@ -18,6 +18,9 @@ const stateInitial = {
       , filterSize: [2,3,5]
       , filterTag: ["ToWin", "ForFun", "Kill", "Push", "Combo", "Theme"] //, "Early", "Late"
       , filterMap: []
+      
+      , fillterHero: []
+      , searchHero: ""
     }
     
     

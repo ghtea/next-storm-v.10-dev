@@ -157,7 +157,7 @@ const isDarkMode = () => {
 
 const Home= ({
   readyUser
-  , auth
+  , user
   
   , theme
   , language
@@ -227,11 +227,13 @@ const Home= ({
 	    replaceData2("working", "updateMmr", true);
 	    
       const res = await axios.post (`${process.env.REACT_APP_URL_AHR}/user/update-mmr`, {
-        _id: auth._id
-        ,battletag: auth.battletag
+        _id: user._id
+        ,battletag: user.battletag
       });
       
+      // mmr obj 받는다
       console.log(res.data);
+      
       replaceData2("working", "updateMmr", false);
       replaceData2("ready", "mmrUser", true);
       
@@ -249,10 +251,10 @@ const Home= ({
         
         {(readyUser)?
   				<Div>
-  					<DivIdentification> {(auth.battletag)? auth.battletag : auth.email} </DivIdentification>
+  					<DivIdentification> {(user.battletag)? user.battletag : user.email} </DivIdentification>
   					
   					<Button onClick={onClick_LogOut}> LOG OUT </Button>
-  					{(auth.battletag)? 
+  					{(user.battletag)? 
   					  <Button onClick={onClick_UpdateMmr}> Update Mmr </Button>
   					  : <LinkDefault to="/auth/apply-battletag"> Apply Battletag </LinkDefault> 
   					}
@@ -332,7 +334,7 @@ const Home= ({
 function mapStateToProps(state) { 
   return { 
     readyUser: state.basic.ready.user
-    , auth: state.auth
+    , user: state.auth.user
     
     , theme: state.basic.theme
     , language: state.basic.language

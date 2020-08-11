@@ -140,10 +140,7 @@ const Link_Common = styled(LinkDefault)`
             
             removeCookie('logged');
             
-            replaceDataAuth("_id", "");
-            replaceDataAuth("email", "");
-            replaceDataAuth("battletag", "");
-            replaceDataAuth("mmr", {});
+            replaceDataAuth("user", {});
             
             
             if (code_situation === `alocal03`) { // '이 배틀태그는 아직 승인되지 않았습니다'
@@ -168,10 +165,7 @@ const Link_Common = styled(LinkDefault)`
             
             setCookie('logged', "yes",{maxAge: 60 * 60 * 24 * 3});
             
-            replaceDataAuth("_id", res.data._id)
-            replaceDataAuth("email", res.data.email)
-            replaceDataAuth("battletag", res.data.battletagConfirmed)
-            replaceDataAuth("mmr", res.data.mmr)
+            replaceDataAuth("user", res.data);
             
             replaceData2('loading', 'user', false);
             replaceData2('ready', 'user', true);
@@ -189,10 +183,7 @@ const Link_Common = styled(LinkDefault)`
           
           removeCookie('logged');
           
-          replaceDataAuth("_id", "");
-          replaceDataAuth("email", "");
-          replaceDataAuth("battletag", "");
-          replaceDataAuth("mmr", {});
+          replaceDataAuth("user", {});
 
           addDeleteNotification("auth14", language);
         }

@@ -84,6 +84,7 @@ const CompGallery = ({
   
   , readyDictAllHeroBasic
   , readyListAllMap
+  , readyListMapStandardRanked
   
   //, replaceAuthority
   
@@ -192,7 +193,7 @@ const CompGallery = ({
     
       <SubCompGallery/>
       
-    {(!readyDictAllHeroBasic || !readyListAllMap)?
+    {(!readyDictAllHeroBasic || !readyListAllMap || !readyListMapStandardRanked )?
       <Main> <Loading /> </Main>
      :
       <Main>
@@ -222,6 +223,7 @@ function mapStateToProps(state) {
     
     , readyDictAllHeroBasic: state.basic.ready.dictAllHeroBasic
     , readyListAllMap: state.basic.ready.listAllMap
+    , readyListMapStandardRanked: state.basic.ready.listMapStandardRanked
   }; 
 } 
 

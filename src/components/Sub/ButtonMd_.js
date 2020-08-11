@@ -84,12 +84,15 @@ const ButtonMd_ = ({
 	const onClick_Language = (event, language) => {
 		if (language === "en") { 
 			replaceData("language", "ko");
+			setCookie('language', 'ko',{maxAge: 60 * 60 * 24 * 30});
 		}
 		else if (language === "ko") { 
 			replaceData("language", "ja");
+			setCookie('language', 'ja',{maxAge: 60 * 60 * 24 * 30});
 		}
 		else if (language === "ja") { 
 			replaceData("language", "en");
+			setCookie('language', 'en',{maxAge: 60 * 60 * 24 * 30});
 		}
 	}
 	

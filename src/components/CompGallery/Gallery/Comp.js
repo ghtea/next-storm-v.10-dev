@@ -6,6 +6,7 @@ from 'react';
 import styled from 'styled-components';
 
 import axios from 'axios';
+import queryString from 'query-string';
 
 import { connect } from "react-redux";
 
@@ -57,7 +58,7 @@ import IconHeart from '../../../svgs/basic/IconHeart';
 
 const DivComp = styled(Div)
 `
-  width: 300px; /* 6 + ddd + ddd + 6  */
+  width: 300px; 
   height: auto;
   
   position: relative;
@@ -75,7 +76,7 @@ const DivComp = styled(Div)
   
   /* 여백 */
   & > div:nth-child(n+2){
-    margin-top: 8px;
+    margin-top: 10px;
   }
 `
 
@@ -102,7 +103,7 @@ const LinkFocus = styled(LinkDefault)`
 const DivHeader = styled(Div)`
 
   width: 100%;
-  height: 40px;
+  height: 30px;
   
   
   color: ${props => props.theme.color_normal};
@@ -122,7 +123,7 @@ const DivHeader = styled(Div)`
 
 const DivTitle = styled(Div)`
   width: auto;
-  max-width: 130px;
+  max-width: 150px;
   line-height: 1.1rem;
   
   display: block;
@@ -182,7 +183,7 @@ const DivMain = styled(Div)
   
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: flex-start;
 `
 
@@ -209,12 +210,18 @@ const DivUser = styled(Div)`
 
   width: 40px;
   heiht: 40px;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 `
 
 
 const DivOthers = styled(Div)
 ` 
-  width: 180px;
+  width: 140px;
+
   
   display: flex;
   flex-direction: row;
@@ -223,16 +230,56 @@ const DivOthers = styled(Div)
   
   & > div {
     width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    
+    & > div:nth-child(2){
+      width: auto;
+      margin-left: 8px;
+      
+      font-size: 0.9rem;
+      font-weight: bold;
+      
+      padding-left: 4px;
+      padding-right: 4px;
+      
+      background-color: ${props => props.theme.color_very_weak};
+      color: ${props => props.theme.COLOR_normal};
+      border-radius: 4px;
+    }
   }
 
 `
 
+
 const DivLike = styled(Div)`
 
-  width: 40px;
+  width: auto;
   height: 40px;
   
-  & > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  
+    
+  & > div:nth-child(1){
+    width: auto;
+    
+    font-size: 0.9rem;
+    font-weight: bold;
+    
+    padding-left: 4px;
+    padding-right: 4px;
+    
+    background-color: ${props => props.theme.color_very_weak};
+    color: ${props => props.theme.COLOR_normal};
+    border-radius: 4px;
+  }
+  
+  & > div:nth-child(2) {
     
     width: 40px;
     height: 40px;
@@ -248,16 +295,31 @@ const DivLike = styled(Div)`
 
 const Comp = ({
   
+  user
   
-   listAllMap
-    , listAllTag
-    , tComp
+  , language
+  
+  , listAllMap
+  , listAllTag
+  , tComp
 
     , addDeleteNotification
 
   }) => {
-
-
+    
+    
+    
+    const [like, setLike] = useState(false);
+    const [plus, setPlus] = useState(0);
+    useEffect(()=>{
+      if ( tComp.listUserLike.includes(user._id) ) { 
+        setLike(true)
+      }
+      else {
+        setLike(false)
+      };
+    },[])
+    
     const listIdMap = tComp.listIdMap;
     const listPosition = tComp.listPosition;
     const listTag = tComp.listTag;
@@ -265,8 +327,7 @@ const Comp = ({
 
     const listTagSorted = listAllTag.filter(tag => listTag.includes(tag));
 
-    console.log(listTagSorted);
-
+  
 
     const returnIcon = (tag) => {
         switch (tag) {
@@ -287,7 +348,35 @@ const Comp = ({
 
           }
       }
-
+    
+    
+    const onClick_Like = async (event) => {
+      
+      try {
+        let queryTemp = {
+          idUser: user._id
+          , idComp: tComp._id
+          , how: false
+        };
+        
+        // 클릭하기 이전의 like!
+        if (like) {
+          queryTemp.how = false;
+          setPlus(plus-1);
+        }
+        else { 
+          queryTemp.how = true; 
+          setPlus(plus+1);
+        }
+        setLike(!like);
+        const query = queryString.stringify(queryTemp)  
+        await axios.put(`${config.URL_API_NS}/comp/like?` + query );
+      }
+      catch(error) {
+        console.log(error);
+        addDeleteNotification("basic01", language);
+      }
+    }
 
 
     return (
@@ -338,22 +427,22 @@ const Comp = ({
       <DivOthers>
       
         <Div> 
-          <IconComment width = { "18px" } height = { "18px" } color = { "color_very_weak" } />
+          <IconComment width = { "20px" } height = { "20px" } color = { "color_very_weak" } />
+          <Div number={tComp.listIdComment.length}> {tComp.listIdComment.length} </Div>
         </Div>
         
-        
         <Div> 
-          <IconVideo width = { "20px" } height = { "20px" } color = { "color_very_weak" } />
+          <IconVideo width = { "22px" } height = { "22px" } color = { "color_very_weak" } />
+          <Div number={tComp.listIdVideo.length}> {tComp.listIdVideo.length} </Div>
         </Div>
         
       </DivOthers>
       
       
       
-      <DivLike>
-        <Div>
-          <IconHeart width = { "25x" } height = { "25px" } color = { "color_very_weak" } filled={false} />
-        </Div>
+      <DivLike onClick={onClick_Like} >
+        <Div number={tComp.listUserLike.length + plus}> {tComp.listUserLike.length + plus} </Div>
+        <IconHeart width = { "25x" } height = { "25px" }  filled={like} />
       </DivLike> 
         
      </DivFooter>
@@ -388,10 +477,13 @@ const Comp = ({
   function mapStateToProps(state) {
     return {
       
-      listAllTag: state.comp_gallery.gallery.listAllTag
+      user: state.auth.user
+      ,listAllTag: state.comp_gallery.gallery.listAllTag
+      
       
       ,listAllMap: state.hots.listAllMap
       
+      , language: state.basic.language
 
     };
   }

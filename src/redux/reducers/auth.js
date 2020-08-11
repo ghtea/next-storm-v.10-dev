@@ -10,8 +10,6 @@ const stateInitial = {
     , email: ""
     , battletag: ""
     
-    , mmr: {}
-    , tier: "master"
   
   };
 

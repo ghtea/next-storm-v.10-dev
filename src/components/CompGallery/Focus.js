@@ -28,7 +28,7 @@ import ListPosition from './Focus/A/ListPosition';
 
 import Likes from './Focus/B/Likes';
 import Comments from './Focus/B/Comments';
-import Videos from './Focus/B/Videos';
+import Video from './Focus/B/Video';
 
 
 
@@ -238,7 +238,7 @@ const Focus = ({
           { (loadingFocusingCompBonus || !readyFocusingCompBonus) ? <DivFocus> loading </DivFocus>
             : <>
               <Comments />
-              <Videos />
+              <Video />
             </>
           }
           

@@ -85,8 +85,8 @@ const themes =  {
         ,color_very_weak: 'hsl(240, 5%, 20%)'      // 30% down
         
         
-        ,COLOR_normal: 'hsl(240, 5%, 10%)'   // 5% 씩
-        ,COLOR_middle: 'hsl(240, 5%, 6%)'
+        ,COLOR_normal: 'hsl(240, 5%, 8%)'   // 5% 씩
+        ,COLOR_middle: 'hsl(240, 5%, 4%)'
         ,COLOR_bg: 'hsl(240, 5%, 0%)'
         
     
