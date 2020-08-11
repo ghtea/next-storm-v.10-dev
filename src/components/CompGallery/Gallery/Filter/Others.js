@@ -13,116 +13,80 @@ import {
 }
 from "react-redux";
 
-import * as config from '../../../config';
+import * as config from '../../../../config';
 
 
-import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
-import dictCode from '../../../others/dictCode'
+import addDeleteNotification from "../../../../redux/thunks/addDeleteNotification";
+import dictCode from '../../../../others/dictCode'
 
 import { replaceDataCompGallery, replaceData2CompGallery, replaceListPosition }
-from "../../../redux/actions/comp_gallery";
+from "../../../../redux/actions/comp_gallery";
 
 
 import {
   Div, Input, Button, Img, Textarea
 }
-from '../../../styles/DefaultStyles';
+from '../../../../styles/DefaultStyles';
 
-import ListMap from './Comp/ListMap';
-import Position from './Comp/Position';
+import ListMap from '../Comp/ListMap';
+import Position from '../Comp/Position';
 //import MapsReady from './Create/MapsReady';
 //import TagsReady from './Create/TagsReady';
 
-import useInput from '../../../tools/hooks/useInput';
+import useInput from '../../../../tools/hooks/useInput';
 import {
   getTimeStamp
 }
-from '../../../tools/vanilla/time';
+from '../../../../tools/vanilla/time';
 
-import * as imgHero from '../../../images/heroes'
-import * as imgMap from '../../../images/maps'
-
-
-import IconExpand from '../../../svgs/basic/IconExpand'
-
-import IconFun from '../../../svgs/tags/IconFun'
-import IconSerious from '../../../svgs/tags/IconSerious'
-
-import IconKill from '../../../svgs/tags/IconKill'
-import IconPush from '../../../svgs/tags/IconPush'
-
-import IconCombo from '../../../svgs/tags/IconCombo'
-import IconTheme from '../../../svgs/tags/IconTheme'
+import * as imgHero from '../../../../images/heroes'
+import * as imgMap from '../../../../images/maps'
 
 
+import IconExpand from '../../../../svgs/basic/IconExpand'
+
+import IconFun from '../../../../svgs/tags/IconFun'
+import IconSerious from '../../../../svgs/tags/IconSerious'
+
+import IconKill from '../../../../svgs/tags/IconKill'
+import IconPush from '../../../../svgs/tags/IconPush'
+
+import IconCombo from '../../../../svgs/tags/IconCombo'
+import IconTheme from '../../../../svgs/tags/IconTheme'
 
 
-const DivFilter = styled(Div)
+
+
+const DivOthers = styled(Div)
 `
-  
-  
-  overflow-y: auto;
-  height: calc(100% - 30px);
-  
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: flex-start;
-  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
   
-  @media (min-width:  ${props => (props.theme.media.md) }px) {
-	  flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    flex-wrap: nowrap;
-    
-    height: 100%;
-    
-    & > div { margin-top: 10px; margin-bottom: 10px; }
-    & > div:first-child {margin-top: 20px;}
-    & > div:last-child {margin-bottom: 20px;}
-	}
 `
 // 870
 
 
-const DivFilterEachGroup = styled(Div)`
-  witdh: 100%; /* mobile first */
+
+const DivFilterEach = styled(Div)`
+	
+	margin-top: 10px;
+	
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
+  
   @media (min-width:  ${props => (props.theme.media.md) }px) {
-	  width: 100%;
 	  
 	  display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    
 	}
 	
-	& > div:nth-child(1) {  /* 'tags' , 'maps' */
-    color: ${props =>  props.theme.color_normal };
-    font-size: 1.1rem;
-    margin-bottom: 5px;
-    font-weight: bold;
-    width: auto;
-  }
-`
-
-
-const DivFilterEach = styled(DivFilterEachGroup)`
-  
-  
-  & > div:nth-child(2) {   /* buttons */
-    witdh: auto;
-    
-    flex-direction: row;
-    justify-content: flex-start;
-    
-    @media (min-width:  ${props => (props.theme.media.md) }px) {
-      flex-direction: column;
-	  }
-  }
 `
 
 
@@ -150,7 +114,7 @@ const ButtonSize = styled(Button)`
 
 
 const DivTagPair = styled(Div)`
-  witdh: auto;
+  width: auto;
   
   display: flex;
   flex-direction: row;
@@ -174,12 +138,7 @@ const ButtonTag = styled(Button)`
 
 
 
-
-
-
-
-
-const Filter = ({
+const Others = ({
     language
     
     , dictAllHeroBasic
@@ -193,7 +152,6 @@ const Filter = ({
     
     , filterSize
     , filterTag
-    , filterMap
     
     , replaceData2CompGallery
     
@@ -201,17 +159,6 @@ const Filter = ({
 
   }) => {
     
-    const isBigMidScreen = useMediaQuery({ query: `(min-device-width: ${props => (props.theme.media.mid_big) }px)` });
-    
-    //const [listMapStandardRanked, setListMapStandardRanked] = useState([]);
-    
-    useEffect(()=>{
-      if(readyListMapStandardRanked === true) {
-        replaceData2CompGallery("gallery", "filterMap", readyListMapStandardRanked );
-      }
-    },[readyListMapStandardRanked])
-
-
 
     const returnIconTag = (tag) => {
         switch (tag) {
@@ -237,24 +184,20 @@ const Filter = ({
     
 
     return (
-      <DivFilter>
+      <DivOthers>
       
-        <DivFilterSize>
-          <Div> Size </Div>
-          <Div> 
-            <ButtonSize> 2 players </ButtonSize>
-            <ButtonSize> 3 players  </ButtonSize>
-            <ButtonSize> Full Team  </ButtonSize>
-          </Div>
-        </DivFilterSize>
+        <DivFilterEach>
+ 
+          <ButtonSize> 2 players </ButtonSize>
+          <ButtonSize> 3 players  </ButtonSize>
+          <ButtonSize> Full Team  </ButtonSize>
+ 
+        </DivFilterEach>
         
         
         
-        <DivFilterTag>
+        <DivFilterEach>
         
-          <Div> Tags </Div>
-          
-        <Div> 
           <DivTagPair>
             <ButtonTag> {returnIconTag("ToWin")} </ButtonTag>
             <ButtonTag> {returnIconTag("ForFun")} </ButtonTag>
@@ -269,33 +212,12 @@ const Filter = ({
             <ButtonTag> {returnIconTag("Combo")} </ButtonTag>
             <ButtonTag> {returnIconTag("Theme")} </ButtonTag>
           </DivTagPair>
-        </Div>
+       
+        </DivFilterEach>
         
-        </DivFilterTag>
-        
-        
-        <DivFilterMap>
-          <Div> Map </Div>
-          
-          <Div>
-            <ButtonMap> all </ButtonMap>
-            <ButtonMap> 2 lines </ButtonMap>
-            <ButtonMap> 3 lines </ButtonMap>
-          </Div>
-          
-          <Div>
-            {(readyListMapStandardRanked)? listMapStandardRanked.map(element=>(
-                <ButtonMap key={element.name[language].short} > <Div>{element.name[language].full}</Div> </ButtonMap>
-              ))
-              :
-              <Div> loading...  </Div>
-            }
-          </Div>
-          
-        </DivFilterMap>
+
       
-      
-      </DivFilter>
+      </DivOthers>
     )
 
 }
@@ -309,13 +231,8 @@ const Filter = ({
       language: state.basic.language
       
       , dictAllHeroBasic: state.hots.dictAllHeroBasic
-      ,listAllMap: state.hots.listAllMap
-      , listMapStandardRanked:  state.hots.listMapStandardRanked
       
       ,listAllTag: state.comp_gallery.gallery.listAllTag
-      
-      ,readyListAllMap: state.basic.ready.listAllMap
-      , readyListMapStandardRanked: state.basic.ready.listMapStandardRanked
       
     
     };
@@ -333,4 +250,4 @@ const Filter = ({
 
 
   export
-default connect(mapStateToProps, mapDispatchToProps)(Filter);
+default connect(mapStateToProps, mapDispatchToProps)(Others);
