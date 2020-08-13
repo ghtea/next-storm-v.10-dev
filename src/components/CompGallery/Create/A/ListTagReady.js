@@ -93,6 +93,7 @@ const TagsReady = ({
   
    listTag
   
+  , language
    
    , replaceDataCompGallery
    , replaceData2CompGallery
@@ -100,40 +101,19 @@ const TagsReady = ({
    , addDeleteNotification
 }) => {
   
-  // should be towin or Fun or towin && forfun
-  const onClick_Tag_ToWin = (event) => {
-    
+  // should be towin or Fun 
+  const onClick_Tag_ToWin_ForFun= (event) => {
     let listTagTemp = listTag;
-    
-    if (listTagTemp.includes("ToWin") && listTagTemp.includes("ForFun") ) {
-      listTagTemp = listTagTemp.filter(element => element !== "ToWin");
-    }
-    else if ( !listTagTemp.includes("ToWin") ) {
-      listTagTemp.push("ToWin")
-    }
-    else if (!listTagTemp.includes("ToWin") && !listTagTemp.includes("ForFun") ) {
-      // do nothing
-    }
-    replaceData2CompGallery("create", "listTag", listTagTemp);
-  }
-  
-  const onClick_Tag_ForFun = (event) => {
-    
-    let listTagTemp = listTag;
-    
-    if (listTagTemp.includes("ForFun") && listTagTemp.includes("ToWin") ) {
+    if ( listTagTemp.includes("ForFun") ) {
       listTagTemp = listTagTemp.filter(element => element !== "ForFun");
+      listTagTemp.push("ToWin");
     }
-    else if ( !listTagTemp.includes("ForFun") ) {
-      listTagTemp.push("ForFun")
-    }
-    else if (!listTagTemp.includes("ForFun") && !listTagTemp.includes("ToWin") ) {
-      // do nothing
+    else  {
+      listTagTemp = listTagTemp.filter(element => element !== "ToWin");
+      listTagTemp.push("ForFun");
     }
     replaceData2CompGallery("create", "listTag", listTagTemp);
   }
-  
-  
   
   
   
@@ -251,17 +231,35 @@ const TagsReady = ({
       
       <DivEachGroup>
       
-        <ButtonTag  onClick={onClick_Tag_ToWin} > 
+        <ButtonTag  onClick={onClick_Tag_ToWin_ForFun} > 
         
           <DivIcon>  <IconSerious width={"28px"}  height={"28px"} color={dictColorTag.ToWin} /> </DivIcon>
-          <DivTagName color={dictColorTag.ToWin}> to win </DivTagName> 
+          <DivTagName color={dictColorTag.ToWin}> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '빡겜';
+                case 'ja': 
+                  return 'to win';
+                default: // eng
+                  return 'to win';
+              }
+            })()} </DivTagName> 
           
         </ButtonTag>
           
-        <ButtonTag  onClick={onClick_Tag_ForFun} > 
+        <ButtonTag  onClick={onClick_Tag_ToWin_ForFun} > 
         
           <DivIcon>  <IconFun width={"26px"}  height={"26px"} color={dictColorTag.ForFun} /></DivIcon>
-          <DivTagName color={dictColorTag.ForFun}> for fun </DivTagName> 
+          <DivTagName color={dictColorTag.ForFun}>  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '즐겜';
+                case 'ja': 
+                  return 'for fun';
+                default: // eng
+                  return 'for fun';
+              }
+            })()}  </DivTagName> 
           
         </ButtonTag>
         
@@ -274,7 +272,16 @@ const TagsReady = ({
         <ButtonTag  onClick={onClick_Tag_Kill} > 
           
           <DivIcon>  <IconKill width={"28px"}  height={"28px"} color={dictColorTag.Kill} /> </DivIcon>
-          <DivTagName color={dictColorTag.Kill}> kill </DivTagName>
+          <DivTagName color={dictColorTag.Kill}> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '킬';
+                case 'ja': 
+                  return 'kill';
+                default: // eng
+                  return 'kill';
+              }
+            })()}  </DivTagName>
           
         </ButtonTag>
           
@@ -282,7 +289,16 @@ const TagsReady = ({
         <ButtonTag  onClick={onClick_Tag_Push} > 
         
           <DivIcon> <IconPush width={"23px"}  height={"23px"} color={dictColorTag.Push} />  </DivIcon>
-          <DivTagName color={dictColorTag.Push}> push </DivTagName> 
+          <DivTagName color={dictColorTag.Push}>  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '푸쉬';
+                case 'ja': 
+                  return 'push';
+                default: // eng
+                  return 'push';
+              }
+            })()}   </DivTagName> 
           
         </ButtonTag>
       
@@ -294,12 +310,30 @@ const TagsReady = ({
       
         <ButtonTag  onClick={onClick_Tag_Combo} > 
           <DivIcon>  <IconCombo width={"28px"}  height={"28px"} color={dictColorTag.Combo} />  </DivIcon>
-          <DivTagName color={dictColorTag.Combo}> combo </DivTagName> 
+          <DivTagName color={dictColorTag.Combo}>  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '연계';
+                case 'ja': 
+                  return 'combo';
+                default: // eng
+                  return 'combo';
+              }
+            })()}  </DivTagName> 
         </ButtonTag>
           
         <ButtonTag  onClick={onClick_Tag_Theme} > 
           <DivIcon> <IconTheme width={"21px"}  height={"21px"} color={dictColorTag.Theme} /> </DivIcon>
-          <DivTagName color={dictColorTag.Theme}> theme </DivTagName>  
+          <DivTagName color={dictColorTag.Theme}>  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '테마';
+                case 'ja': 
+                  return 'theme';
+                default: // eng
+                  return 'theme';
+              }
+            })()}  </DivTagName>  
         </ButtonTag>
       
       </DivEachGroup>
@@ -337,7 +371,8 @@ function mapStateToProps(state) {
   return { 
     
    listTag: state.comp_gallery.create.listTag
-    
+  
+  , language: state.basic.language
     
   }; 
 } 

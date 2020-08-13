@@ -89,7 +89,14 @@ const DivFilterEach = styled(Div)`
 	
 `
 
-
+const GroupButtonSize = styled(Div)`
+  width: auto;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`
 
 const ButtonSize = styled(Button)`
   width: auto;
@@ -106,9 +113,9 @@ const ButtonSize = styled(Button)`
   margin-right: 2px;
   margin-left: 2px;
   
-  background-color: ${props => (props.active)? props.theme.COLOR_normal : props.theme.COLOR_middle};
-  color:  ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
-  border: 1px solid ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
+  background-color: ${props => (props.selected)? props.theme.COLOR_normal : props.theme.COLOR_middle};
+  color:  ${props => (props.selected)? props.theme.color_active : props.theme.color_weak};
+  border: 1px solid ${props => (props.selected)? props.theme.color_active : props.theme.color_weak};
 `
 
 
@@ -131,8 +138,8 @@ const ButtonTag = styled(Button)`
   margin-right: 2px;
   margin-left: 2px;
   
-  background-color: ${props => (props.active)? props.theme.COLOR_normal : props.theme.COLOR_middle};
-  border: 1px solid ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
+  background-color: ${props => (props.selected)? props.theme.COLOR_normal : props.theme.COLOR_middle};
+  border: 1px solid ${props => (props.selected)? props.theme.color_active : props.theme.color_weak};
 `
 
 
@@ -141,14 +148,8 @@ const ButtonTag = styled(Button)`
 const Others = ({
     language
     
-    , dictAllHeroBasic
-    , listAllMap
-    , listMapStandardRanked
     
     , listAllTag
-    
-    , readyListAllMap
-    , readyListMapStandardRanked
     
     , filterSize
     , filterTag
@@ -160,38 +161,172 @@ const Others = ({
   }) => {
     
 
-    const returnIconTag = (tag) => {
-        switch (tag) {
-          case "ToWin":
-            return ( < IconSerious width = { "20px" } height = { "20px" } color = {  "color_weak" } />)
-          case "ForFun":
-            return ( < IconFun width = { "20px" } height = { "20px" }  color = { "color_weak" } />)
-            
-          case "Kill":
-            return ( < IconKill width = { "20px" } height = { "20px" } color = { "color_weak" } />)
-          case "Push":
-            return ( < IconPush width = {  "19px" } height = {  "19px" } color = {  "color_weak" } />)
-            
-          case "Combo":
-            return ( < IconCombo width = { "20px" } height = { "20px" } color = { "color_weak" } />)
-          case "Theme":
-            return ( < IconTheme width = {  "19px" } height = {  "19px" } color = {  "color_weak" } />)
-    
+  const returnIconTag = (tag, selected) => {
+    switch (tag) {
+      case "ToWin":
+        return ( < IconSerious width = { "20px" } height = { "20px" } color = { selected? "color_active": "color_weak" } />)
+      case "ForFun":
+        return ( < IconFun width = { "20px" } height = { "20px" }  color = {selected? "color_active": "color_weak" } />)
+        
+      case "Kill":
+        return ( < IconKill width = { "20px" } height = { "20px" } color = {selected? "color_active": "color_weak" } />)
+      case "Push":
+        return ( < IconPush width = {  "19px" } height = {  "19px" } color = {selected? "color_active": "color_weak" } />)
+        
+      case "Combo":
+        return ( < IconCombo width = { "20px" } height = { "20px" } color = {selected? "color_active": "color_weak" } />)
+      case "Theme":
+        return ( < IconTheme width = {  "19px" } height = {  "19px" } color = { selected? "color_active": "color_weak" } />)
 
-          }
       }
+  }
+      
+  
+  const onClick_Size = (event, filterSize) => {
+    replaceData2CompGallery("gallery", "filterSize", filterSize)
+  }
+  
+  const onClick_Tag = (event, tag) => {
     
+    let filterTagTemp = filterTag;
+    
+    if (tag === "ToWin"){
+      if (filterTag.includes("ToWin")) { filterTagTemp = filterTagTemp.filter(element => element !== "ToWin"); }
+      else  { filterTagTemp.push("ToWin");  filterTagTemp = filterTagTemp.filter(element => element !== "ForFun"); }
+    }
+    else if (tag === "ForFun"){
+      if (filterTag.includes("ToWin")) { filterTagTemp = filterTagTemp.filter(element => element !== "ToWin"); }
+      else  { filterTagTemp.push("ToWin");  filterTagTemp = filterTagTemp.filter(element => element !== "ForFun"); }
+    }
+    
+    else if (tag === "Kill"){
+      if (filterTag.includes("Kill")) { filterTagTemp = filterTagTemp.filter(element => element !== "Kill"); }
+      else  { filterTagTemp.push("Kill");  filterTagTemp = filterTagTemp.filter(element => element !== "Push"); }
+    }
+    else if (tag === "Push"){
+      if (filterTag.includes("Kill")) {  filterTagTemp = filterTagTemp.filter(element => element !== "Kill"); }
+      else  { filterTagTemp.push("Kill");  filterTagTemp = filterTagTemp.filter(element => element !== "Push"); }
+    }
+    
+    else {
+      if(filterTag.includes(tag)){
+        filterTagTemp = filterTagTemp.filter(element => element !== tag)
+      }
+      else {
+        filterTagTemp.push(tag)
+      }
+    }
+    
+    replaceData2CompGallery("gallery", "filterTag", filterTagTemp)
+  }
+  
     
 
     return (
       <DivOthers>
       
         <DivFilterEach>
- 
-          <ButtonSize> 2 players </ButtonSize>
-          <ButtonSize> 3 players  </ButtonSize>
-          <ButtonSize> Full Team  </ButtonSize>
- 
+        
+          <GroupButtonSize>
+          
+           <ButtonSize
+            onClick={(event)=> onClick_Size(event, [2,3,5])}
+            selected = {filterSize.includes(2) && filterSize.includes(3)  && filterSize.includes(5) }
+          > {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '전체';
+                case 'ja': 
+                  return '全部';
+                default: // eng
+                  return 'all';
+              }
+            })()}   </ButtonSize>
+          
+          </GroupButtonSize>
+            
+            
+        <GroupButtonSize>
+          <ButtonSize
+            onClick={(event)=> onClick_Size(event, [2])}
+            selected = {filterSize.includes(2) && !filterSize.includes(3)  && !filterSize.includes(5) }
+          > {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '2인';
+                case 'ja': 
+                  return '2人';
+                default: // eng
+                  return '2 players';
+              }
+            })()}   </ButtonSize>
+          
+          
+          <ButtonSize
+            onClick={(event)=> onClick_Size(event, [2,3])}
+            selected = {filterSize.includes(2) && filterSize.includes(3)  && !filterSize.includes(5) }
+          > {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '2~3인';
+                case 'ja': 
+                  return '2~3人';
+                default: // eng
+                  return '2~3';
+              }
+            })()}   </ButtonSize>
+            
+        </GroupButtonSize>
+        
+        
+        <GroupButtonSize>  
+          <ButtonSize
+            onClick={(event)=> onClick_Size(event, [3])}
+            selected = {!filterSize.includes(2) && filterSize.includes(3)  && !filterSize.includes(5) }
+          > {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '3인';
+                case 'ja': 
+                  return '3人';
+                default: // eng
+                  return '3 players';
+              }
+            })()}    </ButtonSize>
+          
+          <ButtonSize
+            onClick={(event)=> onClick_Size(event, [3,5])}
+            selected = {!filterSize.includes(2) && filterSize.includes(3)  && filterSize.includes(5) }
+          > {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '3~5인';
+                case 'ja': 
+                  return '3~5人';
+                default: // eng
+                  return '3~5';
+              }
+            })()}   </ButtonSize>
+        
+        </GroupButtonSize>
+        
+        
+        <GroupButtonSize>  
+          <ButtonSize
+            onClick={(event)=> onClick_Size(event, [5])}
+            selected = {!filterSize.includes(2) && !filterSize.includes(3)  && filterSize.includes(5) }
+          > {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '5인 팀';
+                case 'ja': 
+                  return '5人チーム';
+                default: // eng
+                  return 'full team';
+              }
+            })()}    </ButtonSize>
+          </GroupButtonSize>
+        
         </DivFilterEach>
         
         
@@ -199,18 +334,45 @@ const Others = ({
         <DivFilterEach>
         
           <DivTagPair>
-            <ButtonTag> {returnIconTag("ToWin")} </ButtonTag>
-            <ButtonTag> {returnIconTag("ForFun")} </ButtonTag>
+            <ButtonTag
+              onClick={(event)=> onClick_Tag(event, "ToWin")}
+              selected = {filterTag.includes("ToWin")}
+              >
+              {returnIconTag("ToWin", filterTag.includes("ToWin"))} </ButtonTag>
+            
+            <ButtonTag
+              onClick={(event)=> onClick_Tag(event, "ForFun")}
+              selected = {filterTag.includes("ForFun")}
+              >
+              {returnIconTag("ForFun", filterTag.includes("ForFun"))} </ButtonTag>
           </DivTagPair>
           
           <DivTagPair>
-            <ButtonTag> {returnIconTag("Kill")} </ButtonTag>
-            <ButtonTag> {returnIconTag("Push")} </ButtonTag>
+            <ButtonTag
+              onClick={(event)=> onClick_Tag(event, "Kill")}
+              selected = {filterTag.includes("Kill")}
+              >
+              {returnIconTag("Kill", filterTag.includes("Kill"))} </ButtonTag>
+            
+            <ButtonTag
+              onClick={(event)=> onClick_Tag(event, "Push")}
+              selected = {filterTag.includes("Push")}
+              >
+              {returnIconTag("Push", filterTag.includes("Push"))} </ButtonTag>
           </DivTagPair>
           
           <DivTagPair>
-            <ButtonTag> {returnIconTag("Combo")} </ButtonTag>
-            <ButtonTag> {returnIconTag("Theme")} </ButtonTag>
+            <ButtonTag
+              onClick={(event)=> onClick_Tag(event, "Combo")}
+              selected = {filterTag.includes("Combo")}
+              >
+              {returnIconTag("Combo", filterTag.includes("Combo"))} </ButtonTag>
+            
+            <ButtonTag
+              onClick={(event)=> onClick_Tag(event, "Theme")}
+              selected = {filterTag.includes("Theme")}
+              >
+              {returnIconTag("Theme", filterTag.includes("Theme"))} </ButtonTag>
           </DivTagPair>
        
         </DivFilterEach>
@@ -234,7 +396,8 @@ const Others = ({
       
       ,listAllTag: state.comp_gallery.gallery.listAllTag
       
-    
+      , filterSize: state.comp_gallery.gallery.filterSize
+      , filterTag: state.comp_gallery.gallery.filterTag
     };
   }
 

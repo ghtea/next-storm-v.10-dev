@@ -44,7 +44,7 @@ const Loading = ({
 
     <ContainerLoading>
       
-      <IconLoading width={"140px"} height={"140px"} color={"color_very_weak"} />
+      <IconLoading width={"100px"} height={"100px"} color={"color_very_weak"} />
       
     </ContainerLoading>
 

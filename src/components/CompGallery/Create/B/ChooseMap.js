@@ -185,19 +185,55 @@ const ImgEachMap = styled(Img)`
       <DivGroups>
         
         <GroupMaps>
-          <DivLineNumber> <Div> set </Div> </DivLineNumber>
+          <DivLineNumber> <Div> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '세트';
+                case 'ja': 
+                  return 'セット';
+                default: // eng
+                  return 'set';
+              }
+            })()} </Div> </DivLineNumber>
           <ContainerMap> 
             
             <DivEachMap  onClick={(event)=> onClick_Map(event, "all", null)} > 
-              <Div> all  </Div> 
+              <Div> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '모든 맵';
+                case 'ja': 
+                  return '全マップ';
+                default: // eng
+                  return 'all maps';
+              }
+            })()}   </Div> 
             </DivEachMap>
             
             <DivEachMap  onClick={(event)=> onClick_Map(event, "2lines", null)} > 
-              <Div> 2 lines </Div> 
+              <Div> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '2라인';
+                case 'ja': 
+                  return '2ライン';
+                default: // eng
+                  return '2 lanes';
+              }
+            })()} </Div> 
             </DivEachMap>
             
             <DivEachMap  onClick={(event)=> onClick_Map(event, "3lines", null)} > 
-              <Div> 3 lines </Div> 
+              <Div> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '3라인';
+                case 'ja': 
+                  return '3ライン';
+                default: // eng
+                  return '3 lanes';
+              }
+            })()}</Div> 
             </DivEachMap>
            
           </ContainerMap>
@@ -205,7 +241,16 @@ const ImgEachMap = styled(Img)`
         
         
         <GroupMaps>
-          <DivLineNumber> <Div> 2 </Div> <Div> lines </Div> </DivLineNumber>
+          <DivLineNumber> <Div> 2 </Div> <Div> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '라인';
+                case 'ja': 
+                  return 'ライン';
+                default: // eng
+                  return 'lanes';
+              }
+            })()}  </Div> </DivLineNumber>
           <ContainerMap> 
             {list2LineMap.map((tMap) => {
         
@@ -228,7 +273,16 @@ const ImgEachMap = styled(Img)`
         
         
         <GroupMaps>
-          <DivLineNumber> <Div> 3 </Div> <Div> lines </Div> </DivLineNumber>
+          <DivLineNumber> <Div> 3 </Div> <Div>  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '라인';
+                case 'ja': 
+                  return 'ライン';
+                default: // eng
+                  return 'lanes';
+              }
+            })()}  </Div> </DivLineNumber>
           <ContainerMap> 
             {list3LineMap.map((tMap) => {
         

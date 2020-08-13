@@ -100,7 +100,6 @@ const ImgEachHero = styled(Img)`
   width: 40px;
   height: 40px;
     
-
 `
 
 

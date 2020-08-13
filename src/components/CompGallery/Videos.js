@@ -62,12 +62,17 @@ const Videos = ({
 
   language
   
+  , location
+  
+  , user
+  , readyUser
+  
   , listVideo
   , readyListVideo
   , loadingListVideo
 
   , replaceData2CompGallery, replaceData2
-
+  
   , addDeleteNotification
 }) => {
 
@@ -75,18 +80,26 @@ const Videos = ({
   useEffect(() => {
 
     (async() => {
-
+      
       if (!readyListVideo) {
 
         try {
           
+          const queryRecieved = queryString.parse(location.search);
+   
+          const idSubject = queryRecieved.idSubject
+          const modelSubject = queryRecieved.modelSubject
+      
+          const queryRequest = queryString.stringify({
+            idSubject: idSubject
+            , modelSubject: modelSubject
+          });
+          
           replaceData2("ready", "listVideo", false);
           replaceData2("loading", "listVideo", true);
-          
-          const {
-            data
-          } = await axios.get(`${config.URL_API_NS}/video/`);
-          
+              
+          const { data } = await axios.get(`${config.URL_API_NS}/video/?` + queryRequest );
+            
           console.log(data)
           
           replaceData2CompGallery("videos", "listVideo", data);
@@ -102,7 +115,7 @@ const Videos = ({
 
     })() // async
 
-  }, [])
+  }, [readyListVideo])
 
 
   return (
@@ -117,7 +130,8 @@ const Videos = ({
           
           <Video 
             key={element._id}
-            video={element} 
+            video={element}
+            where="videos"
             />
           
         )}
@@ -138,7 +152,10 @@ function mapStateToProps(state) {
   return {
 
     language: state.basic.language
-
+    
+    , user: state.auth.user
+    , readyUser: state.basic.ready.user
+    
     , listVideo: state.comp_gallery.videos.listVideo
     , readyListVideo: state.basic.ready.listVideo
     , loadingListVideo: state.basic.loading.listVideo

@@ -38,7 +38,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 //dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const DivEntry = styled(Div)`
-  width: auto;
+  width: 350px !important;
   height: 100%;
   
   display: flex;
@@ -94,9 +94,12 @@ const DivTableEntry = styled(Div)`
   justify-content: flex-start;
   align-items: flex-start;
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    overflow-y: auto;
-    height: 360px;
+  
+  overflow-y: auto;
+  height: 360px;
+  
+  @media (min-width: ${props => (props.theme.media.md) }px ) {
+    height: auto;
   }
   
 `
@@ -113,13 +116,15 @@ const DivRowHeader = styled(Div)`
   color: ${props => props.theme.color_weak};
 
   display: grid;
-  grid-template-columns: 30px 150px 120px 60px 30px; // 20(padding) + 30 + 150 + 120 + 60 + 30 = 410 => 안전하게 small_mid 420 으로 하자
+  grid-template-columns: 25px 135px 110px 40px 30px; // 20(padding) + 30 + 150 + 120 + 60 + 30 = 410 => 안전하게 small_mid 420 으로 하자
   grid-template-rows: 24px;
   
+  /*
   @media (max-width: ${props => (props.theme.media.small_mid -1) }px ) {
     grid-template-columns: 30px 90px minmax(72px, auto) 60px 30px; // 
     grid-template-rows: 60px;
   }
+  */
   
   & > Div {
     font-weight: thin;
@@ -132,14 +137,15 @@ const DivRowHeader = styled(Div)`
 
 const DivRowPlayer = styled(Div)`
   display: grid;
-  grid-template-columns: 30px 150px 120px 60px 30px; // 20(padding) + 30 + 150 + 120 + 60 + 30 = 410
+  grid-template-columns: 25px 135px 110px 40px 30px; // 20(padding) + 30 + 150 + 120 + 60 + 30 = 410
   grid-template-rows: 40px;
   
+  /*
   @media (max-width: ${props => (props.theme.media.small_mid -1) }px ) {
     grid-template-columns: 30px 100px 80px 60px 30px; // 
     grid-template-rows: 60px;
   }
-  
+  */
   
   border-bottom: 1px solid ${props => props.theme.color_very_weak};
   &:last-child {
@@ -245,8 +251,8 @@ const DivRoles = styled(Div)`
   }
   
   & > div > div {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     margin: 2px;
   }
 `
@@ -410,8 +416,8 @@ onMouseEnter={(event)=>{
         > 
         <IconLeader
           
-          width={"23px"}
-          height={"18px"}
+          width={"20px"}
+          height={"20px"}
           isFilled={isLeader}
         />  
       </DivLeader >
@@ -434,11 +440,11 @@ onMouseEnter={(event)=>{
       </CopyToClipboard>
       
       <DivRoles> 
-        <Div> {(roles.includes("Tank"))? <IconTank width={"20px"} height={"20px"} /> : <Div></Div>} </Div>
-        <Div> {(roles.includes("Bruiser"))? <IconBruiser width={"20px"} height={"20px"} /> : <Div></Div>} </Div>
-        <Div> {(roles.includes("Melee Assassin"))? <IconMeleeAssassin width={"18px"} height={"20px"} /> : <Div></Div>} </Div>
-        <Div> {(roles.includes("Ranged Assassin"))? <IconRangedAssassin width={"20px"} height={"20px"} /> : <Div></Div>} </Div>
-        <Div> {(roles.includes("Healer"))? <IconHealer width={"15px"} height={"20px"} /> : <Div></Div>} </Div>
+        <Div> {(roles.includes("Tank"))? <IconTank width={"18px"} height={"18px"} /> : <Div></Div>} </Div>
+        <Div> {(roles.includes("Bruiser"))? <IconBruiser width={"18px"} height={"18px"} /> : <Div></Div>} </Div>
+        <Div> {(roles.includes("Melee Assassin"))? <IconMeleeAssassin width={"18px"} height={"18px"} /> : <Div></Div>} </Div>
+        <Div> {(roles.includes("Ranged Assassin"))? <IconRangedAssassin width={"18px"} height={"18px"} /> : <Div></Div>} </Div>
+        <Div> {(roles.includes("Healer"))? <IconHealer width={"18px"} height={"18px"} /> : <Div></Div>} </Div>
       </DivRoles>
       
       
@@ -541,7 +547,16 @@ const Entry = ({
   
   <DivEntry>
     
-    <DivEntryTitle> Entry </DivEntryTitle>
+    <DivEntryTitle>  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '참가자';
+                case 'ja': 
+                  return '参加者';
+                default: // eng
+                  return 'Entry';
+              }
+            })()} </DivEntryTitle>
     
     <DivDescription> 
     
@@ -588,9 +603,40 @@ const Entry = ({
     
     <DivRowHeader> 
       <Div>  </Div>
-      <DivBattletagHeader>  battletag </DivBattletagHeader>
-      <Div> roles </Div>
-      <Div> mmr </Div>
+      
+      <DivBattletagHeader>  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '배틀태그';
+                case 'ja': 
+                  return 'バトルタグ';
+                default: // eng
+                  return 'battletag';
+              }
+            })()} </DivBattletagHeader>
+            
+      <Div> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '역할';
+                case 'ja': 
+                  return '役割';
+                default: // eng
+                  return 'roles';
+              }
+            })()}  </Div>
+      
+      <Div> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return 'mmr';
+                case 'ja': 
+                  return 'mmr';
+                default: // eng
+                  return 'mmr';
+              }
+            })()}  </Div>
+      
       <Div>  </Div>
       
     </DivRowHeader>

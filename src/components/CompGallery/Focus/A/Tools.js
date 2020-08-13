@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import axios from 'axios';
+import queryString from 'query-string';
 
 import { connect } from "react-redux";
 import * as config from '../../../../config';
@@ -18,7 +19,12 @@ import {  NavLink, useHistory } from 'react-router-dom';
 
 import { Div, Input, Button } from '../../../../styles/DefaultStyles';
 
-import IconWorking from '../../../../svgs/basic/IconWorking'
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+
+import IconCopy from '../../../../svgs/basic/IconCopy'
+import IconBack from '../../../../svgs/basic/IconBack'
+import IconEdit from '../../../../svgs/basic/IconEdit'
+import IconHeart from '../../../../svgs/basic/IconHeart'
 
 
 
@@ -53,24 +59,89 @@ const ButtonTool = styled(Button)`
 const Tools = ({
 
   language
+  , user
+  , readyUser
   
-  , listComp
-  , readyListComp, loadingListComp
-
-  , replaceData2CompGallery, replaceData2
-
+  , focusingComp
+  
   , addDeleteNotification
 }) => {
+  
+  const [like, setLike] = useState(false);
+  const [plus, setPlus] = useState(0);
+  useEffect(()=>{
+    if ( focusingComp.listUserLike.includes(user._id) ) { 
+      setLike(true)
+    }
+    else {
+      setLike(false)
+    };
+  },[])
+    
+    
+  const history = useHistory(); 
+  
+  const onClick_Back = (event) => {
+    history.goBack();
+  }
+  
+  
+  
+  const onClick_Like = async (event) => {
+      
+      try {
+        
+        if(!readyUser) { addDeleteNotification("auth31", language); }
+        else {
+          let queryTemp = {
+            idUser: user._id
+            //, idComp: focusingComp._id
+            , how: false
+          };
+          
+          // 클릭하기 이전의 like!
+          if (like) {
+            queryTemp.how = false;
+            setPlus(plus-1);
+          }
+          else { 
+            queryTemp.how = true; 
+            setPlus(plus+1);
+          }
+          setLike(!like);
+          const query = queryString.stringify(queryTemp)  
+          await axios.put(`${config.URL_API_NS}/comp/like/${focusingComp._id}?` + query );
+        } // else
+      }
+      catch(error) {
+        console.log(error);
+        addDeleteNotification("basic01", language);
+      }
+    }
 
-
+  
   return (
 
     <DivTools>
       
-      <ButtonTool> back  </ButtonTool>
-      <ButtonTool> copy link </ButtonTool>
-      <ButtonTool> like </ButtonTool>
-      <ButtonTool> edit  </ButtonTool>
+      <ButtonTool onClick={onClick_Back} > <IconBack  width={"24px"} height={"24px"} color={"color_weak"} />  </ButtonTool>
+      
+      
+      <CopyToClipboard 
+          text={`${config.URL_THIS}/comp-gallery/focus/${focusingComp._id}`}
+          onCopy={ () => { addDeleteNotification("basic03", language); } } >
+          
+          <ButtonTool> <IconCopy width={"24px"} height={"24px"} color={"color_weak"} /> </ButtonTool>
+          
+      </CopyToClipboard>
+      
+      <ButtonTool onClick={onClick_Like} > <IconHeart  width={"24px"} height={"24px"} filled={like} /> </ButtonTool>
+      
+      { readyUser && (focusingComp.author === user._id) && 
+        <ButtonTool
+          onClick={(event=>{history.push(`/comp-gallery/edit/${focusingComp._id}`)})}
+        > <IconEdit  width={"24px"} height={"24px"} color={"color_weak"} />  </ButtonTool>
+      }
 
     </DivTools>
 
@@ -85,10 +156,11 @@ function mapStateToProps(state) {
   return {
 
     language: state.basic.language
-
-    , listComp: state.comp_gallery.gallery.listComp
-    , readyListComp: state.basic.ready.listComp
-    , loadingListComp: state.basic.loading.listComp
+    
+    , user: state.auth.user
+    , readyUser: state.basic.ready.user
+    
+    , focusingComp: state.comp_gallery.focus.comp
     
   };
 }

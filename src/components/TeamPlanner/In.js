@@ -37,7 +37,6 @@ const DivTeamPlanner = styled(Div)`
   justify-content: flex-start;
   align-items: center;
   
-  /*240px 240px 480px 480px;*/
   
 `;
 
@@ -46,21 +45,34 @@ const DivA = styled(Div)`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  
+   
+  width: 100%;
+  min-width: 360px;
   height: 480px; /* 240 * 2 */
   
-  @media (min-width: ${props => props.theme.media.md }px ) {
+  
+  @media (min-width:  ${props => props.theme.media.md }px) {
+    
+    width: 100%;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: flex-start;
     
     height: 240px; 
-  
+    
   }
   
   & > div {
+    width: 100%;
+    min-width: 360px;
     border-bottom: 2px solid ${props => props.theme.color_very_weak};
-    height: 100%;
+    height: 240px; 
+    
+    @media (min-width:  ${props => props.theme.media.md }px) {
+      width: 50%;
+      max-width: 500px;
+      height: 240px; 
+    }
   }
 `
 
@@ -70,13 +82,26 @@ const DivB = styled(Div)`
   justify-content: flex-start;
   align-items: center;
   
+  width: 100%;
+  min-width: 360px;
   height: auto;
   
-  @media (min-width: ${props => props.theme.media.md }px ) {
+  @media (min-width:  ${props => props.theme.media.md }px) {
+    width: 100%;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: flex-start;
     
+  }
+  
+   & > div {
+    width: 100%;
+    min-width: 360px;
+    
+    @media (min-width:  ${props => props.theme.media.md }px) {
+      width: 50%;
+      max-width: 500px;
+    }
   }
 `
 
@@ -102,8 +127,16 @@ const Loading = () => {
 
 // https://ps.avantwing.com/team-Planner/sss?ooo 들어가 보기
 const TeamPlanner = ({
+  
   match, location
-  , authority, language
+  
+  , language
+  , user
+  
+  , authority
+  
+  , ePlanTeam
+  
   , loadingPlanTeam
   , readyPlanTeam
   , idPlanTeam, passwordPlanTeam
@@ -155,14 +188,19 @@ const TeamPlanner = ({
     
     if (!loadingPlanTeam && readyPlanTeam && (authority === "viewer") ) {
       
-      if (!passwordPlanTeamTrying) {
+      if (ePlanTeam.listAuthor.includes(user._id)){
+        replaceAuthority("team_planner", "administrator");
+        //addDeleteNotification("tplan13", language);
+      }
+      
+      else if (!passwordPlanTeamTrying) {
         replaceAuthority("team_planner", "viewer");
         //addDeleteNotification("success", "welcome viewer!");
       }
       
       else if ( passwordPlanTeamTrying === passwordPlanTeam ) {
         replaceAuthority("team_planner", "administrator");
-        addDeleteNotification("tplan13", language);
+        //addDeleteNotification("tplan13", language);
       }
       
       // 문제 정상적인 비번인데, 정보를 받는 과정에서 잠시동안 두 비번이 불일치 하는것으로 나와서 => plan 생성시에 조금 지연후에 이곳 페이지로 이동하는 등 시도 중
@@ -173,6 +211,17 @@ const TeamPlanner = ({
         addDeleteNotification("tplan14", language);
       }
       
+    }
+    
+    else if (!loadingPlanTeam && readyPlanTeam && (authority === "administrator") ) {
+      
+      if ( ePlanTeam.listAuthor.includes(user._id) || passwordPlanTeamTrying === passwordPlanTeam ){
+        replaceAuthority("team_planner", "administrator");
+        //addDeleteNotification("tplan13", language);
+      }
+      else {
+        replaceAuthority("team_planner", "viewer");
+      }
     }
     
   }, [loadingPlanTeam, readyPlanTeam] )
@@ -228,7 +277,11 @@ const TeamPlanner = ({
 function mapStateToProps(state) { 
   return { 
     authority: state.basic.authority.team_planner
+    
+    , user: state.auth.user
     , language: state.basic.language
+    
+    , ePlanTeam: state.team_planner.ePlanTeam
     
     ,idPlanTeam: state.team_planner.ePlanTeam._id
     ,passwordPlanTeam: state.team_planner.ePlanTeam.password

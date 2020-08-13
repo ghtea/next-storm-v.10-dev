@@ -16,10 +16,10 @@ const stateInitial = {
       , listAllTag: ["ToWin", "ForFun", "Kill", "Push", "Combo", "Theme"] //, "Early", "Late"
       
       , filterSize: [2,3,5]
-      , filterTag: ["ToWin", "ForFun", "Kill", "Push", "Combo", "Theme"] //, "Early", "Late"
+      , filterTag: []    //, "Early", "Late"
       , filterMap: []
+      , filterHero: []
       
-      , fillterHero: []
       , searchHero: ""
     }
     
@@ -42,14 +42,33 @@ const stateInitial = {
       
       , triggerPosition: ""
       , triggerMap: ""
-      //, triggerTag: ""
-      //, idMapChosen: ""
-      //, idHeroChosen: ""
+     
       
+    }
+    
+    , edit : {
+      
+      _id: ""
+      , title: ""
+      , listIdMap: []
+      , listPosition: [ { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] } ]
+      , listTag: ["ToWin", "Kill"]
+      
+      , whichAdding: "Hero"
+      
+      , locationAddingMap: [0]
+      , locationAddingHero: [0,0]
+      
+      , triggerPosition: ""
+      , triggerMap: ""
     }
     
     , videos: {
       listVideo: [] 
+    }
+    
+    , comments: {
+      listComment: [] 
     }
     
     , focus: {
@@ -61,9 +80,9 @@ const stateInitial = {
       
       , author: {}
       
-      , comment: ""  // 대표 1 코맨트
-      , video: ""
-      , link: ""
+      , comment: {}  // 대표 1 코맨트
+      , video: {} 
+      , link: {} 
       
     }
     

@@ -99,7 +99,7 @@ const GroupNumber= styled(Div)`
   align-items: center;
   
   & > * {
-    width: 150px;
+    width: auto;
   	margin-left: 5px;
   	margin-right: 5px;
   	border-radius: 6px;
@@ -194,7 +194,16 @@ const ButtonNumberSide = styled(Button)`
   <DivOption>
         
     
-    <DivOptionTitle> Option </DivOptionTitle>
+    <DivOptionTitle> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '설정';
+                case 'ja': 
+                  return '設定';
+                default: // eng
+                  return 'Options';
+              }
+            })()} </DivOptionTitle>
       
 
     
@@ -202,7 +211,16 @@ const ButtonNumberSide = styled(Button)`
    <DivBody>
    
     <DivRegion>
-      <Div> region:  </Div>
+      <Div>  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '지역:';
+                case 'ja': 
+                  return '地域:';
+                default: // eng
+                  return 'region:';
+              }
+            })()} </Div>
       <ButtonRegion onClick={(authority==="administrator")?onClick_ButtonRegion:onClick_NotAdministrator}> 
   	     <img src={objFlag[option.region]} width="48" height="36"/>
   	  </ButtonRegion>
@@ -210,7 +228,16 @@ const ButtonNumberSide = styled(Button)`
    
    {(authority==="administrator")?
       <GroupNumber>
-        <Div> number of teams: </Div>
+        <Div>  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '팀 수:';
+                case 'ja': 
+                  return 'チーム数:';
+                default: // eng
+                  return 'number of teams:';
+              }
+            })()}  </Div>
         
         <ButtonNumberSide
           onClick={(event)=>onClick_ButtonNumber(event, [option.numberTeams, option.numberGroups], "team", "minus")}

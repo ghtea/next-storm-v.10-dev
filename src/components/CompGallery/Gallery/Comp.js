@@ -36,6 +36,8 @@ import UserPublic from '../../_/UserPublic';
 
 import IconExpand from '../../../svgs/basic/IconExpand'
 import IconEnter from '../../../svgs/basic/IconEnter'
+import IconEye from '../../../svgs/basic/IconEye'
+
 
 import IconLink from '../../../svgs/basic/IconLink'
 import IconVideo from '../../../svgs/basic/IconVideo'
@@ -96,6 +98,8 @@ const LinkFocus = styled(LinkDefault)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  
+  cursor: pointer;
 `
 
 
@@ -296,6 +300,7 @@ const DivLike = styled(Div)`
 const Comp = ({
   
   user
+  , readyUser
   
   , language
   
@@ -353,24 +358,28 @@ const Comp = ({
     const onClick_Like = async (event) => {
       
       try {
-        let queryTemp = {
-          idUser: user._id
-          , idComp: tComp._id
-          , how: false
-        };
         
-        // 클릭하기 이전의 like!
-        if (like) {
-          queryTemp.how = false;
-          setPlus(plus-1);
-        }
-        else { 
-          queryTemp.how = true; 
-          setPlus(plus+1);
-        }
-        setLike(!like);
-        const query = queryString.stringify(queryTemp)  
-        await axios.put(`${config.URL_API_NS}/comp/like?` + query );
+        if(!readyUser) { addDeleteNotification("auth31", language); }
+        else {
+          let queryTemp = {
+            idUser: user._id
+            //, idComp: tComp._id
+            , how: false
+          };
+          
+          // 클릭하기 이전의 like!
+          if (like) {
+            queryTemp.how = false;
+            setPlus(plus-1);
+          }
+          else { 
+            queryTemp.how = true; 
+            setPlus(plus+1);
+          }
+          setLike(!like);
+          const query = queryString.stringify(queryTemp)  
+          await axios.put(`${config.URL_API_NS}/comp/like/${tComp._id}?` + query );
+        } // else
       }
       catch(error) {
         console.log(error);
@@ -383,7 +392,7 @@ const Comp = ({
 
    <DivComp>
     
-    <LinkFocus to={`/comp-gallery/focus/${tComp._id}`} > <IconEnter width={"24px"} height={"24px"} color={"color_very_weak"}  /> </LinkFocus>
+    <LinkFocus to={`/comp-gallery/focus/${tComp._id}`} > <IconEye width={"24px"} height={"24px"} color={"color_weak"}  /> </LinkFocus>
       
      <DivHeader>
         
@@ -420,7 +429,7 @@ const Comp = ({
      <DivFooter>
       
       <DivUser >
-        <UserPublic idUser={tComp.author} layout={"icon only"} />
+        <UserPublic size={36} idUser={tComp.author} layout={"icon only"} />
       </DivUser>
       
       
@@ -478,6 +487,8 @@ const Comp = ({
     return {
       
       user: state.auth.user
+      , readyUser: state.basic.ready.user
+      
       ,listAllTag: state.comp_gallery.gallery.listAllTag
       
       

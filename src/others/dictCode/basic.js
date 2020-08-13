@@ -19,6 +19,16 @@ const basic = {
 	}
 	
 	
+	, "basic03": { 
+		situation: "success"
+		, message: {
+			en: `The link has been copied.`
+			,ko: `링크가 복사되었습니다`
+			,ja: `リンクがコピーされました。`
+		}
+	}
+	
+	
 }
 
 

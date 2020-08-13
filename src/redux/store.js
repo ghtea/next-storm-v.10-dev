@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 
 import auth from './reducers/auth';
 import basic from './reducers/basic';
+import reaction from './reducers/reaction';
 import hots from './reducers/hots';
 import team_planner from './reducers/team_planner';
 import comp_gallery from './reducers/comp_gallery';
@@ -19,6 +20,7 @@ const reducers = combineReducers({
   
   auth: auth
   ,basic: basic
+  ,reaction: reaction
   ,hots : hots
   ,team_planner : team_planner
   ,comp_gallery : comp_gallery

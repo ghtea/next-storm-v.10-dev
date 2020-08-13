@@ -28,9 +28,8 @@ import IconLoading from '../svgs/basic/IconLoading'
 
 
 
-const Container = styled(Div)`
+const DivTeamPlanner = styled(Div)`
   width: 100%;
-  height: 100%;
   
   display: flex;
   flex-direction: column;
@@ -51,11 +50,11 @@ const Main = styled(Div)`
   
   width: 100%;
   
-  margin-top: 100px; 
+  margin-top: 50px; 
   
   @media (min-width:  ${props => (props.theme.media.md) }px) {
     
-    margin-top: 120px;
+    margin-top: 60px;
     
   }
 `
@@ -70,7 +69,7 @@ const TeamPlanner = ({
   
   
    return (
-   <Container>
+   <DivTeamPlanner>
     
     <SubTeamPlanner/>
       
@@ -81,7 +80,7 @@ const TeamPlanner = ({
       </Switch>
     </Main>
   
-    </Container>
+    </DivTeamPlanner>
     )
 }
   

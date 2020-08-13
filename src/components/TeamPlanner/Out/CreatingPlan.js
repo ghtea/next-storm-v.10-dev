@@ -35,6 +35,7 @@ dotenv.config({
 */
 
 const DivCreatingPlan = styled(Div)`
+  height: 180px;
   
   display: flex;
   flex-direction: column;
@@ -50,9 +51,6 @@ const DivHeader = styled(Div)`
   align-items: center;
 `
 
-const DivTitle = styled(Div)`
-  font-size: 1.6rem;
-`
 
 const DivDescription = styled(Div)`
   color: ${props => props.theme.color_weak};
@@ -109,6 +107,10 @@ const ButtonCreatePlan = styled(Button)`
   width: 60px;
   height: 100%;
   
+  white-space: nowrap;
+  overflow: hidden;
+  
+  padding:2px;
   border-radius: 6px;
 `
 
@@ -139,6 +141,7 @@ const DivIconWorking = styled(Div)`
  const CreatingPlan = ({
    
    language
+   , user
    , loading, ready, working
    
    , readPlanTeam, replaceWorking
@@ -196,12 +199,21 @@ const DivIconWorking = styled(Div)`
       try {
         replaceWorking("createPlan", true);
         
-        await axios.post (`${process.env.REACT_APP_URL_AHR}/plan-team`, {
+        let request = {
           _id: idPlanTeam
           , password: pwPlanTeam
           , title: titlePlanTeam
           , region: regionCreating
-        });
+        }
+        
+        if (user._id) {
+          request['listAuthor'] = [user._id]
+        }
+        else {
+          request['listAuthor'] = []
+        }
+        
+        await axios.post (`${process.env.REACT_APP_URL_AHR}/plan-team`, request);
         //console.log(regionCreating);
         replaceWorking("createPlan", false);
         
@@ -230,56 +242,55 @@ const DivIconWorking = styled(Div)`
   return (
   
   <DivCreatingPlan>
-        
-    <DivHeader>
+   
     
-      <DivTitle> Team Planner </DivTitle>
+	  <DivInput>
+      <InputTitle {...inputTitle} placeholder="ex) friday event games" />
       
+      <ButtonRegion onClick={onClick_ButtonRegion} > 
+        <img src={objFlag[regionCreating]} width="48" height="36"/>
+      </ButtonRegion>
       
-    </DivHeader>
+      {working.createPlan ? 
+      <ButtonCreatePlan> 
+      
+        <DivIconWorking>
+          <IconWorking 
+            width={"27px"}
+            height={"24px"}
+          />  
+        </DivIconWorking>
+        
+      </ButtonCreatePlan> 
+      
+     : <ButtonCreatePlan onClick = {onClick_ButtonCreatePlan} > {(() => {
+          switch (language) {
+            case 'ko': 
+              return '만들기';
+            case 'ja': 
+              return '作成';
+            default: // eng
+              return 'Create';
+          }
+	      })()} </ButtonCreatePlan> }
+      
+	  </DivInput>
     
-    <DivBody>
-	   
-		  <DivInput>
-	      <InputTitle {...inputTitle} placeholder="ex) friday event games" />
-	      
-	      <ButtonRegion onClick={onClick_ButtonRegion} > 
-	        <img src={objFlag[regionCreating]} width="48" height="36"/>
-	      </ButtonRegion>
-	      
-        {working.createPlan ? 
-        <ButtonCreatePlan> 
-        
-          <DivIconWorking>
-            <IconWorking 
-              width={"27px"}
-              height={"24px"}
-            />  
-          </DivIconWorking>
-          
-        </ButtonCreatePlan> 
-        
-       : <ButtonCreatePlan onClick = {onClick_ButtonCreatePlan} > START </ButtonCreatePlan> }
-        
-		  </DivInput>
+    <DivCaution>
+	    <Div> 
+	      {(() => {
+          switch (language) {
+            case 'ko': 
+              return '우선 아무 제목이나 입력한 후, 만들기!';
+            case 'ja': 
+              return '適当なタイトル入力して、作成!';
+            default: // eng
+              return 'Enter any title first, and click Create!';
+          }
+	      })()}
+     </Div>
+    </DivCaution>
 	    
-	    <DivCaution>
-  	    <Div> 
-  	      {(() => {
-            switch (language) {
-              case 'ko': 
-                return '우선 아무 제목이나 입력한 후 start!';
-              case 'ja': 
-                return '適当なタイトル入力してstart!';
-              default: // eng
-                return 'Enter any title first, and click start!';
-            }
-  	      })()}
-	     </Div>
-	    </DivCaution>
-	    
-	   </DivBody>
-  
   </DivCreatingPlan>
   
   )
@@ -294,6 +305,7 @@ function mapStateToProps(state) {
     ,loading: state.basic.loading
     ,working: state.basic.working
     
+    , user: state.auth.user
     , language: state.basic.language
   }; 
 } 

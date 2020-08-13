@@ -30,6 +30,7 @@ import IconWorking from '../../svgs/basic/IconWorking'
 
 
 const DivSignUp = styled(Div)`
+  margin-top: 20px;
   width: 300px;
   
   display: flex;
@@ -187,25 +188,61 @@ const Link_Common = styled(LinkDefault)`
     
     
     <Div>
-      <DivLabel> Email Address </DivLabel>
+      <DivLabel> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '이메일 주소';
+                case 'ja': 
+                  return 'メールアドレス';
+                default: // eng
+                  return 'Email Address';
+              }
+            })()} </DivLabel>
       <InputCommon {...inputEmail1}  placeholder="example@gmail.com"  />
       <InputCommon {...inputEmail2}  placeholder="again"  />
     </Div>
     
     <Div>
-      <DivLabel> Password </DivLabel>
+      <DivLabel> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '비밀번호';
+                case 'ja': 
+                  return 'パスワード';
+                default: // eng
+                  return 'Password';
+              }
+            })()}  </DivLabel>
       <InputCommon {...inputPassword1}  placeholder="password" type="password" />
       <InputCommon {...inputPassword2}  placeholder="again" type="password" />
     </Div>
     
     <Div>
-      <DivLabel> Battletag </DivLabel>
+      <DivLabel> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '배틀태그';
+                case 'ja': 
+                  return 'バトルタグ';
+                default: // eng
+                  return 'Battletag';
+              }
+            })()}  </DivLabel>
       <InputCommon {...inputBattletagPending1}  placeholder="exmaple#1234"/>
       <InputCommon {...inputBattletagPending2}  placeholder="again"/>
     </Div>
     
     
-    <ButtonSignUp onClick={onClick_SignUp}> SIGN UP </ButtonSignUp>
+    <ButtonSignUp onClick={onClick_SignUp}> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '회원가입';
+                case 'ja': 
+                  return '会員加入';
+                default: // eng
+                  return 'Sign Up';
+              }
+            })()}  </ButtonSignUp>
     
     <Link_Common to="/auth/log-in"> to Log In </Link_Common>
     

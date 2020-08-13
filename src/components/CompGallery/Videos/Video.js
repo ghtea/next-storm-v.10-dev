@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ReactPlayer from 'react-player';
+import { TwitchClip } from 'react-twitch-embed';
+//import YouTube from 'react-youtube';
 
 import axios from 'axios';
 import queryString from 'query-string';
@@ -15,6 +17,8 @@ import dictCode from '../../../others/dictCode'
 
 import { replaceData2 } from "../../../redux/actions/basic";
 import { replaceDataCompGallery, replaceData2CompGallery } from "../../../redux/actions/comp_gallery";
+import {replaceDataReaction, replaceData2Reaction} from "../../../redux/actions/reaction";
+
 
 
 import {  NavLink, useHistory } from 'react-router-dom';
@@ -25,9 +29,11 @@ import UserPublic from '../../_/UserPublic';
 
 import IconEdit from '../../../svgs/basic/IconEdit'
 import IconPlus from '../../../svgs/basic/IconPlus'
-import IconEnter from '../../../svgs/basic/IconEnter'
 import IconHeart from '../../../svgs/basic/IconHeart'
 
+import IconEnter from '../../../svgs/basic/IconEnter'
+import IconEye from '../../../svgs/basic/IconEye'
+import IconLayers from '../../../svgs/basic/IconLayers'
 
 
 
@@ -52,7 +58,7 @@ const DivVideo = styled(Div)
 `;
 
 
-const DivEnter = styled(Div)`
+const DivToSubject = styled(Div)`
   z-index: 2;
   position: absolute;
   right: 0;
@@ -63,6 +69,8 @@ const DivEnter = styled(Div)`
   width: 36px;
   height: 36px;
   border-radius: 5px;
+  
+  cursor: pointer;
 `
 
 
@@ -131,19 +139,32 @@ const DivLike = styled(Div)`
 const Video = ({
 
   language
+  
   , user
+  , readyUser
   
   , video
+  
+  , where
+    
+    
+  , replaceDataReaction
+  , replaceData2Reaction
   
   , addDeleteNotification
 }) => {
   
+  const history = useHistory(); 
+  
   const [like, setLike] = useState(false);
   const [plus, setPlus] = useState(0);
-    useEffect(()=>{
-      if ( video.listUserLike.includes(user._id) ) { setLike(true)}
-      else {setLike(false)};
-    },[])
+  
+  
+  useEffect(()=>{
+    if ( video.listUserLike.includes(user._id) ) { setLike(true)}
+    else {setLike(false)};
+  },[])
+    
     
   const onClick_Like = async (event) => {
       
@@ -175,25 +196,82 @@ const Video = ({
       }
     }
 
+
+  const onClick_Edit = (event) => {
+    
+    if (!readyUser) {
+      addDeleteNotification("auth31", language);
+      
+      const query = queryString.stringify({
+        "shouldGoBack": "yes"
+      });
+      history.push('/auth/log-in?' + query)
+    }
+    
+    else {
+      
+      replaceDataReaction("mode", "edit");
+      replaceDataReaction("which", "video");
+      
+      replaceDataReaction("authorReaction", video.author);
+      replaceDataReaction("idReaction", video._id);
+      replaceDataReaction("idSubject", video.subject._id);
+      replaceDataReaction("modelSubject", video.subject.model);
+      
+      replaceDataReaction("visibility", "visible");
+    }
+    
+  }
+
   return (
 
     <DivVideo>
+    
+      { (where==="videos")&&  
+        <DivToSubject
+          onClick={event=>{history.push(`/comp-gallery/focus/${video.subject._id}`)}}
+        > <IconEye width={"24px"} height={"24px"} color={"color_weak"}  /> </DivToSubject>
+      }
       
-      <DivEnter> <IconEnter width={"24px"} height={"24px"} color={"color_very_weak"}  /> </DivEnter>
       
       <DivView> 
+    
+      {video.type === "Youtube" &&
         <ReactPlayer
-          className='react-player'
-          url={`${video.content}`}
+          url={`${video.urlContent}`}
           width='270px'
           height='100%'
         />
+      }
+      
+      {video.type === "Twitch Clip" &&
+       <TwitchClip 
+        clip={`${video.idContent}`}
+        width='270px'
+        height='100%'
+        autoplay={false}
+        />
+      }
+      
+      {video.type === "Others" &&
+        <ReactPlayer
+          url={`${video.urlContent}`}
+          width='270px'
+          height='100%'
+        />
+      }
+      
       </DivView>
       
       <DivFooter>  
-        <Div> <UserPublic idUser={video.author} layout={"right"}/> </Div>
+        <Div> <UserPublic size={36} idUser={video.author} layout={"right"}/> </Div>
         
-        <Div> <IconEdit width={"24px"} height={"24px"} color={"color_very_weak"}  /> </Div>
+        
+        { user._id && (video.author === user._id) && 
+          <Div
+            onClick={onClick_Edit}
+          > <IconEdit  width={"24px"} height={"24px"} color={"color_weak"} />  </Div>
+        }
         
         <DivLike onClick={onClick_Like} >
           <Div number={video.listUserLike.length + plus}> {video.listUserLike.length + plus} </Div>
@@ -215,7 +293,9 @@ function mapStateToProps(state) {
   return {
 
     language: state.basic.language
+    
     , user: state.auth.user
+    , readyUser: state.basic.ready.user
   };
 }
 
@@ -226,7 +306,10 @@ function mapDispatchToProps(dispatch) {
     , replaceData2CompGallery: (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
 
     , replaceData2: (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
-
+    
+    ,replaceDataReaction : (which, replacement) => dispatch(replaceDataReaction(which, replacement))
+    ,replaceData2Reaction : (which1, which2, replacement) => dispatch(replaceData2Reaction(which1, which2, replacement))
+    
     , addDeleteNotification: (code_situation, language, message, time) => dispatch(addDeleteNotification(code_situation, language, message, time))
   };
 }

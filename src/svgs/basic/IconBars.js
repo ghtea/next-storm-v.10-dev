@@ -18,7 +18,7 @@ const IconBars = ({width, height, color="color_very_weak", themeName}) => {
 	<DivContainer style= {{ width: `${width}`, height:`${height}` }} >
 		<svg 
 			
-			className="icon usingHover Info"
+			className="icon"
 			xmlns="http://www.w3.org/2000/svg" 
 			
 			

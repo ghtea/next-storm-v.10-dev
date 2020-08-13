@@ -24,8 +24,13 @@ import {Div, Input, Button, NavLinkDefault} from '../../styles/DefaultStyles';
 import IconLoading from '../../svgs/basic/IconLoading';
 
 import IconGallery from '../../svgs/basic/IconGallery';
-import IconVideo from '../../svgs/basic/IconVideo';
 import IconCreate from '../../svgs/basic/IconCreate';
+
+import IconVideo from '../../svgs/basic/IconVideo';
+import IconComment from '../../svgs/basic/IconComment';
+
+import IconEye from '../../svgs/basic/IconEye';
+import IconEdit from '../../svgs/basic/IconEdit';
 
 const DivSubCompGallery = styled(Div)`
 
@@ -49,9 +54,7 @@ const DivSubCompGallery = styled(Div)`
   /*max-width: 360px;*/
   
   height: 40px; 
-    
-
-
+  
   @media (min-width:  ${props => (props.theme.media.md) }px) {
     top: 70px;
     width: auto;
@@ -98,6 +101,16 @@ const NavLinkStyled = styled(NavLinkDefault).attrs({ activeClassName })`
 	  margin-left: 3px;
     margin-right: 3px;
     
+	}
+	
+	/*hide text on mobile*/
+	& > div:nth-child(2) {
+	  display: none;
+	  
+	  @media (min-width:  ${props => (props.theme.media.md) }px) {
+	    display: flex;
+	    font-size: 0.9rem;
+	  }
 	}
 	
 `;
@@ -153,7 +166,25 @@ const SubCompGallery = ({
         </Div> 
 			</NavLinkStyled> 
 			
+		  
+		  <NavLinkStyled to="/comp-gallery/create" isActive={()=>checkActive(/^(\/comp-gallery\/create)/)} > 
+        <IconCreate width={"22px"} height={"22px"} color={(location.pathname==="/comp-gallery/create")?"color_active": "color_very_weak"} />
+				<Div> 
+				  {(() => {
+            switch (language) {
+              case 'ko': 
+                return '만들기';
+              case 'ja': 
+                return '作成';
+              default: // eng
+                return 'Create';
+            }
+          })()}  
+				</Div> 
+			</NavLinkStyled> 
 			
+			
+		  
 			<NavLinkStyled to="/comp-gallery/videos" isActive={()=>checkActive(/^(\/comp-gallery\/videos)/)} > 
         <IconVideo width={"22px"} height={"22px"} color={(location.pathname==="/comp-gallery/videos")?"color_active": "color_very_weak"} />
 				<Div> 
@@ -170,22 +201,59 @@ const SubCompGallery = ({
         </Div> 
 			</NavLinkStyled> 
 
-
-      <NavLinkStyled to="/comp-gallery/create" isActive={()=>checkActive(/^(\/comp-gallery\/create)/)} > 
-        <IconCreate width={"22px"} height={"22px"} color={(location.pathname==="/comp-gallery/create")?"color_active": "color_very_weak"} />
+      <NavLinkStyled to="/comp-gallery/comments" isActive={()=>checkActive(/^(\/comp-gallery\/comments)/)} > 
+        <IconComment width={"22px"} height={"22px"} color={(location.pathname==="/comp-gallery/comments")?"color_active": "color_very_weak"} />
 				<Div> 
 				  {(() => {
             switch (language) {
               case 'ko': 
-                return '만들기';
+                return '댓글';
               case 'ja': 
-                return '作成';
+                return 'コメント';
               default: // eng
-                return 'Create';
+                return 'Comments';
             }
           })()}  
-				</Div> 
+        </Div> 
 			</NavLinkStyled> 
+      
+      
+			
+			{ (/^(\/comp-gallery\/edit)/).test(location.pathname) &&
+  			<NavLinkStyled to={`${location.href}`} isActive={()=>true} > 
+          <IconEdit width={"22px"} height={"22px"} color={"color_active"} />
+  				<Div> 
+  				  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '수정중';
+                case 'ja': 
+                  return '修正中';
+                default: // eng
+                  return 'Editing';
+              }
+            })()}  
+  				</Div> 
+  			</NavLinkStyled> 
+			}
+			
+			{ (/^(\/comp-gallery\/focus)/).test(location.pathname) &&
+  			<NavLinkStyled  to={`${location.href}`} isActive={()=>true} > 
+          <IconEye width={"22px"} height={"22px"} color={"color_active"} />
+  				<Div> 
+  				  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '보는중';
+                case 'ja': 
+                  return '観覧中';
+                default: // eng
+                  return 'Focusing';
+              }
+            })()}  
+  				</Div> 
+  			</NavLinkStyled> 
+			}
 			
     </DivSubCompGallery>
       

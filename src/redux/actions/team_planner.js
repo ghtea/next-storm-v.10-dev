@@ -1,6 +1,23 @@
 import * as types from './ActionTypes';
 
 
+export const replaceDataTeamPlanner = (which, replacement) => {
+  return {
+    type: types.REPLACE_DATA_TEAM_PLANNER,
+    which: which,
+    replacement: replacement
+  }
+}
+
+export const replaceData2TeamPlanner = (which1, which2, replacement) => {
+  return {
+    type: types.REPLACE_DATA_2_TEAM_PLANNER,
+    which1: which1,
+    which2: which2,
+    replacement: replacement
+  }
+}
+
 
 
 export const replacePlanTeam = (newPlanTeam) => {

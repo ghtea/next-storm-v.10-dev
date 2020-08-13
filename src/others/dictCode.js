@@ -5,6 +5,7 @@ import abnet from './dictCode/abnet';
 import alocal from './dictCode/alocal';
 import tplan from './dictCode/tplan';
 import comp from './dictCode/comp';
+import reaction from './dictCode/reaction';
 
 const dictCode = {
 	
@@ -14,6 +15,7 @@ const dictCode = {
 	, ...alocal
 	, ...tplan
 	, ...comp
+	, ...reaction
 }
 
 

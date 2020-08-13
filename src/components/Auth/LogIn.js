@@ -31,6 +31,7 @@ import IconWorking from '../../svgs/basic/IconWorking'
 
 
 const DivLogIn = styled(Div)`
+  margin-top: 20px;
   width: 300px;
   
   display: flex;
@@ -99,14 +100,7 @@ const Link_Common = styled(LinkDefault)`
   
   const history = useHistory(); 
   
-  const [destination, setDestination] = useState("/");
   
-  useEffect(()=>{
-    const query = queryString.parse(location.search);
-    if(query.destination !== undefined) {
-      setDestination(query.destination);
-    }
-  },[])
   
   
   const onClick_LogIn = async (event) => {
@@ -169,8 +163,16 @@ const Link_Common = styled(LinkDefault)`
             
             replaceData2('loading', 'user', false);
             replaceData2('ready', 'user', true);
-        
-            history.push(destination);
+            
+            
+            const query = queryString.parse(location.search);
+            if(query.destination !== undefined) {
+              history.push(query.destination);
+            }
+            else if (query.shouldGoBack === "yes") {
+              history.goBack();
+            }
+            
             addDeleteNotification("auth13", language);
           }
           
@@ -202,16 +204,43 @@ const Link_Common = styled(LinkDefault)`
   <DivLogIn>
     
     <Div>
-      <DivLabel> Email or Battletag </DivLabel>
+      <DivLabel> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '이메일 또는 배틀태그';
+                case 'ja': 
+                  return 'メールまたはバトルタグ';
+                default: // eng
+                  return 'Email or Battletag'
+              }
+            })()}  </DivLabel>
       <InputCommon {...inputEmailBattletag}  placeholder="email or battletag"  />
     </Div>
     
     <Div>
-      <DivLabel> Password </DivLabel>
+      <DivLabel> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '비밀번호';
+                case 'ja': 
+                  return 'パスワード';
+                default: // eng
+                  return 'Password';
+              }
+            })()}  </DivLabel>
       <InputCommon {...inputPassword}  placeholder="password" type="password" />
     </Div>
     
-    <ButtonLogIn onClick={onClick_LogIn}> LOG IN </ButtonLogIn>
+    <ButtonLogIn onClick={onClick_LogIn}> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '로그인';
+                case 'ja': 
+                  return 'ログイン';
+                default: // eng
+                  return 'Log In'
+              }
+            })()}  </ButtonLogIn>
     
     <Link_Common to="/auth/sign-up"> to Sign Up </Link_Common>
     <Link_Common to="/auth/apply-battletag"> to Apply Battletag </Link_Common>

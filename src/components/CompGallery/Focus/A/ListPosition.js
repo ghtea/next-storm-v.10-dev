@@ -32,7 +32,7 @@ import Position from './ListPosition/Position';
 const DivListPosition = styled(Div)
 `
   width: 100%;
-  height: 300px;
+  height: 280px;
   
   display: flex;
   flex-direction: row;

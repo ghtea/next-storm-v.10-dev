@@ -9,12 +9,45 @@ const comp = {
 		}
 	}
 	
+	, "comp011": { // 
+		situation: "success"
+		, message: {
+			en: `Composition has been updated!`
+			,ko: `조합이 수정되었습니다!`
+			,ja: `構成が修整されました！`
+		}
+	}
+	, "comp012": { // 
+		situation: "success"
+		, message: {
+			en: `Composition has been deleted`
+			,ko: `조합이 삭제되었습니다!`
+			,ja: `構成が削除されました！`
+		}
+	}
+	
 	, "comp02": { // 
 		situation: "error"
 		, message: {
 			en: `Failed in creating composition`
 			,ko: `조합을 생성하지 못했습니다`
 			,ja: `構成を作成できませんでした`
+		}
+	}
+	, "comp021": { // 
+		situation: "error"
+		, message: {
+			en: `Failed in updating composition`
+			,ko: `조합을 수정하지 못했습니다`
+			,ja: `構成を修整できませんでした`
+		}
+	}
+	, "comp022": { // 
+		situation: "error"
+		, message: {
+			en: `Failed in deleting composition`
+			,ko: `조합을 삭제하지 못했습니다`
+			,ja: `構成を削除できませんでした`
 		}
 	}
 	
@@ -85,6 +118,8 @@ const comp = {
 			,ja: `その英雄はすでに他のポジションのメイン英雄として追加されています`
 		}
 	}
+	
+	
 	
 }
 

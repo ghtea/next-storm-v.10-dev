@@ -10,8 +10,11 @@ import * as config from '../config';
 
 import Gallery from "../components/CompGallery/Gallery"
 import Videos from "../components/CompGallery/Videos"
+import Comments from "../components/CompGallery/Comments"
+
 import Focus  from "../components/CompGallery/Focus"
 import Create  from "../components/CompGallery/Create"
+import Edit  from "../components/CompGallery/Edit"
 import SubCompGallery from "../components/CompGallery/SubCompGallery"
 
 import { connect } from "react-redux";
@@ -201,7 +204,10 @@ const CompGallery = ({
           <Route path="/comp-gallery" exact={true} component={Gallery} />
           <Route path="/comp-gallery/focus/:idComp"  component={Focus} />
           <Route path="/comp-gallery/videos"  component={Videos} />
+          <Route path="/comp-gallery/comments"  component={Comments} />
           <Route path="/comp-gallery/create"  component={Create} />
+          
+          <Route path="/comp-gallery/edit/:idComp"  component={Edit} />
         </Switch>
       </Main>
     }

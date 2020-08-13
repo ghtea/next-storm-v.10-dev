@@ -32,7 +32,7 @@ const DivSub = styled(Div)`
   color: ${props => props.theme.color_strong};
   
 
-  z-index: 100; 
+  z-index: 200; 
   
   position: fixed;
   top: 0px;

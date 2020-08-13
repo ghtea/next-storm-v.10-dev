@@ -161,7 +161,14 @@ const auth = {
 			,ja: `先にログインしてください`
 		}
 	}
-	
+	, "auth32": { // 
+		situation: "error"
+		, message: {
+			en: `You are not an author of this comment/video`
+			,ko: `해당 댓글/동영상을 만든 유저가 아닙니다`
+			,ja: `このコメントまたは動画を作ったユーザーではありません`
+		}
+	}
 	
 	
 	, "alocal41": { // 

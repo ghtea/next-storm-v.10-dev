@@ -95,8 +95,7 @@ const ImgEachMap = styled(Img)`
   
   position: absolute;
   z-index:0;
-  
-   
+ 
 `
 
 const ButtonDelete = styled(Button)`
@@ -228,7 +227,9 @@ const DivMapsReady = styled(Div)`
 //https://stackoverflow.com/questions/47922687/force-react-to-reload-an-image-file
 // https://www.npmjs.com/package/react-image
 const MapsReady = ({
-  indexMap
+  
+  language
+  , indexMap
   
   , listAllMap
   
@@ -267,12 +268,48 @@ const MapsReady = ({
     const numberCurrentMap = listIdMap.length;
     const setIdMap = new Set(listIdMap);
     
-    if ( areEqualSets(setIdMap, setIdAllMap)  ) { setSummary("all maps") }
-    else if ( areEqualSets(setIdMap, setId2LineMap) ) { setSummary("2 lines") }
-    else if ( areEqualSets(setIdMap, setId3LineMap)  ) { setSummary("3 lines") }
+    
+    if ( areEqualSets(setIdMap, setIdAllMap)  ) { setSummary(`${(() => {
+              switch (language) {
+                case 'ko': 
+                  return '모든 맵';
+                case 'ja': 
+                  return '全マップ';
+                default: // eng
+                  return 'all maps';
+              }
+            })()}`) }
+    else if ( areEqualSets(setIdMap, setId2LineMap) ) { setSummary(`${(() => {
+              switch (language) {
+                case 'ko': 
+                  return '2라인';
+                case 'ja': 
+                  return '2ライン';
+                default: // eng
+                  return '2 lines';
+              }
+            })()}`) }
+    else if ( areEqualSets(setIdMap, setId3LineMap)  ) { setSummary(`${(() => {
+              switch (language) {
+                case 'ko': 
+                  return '3라인';
+                case 'ja': 
+                  return '3ライン';
+                default: // eng
+                  return '3 lines';
+              }
+            })()}`) }
     else {
-      setSummary(`${numberCurrentMap} maps`)
-    }
+        setSummary(`${(() => {
+          switch (language) {
+            case 'ko': 
+              return `${numberCurrentMap}맵`
+            case 'ja': 
+              return `${numberCurrentMap}マップ`
+            default: // eng
+              return `${numberCurrentMap} maps`
+          }
+        })()}`) }
     
   }, [listIdMap])
   
@@ -355,7 +392,10 @@ const MapsReady = ({
 
 function mapStateToProps(state) { 
   return { 
-    listAllMap: state.hots.listAllMap
+    
+    language: state.basic.language
+    
+    , listAllMap: state.hots.listAllMap
     
     , listIdMap: state.comp_gallery.create.listIdMap
     

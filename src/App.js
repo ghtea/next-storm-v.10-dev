@@ -11,6 +11,7 @@ import { useCookies } from 'react-cookie';
 import dictCode from './others/dictCode'
 
 import Sub from "./routes/Sub";
+import Reaction from "./routes/Reaction";
 import Notification from "./routes/Notification";
 import Home from "./routes/Home";
 
@@ -34,6 +35,8 @@ import { GlobalStyle, Div} from './styles/DefaultStyles';
 // env 사용할때 각변수 앞에 REACT_APP_ 를 붙혀야한다 https://hello-bryan.tistory.com/134
 
 const DivContent = styled(Div)`
+  
+  opacity: ${props=> (props.visibilityReaction === "visible")? "0.3" : "1.0"  };
   
   width: 100%;
   
@@ -69,6 +72,7 @@ const App = ({
   ,match, location, history
   
   , themeName, language
+  , visibilityReaction
   
   ,replaceDataAuth, replaceData2Auth
   ,replaceData, replaceData2
@@ -198,9 +202,9 @@ const App = ({
       <Route path="/" component={Sub} />
       <Route path="/" component={Notification} />
       
+      <Route path="/" component={Reaction} />
       
-      
-      <DivContent>
+      <DivContent visibilityReaction={visibilityReaction}>
       <Switch >
       
       <Route path="/" exact={true} component={Home} />
@@ -210,6 +214,7 @@ const App = ({
       <Route path="/team-planner" component={TeamPlanner} />
       
       <Route path="/comp-gallery" component={CompGallery} />
+      
       
       </Switch >
       </DivContent>
@@ -232,7 +237,8 @@ function mapStateToProps(state) {
     
     , themeName: state.basic.themeName
     , language: state.basic.language
-   
+    
+    , visibilityReaction: state.reaction.visibility
   }; 
 } 
 

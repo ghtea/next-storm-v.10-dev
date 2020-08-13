@@ -48,7 +48,12 @@ const DivHeader = styled(Div)
 
 const DivFirst = styled(Div)`
   
-  height: 50px;
+  height: 30px;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   
   background-color: ${props => props.theme.COLOR_normal};
   border-radius: 9px 9px 0 0;
@@ -184,7 +189,7 @@ const Header = ({
     <DivHeader>
       
       <DivFirst> 
-        title  
+        {focusingComp.title}  
       </DivFirst>
       
       <DivSecond> 

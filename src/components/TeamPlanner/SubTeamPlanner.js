@@ -24,6 +24,7 @@ import IconLoading from '../../svgs/basic/IconLoading';
 
 import IconList from '../../svgs/basic/IconList';
 import IconCreate from '../../svgs/basic/IconCreate';
+import IconEdit from '../../svgs/basic/IconEdit';
 
 
 
@@ -98,6 +99,15 @@ const NavLinkStyled = styled(NavLinkDefault).attrs({ activeClassName })`
     
 	}
 	
+	/*hide text on mobile*/
+	& > div:nth-child(2) {
+	  display: none;
+	  
+	  @media (min-width:  ${props => (props.theme.media.md) }px) {
+	    display: flex;
+	    font-size: 0.9rem;
+	  }
+	}
 `;
 
 
@@ -153,7 +163,23 @@ const SubTeamPlanner = ({
 				</Div> 
 			</NavLinkStyled> 
 
-      
+      { (/^(\/team-planner\/[\W\w]+)/).test(location.pathname) &&
+  			<NavLinkStyled  to={`${location.href}`} isActive={()=>true} > 
+          <IconEdit width={"22px"} height={"22px"} color={"color_active"} />
+  				<Div> 
+  				  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '작성중';
+                case 'ja': 
+                  return '作成中';
+                default: // eng
+                  return 'Doing';
+              }
+            })()}  
+  				</Div> 
+  			</NavLinkStyled> 
+			}
 			
     </DivSubTeamPlanner>
       

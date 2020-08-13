@@ -45,6 +45,10 @@ import * as imgMap from '../../../images/maps'
 
 
 import IconExpand from '../../../svgs/basic/IconExpand'
+import IconHero from '../../../svgs/basic/IconHero'
+import IconMap from '../../../svgs/basic/IconMap'
+import IconMore from '../../../svgs/basic/IconMore'
+
 
 import IconFun from '../../../svgs/tags/IconFun'
 import IconSerious from '../../../svgs/tags/IconSerious'
@@ -113,16 +117,15 @@ const GroupWhich = styled(Div)`
 `
 
 const InputHeroes = styled(Input)`
-  width: 160px;
+  width: 140px;
   height: 30px;
   font-size: 0.9rem;
   
   margin: 4px;
 `
 
-const ButtonMapOthers = styled(Button)`
+const ButtonWhich = styled(Button)`
   width: auto;
-  font-size: 0.9rem;
   height: 30px;
   
   margin: 4px;
@@ -141,6 +144,11 @@ const Filter = ({
     
     , listAllTag
     , searchHero
+    
+    , filterSize
+    , filterTag
+    , filterHero
+    , filterMap
     
     , readyListAllMap
     , readyListMapStandardRanked
@@ -161,7 +169,8 @@ const Filter = ({
     	const onChange = event => {
     		//console.log(event.target.value)
     		setWhich("heroes");
-    		replaceData2CompGallery("gallery", "searchHero", event.target.value);
+    		const searchHeroTemp = (event.target.value).toLowerCase();
+    		replaceData2CompGallery("gallery", "searchHero", searchHeroTemp);
     	}
     	return {value, onChange};
     }
@@ -183,20 +192,17 @@ const Filter = ({
     const onClick_Filtered = async (event) => {
       try {
         
-        const filterSize = [2, 3]; // 이 리스트 항목 중 하나의 값을 가져야한다
-        const filterMap = ['2', '3']; // 이 리스트의 모든 항목을 가져야 한다
-        const filterTag = ['ToWin', 'Kill']; // 이 리스트의 모든 항목을 가져야 한다
-        
         const query = queryString.stringify({
           filterSize: filterSize
           , filterMap: filterMap
           , filterTag: filterTag
+          , filterHero: filterHero
         });
         
         replaceData2("ready", "listComp", false);
         replaceData2("loading", "listComp", true);
             
-        const { data } = await axios.get(`${config.URL_API_NS}/comp/filtered?` + query );
+        const { data } = await axios.get(`${config.URL_API_NS}/comp/?` + query );
   
         replaceData2CompGallery("gallery", "listComp", data);
         replaceData2("ready", "listComp", true);
@@ -214,11 +220,48 @@ const Filter = ({
     return (
       <DivFilter>
         
-        <ButtonFilter> FILTER </ButtonFilter>
+        <ButtonFilter
+          onClick={onClick_Filtered}
+        > {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '적용';
+                case 'ja': 
+                  return '適用';
+                default: // eng
+                  return 'Apply';
+              }
+            })()}  </ButtonFilter>
         
         <GroupWhich>
-          <Div> <InputHeroes {...inputHeroes} placeholder="Heroes" /> </Div>
-          <Div> <ButtonMapOthers onClick={(event=>{setWhich("maps")})}> Maps </ButtonMapOthers> <ButtonMapOthers onClick={(event=>{setWhich("others")})}> Others </ButtonMapOthers> </Div>
+          <Div> 
+            <InputHeroes {...inputHeroes} placeholder={(() => {
+                switch (language) {
+                  case 'ko': 
+                    return '영웅';
+                  case 'ja': 
+                    return 'Heroes';
+                  default: // eng
+                    return 'Heroes';
+                }
+              })()}   /> 
+            </Div>
+            
+            
+          <Div> 
+            <ButtonWhich onClick={(event=>{setWhich("others")})}> 
+              <IconMore width={'20px'} height={'20px'} color={'color_weak'} />     
+            </ButtonWhich> 
+                 
+            <ButtonWhich onClick={(event=>{setWhich("heroes")})}> 
+              <IconHero width={'20px'} height={'20px'} color={'color_weak'} />     
+            </ButtonWhich> 
+            
+            <ButtonWhich onClick={(event=>{setWhich("maps")})}> 
+              <IconMap width={'20px'} height={'20px'} color={'color_weak'} />     
+            </ButtonWhich> 
+            
+          </Div>
         </GroupWhich>
         
         {returnWhich(which)}
@@ -244,6 +287,13 @@ const Filter = ({
       
       , searchHero: state.comp_gallery.gallery.searchHero
       
+      
+      , filterSize: state.comp_gallery.gallery.filterSize
+      , filterTag: state.comp_gallery.gallery.filterTag
+      , filterHero: state.comp_gallery.gallery.filterHero
+      , filterMap: state.comp_gallery.gallery.filterMap
+    
+    
       ,readyListAllMap: state.basic.ready.listAllMap
       , readyListMapStandardRanked: state.basic.ready.listMapStandardRanked
       

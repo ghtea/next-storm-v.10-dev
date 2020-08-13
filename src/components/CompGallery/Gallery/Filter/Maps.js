@@ -35,6 +35,7 @@ import Position from '../Comp/Position';
 
 import useInput from '../../../../tools/hooks/useInput';
 
+import {areEqualSets} from '../../../../tools/vanilla/set';
 
 import * as imgHero from '../../../../images/heroes'
 import * as imgMap from '../../../../images/maps'
@@ -103,7 +104,7 @@ const ButtonMap = styled(Button)`
   font-size: 0.8rem;
   
   width: auto;
-  max-width: 130px;
+  /*max-width: 130px;*/
   
   height: 28px;
   
@@ -117,13 +118,14 @@ const ButtonMap = styled(Button)`
   margin-right: 2px;
   margin-left: 2px;
   
-  background-color: ${props => (props.active)? props.theme.COLOR_normal : props.theme.COLOR_middle};
-  color:  ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
-  border: 1px solid ${props => (props.active)? props.theme.color_active : props.theme.color_weak};
+  background-color: ${props => (props.selected)? props.theme.COLOR_normal : props.theme.COLOR_middle};
+  color:  ${props => (props.selected)? props.theme.color_active : props.theme.color_weak};
+  border: 1px solid ${props => (props.selected)? props.theme.color_active : props.theme.color_weak};
   
   
   & > div {
-    display: block;
+    /*belows not work..*/
+    display: inline !important;
     text-align: left;
     overflow: hidden;
     white-space: nowrap;
@@ -152,6 +154,62 @@ const Maps = ({
   }) => {
     
     
+    const [setCurrent, setSetCurrent] = useState(new Set([]));
+    
+    /*
+    const listShowingMap = listAllMap.filter(objMap => objMap.type === "standard" && objMap.playable === true );
+    const list2LaneMap = listShowingMap.filter(objMap => objMap.lines === 2 );
+    const list3LaneMap = listShowingMap.filter(objMap => objMap.lines === 3 );
+    
+    const listIdAllMap = listShowingMap.map(element=> element._id);
+    const listId2LaneMap = list2LaneMap.map(element=> element._id);
+    const listId3LaneMap = list3LaneMap.map(element=> element._id);
+    
+    const setIdAllMap = new Set(listIdAllMap);
+    const setId2LaneMap = new Set(listId2LaneMap);
+    const setId3LaneMap = new Set(listId3LaneMap);
+    */
+    
+    
+    useEffect(()=>{
+    
+      const setFilterMap = new Set(filterMap);
+      
+      if (areEqualSets(setFilterMap, new Set([]) )){
+        setSetCurrent("any");
+      }
+      else {
+        setSetCurrent("");
+      }
+        
+    },[filterMap])
+    
+    
+    
+    const onClick_Set = (event, set) => {
+      switch(set) {
+        case "any":
+          replaceData2CompGallery("gallery", "filterMap", [])
+          break;
+        
+      }
+      
+    }
+    
+    
+    const onClick_Map = (event, idMap) => {
+      if(filterMap.includes(idMap)){
+        let filterMapTemp = filterMap;
+        filterMapTemp = filterMapTemp.filter(element => element !== idMap)
+        replaceData2CompGallery("gallery", "filterMap", filterMapTemp)
+      }
+      else {
+        let filterMapTemp = filterMap;
+        filterMapTemp.push(idMap)
+        replaceData2CompGallery("gallery", "filterMap", filterMapTemp)
+      }
+    }
+    
 
 
     return (
@@ -159,48 +217,34 @@ const Maps = ({
   
           
           <Div>
-            <ButtonMap> {(() => {
+            <ButtonMap
+              selected={setCurrent==="any"}
+              onClick={(event)=>onClick_Set(event, "any")}
+              > {(() => {
               switch (language) {
                 case 'ko': 
-                  return '모든 맵';
+                  return '아무 맵';
                 case 'ja': 
-                  return '全マップ';
+                  return '何でも';
                 default: // eng
-                  return 'all maps';
+                  return 'any maps';
               }
             })()}  
             </ButtonMap>
             
-            <ButtonMap> {(() => {
-              switch (language) {
-                case 'ko': 
-                  return '2라인';
-                case 'ja': 
-                  return '2ライン';
-                default: // eng
-                  return '2 lanes';
-              }
-            })()}  
-            </ButtonMap>
-            
-            <ButtonMap> {(() => {
-              switch (language) {
-                case 'ko': 
-                  return '3라인';
-                case 'ja': 
-                  return '3ライン';
-                default: // eng
-                  return '3 lanes';
-              }
-            })()}  
-            </ButtonMap>
             
           </Div>
           
           <Div>
             {
               listMapStandardRanked.map(element=>(
-                <ButtonMap key={element.name[language].short} > <Div>{element.name[language].full}</Div> </ButtonMap>
+                <ButtonMap 
+                  key={element.name[language].short} 
+                  onClick={(event)=> onClick_Map(event, element._id)}
+                  selected = {filterMap.includes(element._id)}
+                  > 
+                  <Div>{element.name[language].full}</Div> 
+                </ButtonMap>
               ))
             }
           </Div>
@@ -225,6 +269,9 @@ const Maps = ({
       
       ,listAllTag: state.comp_gallery.gallery.listAllTag
       
+      , filterMap: state.comp_gallery.gallery.filterMap
+
+      
       ,readyListAllMap: state.basic.ready.listAllMap
       , readyListMapStandardRanked: state.basic.ready.listMapStandardRanked
       
@@ -245,3 +292,86 @@ const Maps = ({
 
   export
 default connect(mapStateToProps, mapDispatchToProps)(Maps);
+
+
+
+
+// 맵은 필터에 있는 것 모두 포함한 경우니깐 필터에 애초에 여러개 넣을 이유가 적다
+/*
+
+      else if (areEqualSets(setFilterMap, setIdAllMap)){
+        setSetCurrent("all maps");
+      }
+      else if (areEqualSets(setFilterMap, setId2LaneMap)){
+        setSetCurrent("2 lanes");
+      }
+      else if (areEqualSets(setFilterMap, listId3LaneMap)){
+        setSetCurrent("3 lanes");
+      }
+      else {
+        setSetCurrent("")
+      }
+*/
+
+/*
+case "all maps":
+          replaceData2CompGallery("gallery", "filterMap", listIdAllMap)
+          break;
+        case "2 lanes":
+          replaceData2CompGallery("gallery", "filterMap", listId2LaneMap)
+          break;
+        case "3 lanes":
+          replaceData2CompGallery("gallery", "filterMap", listId3LaneMap)
+          break;
+          
+*/
+
+/*
+
+
+            <ButtonMap
+              selected={setCurrent==="all maps"}
+              onClick={(event)=>onClick_Set(event, "all maps")}
+              > {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '모든 맵';
+                case 'ja': 
+                  return '全マップ';
+                default: // eng
+                  return 'all maps';
+              }
+            })()}  
+            </ButtonMap>
+            
+            <ButtonMap
+              selected={setCurrent==="2 lanes"}
+              onClick={(event)=>onClick_Set(event, "2 lanes")}
+              > {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '2라인';
+                case 'ja': 
+                  return '2ライン';
+                default: // eng
+                  return '2 lanes';
+              }
+            })()}  
+            </ButtonMap>
+            
+            <ButtonMap
+              selected={setCurrent==="3 lanes"}
+              onClick={(event)=>onClick_Set(event, "3 lanes")}
+              > {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '3라인';
+                case 'ja': 
+                  return '3ライン';
+                default: // eng
+                  return '3 lanes';
+              }
+            })()}  
+            </ButtonMap>
+            
+*/

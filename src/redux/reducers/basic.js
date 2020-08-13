@@ -6,8 +6,14 @@ import * as types from '../actions/ActionTypes';
 
 const stateInitial = { 
     
-    ready : {
+    trigger : ""
+    
+    
+    , ready : {
+      
       planTeam: false
+      , listPlan: false
+      
       ,dictAllHeroBasic: false
       
       ,listAllMap: false
@@ -15,26 +21,37 @@ const stateInitial = {
       
       ,listComp: false
       
-      ,focusingComp: false
-      ,focusingCompBonus: false
+      , focusingComp: false
+      , focusingCompComment: false
+      , focusingCompVideo: false
+      
+      , editingComp: false
       
       ,listVideo: false
       
       ,user: false
       
       ,mmrUser: false
+      
+      , reactionToEdit: false
     }
     
     ,loading : {
-      planTeam: false
       
-      ,listComp: false
-      ,focusingComp: false
-      ,focusingCompBonus: false
+      planTeam: false
+      , listPlan: false
+      
+      , listComp: false
+      , focusingComp: false
+      , focusingCompComment: false
+      , focusingCompVideo: false
+      , editingComp: false
       
       ,listVideo: false
       
       ,user: false
+      
+      , reactionToEdit: false
     }
     
     

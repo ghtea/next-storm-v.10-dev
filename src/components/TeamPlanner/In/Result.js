@@ -80,8 +80,11 @@ const GroupButtonMain = styled(Div)`
 `
 
 const ButtonGenerate = styled(Button)`
-  width: 180px;
+  width: auto;
   height: 36px;
+  
+  padding-left: 5px !important;
+  padding-right: 5px !important;
   
   
   display: flex;
@@ -90,10 +93,11 @@ const ButtonGenerate = styled(Button)`
   align-items: center;
   
   border-radius: 10px;
-  
+
   & > div {
-    
+    width: auto;
     height: 100%;
+    
   }
 `
 
@@ -112,8 +116,11 @@ const InputTitleResult = styled(Input)`
 
 
 const ButtonSave = styled(Button)`
-  width: 90px;
+  width: auto;
   height: 36px;
+  
+  padding-left: 5px;
+  padding-right: 5px;
   
   margin-left: 5px;
   margin-right: 5px;
@@ -132,8 +139,11 @@ const ButtonSave = styled(Button)`
 `
 
 const ButtonDelete = styled(Button)`
-  width: 90px;
+  width: auto;
   height: 36px;
+  
+  padding-left: 5px;
+  padding-right: 5px;
   
   margin-left: 5px;
   margin-right: 5px;
@@ -183,9 +193,12 @@ const DivAllTeams = styled(Div)`
   
   flex-wrap: wrap;
   
-  @media (max-width: ${props => (props.theme.media.mid_big -1) }px ) {
-    overflow-y: auto;
-    height: 360px;
+  
+  overflow-y: auto;
+  height: 360px;
+  
+  @media (min-width: ${props => (props.theme.media.md) }px ) {
+    height: auto;
   }
 `
 
@@ -822,8 +835,17 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
         
         <Div>
           <ButtonGenerate onClick={onClick_generateTeams}>
-            <Div> Generate Teams </Div>
-            <IconMagic width={"28px"} height={"28px"} />   
+            <Div> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '팀 나누기';
+                case 'ja': 
+                  return 'チーム分け';
+                default: // eng
+                  return 'Generate Teams';
+              }
+            })()} </Div>
+            <IconMagic width={"22px"} height={"22px"} />   
           </ButtonGenerate>
         </Div>
         
@@ -831,13 +853,29 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
           <InputTitleResult {...inputTitleResult} placeholder="title of result" />
           
           <ButtonSave onClick={onClick_SaveResult}>
-            <Div> Save </Div>
-            <IconUpload width={"40px"} height={"32px"} /> 
+            <Div> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '저장';
+                case 'ja': 
+                  return '保存';
+                default: // eng
+                  return 'Save';
+              }
+            })()}</Div>
           </ButtonSave>
           
           <ButtonDelete onClick={onClick_DeleteResult} >
-            <Div> Delete </Div>
-            <IconDelete width={"28px"} height={"32px"} /> 
+            <Div>  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '삭제';
+                case 'ja': 
+                  return '削除';
+                default: // eng
+                  return 'Delete';
+              }
+            })()} </Div>
           </ButtonDelete>
           
         </Div>

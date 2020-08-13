@@ -4,6 +4,7 @@ import axios from 'axios';
 import Media from 'react-media';
 
 import * as config from '../../../config';
+import { useCookies } from 'react-cookie';
 
 import { connect } from "react-redux";
 import {replaceData} from "../../../redux/actions/basic";
@@ -14,6 +15,10 @@ import dictCode from '../../../others/dictCode';
 
 import { NavLink } from 'react-router-dom';
 import {Div, Button} from '../../../styles/DefaultStyles';
+
+import IconMoon from '../../../svgs/basic/IconMoon';
+import IconSun from '../../../svgs/basic/IconSun';
+import IconMoonSun from '../../../svgs/basic/IconMoonSun';
 
 
 
@@ -48,8 +53,6 @@ const GroupNav = styled(Div)`
 `
 
 
-
-
 const activeClassName = 'nav-link-active';
 
 
@@ -77,7 +80,31 @@ const NavLinkNavItem = styled(NavLink).attrs({ activeClassName })`
 	
 	}
 	
-`;
+`
+
+const GroupButton = styled(Div)`
+  display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+`
+
+const ButtonLanguage = styled(Button)`
+	font-size: 1rem;
+	width: 70px;
+	margin-left: 0px;
+	margin-right: 5px;
+	
+	padding: 0;
+`
+
+const ButtonTheme = styled(Button)`
+	width: 40px;
+	margin-left: 5px;
+	margin-right: 0px;
+`
+
+
 
 const checkActive = (regex) => {
     return regex.test(window.location.pathname);
@@ -93,12 +120,101 @@ const More = ({
 	, loadingUser, readyUser
 	
 	, themeName
+	, themeOption
 	
 	,replaceData, addDeleteNotification
 	
 	, replaceDataAuth, replaceData2Auth
 	}) => {
 	
+	  const [cookies, setCookie, removeCookie] = useCookies(['logged', 'language', 'themeOption']);
+	  
+	  
+	  const dictLanguage = {
+  		en: "English"
+  		, ko: "한국어"
+  		, ja: "日本語"
+  	}
+  	
+  	
+  	const onClick_Language = (event, language) => {
+  		if (language === "en") { 
+  			replaceData("language", "ko");
+  			removeCookie("language");
+  			setCookie('language', 'ko',{maxAge: 60 * 60 * 24 * 30});
+  		}
+  		else if (language === "ko") { 
+  			replaceData("language", "ja");
+  			removeCookie("language");
+  			setCookie('language', 'ja',{maxAge: 60 * 60 * 24 * 30});
+  		}
+  		else if (language === "ja") { 
+  			replaceData("language", "en");
+  			removeCookie("language");
+  			setCookie('language', 'en',{maxAge: 60 * 60 * 24 * 30});
+  		}
+  	}
+	  
+	  const isDarkMode = () => {
+  	  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  	    return true;
+  	  }
+  	  else {
+  	    return false;
+  	  }
+  	}  
+	
+	
+	const onClick_Theme = (event) => {
+	
+	  if (themeOption === "auto" ) {
+	    removeCookie("themeOption");
+    	setCookie('themeOption', 'light',{maxAge: 60 * 60 * 24 * 30});
+    	replaceData("themeOption", 'light');
+    	
+      replaceData("themeName", 'light');
+    }
+    
+	  else if (themeOption === 'light') { // 기존이 light 였으면 dark 로 변경
+	    removeCookie("themeOption");
+	  	setCookie('themeOption', 'dark',{maxAge: 60 * 60 * 24 * 30});
+      replaceData("themeOption", 'dark');
+      
+      replaceData("themeName", 'dark');
+    }
+    
+    else if (themeOption === "dark") { // 기존이 dark 였으면 auto 로 변경
+      removeCookie("themeOption");
+    	setCookie('themeOption', 'auto',{maxAge: 60 * 60 * 24 * 30});
+    	replaceData("themeOption", 'auto');
+    	
+    	const themeNameNew = isDarkMode() ? 'dark' : 'light';
+      replaceData("themeName", themeNameNew);
+    }
+
+	}
+	
+	
+	const returnIconTheme = () => {
+		
+	  switch (themeOption) {
+	    case 'light':
+	      return <IconSun width={"32px"} height={"32px"} color={"color_very_weak"} />;
+	    case 'dark':
+	      return <IconMoon width={"25px"} height={"25px"} color={"color_very_weak"} />;
+	    case 'auto':
+	      return <IconMoonSun width={"36px"} height={"36px"} color={"color_very_weak"} />;
+	    default:
+	      return null;
+	  }
+	}
+	
+	
+	const dictThemeOption = {
+		en: "English"
+		, ko: "한국어"
+		, ja: "日本語"
+	}
 	
 	
 	return (
@@ -149,10 +265,16 @@ const More = ({
     })()} 
      </NavLinkNavItem> 
 
-
+    
   
   </GroupNav>
-
+    
+    
+    <GroupButton>
+      <ButtonLanguage onClick={(event) => onClick_Language(event, language)}> {dictLanguage[language]} </ButtonLanguage>
+    
+		  <ButtonTheme onClick={(event) => onClick_Theme(event)}> { returnIconTheme() } </ButtonTheme>
+    </GroupButton>
 
 	</DivMore>
 	
@@ -162,6 +284,9 @@ const More = ({
 function mapStateToProps(state) { 
   return { 
     themeName: state.basic.themeName
+    , themeOption: state.basic.themeOption
+
+    
     , language: state.basic.language
  
     , auth: state.auth

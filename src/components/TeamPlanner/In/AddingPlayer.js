@@ -46,10 +46,6 @@ const DivHeader = styled(Div)`
 `
 
 const DivTitle = styled(Div)`
-  font-size: 1.6rem;
-  font-weight: bold;
-  
-  height: 30px;
   
   display: flex;
   flex-direction: row;
@@ -58,8 +54,18 @@ const DivTitle = styled(Div)`
   
   & > div {
     width: auto;
-    margin-left: 8px;
-    margin-right: 8px;
+    max-width: 300px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    
+    height: 30px;
+  
+    display: block;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  
   }
 `
 
@@ -85,17 +91,21 @@ const GroupCopy = styled(Div)`
 const ButtonCopy = styled(Button)`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-
-  width: 150px;
+  
+  width: 130px;
   height: 100%;
+  
+  padding-left: 5px;
+  padding-right: 5px;
   
   color: ${props => props.theme.color_normal};
   
   border-radius: 4px;
   
   & > div {
+    width: auto;
     height: 100%;
   }
 `
@@ -173,14 +183,19 @@ const ButtonLinkToHeroesProfile = styled(Button)`
   
   font-size: 0.9rem;
   
-  width: 300px;
-  height: 30px;
+  padding-left: 5px;
+  padding-right: 5px;
+  
+  width: auto;
+  height: 32px;
   
   border-radius: 9px;
   
   & span {
     font-weight: bold;
   }
+  
+  & > * {width: auto;}
 `
 
 const DivIconWorking = styled(Div)`
@@ -350,8 +365,17 @@ const DivIconWorking = styled(Div)`
           onCopy={ () => { addDeleteNotification("tplan24", language); } } >
           
           <ButtonCopy> 
-            <IconCopy width={"20px"} height={"20px"} /> 
-            <Div> Viewing Link </Div>
+            <IconCopy width={"18px"} height={"18px"} /> 
+            <Div> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '일반 링크';
+                case 'ja': 
+                  return '一般リンク';
+                default: // eng
+                  return 'Viewing Link';
+              }
+            })()}  </Div>
           </ButtonCopy> 
           
         </CopyToClipboard>
@@ -362,8 +386,17 @@ const DivIconWorking = styled(Div)`
             onCopy={ () => { addDeleteNotification("tplan25", language); } } >
             
             <ButtonCopy>
-              <IconCopy width={"20px"} height={"20px"} /> 
-              <Div> Editing Link </Div>
+              <IconCopy width={"18px"} height={"18px"} /> 
+              <Div> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '관리자 링크';
+                case 'ja': 
+                  return '管理者リンク';
+                default: // eng
+                  return 'Editing Link';
+              }
+            })()} </Div>
             </ButtonCopy> 
             
           </CopyToClipboard>
@@ -405,7 +438,16 @@ const DivIconWorking = styled(Div)`
         
         { (authority === "administrator") && !workingAddPlayer && 
           <>
-            <ButtonAdd onClick = {  (event)=> onClick_ButtonAdd(event, "confirmed")} > Add </ButtonAdd>
+            <ButtonAdd onClick = {  (event)=> onClick_ButtonAdd(event, "confirmed")} > {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '추가';
+                case 'ja': 
+                  return '追加';
+                default: // eng
+                  return 'Add';
+              }
+            })()} </ButtonAdd>
           </>
         }
 
@@ -417,7 +459,16 @@ const DivIconWorking = styled(Div)`
 	      <IconLink width={"20px"} height={"20px"} />
 	      
         <A href="https://api.heroesprofile.com/upload" target="_blank" rel="noopener noreferrer"> 
-	        please <span> upload replays </span> for better data 
+	        {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '리플레이 업로드를 권장합니다';
+                case 'ja': 
+                  return 'リプレイのアップロード';
+                default: // eng
+                  return 'please upload replays for better data';
+              }
+            })()} 
 	     </A> 
 	       
 	     </ButtonLinkToHeroesProfile>

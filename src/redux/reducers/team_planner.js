@@ -5,10 +5,15 @@ import * as types from '../actions/ActionTypes';
 
 
 const stateInitial = { 
+  
+    listPlan: []
     
-    ePlanTeam: {  // editing
+    , ePlanTeam: {  // editing
       _id:"_id"
       ,password:"password"
+      
+      , listAuthor: []
+      
       ,title:"title"
       ,listResult:[]
       ,listPlayerEntry: [
@@ -35,6 +40,68 @@ const team_planner = (
     
   switch (action.type) {
     
+    case types.REPLACE_DATA_TEAM_PLANNER:
+      
+      if ( (!!action.replacement) && (action.replacement.constructor === Array) ) {
+        return {
+      	...state, 
+      	[action.which]: [...action.replacement]
+        }
+      }
+      
+      else if ( (!!action.replacement) && (action.replacement.constructor === Object) ) {
+        return {
+      	...state, 
+      	[action.which]: {...action.replacement}
+        }
+      }
+      else {
+        return {
+        	...state, 
+        	[action.which]: action.replacement
+        }
+      }
+      
+    
+    case types.REPLACE_DATA_2_TEAM_PLANNER:
+      
+      let replacementState = {};
+      if ( (!!action.replacement) && (action.replacement.constructor === Array) ) {
+        
+        replacementState = {
+        	...state, 
+        	[action.which1]: {
+        	  ...state[action.which1]
+        	  ,[action.which2]: [...action.replacement]
+        	}
+        }
+      }
+      
+      else if ( (!!action.replacement) && (action.replacement.constructor === Object) ) {
+        replacementState = {
+        	...state, 
+        	[action.which1]: {
+        	  ...state[action.which1]
+        	  ,[action.which2]: {...action.replacement}
+        	}
+        }
+      }
+      
+      else {
+        replacementState = {
+        	...state, 
+        	[action.which1]: {
+        	  ...state[action.which1]
+        	  ,[action.which2]: action.replacement
+        	}
+        }
+      }
+       
+      return replacementState;
+      
+      
+      
+      
 
     case types.REPLACE_PLAN_TEAM:
       return {

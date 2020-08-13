@@ -114,11 +114,11 @@ const UserPublic = ({
       try {
         setReadyUser(false);
         const resUser = await axios.get(`${config.URL_API_NS}/user/public/${idUser}`);
-        console.log(resUser.data.listIdShape)
+        //console.log(resUser.data.listIdShape)
         
         setUser(resUser.data);
         setReadyUser(true);
-        console.log(User)
+        //console.log(User)
         
       } catch (error) {
         setReadyUser(false);

@@ -26,28 +26,28 @@ import Header from './Focus/A/Header';
 import ListMap from './Focus/A/ListMap';
 import ListPosition from './Focus/A/ListPosition';
 
-import Likes from './Focus/B/Likes';
-import Comments from './Focus/B/Comments';
-import Video from './Focus/B/Video';
+import Reactions from './Focus/B/Reactions';
+import Comment from './Comments/Comment';
+import Video from './Videos/Video';
 
 
 
 import useInput from '../../tools/hooks/useInput';
 import {  getTimeStamp } from '../../tools/vanilla/time';
 
-import IconWorking from '../../svgs/basic/IconWorking'
 
 
 
 
 const DivFocus = styled(Div)
 `
-  width: 100%;
- 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  
+  height: 100%;
+  overflow: hidden;
   
   @media (min-width:  ${props => (props.theme.media.md) }px) {
 	  display: flex;
@@ -55,7 +55,7 @@ const DivFocus = styled(Div)
     justify-content: center;
     align-items: flex-start;
     
-    width: 100%;
+    max-width: 900px;
 	}
 `;
 
@@ -68,13 +68,17 @@ const DivA = styled(Div)`
   
   width: 360px;      /*  768  */
   height: 360px;
+  overflow: auto;
   
   margin-top: 5px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  
+  position: relative;
   
   @media (min-width:  ${props => props.theme.media.md }px) {
+    height: 100%;
     margin: 5px;
   }
   
@@ -97,16 +101,15 @@ const DivB = styled(Div)`
   justify-content: flex-start;
   align-items: center;
   
-  width: 360px;      /*  768  */
-  height: auto;
+  width: 360px; 
   
   margin-top: 5px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 5px;
-  
+  margin-bottom: 10px;
   
   @media (min-width:  ${props => props.theme.media.md }px) {
+    height: 100%;
     margin: 5px;
   }
   
@@ -114,7 +117,6 @@ const DivB = styled(Div)`
     margin: 5px;
   }
 `
-
 
 
 
@@ -131,8 +133,14 @@ const Focus = ({
   , focusingComp
   , readyFocusingComp, loadingFocusingComp
   
-  , readyFocusingCompBonus, loadingFocusingCompBonus
-
+  , focusingComment
+  , focusingVideo
+  
+  , loadingFocusingCompComment
+  , readyFocusingCompComment
+  , loadingFocusingCompVideo
+  , readyFocusingCompVideo
+  
   , replaceData2CompGallery, replaceData2
 
   , addDeleteNotification
@@ -144,59 +152,62 @@ const Focus = ({
 
     (async() => {
       
-      try {
+      if (!readyFocusingComp) {
+        try {
+            
+          replaceData2("ready", "focusingComp", false);
+          replaceData2("loading", "focusingComp", true);
           
-        replaceData2("ready", "focusingComp", false);
-        replaceData2("loading", "focusingComp", true);
+          const {
+            data
+          } = await axios.get(`${config.URL_API_NS}/comp/${idComp}`);
+          
+          
+          replaceData2CompGallery("focus", "comp", data);
+          replaceData2("loading", "focusingComp", false);
+          replaceData2("ready", "focusingComp", true);
+          
+    
+        } catch (error) {
+  
+          //addDeleteNotification("basic01", language);
+          console.log(error)
+        }
         
-        const {
-          data
-        } = await axios.get(`${config.URL_API_NS}/comp/${idComp}`);
-
-        replaceData2CompGallery("focus", "comp", data);
-        replaceData2("loading", "focusingComp", false);
-        replaceData2("ready", "focusingComp", true);
-        
-
-      } catch (error) {
-
-        //addDeleteNotification("basic01", language);
-        console.log(error)
       }
      
     })() // async
 
-  }, [])
+  }, [readyFocusingComp])
   
   
   useEffect(() => {
 
     (async() => {
       
-      if (readyFocusingComp) {
+      if (readyFocusingComp && !readyFocusingCompComment) {
         try {
-            
-          replaceData2("ready", "focusingCompBonus", false);
-          replaceData2("loading", "focusingCompBonus", true);
           
+          replaceData2CompGallery("focus", "comment", {});
           
-          const resComment = await axios.get( `${config.URL_API_NS}/comment/${focusingComp.listIdComment[0] } `);
-          replaceData2CompGallery("focus", "comment", resComment.data);
+          replaceData2("ready", "focusingCompComment", false);
+          replaceData2("loading", "focusingCompComment", true);
           
+          // comment
+          if (focusingComp.listIdComment.length === 0) {
+            replaceData2CompGallery("focus", "comment", {});
+          }
+          else {
+            try {
+              const resComment = await axios.get( `${config.URL_API_NS}/comment/${focusingComp.listIdComment[0] }`);
+              
+              console.log(resComment);
+              replaceData2CompGallery("focus", "comment", resComment.data);
+            } catch { replaceData2CompGallery("focus", "comment", {}); } 
+          }
           
-          const resVideo = await axios.get( `${config.URL_API_NS}/video/${focusingComp.listIdVideo[0]}` );
-          replaceData2CompGallery("focus", "video", resVideo.data);
-          
-          
-          
-          
-          
-          
-          replaceData2("loading", "focusingCompBonus", false);
-          replaceData2("ready", "focusingCompBonus", true);
-          
-          console.log(resVideo.data)
-          
+          replaceData2("loading", "focusingCompComment", false);
+          replaceData2("ready", "focusingCompComment", true);
           
         } catch (error) {
   
@@ -208,11 +219,53 @@ const Focus = ({
      
     })() // async
 
-  }, [readyFocusingComp])
+  }, [readyFocusingComp, readyFocusingCompComment])
+  
+  
+  
+  useEffect(() => {
+
+    (async() => {
+      
+      if (readyFocusingComp && !readyFocusingCompVideo) {
+        try {
+          
+          replaceData2CompGallery("focus", "video", {});
+          
+          replaceData2("ready", "focusingCompVideo", false);
+          replaceData2("loading", "focusingCompVideo", true);
+          
+          
+          // video
+          if (focusingComp.listIdVideo.length === 0) {
+            replaceData2CompGallery("focus", "video", {});
+          }
+          else {
+            try {
+              const resVideo = await axios.get( `${config.URL_API_NS}/video/${focusingComp.listIdVideo[0] }`);
+              replaceData2CompGallery("focus", "video", resVideo.data);
+            } catch { replaceData2CompGallery("focus", "video", {}); } 
+          }
+          
+          replaceData2("loading", "focusingCompVideo", false);
+          replaceData2("ready", "focusingCompVideo", true);
+          
+        } catch (error) {
+  
+          addDeleteNotification("basic01", language);
+          console.log(error)
+        }
+        
+      } //if   
+     
+    })() // async
+
+  }, [readyFocusingComp, readyFocusingCompVideo])
   /*
     <DivA> title, author, tags   maps, positions  </DivA>
     <DivB> likes, comments, videos, links </DivB>
   */
+
 
   return (
     <>
@@ -233,14 +286,26 @@ const Focus = ({
         
         <DivB>  
         
-          <Likes />
+        
+          <Reactions />
           
-          { (loadingFocusingCompBonus || !readyFocusingCompBonus) ? <DivFocus> loading </DivFocus>
-            : <>
-              <Comments />
-              <Video />
-            </>
+        
+          { (readyFocusingComp && readyFocusingCompComment && focusingComp.listIdComment.length > 0) && 
+            <Comment 
+              comment={focusingComment}
+              where="focus"
+            />
           }
+          
+           { (readyFocusingComp && readyFocusingCompVideo && focusingComp.listIdVideo.length > 0) && 
+            <Video 
+              video={focusingVideo}
+              where="focus"
+            />
+          }
+          
+          { (loadingFocusingCompComment || loadingFocusingCompVideo) && <DivFocus> loading </DivFocus> }
+          
           
         </DivB>
   
@@ -269,8 +334,15 @@ function mapStateToProps(state) {
     , loadingFocusingComp: state.basic.loading.focusingComp
     
     
-    , readyFocusingCompBonus: state.basic.ready.focusingCompBonus
-    , loadingFocusingCompBonus: state.basic.loading.focusingCompBonus
+    , focusingComment: state.comp_gallery.focus.comment
+    , focusingVideo: state.comp_gallery.focus.video
+    
+    
+    , loadingFocusingCompComment: state.basic.loading.focusingCompComment
+    , readyFocusingCompComment: state.basic.ready.focusingCompComment
+    
+    , loadingFocusingCompVideo: state.basic.loading.focusingCompVideo
+    , readyFocusingCompVideo: state.basic.ready.focusingCompVideo
     
   };
 }

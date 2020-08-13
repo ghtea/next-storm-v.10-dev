@@ -38,7 +38,7 @@ import {getTimeStamp} from '../../tools/vanilla/time';
 
 import IconPlus from '../../svgs/basic/IconPlus';
 import IconVideo from '../../svgs/basic/IconVideo';
-import IconLink from '../../svgs/basic/IconLink';
+//import IconLink from '../../svgs/basic/IconLink';
 
 import * as imgHero from '../../images/heroes'
 
@@ -51,7 +51,6 @@ const DivCreate = styled(Div)`
   justify-content: flex-start;
   align-items: center;
   
-  width: 100%;
   height: 100%;
   overflow: hidden;
  
@@ -62,7 +61,6 @@ const DivCreate = styled(Div)`
     justify-content: center;
     align-items: flex-start;
     
-    width: 100%;
     max-width: 900px;
   
   }
@@ -71,8 +69,6 @@ const DivCreate = styled(Div)`
 
 
 const DivA = styled(Div)`
-  
- 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -85,8 +81,9 @@ const DivA = styled(Div)`
   margin-top: 5px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 5px;
-
+  margin-bottom: 10px;
+  
+  position: relative;
   
   @media (min-width:  ${props => props.theme.media.md }px) {
     height: 100%;
@@ -99,22 +96,17 @@ const DivA = styled(Div)`
 `
 
 const DivB = styled(Div)`
-  
-  
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   
-  width: 360px;      /*  768  */
-  /*height: 360px;  맨 아래니깐 자유롭게*/
- 
+  width: 360px; 
+  
   margin-top: 5px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 5px;
-  
-  
+  margin-bottom: 10px;
   
   @media (min-width:  ${props => props.theme.media.md }px) {
     height: 100%;
@@ -138,6 +130,14 @@ const ButtonCreate = styled(Button)`
   
   border-radius: 9px;
   
+  position: fixed;
+  top: 120px;
+  z-index: 100;
+  
+  @media (min-width:  ${props => props.theme.media.md }px) {
+    position: static;
+    z-index: 0;
+  }
 `
 
 const DivCreatingComp = styled(Div)`
@@ -152,6 +152,11 @@ const DivCreatingComp = styled(Div)`
   & > div:first-child {border-radius: 12px 12px 0 0;}
   & > div:last-child {border-radius: 0 0 12px 12px;}
   
+  padding-top: 60px;
+  
+  @media (min-width:  ${props => props.theme.media.md }px) {
+    padding-top: 0px;
+  }
 `
 
 
@@ -188,7 +193,7 @@ const DivTwo = styled(Div)`
   align-items: center;
   
   & > div:nth-child(1) {
-    height: 60px;
+    height: 55px;
   }
   
   & > div:nth-child(2) {
@@ -228,7 +233,7 @@ const DivListPositionReady = styled(Div)`
 
 // 'tags'
 const DivThree = styled(Div)`
-  height: 80px;
+  height: 70px;
   
   background-color: ${props => props.theme.COLOR_normal};
   color: ${props => props.theme.color_normal};
@@ -258,7 +263,7 @@ const DivFour = styled(Div)`
 
 // video, link
 const DivFive = styled(Div)`
-  height: 90px;
+  height: 70px;
   
   background-color: ${props => props.theme.COLOR_normal};
   color: ${props => props.theme.color_normal};
@@ -268,32 +273,26 @@ const DivFive = styled(Div)`
   justify-content: center;
   align-items: center;
   
-  & > div {
+  & > div:nth-child(1) {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    
+    padding-left: 15px;
+    font-size: 0.9rem;
+  }
+  
+  & > div:nth-child(2) {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     
     & > *:nth-child(1) { width: 40px; margin-left: 10px;}
-    & > *:nth-child(2) { width: 230px; margin-right: 10px;}
+    & > *:nth-child(2) { width: 300px; margin-right: 10px;}
   }
 `
-
-
-
-
-
-export const SubCreate = ({}) => {
-  
-  return (
-  <Div>
-    create!
-  </Div>
-  
-  )
-}
-
-
 
 
 
@@ -336,12 +335,6 @@ const TextareaComment =  styled(Textarea)`
 
   border-radius: 4px;
 `
-
-
-
-
-
-
 
 
 
@@ -418,9 +411,6 @@ const TextareaComment =  styled(Textarea)`
   const inputTitle = useInput_redux_CompGallery(title, "create", "title"); // {value, setValue, onChange};
   //const inputAuthor = useInput("");
   
-  const inputPassword1 = useInput("");
-  const inputPassword2 = useInput("");
-  
   const inputComment = useInput_redux_CompGallery(comment, "create", "comment");
   const inputVideo = useInput_redux_CompGallery(video, "create", "video");
   
@@ -431,7 +421,7 @@ const TextareaComment =  styled(Textarea)`
     try {
       
       let listExistingPosition = [];
-      // 비어있는 position 들은 제거
+      //  영웅이 들어있는 포지션만 입력
       for (const position of listPosition) {
         if (position.listIdHero.length >0) {
           listExistingPosition.push(position);
@@ -466,47 +456,14 @@ const TextareaComment =  styled(Textarea)`
       else if ( listIdMainHero.length !== setIdMainHero.size ) {
         addDeleteNotification("comp06", language);
       }
-      
     
       
       else  {
         
+        let bodyRequest = {};
+        
         const idComp = uuidv4();
         
-        const idComment = uuidv4();
-        const idVideo = uuidv4();
-        
-        
-        
-        const commentRequest = {
-          
-          _id: idComment
-          , subject: {_id: idComp, model: "Comp"}
-          
-          , author: user._id
-          
-          //, language: String
-          , content: inputComment.value
-          // , listLike:
-        }
-        
-        const videoRequest = {
-          _id: idVideo
-          , subject: {_id: idComp, model: "Comp"}
-          
-          , author: user._id
-          
-          , content: inputVideo.value
-          
-          //, listLike: [String] 
-        }
-        
-        
-
-        
-        
-       
-        let bodyRequest = {};
         
         let compRequest = {
           
@@ -515,7 +472,7 @@ const TextareaComment =  styled(Textarea)`
           
           ,title: inputTitle.value
           
-          ,listPosition: listPosition
+          ,listPosition: listExistingPosition
           
           ,listIdMap: listIdMap
           ,listTag: listTag
@@ -527,29 +484,106 @@ const TextareaComment =  styled(Textarea)`
         }
         
         
-        
-        console.log(commentRequest.content);
-        console.log(idComment);
-        console.log(compRequest["listIdComment"]);
-        
-        if (commentRequest.content !== "") {
+        let idComment;
+        let commentRequest={};
+        if (inputComment.value) {
+          idComment = uuidv4();
+          
+          commentRequest = {
+          
+            _id: idComment
+            , subject: {_id: idComp, model: "Comp"}
+            
+            , author: user._id
+            
+            //, language: String
+            , content: inputComment.value
+            // , listLike:
+          }
+          
           compRequest["listIdComment"]=[idComment];
           bodyRequest["comment"] = commentRequest;
         }
         
-        if (videoRequest.content !== "") {
+        
+        let idVideo; // for _id in Mongodb
+        
+        let typeVideo;
+        let idContentVideo = "";
+        
+        let videoRequest={};
+        if (inputVideo.value) {
+          idVideo = uuidv4();
+          
+          // https://regexr.com/3akf5
+          const isYoutube = /(?:https?:\/\/)?(?:(?:(?:www\.?)?youtube\.com(?:\/(?:(?:watch\?.*?(v=[^&\s]+).*)|(?:v(\/.*))|(channel\/.+)|(?:user\/(.+))|(?:results\?(search_query=.+))))?)|(?:youtu\.be(\/.*)?))/;
+          
+          const isTwitchClip1 = /[\W\w]*www.twitch.tv\/[\W\w]*\/clip\//; // https://www.twitch.tv/akr114/clip/SassyEagerHamBibleThump?filter=clips&range=30d&sort=time
+          const isTwitchClip2 = /[\W\w]*clips.twitch.tv\//; // https://clips.twitch.tv/RudeCrispyPheasantAllenHuhu
+          
+          
+          if (isYoutube.test(inputVideo.value)){
+            typeVideo = "Youtube";
+            
+            
+          // https://stackoverflow.com/questions/3452546/how-do-i-get-the-youtube-video-id-from-a-url
+            const matchIdContent = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+            const match = (inputVideo.value).match(matchIdContent);
+            if (match&&match[7].length==11) {
+              idContentVideo = match[7];
+            }
+            
+          }
+          
+          else if (isTwitchClip1.test(inputVideo.value)){
+            typeVideo = "Twitch Clip";
+            // https://stackoverflow.com/questions/31262539/how-can-i-extract-text-from-the-middle-of-a-string-with-javascript
+            const regexFront = /[\W\w]*www.twitch.tv\/[\W\w]*\/clip\//;
+            const regexBack = /(\?[^\?]*)$/
+            
+            idContentVideo = inputVideo.value.replace(regexFront, "");
+            idContentVideo = idContentVideo.replace(regexBack, "");
+          }
+          
+          else if (isTwitchClip2.test(inputVideo.value)){
+            typeVideo = "Twitch Clip";
+            // https://stackoverflow.com/questions/31262539/how-can-i-extract-text-from-the-middle-of-a-string-with-javascript
+            const regexFront = /[\W\w]*clips.twitch.tv\//;
+            const regexBack = /(\?[^\?]*)$/
+            
+            idContentVideo = inputVideo.value.replace(regexFront, "");
+            idContentVideo = idContentVideo.replace(regexBack, "");
+          }
+          
+          
+          else {
+            typeVideo = "Others";
+          }
+          
+          videoRequest = {
+          
+            _id: idVideo
+            , subject: {_id: idComp, model: "Comp"}
+            
+            , author: user._id
+            
+            , type: typeVideo
+            , urlContent: inputVideo.value
+            , idContent: idContentVideo
+            // , listLike:
+          }
+          
           compRequest["listIdVideo"]=[idVideo];
           bodyRequest["video"] = videoRequest;
         }
-        
-        
+      
         
         bodyRequest["comp"] = compRequest
         
         await axios.post(`${config.URL_API_NS}/comp/`, bodyRequest);
         
         addDeleteNotification("comp01", language);
-        
+        history.push(`/comp-gallery/focus/${idComp}`);
         }
         
     } catch (error) {
@@ -580,7 +614,16 @@ const TextareaComment =  styled(Textarea)`
         <ButtonCreate
           onClick={(event) => onClick_ButtonCreate(event)}
         >
-          Publish
+          {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '공개';
+                case 'ja': 
+                  return '公開';
+                default: // eng
+                  return 'Publish';
+              }
+            })()}
         </ButtonCreate>
       
       
@@ -589,7 +632,16 @@ const TextareaComment =  styled(Textarea)`
         
         
           <DivOne> 
-            <Div>  <InputCommon  {...inputTitle} placeholder="title of composition" />  </Div>
+            <Div>  <InputCommon  {...inputTitle} placeholder={(() => {
+              switch (language) {
+                case 'ko': 
+                  return '제목';
+                case 'ja': 
+                  return 'タイトル';
+                default: // eng
+                  return 'Title';
+              }
+            })()} />  </Div>
           </DivOne>
           
           <DivThree> 
@@ -626,10 +678,10 @@ const TextareaComment =  styled(Textarea)`
           </DivFour>
           
           <DivFive>
-          
+            <Div> Youtube or Twitch 'Clip'</Div>
             <Div> 
               <Div> <IconVideo width={'20px'}  height={'20px'} color={'color_very_weak'} /> </Div>
-              <InputVideoLink  {...inputVideo} placeholder="link (ex: twitch, youtube)" /> 
+              <InputVideoLink  {...inputVideo} placeholder="link" /> 
             </Div>
             
           </DivFive>
