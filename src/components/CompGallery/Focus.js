@@ -148,6 +148,11 @@ const Focus = ({
 
   const { idComp } = useParams();
   
+  /* makes error
+  useEffect(()=>{
+    replaceData2("ready", "focusingComp", false);
+  },[])
+  */
   useEffect(() => {
 
     (async() => {
@@ -169,8 +174,10 @@ const Focus = ({
           
     
         } catch (error) {
-  
-          //addDeleteNotification("basic01", language);
+          replaceData2("ready", "focusingComp", false);
+          replaceData2("loading", "focusingComp", false);
+          
+          addDeleteNotification("basic01", language);
           console.log(error)
         }
         
@@ -178,7 +185,7 @@ const Focus = ({
      
     })() // async
 
-  }, [readyFocusingComp])
+  }, [readyFocusingComp, idComp])
   
   
   useEffect(() => {
@@ -210,7 +217,7 @@ const Focus = ({
           replaceData2("ready", "focusingCompComment", true);
           
         } catch (error) {
-  
+          
           addDeleteNotification("basic01", language);
           console.log(error)
         }
@@ -251,7 +258,7 @@ const Focus = ({
           replaceData2("ready", "focusingCompVideo", true);
           
         } catch (error) {
-  
+          
           addDeleteNotification("basic01", language);
           console.log(error)
         }

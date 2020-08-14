@@ -12,10 +12,11 @@ import { connect } from "react-redux";
 
 import * as config from '../../../config';
 
+import {useHistory } from 'react-router-dom';
 
 import addDeleteNotification from "../../../redux/thunks/addDeleteNotification";
 import dictCode from '../../../others/dictCode'
-
+import { replaceData2 } from "../../../redux/actions/basic";
 import { replaceDataCompGallery, replaceData2CompGallery, replaceListPosition } from "../../../redux/actions/comp_gallery";
 
 
@@ -32,7 +33,7 @@ import { getTimeStamp } from '../../../tools/vanilla/time';
 import * as imgHero from '../../../images/heroes'
 import * as imgMap from '../../../images/maps'
 
-import UserPublic from '../../_/UserPublic';
+import Profile from '../../_/Profile';
 
 import IconExpand from '../../../svgs/basic/IconExpand'
 import IconEnter from '../../../svgs/basic/IconEnter'
@@ -82,7 +83,7 @@ const DivComp = styled(Div)
   }
 `
 
-const LinkFocus = styled(LinkDefault)`
+const DivFocus = styled(Div)`
   z-index: 2;
   position: absolute;
   right: 0;
@@ -233,6 +234,9 @@ const DivOthers = styled(Div)
   align-items: center;
   
   & > div {
+    
+    cursor: pointer;
+    
     width: auto;
     display: flex;
     flex-direction: row;
@@ -307,12 +311,13 @@ const Comp = ({
   , listAllMap
   , listAllTag
   , tComp
-
-    , addDeleteNotification
+  
+  , replaceData2
+  , addDeleteNotification
 
   }) => {
     
-    
+    const history=useHistory();
     
     const [like, setLike] = useState(false);
     const [plus, setPlus] = useState(0);
@@ -386,13 +391,39 @@ const Comp = ({
         addDeleteNotification("basic01", language);
       }
     }
-
+  
+  
+  const onClick_Focus = (event) => {
+    replaceData2("ready", "focusingComp", false);
+    history.push(`/comp-gallery/focus/${tComp._id}`)
+  }
+  
+  
+  const onClick_MoreComments = () => {
+    
+    const query = queryString.stringify({
+      idSubject: tComp._id
+      , modelSubject: "Comp"
+    });
+    
+    history.push(`/comp-gallery/comments?` + query);
+  }
+  
+  const onClick_MoreVideos = () => {
+    
+    const query = queryString.stringify({
+      idSubject: tComp._id
+      , modelSubject: "Comp"
+    });
+    
+    history.push(`/comp-gallery/videos?` + query);
+  }
 
     return (
 
    <DivComp>
     
-    <LinkFocus to={`/comp-gallery/focus/${tComp._id}`} > <IconEye width={"24px"} height={"24px"} color={"color_weak"}  /> </LinkFocus>
+    <DivFocus onClick={onClick_Focus} > <IconEye width={"24px"} height={"24px"} color={"color_weak"}  /> </DivFocus>
       
      <DivHeader>
         
@@ -429,18 +460,22 @@ const Comp = ({
      <DivFooter>
       
       <DivUser >
-        <UserPublic size={36} idUser={tComp.author} layout={"icon only"} />
+        <Profile size={36} idUser={tComp.author} layout={"icon only"} />
       </DivUser>
       
       
       <DivOthers>
       
-        <Div> 
+        <Div
+          onClick={onClick_MoreComments}
+        > 
           <IconComment width = { "20px" } height = { "20px" } color = { "color_very_weak" } />
           <Div number={tComp.listIdComment.length}> {tComp.listIdComment.length} </Div>
         </Div>
         
-        <Div> 
+        <Div
+          onClick={onClick_MoreVideos}
+        > 
           <IconVideo width = { "22px" } height = { "22px" } color = { "color_very_weak" } />
           <Div number={tComp.listIdVideo.length}> {tComp.listIdVideo.length} </Div>
         </Div>
@@ -464,25 +499,6 @@ const Comp = ({
 }
 
 
-/*
-
-< DivListComment> {
-          tComp["listComment"].map((comment, index) => {
-            const tComment = comment;
-  
-            return (
-  
-             <Div 
-                key = { index }
-                tComment = { tComment }
-              />
-            )
-          })
-        }</DivListComment>
-
-*/
-
-
   function mapStateToProps(state) {
     return {
       
@@ -501,8 +517,10 @@ const Comp = ({
 
   function mapDispatchToProps(dispatch) {
     return {
+    
+      replaceData2: (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
 
-     addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
+      , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
     };
   }
 

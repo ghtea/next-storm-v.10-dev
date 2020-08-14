@@ -103,6 +103,20 @@ const NavMd_ = ({
 		</NavLinkNavItem> 
     
     
+    <NavLinkNavItem to="/my" isActive={()=>checkActive(/^(\/my)/)} > 
+		{(() => {
+      switch (language) {
+        case 'ko': 
+          return '나';
+        case 'ja': 
+          return '私';
+        default: // eng
+          return 'My';
+      }
+    })()} 
+		</NavLinkNavItem> 
+		
+		
     <NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > 
 		{(() => {
       switch (language) {

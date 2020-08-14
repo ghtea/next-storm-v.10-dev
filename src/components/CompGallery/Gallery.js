@@ -18,8 +18,9 @@ import { replaceDataCompGallery, replaceData2CompGallery } from "../../redux/act
 import {  NavLink, useHistory } from 'react-router-dom';
 
 import { Div, Input, Button } from '../../styles/DefaultStyles';
-import Comp from './Gallery/Comp'
-import Filter from './Gallery/Filter'
+import Comp from './Gallery/Comp';
+import Filter from './Gallery/Filter';
+import Loading from '../_/Loading';
 
 import useInput from '../../tools/hooks/useInput';
 
@@ -135,18 +136,16 @@ const Gallery = ({
       <Filter />
 
     < ContainerListComp > {
-      (loadingListComp) ? < Div > loading < /Div>:
+      (loadingListComp) ? < Loading/>:
         < DivListComp >
 
         {
           listComp.map((comp, index) => {
 
-              return ( < Comp key = {
-                  index
-                }
-                tComp = {
-                  comp
-                }
+              return ( 
+                < Comp 
+                key = { index }
+                tComp = { comp }
                 />
               )
             }) //map

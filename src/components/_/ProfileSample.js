@@ -3,6 +3,8 @@ import React, { useState, useEffect , Suspense, lazy } from 'react';
 import styled from 'styled-components';
 
 import axios from 'axios';
+import queryString from 'query-string';
+
 
 import { connect } from "react-redux";
 import * as config from '../../config';
@@ -21,7 +23,7 @@ import { Div, Input, Button } from '../../styles/DefaultStyles';
 import IconProfile from "./Profile/Icon";
 import borders from "../../profile/borders";
 
-const DivUserPublic = styled(Div)`
+const DivProfileSample = styled(Div)`
   
   width: auto;
   height: ${props => props.size}px;
@@ -50,7 +52,7 @@ const DivIcon = styled(Div)`
   width: ${props => props.size}px;
   height: ${props => props.size}px;
   
-  ${props => borders[props.border]}
+  ${props => borders[props.border] }
   border-radius: 6px; 
   
   display: flex;
@@ -65,7 +67,8 @@ const DivName = styled(Div)`
     
   font-size: 0.9rem;
   
-  width: 90px;
+  width: 70px;
+  /*width: 90px;*/
 
   display: 
     ${props => {
@@ -88,75 +91,80 @@ const DivName = styled(Div)`
 
 
 
-const UserPublic = ({
+const ProfileSample = ({
 
   language
   , themeName
+ 
+  , user
+  , readyUser
   
-  , idUser
+  , palette
+  , border
+  , shape
   
   , size
   , layout
-
+  
+  , replaceData2
   , addDeleteNotification
 }) => {
   
-  const [readyUser, setReadyUser] = useState(false);
-  const [User, setUser] = useState({});
+  const battletagName = "battletag";
+  const battletagNumber = "#1234";
   
   size = size || 40;
-  //const sizeUsing = size || 40;
   
-  useEffect(() => {
-
-    (async() => {
-      
+  
+  const onClick_ProfileSample = async (event) => {
+    
+    addDeleteNotification(
+      undefined, language, `${shape}-${palette}-${border}`, 3000
+    )
+    
+    if (readyUser) {
       try {
-        setReadyUser(false);
-        const resUser = await axios.get(`${config.URL_API_NS}/user/public/${idUser}`);
-        //console.log(resUser.data.listIdShape)
-        
-        setUser(resUser.data);
-        setReadyUser(true);
-        //console.log(User)
-        
-      } catch (error) {
-        setReadyUser(false);
-        //addDeleteNotification("basic01", language);
-        console.log(error)
+        const query = queryString.stringify({
+          shape: shape
+          , palette: palette
+          , border: border
+        })  
+        await axios.put(`${config.URL_API_NS}/user/profile/${user._id}?` + query );
+        replaceData2("ready", "user", false);
       }
-        
-    })() // async
-
-  }, [])
-
-  // Suspense 로 변수를 이용한 컴포넌트 import!
+      catch (error) {
+        console.log(error);
+        addDeleteNotification("basic01", language);
+      }
+    }// if readyUser
+  }
+  
+  
   return (
 
-    <DivUserPublic size={size} layout={layout} >
+    <DivProfileSample 
+      size={size} layout={layout} 
+      onClick={onClick_ProfileSample}
+      >
       
-      {(!readyUser)? 'loading' :
-        <>
+      
+      <DivIcon size={size} layout={layout} border={border} >
         
-          <DivIcon size={size} layout={layout} border={User.profile.listIdBorder[0]} >
-            
-            <IconProfile 
-              width = { `${size-6}px` } height = { `${size-6}px` } 
-              shape={User.profile.listIdShape[0]} 
-              palette={User.profile.listIdPalette[0]} 
-            />
+        <IconProfile 
+          width = { `${size-6}px` } height = { `${size-6}px` } 
+          shape={shape} 
+          palette={palette} 
+        />
 
-            
-          </DivIcon>
         
-          <DivName layout={layout}>
-            {User.battletag}
-          </DivName>
+      </DivIcon>
+    
+      <DivName layout={layout}>
+        {battletagName}
+      </DivName>
 
-        </>
-      }
 
-    </DivUserPublic>
+    </DivProfileSample>
 
   )
 }
@@ -170,15 +178,20 @@ function mapStateToProps(state) {
     language: state.basic.language
     , themeName: state.basic.themeName
     
+    , user: state.auth.user
+    , readyUser: state.basic.ready.user
+    
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    
+    replaceData2: (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
 
-    addDeleteNotification: (code_situation, language, message, time) => dispatch(addDeleteNotification(code_situation, language, message, time))
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(addDeleteNotification(code_situation, language, message, time))
   };
 }
 
 // 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다
-export default connect(mapStateToProps, mapDispatchToProps)(UserPublic);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileSample);

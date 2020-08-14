@@ -1,8 +1,13 @@
-import basic from './shapes/basic';
+import person from './shapes/person';
+import animal from './shapes/animal';
 import limited from './shapes/limited';
+import others from './shapes/others';
 
 const shapes ={
-	...basic
+	...person
+	, ...animal
+	, ...others
+	
 	, ...limited
 }
 

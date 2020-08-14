@@ -16,7 +16,7 @@ import { NavLink } from 'react-router-dom';
 import themes from "../../styles/themes"
 import {Div, Button, A, NavLinkDefault} from '../../styles/DefaultStyles';
 
-import UserPublic from '../_/UserPublic';
+import Profile from '../_/Profile';
 
 import IconProfile from "../_/Profile/Icon";
 import borders from "../../profile/borders";
@@ -84,8 +84,19 @@ const DivProfileMd_ = styled(Div)`
 		align-items: center;
 	}
 	
-	
-	
+`
+
+
+const DivIconCommon = styled(Div)`
+  
+  width: 40px;
+  height: 40px;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  
 `
 
 const DivIconProfile = styled(Div)`
@@ -101,6 +112,14 @@ const DivIconProfile = styled(Div)`
   justify-content: center;
   align-items: center;
   
+`
+
+const DivCommon = styled(Div)`
+	width:auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
 `
 
 
@@ -156,8 +175,12 @@ const DivEmail = styled(Div)`
 
 
 const NavLinkStyled = styled(NavLinkDefault)`
-  
+  display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
 	
+	width: auto;
 `;
 
 
@@ -211,16 +234,16 @@ const ProfileMd_ = ({
       if (loadingUser) {
       	return (
       		<A>
-        		<DivIconProfile> <IconLoading width={"25px"} height={"25px"} color={"color_weak"} /> </DivIconProfile>
-        		<Div> loading </Div>
+        		<DivIconCommon> <IconLoading width={"25px"} height={"25px"} color={"color_weak"} /> </DivIconCommon>
+        		<DivCommon> loading </DivCommon>
         	</A>
       	);
     	}
     	else if (!loadingUser && !readyUser) {
       	return (
 					<NavLinkStyled to="/auth/log-in" > 
-						<DivIconProfile> <IconLogIn width={"25px"} height={"25px"} color={"color_weak"} /> </DivIconProfile>
-						<Div> Log In </Div> 
+						<DivIconCommon> <IconLogIn width={"25px"} height={"25px"} color={"color_weak"} /> </DivIconCommon>
+						<DivCommon> Log In </DivCommon> 
 					</NavLinkStyled> 
 
 				);

@@ -20,7 +20,7 @@ import {  NavLink, useHistory } from 'react-router-dom';
 
 import { Div, Input, Button } from '../../../styles/DefaultStyles';
 
-import UserPublic from '../../_/UserPublic';
+import Profile from '../../_/Profile';
 
 import IconEdit from '../../../svgs/basic/IconEdit'
 import IconPlus from '../../../svgs/basic/IconPlus'
@@ -242,7 +242,7 @@ const Comment = ({
       </DivView>
       
       <DivFooter>  
-        <Div> <UserPublic size={36} idUser={comment.author} layout={"right"}/> </Div>
+        <Div> <Profile size={36} idUser={comment.author} layout={"right"}/> </Div>
         
         { user._id && (comment.author === user._id) && 
           <Div

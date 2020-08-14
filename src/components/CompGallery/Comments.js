@@ -19,6 +19,7 @@ import { replaceDataCompGallery, replaceData2CompGallery } from "../../redux/act
 import {  NavLink, useHistory } from 'react-router-dom';
 
 import { Div, Input, Button } from '../../styles/DefaultStyles';
+import Loading from '../_/Loading';
 import Comment from './Comments/Comment'
 
 
@@ -121,7 +122,7 @@ const Comments = ({
   <DivComments>
 
 
-    {(loadingListComment ) ? <Div> loading </Div> :
+    {(loadingListComment ) ? <Loading/> :
       <DivListComment>
 
         {listComment.map(element=>

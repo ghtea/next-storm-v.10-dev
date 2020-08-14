@@ -1,7 +1,7 @@
 
 const basic ={
 	// colorMain, colorBack
-	Default: {colorMain:'#eee', colorBack:'#888'}
+	Default: {colorMain:'#eee', colorBack:'#999'}
 }
 
 export default basic;

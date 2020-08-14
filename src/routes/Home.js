@@ -262,7 +262,16 @@ const Home= ({
   				</Div>
   				:  
   				<Div>
-  				  <LinkDefault to="/auth/log-in" > Log In </LinkDefault> 
+  				  <LinkDefault to="/auth/log-in" > {(() => {
+            switch (language) {
+              case 'ko': 
+                return '로그인';
+              case 'ja': 
+                return 'ログイン';
+              default: // eng
+                return 'Log In';
+            }
+  	      })()}  </LinkDefault> 
   				</Div>
   			}
 			

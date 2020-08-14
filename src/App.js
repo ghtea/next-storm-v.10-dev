@@ -13,7 +13,10 @@ import dictCode from './others/dictCode'
 import Sub from "./routes/Sub";
 import Reaction from "./routes/Reaction";
 import Notification from "./routes/Notification";
+
 import Home from "./routes/Home";
+
+import My from "./routes/My";
 
 import Auth from "./routes/Auth";
 
@@ -68,6 +71,9 @@ const isDarkMode = () => {
 
 const App = ({
   notification
+  
+  , user
+  , readyUser
   
   ,match, location, history
   
@@ -141,50 +147,54 @@ const App = ({
   
   
   
-  
+  // 유저 업데이트 해서 다시 정보 가져와야 할때 readyUser 를 false 로 바꿔서 아래 것을 유도한다
   // 새로고침할 때마다, 로그인의 흔적이 있으면 감춰진 토큰 이용해서 로그인
   useEffect( () => { 
-    (async () => {
-      
-    replaceData2('loading', 'user', true);
-    replaceData2('ready', 'user', false);
     
-    const logged = cookies.logged; // 로그인 정보를 로컬스토리지에서 가져옵니다.
-    // 참고로 localStorage 에는 user의 _id 만 저장한다!!! 
-    
-    if(!logged) {
-      console.log("no logged user");
-      
-      replaceDataAuth("user", {});
-      
-      replaceData2('loading', 'user', false);
+    if (!readyUser) {
+      (async () => {
+        
+      replaceData2('loading', 'user', true);
       replaceData2('ready', 'user', false);
-    
-      return; // 로그인 정보가 없다면 여기서 멈춥니다.
-    }; 
-    
-    
-    
-    try {
-      // 토큰 확인해서 바로 유저 정보 부여!
-      const res = await axios.get(`${config.URL_API_NS}/auth-local/check`, {withCredentials: true, credentials: 'include'});
-      //console.log("seems not error!")
       
-      console.log(res.data);
+      const logged = cookies.logged; // 로그인 정보를 로컬스토리지에서 가져옵니다.
+      // 참고로 localStorage 에는 user의 _id 만 저장한다!!! 
       
-      replaceDataAuth("user", res.data);
+      if(!logged) {
+        console.log("no logged user");
+        
+        replaceDataAuth("user", {});
+        
+        replaceData2('loading', 'user', false);
+        replaceData2('ready', 'user', false);
       
-      replaceData2('loading', 'user', false);
-      replaceData2('ready', 'user', true);
+        return; // 로그인 정보가 없다면 여기서 멈춥니다.
+      }; 
       
-    } catch (e) { // token 정보가 잘못되었었으면 여기로 이동
-      removeCookie('logged');
-      window.location.href = '/auth/log-in?reason=wrong-token';
-    }
-    
-    }) ()
+      
+      
+      try {
+        // 토큰 확인해서 바로 유저 정보 부여!
+        const res = await axios.get(`${config.URL_API_NS}/auth-local/check`, {withCredentials: true, credentials: 'include'});
+        //console.log("seems not error!")
+        
+        console.log(res.data);
+        
+        replaceDataAuth("user", res.data);
+        
+        replaceData2('loading', 'user', false);
+        replaceData2('ready', 'user', true);
+        
+      } catch (e) { // token 정보가 잘못되었었으면 여기로 이동
+        removeCookie('logged');
+        window.location.href = '/auth/log-in';
+      }
+      
+      }) ()
+      
+    } // if !readyUser
   
-  },[])
+  },[readyUser])
   
   
   
@@ -211,6 +221,8 @@ const App = ({
       
       <Route path="/auth" component={Auth} />
       
+      <Route path="/my" component={My} />
+      
       <Route path="/team-planner" component={TeamPlanner} />
       
       <Route path="/comp-gallery" component={CompGallery} />
@@ -234,6 +246,9 @@ const App = ({
 function mapStateToProps(state) { 
   return { 
     notification: state.basic.notification
+    
+    , user: state.auth.user
+    , readyUser: state.basic.ready.user
     
     , themeName: state.basic.themeName
     , language: state.basic.language

@@ -172,8 +172,8 @@ const Link_Common = styled(LinkDefault)`
             else if (query.shouldGoBack === "yes") {
               history.goBack();
             }
-            
-            addDeleteNotification("auth13", language);
+            else { history.push('/') }
+            //addDeleteNotification("auth13", language);
           }
           
           

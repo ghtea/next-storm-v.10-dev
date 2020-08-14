@@ -12,7 +12,7 @@ const addDeleteNotification =  (code_situation, language, message, time) =>
     
     code_situation = code_situation || Date.now().toString();
     
-    const situation_using = dictCode[code_situation]['situation'];
+    const situation_using = (dictCode[code_situation]? dictCode[code_situation]['situation'] : "tip");
     const message_using = message || dictCode[code_situation]['message'][language];
     const idNotification_using = code_situation;
     

@@ -582,9 +582,33 @@ const TextareaComment =  styled(Textarea)`
         
         await axios.post(`${config.URL_API_NS}/comp/`, bodyRequest);
         
+        
         addDeleteNotification("comp01", language);
         history.push(`/comp-gallery/focus/${idComp}`);
+        storage.remove("comp-creating");
+        
+        const reset = {
+          title: ""
+          , listIdMap: []
+          , listPosition: [ { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] } ]
+          , listTag: ["ToWin", "Kill"]
+          
+          , comment: ""
+          , video: ""
+          
+          , whichAdding: "Hero"
+          
+          , locationAddingMap: [0]
+          , locationAddingHero: [0,0]
+          
+          , triggerPosition: ""
+          , triggerMap: ""
         }
+        
+        replaceDataCompGallery("create", reset);
+        
+        
+      } // else
         
     } catch (error) {
       addDeleteNotification("comp02", language);

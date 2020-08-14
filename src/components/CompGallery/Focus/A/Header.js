@@ -18,7 +18,7 @@ import {  NavLink, useHistory } from 'react-router-dom';
 
 import { Div, Input, Button } from '../../../../styles/DefaultStyles';
 
-import UserPublic from '../../../_/UserPublic';
+import Profile from '../../../_/Profile';
 
 import IconUser from '../../../../svgs/basic/IconUser'
 
@@ -202,7 +202,7 @@ const Header = ({
           }
         </DivListTag>
         
-        <UserPublic  idUser={focusingComp.author} layout={"left"} />
+        <Profile  idUser={focusingComp.author} layout={"left"} />
         
       </DivSecond>
 

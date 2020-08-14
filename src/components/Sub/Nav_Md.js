@@ -64,6 +64,11 @@ const Nav_Md = ({
 	    , ko: "홈"
 	    , ja: "ホーム"
 	  }
+	  ,"my": {
+	    en: "my" 
+	    , ko: "나"
+	    , ja: "私"
+	  }
 	  ,"team-planner": {
 	    en: "Team Planner" 
 	    , ko: "팀 나누기"
@@ -80,6 +85,9 @@ const Nav_Md = ({
 	useEffect( () => {
 	  if (location.pathname === "/" || location.pathname === "") {
 	    setTitle( dictTitle["home"][language] )
+	  }
+	  else if ( (/^(\/my)/).test(location.pathname) ) {
+	    setTitle( dictTitle["my"][language] )
 	  }
 	  else if ( (/^(\/team-planner)/).test(location.pathname) ) {
 	    setTitle( dictTitle["team-planner"][language] )

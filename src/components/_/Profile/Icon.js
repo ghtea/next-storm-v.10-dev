@@ -3,12 +3,15 @@ import styled from 'styled-components';
 
 import shapes from "../../../profile/shapes";
 import palettes from "../../../profile/palettes";
+import borders from "../../../profile/borders";
 
 import {Div} from '../../../styles/DefaultStyles';
 
 
 const DivContainer = styled(Div)`
 	background-color: ${props => props.colorBack};
+	/*border: 2px solid rgb(255, 255, 255, 0.1);*/
+	
 	width: ${props => props.width};
 	height: ${props => props.height};
 	
@@ -27,7 +30,7 @@ const Icon = ({
 	
 	return (
 		
-	<DivContainer width={width} height={height} colorBack={palettes[palette]['colorBack']} >
+	<DivContainer width={width} height={height} colorBack={palettes[palette]['colorBack']}  >
 		<svg 
 			
 			className="icon"

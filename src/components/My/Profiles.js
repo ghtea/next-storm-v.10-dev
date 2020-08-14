@@ -21,13 +21,21 @@ import {  NavLink, useHistory } from 'react-router-dom';
 import { Div, Input, Button } from '../../styles/DefaultStyles';
 
 import Loading from '../_/Loading';
-import Video from './Videos/Video';
+
+
+
+import shapes from "../../profile/shapes";
+import palettes from "../../profile/palettes";
+import borders from "../../profile/borders";
+
+
+import ProfileSample from '../_/ProfileSample';
 
 
 
 
 
-const DivVideos = styled(Div)
+const DivProfiles = styled(Div)
 `
   width: 100%;
   
@@ -38,15 +46,13 @@ const DivVideos = styled(Div)
   justify-content: center;
   align-items: center;
   
-  @media (min-width:  ${props => (props.theme.media.md) }px) {
-	  flex-direction: row;
-	}
+  
 `;
 
 
-const DivListVideo = styled(Div)
+const DivListProfile = styled(Div)
 `
-  
+   
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -54,13 +60,19 @@ const DivListVideo = styled(Div)
   
   flex-wrap: wrap;
   
+  margin-top: 20px;
+  margin-bottom: 20px;
+  
+  & > div {
+    margin: 2px;
+  }
 `
 
 
 
 
 
-const Videos = ({
+const Profiles = ({
 
   language
   
@@ -69,79 +81,76 @@ const Videos = ({
   , user
   , readyUser
   
-  , listVideo
-  , readyListVideo
-  , loadingListVideo
-
+  
   , replaceData2CompGallery, replaceData2
   
   , addDeleteNotification
 }) => {
 
   
-  useEffect(() => {
-
-    (async() => {
-      
-      if (!readyListVideo) {
-
-        try {
-          
-          const queryRecieved = queryString.parse(location.search);
-   
-          const idSubject = queryRecieved.idSubject
-          const modelSubject = queryRecieved.modelSubject
-      
-          const queryRequest = queryString.stringify({
-            idSubject: idSubject
-            , modelSubject: modelSubject
-          });
-          
-          replaceData2("ready", "listVideo", false);
-          replaceData2("loading", "listVideo", true);
-              
-          const { data } = await axios.get(`${config.URL_API_NS}/video/?` + queryRequest );
-            
-          console.log(data)
-          
-          replaceData2CompGallery("videos", "listVideo", data);
-          replaceData2("ready", "listVideo", true);
-          replaceData2("loading", "listVideo", false);
-
-        } catch (error) {
-
-          addDeleteNotification("basic01", language);
-          console.log(error)
-        }
-      } // if
-
-    })() // async
-
-  }, [readyListVideo])
-
 
   return (
 
-  <DivVideos>
+  <DivProfiles>
 
 
-    {(loadingListVideo) ? <Loading/> :
-      <DivListVideo>
-
-        {listVideo.map(element=>
+    
+      <DivListProfile>
+        { Object.keys(shapes).map(element=>
           
-          <Video 
-            key={element._id}
-            video={element}
-            where="videos"
+          <ProfileSample 
+            key={`${element}-Default-Default`}
+            
+            shape = {element}
+            palette = {(readyUser)? user.profile.listIdPalette[0] : "Default"}
+            border = {(readyUser)? user.profile.listIdBorder[0] : "Default"}
+            
+            
+            size = {40}
+            layout = {"icon only"}
             />
-          
         )}
-       
-      </DivListVideo>
-    }
+      </DivListProfile>
+      
+      
+      <DivListProfile>
+        { Object.keys(palettes).map(element=>
+          
+          <ProfileSample 
+            key={`Default-${element}-Default`}
+            
+            shape = {(readyUser)? user.profile.listIdShape[0] : "Default"}
+            palette = {element}
+            border = {(readyUser)? user.profile.listIdBorder[0] : "Default"}
+           
+            
+            size = {40}
+            layout = {"icon only"}
+            />
+        )}
+      </DivListProfile>
+      
+      
+      <DivListProfile>
+        { Object.keys(borders).map(element=>
+          
+          <ProfileSample 
+            key={`Default-Default-${element}`}
+            
+            shape = {(readyUser)? user.profile.listIdShape[0] : "Default"}
+            palette = {(readyUser)? user.profile.listIdPalette[0] : "Default"}
+            border = {element}
+            
+            
+            size = {40}
+            layout = {"icon only"}
+            />
+        )}
+      </DivListProfile>
+      
+      
 
-    </DivVideos>
+    </DivProfiles>
 
   )
 
@@ -180,4 +189,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 // 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다
-export default connect(mapStateToProps, mapDispatchToProps)(Videos);
+export default connect(mapStateToProps, mapDispatchToProps)(Profiles);

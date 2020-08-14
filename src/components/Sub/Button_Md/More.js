@@ -44,7 +44,6 @@ const DivMore = styled(Div)`
 
 const GroupNav = styled(Div)`
   
-  height: 300px;
   
 	display: flex;
 	flex-direction: column;
@@ -58,7 +57,9 @@ const activeClassName = 'nav-link-active';
 
 const NavLinkNavItem = styled(NavLink).attrs({ activeClassName })`
   width: 100%;
-  height: 100px;
+  height: 80px;
+  
+  font-size: 1.1rem;
   
   margin-right: 10px;
   margin-left: 10px;
@@ -80,9 +81,15 @@ const NavLinkNavItem = styled(NavLink).attrs({ activeClassName })`
 	
 	}
 	
+	&:nth-child(n+1){
+		border-bottom: 1px solid ${props => props.theme.color_very_weak};
+	}
+	
 `
 
 const GroupButton = styled(Div)`
+	margin-top: 10px;
+	
   display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -90,7 +97,7 @@ const GroupButton = styled(Div)`
 `
 
 const ButtonLanguage = styled(Button)`
-	font-size: 1rem;
+	font-size: 1.1rem;
 	width: 70px;
 	margin-left: 0px;
 	margin-right: 5px;
@@ -238,6 +245,20 @@ const More = ({
 		</NavLinkNavItem> 
 
     
+    <NavLinkNavItem to="/my" isActive={()=>checkActive(/^(\/my)/)} > 
+		{(() => {
+      switch (language) {
+        case 'ko': 
+          return '나';
+        case 'ja': 
+          return '私';
+        default: // eng
+          return 'My';
+      }
+    })()} 
+		</NavLinkNavItem> 
+		
+		
     <NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > 
 		{(() => {
       switch (language) {
