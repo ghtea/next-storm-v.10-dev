@@ -303,7 +303,7 @@ const RowPlayer = ({
       replacePlayerTags(battletag, "leader", true);
       
       
-      await axios.put (`${process.env.REACT_APP_URL_AHR}/player/update-tags`,
+      await axios.put (`${process.env.REACT_APP_URL_AHR}/participant/update-tags`,
         { 
           idPlanTeam: idPlanTeam
           , battletag: battletag
@@ -315,7 +315,7 @@ const RowPlayer = ({
       if (statusPlayer === "pending") { // 만약 status 가 pending 때는 status 도 confirmed 로 한꺼번에 바꿔주기!
         replacePlayerStatus(battletag, "confirmed");
         
-        await axios.put (`${process.env.REACT_APP_URL_AHR}/player/update-status`,
+        await axios.put (`${process.env.REACT_APP_URL_AHR}/participant/update-status`,
           { 
             idPlanTeam: idPlanTeam
             , battletag: battletag
@@ -329,7 +329,7 @@ const RowPlayer = ({
     else {
       replacePlayerTags(battletag, "leader", false);
       
-      await axios.put (`${process.env.REACT_APP_URL_AHR}/player/update-tags`,
+      await axios.put (`${process.env.REACT_APP_URL_AHR}/participant/update-tags`,
         { 
           idPlanTeam: idPlanTeam
           , battletag: battletag
@@ -350,7 +350,7 @@ const RowPlayer = ({
     if (statusPlayer === "pending") {
       replacePlayerStatus(battletag, "confirmed");
     
-      await axios.put (`${process.env.REACT_APP_URL_AHR}/player/update-status`,
+      await axios.put (`${process.env.REACT_APP_URL_AHR}/participant/update-status`,
         { 
           idPlanTeam: idPlanTeam
           , battletag: battletag
@@ -362,7 +362,7 @@ const RowPlayer = ({
     else { // if status was "confirmed"
       replacePlayerStatus(battletag, "pending");
     
-      await axios.put (`${process.env.REACT_APP_URL_AHR}/player/update-status`,
+      await axios.put (`${process.env.REACT_APP_URL_AHR}/participant/update-status`,
         { 
           idPlanTeam: idPlanTeam
           , battletag: battletag
@@ -373,7 +373,7 @@ const RowPlayer = ({
       if (isLeader === true) {
         replacePlayerTags(battletag, "leader", false);
         
-        await axios.put (`${process.env.REACT_APP_URL_AHR}/player/update-tags`,
+        await axios.put (`${process.env.REACT_APP_URL_AHR}/participant/update-tags`,
           { 
             idPlanTeam: idPlanTeam
             , battletag: battletag

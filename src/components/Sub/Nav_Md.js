@@ -65,9 +65,14 @@ const Nav_Md = ({
 	    , ja: "ホーム"
 	  }
 	  ,"my": {
-	    en: "my" 
+	    en: "My" 
 	    , ko: "나"
 	    , ja: "私"
+	  }
+	  ,"player": {
+	    en: "Player" 
+	    , ko: "플레이어"
+	    , ja: "プレーヤー"
 	  }
 	  ,"team-planner": {
 	    en: "Team Planner" 
@@ -88,6 +93,9 @@ const Nav_Md = ({
 	  }
 	  else if ( (/^(\/my)/).test(location.pathname) ) {
 	    setTitle( dictTitle["my"][language] )
+	  }
+	  else if ( (/^(\/player)/).test(location.pathname) ) {
+	    setTitle( dictTitle["player"][language] )
 	  }
 	  else if ( (/^(\/team-planner)/).test(location.pathname) ) {
 	    setTitle( dictTitle["team-planner"][language] )

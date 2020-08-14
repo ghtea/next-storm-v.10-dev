@@ -257,7 +257,7 @@ const DivIconWorking = styled(Div)`
         //replaceWorking("addPlayer", false)
         //addDeleteNotification("success", "player has been added!");
         
-        await axios.put (`${process.env.REACT_APP_URL_AHR}/player/add-roles`,
+        await axios.put (`${process.env.REACT_APP_URL_AHR}/participant/add-roles`,
           {
             battletag: battletag
             , idPlanTeam: idPlanTeam

@@ -117,6 +117,20 @@ const NavMd_ = ({
 		</NavLinkNavItem> 
 		
 		
+		<NavLinkNavItem to="/player" isActive={()=>checkActive(/^(\/player)/)} > 
+		{(() => {
+      switch (language) {
+        case 'ko': 
+          return '플레이어';
+        case 'ja': 
+          return '플레이어';
+        default: // eng
+          return 'プレーヤー';
+      }
+    })()} 
+		</NavLinkNavItem> 
+		
+		
     <NavLinkNavItem to="/comp-gallery" isActive={()=>checkActive(/^(\/comp-gallery)/)} > 
 		{(() => {
       switch (language) {

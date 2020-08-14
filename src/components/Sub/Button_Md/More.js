@@ -57,7 +57,7 @@ const activeClassName = 'nav-link-active';
 
 const NavLinkNavItem = styled(NavLink).attrs({ activeClassName })`
   width: 100%;
-  height: 80px;
+  height: 70px;
   
   font-size: 1.1rem;
   
@@ -254,6 +254,20 @@ const More = ({
           return '私';
         default: // eng
           return 'My';
+      }
+    })()} 
+		</NavLinkNavItem> 
+		
+		
+		<NavLinkNavItem to="/stats" isActive={()=>checkActive(/^(\/stats)/)} > 
+		{(() => {
+      switch (language) {
+        case 'ko': 
+          return '통계';
+        case 'ja': 
+          return '統計';
+        default: // eng
+          return 'Stats';
       }
     })()} 
 		</NavLinkNavItem> 

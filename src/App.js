@@ -17,6 +17,7 @@ import Notification from "./routes/Notification";
 import Home from "./routes/Home";
 
 import My from "./routes/My";
+import Player from "./routes/Player";
 
 import Auth from "./routes/Auth";
 
@@ -223,9 +224,12 @@ const App = ({
       
       <Route path="/my" component={My} />
       
-      <Route path="/team-planner" component={TeamPlanner} />
+      <Route path="/player" component={Player} />
       
       <Route path="/comp-gallery" component={CompGallery} />
+      <Route path="/team-planner" component={TeamPlanner} />
+      
+      
       
       
       </Switch >
