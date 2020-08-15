@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 
 import axios from 'axios';
+import * as config from '../../../config';
 
 import { connect } from "react-redux";
 import {replaceWorking} from "../../../redux/actions/basic";
@@ -170,7 +171,7 @@ const ButtonNumberSide = styled(Button)`
     }
     
     replaceRegion(newRegion);
-    await axios.put (`${process.env.REACT_APP_URL_AHR}/plan-team/`,
+    await axios.put (`${config.URL_API_NS}/plan-team/`,
       {
         filter: {_id: idPlanTeam}
         , update : {

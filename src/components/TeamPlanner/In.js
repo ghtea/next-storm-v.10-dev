@@ -5,10 +5,14 @@ import queryString from 'query-string';
 import { NavLink, useHistory } from 'react-router-dom';
 
 import { connect } from "react-redux";
+import * as config from '../../config';
+
 import readPlanTeam from "../../redux/thunks/readPlanTeam";
 
 //import {replaceRerender} from "../../redux/store";
 import {replaceData, replaceReady, replaceLoading, replaceWorking, replaceAuthority} from "../../redux/actions/basic";
+
+import Loading from '../_/Loading';
 
 import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 import dictCode from '../../others/dictCode';
@@ -116,13 +120,7 @@ const DivLoading = styled(Div)`
   align-items: center;
 `
 
-const Loading = () => {
-  return (
-    <DivLoading>   
-      <IconLoading width={"30px"} height={"30px"} />
-    </DivLoading>
-  )
-}
+
 
 
 // https://ps.avantwing.com/team-Planner/sss?ooo 들어가 보기
@@ -168,7 +166,7 @@ const TeamPlanner = ({
     if (!loadingPlanTeam && !readyPlanTeam)  {  // (readyPlanTeam === false)
       replaceAuthority("team_planner", "unknown");
       
-      addDeleteNotification("tplan06", language);
+      //addDeleteNotification("tplan06", language);
       
       history.push(`/team-planner`);
     }

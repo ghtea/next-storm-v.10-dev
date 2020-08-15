@@ -1,5 +1,5 @@
 {
-  "name": "parallel-storm",
+  "name": "next-storm",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -32,7 +32,7 @@
     "uuidv4": "^6.2.0"
   },
   "scripts": {
-    "start": "export PORT=3009 && react-scripts start",
+    "start": "export PORT=5001 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -56,3 +56,4 @@
     "babel-plugin-module-resolver": "^4.0.0"
   }
 }
+

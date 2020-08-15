@@ -1,5 +1,6 @@
 import axios from 'axios';
-import dotenv from 'dotenv';
+
+import * as config from '../../config';
 
 import * as types from '../actions/ActionTypes';
 import {replaceReady, replaceLoading, replaceData, addNotification, removeNotification} from '../actions/basic'
@@ -43,7 +44,7 @@ const readPlayerMmr = (battletag) => {
       dispatch( replaceReady("cPlayerMmr", false) );
       dispatch( replaceLoading("cPlayerMmr", true) ); 
       
-      const response = await axios.get( `${process.env.REACT_APP_URL_AHR}/PlanTeam/${idPlanTeam}`);
+      const response = await axios.get( `${config.URL_API_NS}/PlanTeam/${idPlanTeam}`);
       
       
       

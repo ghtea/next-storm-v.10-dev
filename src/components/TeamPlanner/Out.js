@@ -83,7 +83,7 @@ const Out = ({
   
   useEffect(()=>{
     
-    if (readyUser) { 
+    if (readyUser && !readyListPlan) { 
       
      (async() => {
       
@@ -117,7 +117,7 @@ const Out = ({
     })()
     
     } //if
-  },[readyUser])
+  },[readyUser, readyListPlan])
     
     return (
     

@@ -7,6 +7,7 @@ import axios from 'axios';
 import { NavLink, useParams } from 'react-router-dom';
 
 import { connect } from "react-redux";
+import * as config from '../../../config';
 
 import {addResult, deleteResult} from "../../../redux/actions/team_planner";
 import readPlanTeam from "../../../redux/thunks/readPlanTeam";
@@ -761,7 +762,7 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
         
         addResult(newResult);
         //replaceRegion(newRegion);
-        await axios.put (`${process.env.REACT_APP_URL_AHR}/plan-team/`,
+        await axios.put (`${config.URL_API_NS}/plan-team/`,
           {
             filter: {_id: idPlanTeam}
             , update : {
@@ -792,7 +793,7 @@ const listPlayerBattletag = (Object.keys(listPlayerEntry)).map(element=>listPlay
       try {
         deleteResult(resultShowing._id);
         //replaceRegion(newRegion);
-        await axios.put (`${process.env.REACT_APP_URL_AHR}/plan-team/`,
+        await axios.put (`${config.URL_API_NS}/plan-team/`,
           {
             filter: {_id: idPlanTeam}
             , update : {

@@ -103,7 +103,7 @@ const NavMd_ = ({
 		</NavLinkNavItem> 
     
     
-    <NavLinkNavItem to="/my" isActive={()=>checkActive(/^(\/my)/)} > 
+    <NavLinkNavItem to="/my/profiles" isActive={()=>checkActive(/^(\/my)/)} > 
 		{(() => {
       switch (language) {
         case 'ko': 
@@ -117,15 +117,15 @@ const NavMd_ = ({
 		</NavLinkNavItem> 
 		
 		
-		<NavLinkNavItem to="/player" isActive={()=>checkActive(/^(\/player)/)} > 
+		<NavLinkNavItem to="/player/general" isActive={()=>checkActive(/^(\/player)/)} > 
 		{(() => {
       switch (language) {
         case 'ko': 
           return '플레이어';
         case 'ja': 
-          return '플레이어';
-        default: // eng
           return 'プレーヤー';
+        default: // eng
+          return 'Player';
       }
     })()} 
 		</NavLinkNavItem> 

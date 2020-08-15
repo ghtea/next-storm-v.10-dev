@@ -1,5 +1,4 @@
 import React, {useEffect, useRef} from 'react';
-import dotenv from 'dotenv';
 
 import styled from 'styled-components';
 import axios from 'axios';
@@ -145,9 +144,9 @@ const SubPlayer = ({
     <DivSubPlayer>
 		  
 		  <NavLinkStyled to="/player/general" isActive={()=>checkActive(/^(\/player\/general)/)} > 
-        <IconPersonCard width={"22px"} height={"22px"} color={(location.pathname==="/player/general")?"color_active": "color_very_weak"} />
+        <IconPersonCard width={"22px"} height={"22px"} color={((/^(\/player\/general)/).test(window.location.pathname))? "color_active" : "color_very_weak"} />
 				<Div> 
-				  {(() =>Player
+				  {(() => {
             switch (language) {
               case 'ko': 
                 return '개요';

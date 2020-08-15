@@ -140,7 +140,7 @@ const Link_Common = styled(LinkDefault)`
         }
         
         try {
-          const res = await axios.post(`https://a-ns.avantwing.com/auth-local/apply-battletag`, inputUser, {withCredentials: true, credentials: 'include'});
+          const res = await axios.post(`${config.URL_API_NS}/auth-local/apply-battletag`, inputUser, {withCredentials: true, credentials: 'include'});
           // https://www.zerocho.com/category/NodeJS/post/5e9bf5b18dcb9c001f36b275   we need extra setting for cookies
           //console.log(res)
           

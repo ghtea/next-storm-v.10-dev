@@ -1,5 +1,6 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
+import * as config from '../../config';
 
 import * as types from '../actions/ActionTypes';
 import { replaceReady, replaceLoading, replaceData, addNotification, removeNotification} from '../actions/basic'
@@ -49,13 +50,13 @@ const readPlanTeam = (idPlanTeam, language) => {
       
       
       
-      const response = await axios.get( `${process.env.REACT_APP_URL_AHR}/plan-team/${idPlanTeam}`);
+      const response = await axios.get( `${config.URL_API_NS}/plan-team/${idPlanTeam}`);
       
       const newPlanTeam = response.data;
       
       
       // leave record of when is the latest access
-      await axios.put (`${process.env.REACT_APP_URL_AHR}/plan-team/`,
+      await axios.put (`${config.URL_API_NS}/plan-team/`,
         {
           filter: {_id: idPlanTeam}
           , update : {

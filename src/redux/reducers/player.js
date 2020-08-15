@@ -7,13 +7,14 @@ import * as types from '../actions/ActionTypes';
 
 const stateInitial = { 
   
+  general: {}
   
   
 };
 
 
 
-const reaction = (
+const player = (
   
   // 기본값 설정
   state = stateInitial, 
@@ -48,6 +49,9 @@ const reaction = (
       }
       
       
+      if (action.which === "general") {
+        storage.set( 'playerGeneral' , replacementState);
+      }
       
       return replacementState;
       

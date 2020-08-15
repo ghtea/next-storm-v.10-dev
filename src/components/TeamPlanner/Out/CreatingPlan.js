@@ -1,7 +1,9 @@
-import dotenv from 'dotenv';
+
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+
+import * as config from '../../../config';
 
 import axios from 'axios';
 
@@ -213,7 +215,7 @@ const DivIconWorking = styled(Div)`
           request['listAuthor'] = []
         }
         
-        await axios.post (`${process.env.REACT_APP_URL_AHR}/plan-team`, request);
+        await axios.post (`${config.URL_API_NS}/plan-team`, request);
         //console.log(regionCreating);
         replaceWorking("createPlan", false);
         

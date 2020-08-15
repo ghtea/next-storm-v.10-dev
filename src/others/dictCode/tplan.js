@@ -232,6 +232,17 @@ const tplan = {
 	}
 	
 	
+	, "tplan51": { // 
+		situation: "error"
+		, message: {
+			en: `Failed in deleting the plan`
+			,ko: `플랜을 삭제하지 못했습니다`
+			,ja: `プランを削除できませんでした`
+		}
+	}
+	
+	
+	
 	
 }
 

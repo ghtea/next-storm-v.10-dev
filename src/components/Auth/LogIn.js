@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
@@ -121,7 +121,7 @@ const Link_Common = styled(LinkDefault)`
         }
         
         try {
-          const res = await axios.post(`https://a-ns.avantwing.com/auth-local/log-in`, inputUser, {withCredentials: true, credentials: 'include'});
+          const res = await axios.post(`${config.URL_API_NS}/auth-local/log-in`, inputUser, {withCredentials: true, credentials: 'include'});
           // https://www.zerocho.com/category/NodeJS/post/5e9bf5b18dcb9c001f36b275   we need extra setting for cookies
           //console.log(res)
           
@@ -143,7 +143,7 @@ const Link_Common = styled(LinkDefault)`
                 "code_situation": "alocal03"
               });
               
-              window.location.href = (`https://ns.avantwing.com/auth/apply-battletag?` + query);
+              window.location.href = (`${config.URL_THIS}/auth/apply-battletag?` + query);
               return;
               
             }

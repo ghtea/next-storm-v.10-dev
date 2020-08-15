@@ -34,6 +34,8 @@ const stateInitial = {
       ,mmrUser: false
       
       , reactionToEdit: false
+      
+      , playerGeneral: false
     }
     
     ,loading : {
@@ -47,11 +49,13 @@ const stateInitial = {
       , focusingCompVideo: false
       , editingComp: false
       
-      ,listVideo: false
+      , listVideo: false
       
-      ,user: false
+      , user: false
       
       , reactionToEdit: false
+      
+      , playerGeneral: false
     }
     
     

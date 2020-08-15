@@ -1,8 +1,9 @@
-import dotenv from 'dotenv';
+
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 
 import axios from 'axios';
+import * as config from '../../../config';
 
 import { connect } from "react-redux";
 import {replaceWorking} from "../../../redux/actions/basic";
@@ -243,7 +244,7 @@ const DivIconWorking = styled(Div)`
         replaceWorking("addPlayer", true) // playermmr 옮기고, playerEntry 를 plan에 추가하고, 이후에 mmrStandar 도 추가하는 전체 작업 시작
         
         // listRegionMain (플레이어가 활동하는 지역 목록) 만 가져와서 이후에 이용
-        const res_player_add = await axios.put (`${process.env.REACT_APP_URL_AHR}/player/add`,
+        const res_player_add = await axios.put (`${config.URL_API_NS}/participant/add`,
           {
             battletag: battletag
             , idPlanTeam: idPlanTeam
@@ -257,7 +258,7 @@ const DivIconWorking = styled(Div)`
         //replaceWorking("addPlayer", false)
         //addDeleteNotification("success", "player has been added!");
         
-        await axios.put (`${process.env.REACT_APP_URL_AHR}/participant/add-roles`,
+        await axios.put (`${config.URL_API_NS}/participant/add-roles`,
           {
             battletag: battletag
             , idPlanTeam: idPlanTeam
@@ -361,7 +362,7 @@ const DivIconWorking = styled(Div)`
       <GroupCopy>
         
         <CopyToClipboard 
-          text={`https://ps.avantwing.com/team-generator/${ePlanTeam._id}`}
+          text={`${config.URL_THIS}/team-planner/${ePlanTeam._id}`}
           onCopy={ () => { addDeleteNotification("tplan24", language); } } >
           
           <ButtonCopy> 
@@ -382,7 +383,7 @@ const DivIconWorking = styled(Div)`
         
         { (authority === "administrator") && 
           <CopyToClipboard 
-            text={`https://ps.avantwing.com/team-generator/${ePlanTeam._id}?pw=${ePlanTeam.password}`}
+            text={`${config.URL_THIS}/team-planner/${ePlanTeam._id}?pw=${ePlanTeam.password}`}
             onCopy={ () => { addDeleteNotification("tplan25", language); } } >
             
             <ButtonCopy>

@@ -8,11 +8,12 @@ import { Route, NavLink, Switch } from 'react-router-dom';
 
 import * as config from '../config';
 
-import General from "../components/Stats/General"
+import General from "../components/Player/General"
 
-import SubPlayer from "../components/Stats/SubPlayer"
+import SubPlayer from "../components/Player/SubPlayer"
 
 import { connect } from "react-redux";
+
 
 import {replaceData, replaceReady, replaceLoading, replaceWorking, replaceAuthority, replaceData2} from "../redux/actions/basic";
 
@@ -103,8 +104,7 @@ const Player = ({
       <Main>
         <Switch>
         
-          <Route path="/player/general" component={General} />
-          <Route path="/player/general/:battletag" component={General} />
+          <Route path="/player/general/:battletagEncoded" component={General} />
           
         </Switch>
       </Main>
@@ -114,7 +114,7 @@ const Player = ({
     )
 }
   
- 
+ // <Route path={["/player/general", "/player/general/:battletagEncoded"]} component={General} />
     
  //CompGallery
 
@@ -131,18 +131,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) { 
   return { 
-    //readPlanTeam: (idPlanTeam) => dispatch(readPlanTeam(idPlanTeam)) 
-    
-    //,replaceData: (which, newData) => dispatch(replaceData(which, newData))
-    //,replaceLoading: (which, true_false) => dispatch(replaceLoading(which, true_false)) 
-    //,replaceReady: (which, true_false) => dispatch(replaceReady(which, true_false)) 
-    
-    //replaceAuthority: (which, authority) => dispatch(replaceAuthority(which, authority))
-    
-    replaceDataHots : (which, replacement) => dispatch(replaceDataHots(which, replacement))
-    ,replaceData2Hots : (which1, which2, replacement) => dispatch(replaceData2Hots(which1, which2, replacement))
-    
-    ,replaceData : (which, replacement) => dispatch(replaceData(which, replacement))
+     
+    replaceData : (which, replacement) => dispatch(replaceData(which, replacement))
     ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
     
     , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
