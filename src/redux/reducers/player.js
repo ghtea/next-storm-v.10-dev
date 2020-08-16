@@ -48,10 +48,7 @@ const player = (
         }
       }
       
-      
-      if (action.which === "general") {
-        storage.set( 'playerGeneral' , replacementState);
-      }
+
       
       return replacementState;
       

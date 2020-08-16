@@ -71,8 +71,9 @@ const NavMd_ = ({
 	match, location
 	
 	, language
-	, auth     // 변화 잘 감지하기 위해서, readyUser 만 따로 빼놓기!
-	, loadingUser, readyUser
+	 
+	, user
+	, readyUser
 	
 	, themeName
 	
@@ -81,6 +82,13 @@ const NavMd_ = ({
 	, replaceDataAuth, replaceData2Auth
 	}) => {
 	
+	
+	const [toPlayerGeneral, setToPlayerGeneral] = useState("/player/general/undefined");
+	useEffect(()=>{
+	  if (readyUser && user.battletag){
+	    setToPlayerGeneral ( `/player/general/${encodeURIComponent(user.battletag)}`);
+	  }
+	}, [readyUser])
 	
 	
 	return (
@@ -117,7 +125,7 @@ const NavMd_ = ({
 		</NavLinkNavItem> 
 		
 		
-		<NavLinkNavItem to="/player/general" isActive={()=>checkActive(/^(\/player)/)} > 
+		<NavLinkNavItem to={toPlayerGeneral} isActive={()=>checkActive(/^(\/player)/)} > 
 		{(() => {
       switch (language) {
         case 'ko': 
@@ -168,10 +176,8 @@ function mapStateToProps(state) {
     themeName: state.basic.themeName
     , language: state.basic.language
  
-    , auth: state.auth
+    , user: state.auth.user
     
-    
-    , loadingUser: state.basic.loading.user
     , readyUser: state.basic.ready.user
   }; 
 } 

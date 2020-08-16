@@ -123,8 +123,8 @@ const More = ({
 	match, location
 	
 	, language
-	, auth     // 변화 잘 감지하기 위해서, readyUser 만 따로 빼놓기!
-	, loadingUser, readyUser
+	
+	, user , readyUser
 	
 	, themeName
 	, themeOption
@@ -136,6 +136,12 @@ const More = ({
 	
 	  const [cookies, setCookie, removeCookie] = useCookies(['logged', 'language', 'themeOption']);
 	  
+	  const [toPlayerGeneral, setToPlayerGeneral] = useState("/player/general/undefined");
+		useEffect(()=>{
+		  if (readyUser && user.battletag){
+		    setToPlayerGeneral ( `/player/general/${encodeURIComponent(user.battletag)}`);
+		  }
+		}, [readyUser])
 	  
 	  const dictLanguage = {
   		en: "English"
@@ -259,7 +265,7 @@ const More = ({
 		</NavLinkNavItem> 
 		
 		
-		<NavLinkNavItem to="/player/general" isActive={()=>checkActive(/^(\/player)/)} > 
+		<NavLinkNavItem to={toPlayerGeneral} isActive={()=>checkActive(/^(\/player)/)} > 
 		{(() => {
       switch (language) {
         case 'ko': 
@@ -324,10 +330,7 @@ function mapStateToProps(state) {
     
     , language: state.basic.language
  
-    , auth: state.auth
-    
-    
-    , loadingUser: state.basic.loading.user
+    , user: state.auth.user
     , readyUser: state.basic.ready.user
   }; 
 } 

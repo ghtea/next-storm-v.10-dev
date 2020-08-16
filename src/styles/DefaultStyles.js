@@ -180,8 +180,11 @@ export const Img = styled.img`
   border: 0;
   
   /* working, https://webisfree.com/2019-02-08/[css]-outline%EC%9D%84-%EB%91%A5%EA%B8%80%EA%B2%8C-%ED%91%9C%ED%98%84%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EC%9D%80-radius */
+  
   &:focus, &:active {
-   outline: 2px solid ${props => props.theme.color_very_weak};
+   outline: none;
+   box-shadow: inset 2px 2px ${props => props.theme.color_very_weak}, inset -2px -2px ${props => props.theme.color_very_weak};
+   
   }
   
   
@@ -217,6 +220,12 @@ box-sizing: border-box;
 &::placeholder {
  color: ${props => props.theme.color_weak} !important;
 }
+
+&:focus, &:active {
+  outline: none;
+  box-shadow: inset 2px 2px ${props => props.theme.color_very_weak}, inset -2px -2px ${props => props.theme.color_very_weak};
+
+ }
  
 `
 
@@ -235,6 +244,12 @@ export const Textarea = styled.textarea`
  
  &::placeholder {
   color: ${props => props.theme.color_weak} !important;
+ }
+ 
+ &:focus, &:active {
+  outline: none;
+  box-shadow: inset 2px 2px ${props => props.theme.color_very_weak}, inset -2px -2px ${props => props.theme.color_very_weak};
+
  }
  
 `

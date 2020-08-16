@@ -242,7 +242,7 @@ const ImgEachHero = styled(Img)`
         </GroupEachRole>
         
         <GroupEachRole>
-          <DivRoleName> <IconHealer width={"30px"} height={"30px"} /> </DivRoleName>
+          <DivRoleName> <IconHealer width={"28px"} height={"28px"} /> </DivRoleName>
           <ContainerHero> 
             {dictHealer.map((tHeroBasic) => {
         
