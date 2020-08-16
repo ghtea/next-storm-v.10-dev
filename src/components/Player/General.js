@@ -190,7 +190,6 @@ const DivStatEntire = styled(Div)`
 
 const DivStatRoles = styled(Div)`
   width: 100%;
-  height: 200px;
   
   display: flex;
   flex-direction: row;
@@ -209,36 +208,44 @@ const DivEachRole = styled(Div)`
   justify-content: space-between;
   align-items: center;
   
-  & > div:nth-child(1){
-    
-  }
-  
-  & > div:nth-child(2){
-    height: 40px;
-    border-top: 2px solid ${props => props.theme.color_very_weak};
-  }
-  
-  & > div:nth-child(3){
-    height: 30px;
-    width: 40px;
-    border-radius: 5px;
-    
-    
-    
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  
-    background-color: ${props => props.theme.color_very_weak};
-    color: ${props => props.theme.COLOR_normal};
-    
-    & > div:nth-child(1) { font-size: 0.8rem;  height: 12px; }  
-    & > div:nth-child(2) { font-size: 0.9rem;  height: 15px; }  
-  }
-  
-  
 `
+
+const DivGraph = styled(Div)`
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+`
+const DivBar = styled(Div)`
+  background-color: ${props => props.theme.color_weak};
+  height: ${props => props.ratioAgainstMax * 90 }px;
+`
+
+
+
+const DivIconRole = styled(Div)`
+  height: 40px;
+  border-top: 2px solid ${props => props.theme.color_very_weak};
+`
+
+const DivMmr = styled(Div)`
+  height: 30px;
+  width: 40px;
+  border-radius: 5px;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: ${props => props.theme.color_very_weak};
+  color: ${props => props.theme.COLOR_normal};
+  
+  & > div:nth-child(1) { font-size: 0.8rem;  height: 12px; }  
+  & > div:nth-child(2) { font-size: 0.9rem;  height: 15px; }  
+`
+
 
 
 const DivChooseMode = styled(Div)`
@@ -292,7 +299,8 @@ const General = ({
   const [nameRegionShowing, setNameRegionShowing] = useState("");
   const [modeShowing, setModeShowing] = useState("Both"); // for roles 
   
-  const [triggerShowing, setTriggerShowing] = useState(Date.now().toString())
+  const [readyShowing, setReadyShowing] = useState(false);
+  
   const [showing, setShowing] = useState({
     battletagName: ""
     , battletagNumber: ""
@@ -463,16 +471,17 @@ const General = ({
     
       	// finally  
   		setShowing(showingTemp);
-  		setTriggerShowing(Date.now().toString())
-		
+		  
     } // if
     
   }, [readyPlayerGeneral])
   		
     
     
-    // 메인 지역 알아냈을 때/ 보일 지역 선택했을 때
+    // 메인 지역 알아냈을 때/ 보일 지역 변경했을 때
   useEffect(()=>{
+    
+    setReadyShowing(false);
     
     if (readyPlayerGeneral && nameRegionShowing !== "" ) {
       
@@ -497,12 +506,35 @@ const General = ({
 		      showingTemp['stats'][role]["Both"]['games_played'] += playerGeneral[battletagFull][nameRegionShowing][role]['Storm League']['games_played'];
 		    }
 		    
+		    showingTemp['stats'][role]["Quick Match"]['ratio'] = showingTemp['stats'][role]['Quick Match']['games_played'] / showingTemp['stats']["All"]['Quick Match']['games_played'];
+		    showingTemp['stats'][role]["Storm League"]['ratio'] = showingTemp['stats'][role]['Storm League']['games_played'] / showingTemp['stats']["All"]['Storm League']['games_played'];
+		    showingTemp['stats'][role]["Both"]['ratio'] = showingTemp['stats'][role]['Both']['games_played'] / showingTemp['stats']["All"]['Both']['games_played'];
+
 		  } // for
 		  
-		
+		  
+		  // 역할 중에서 ratio 최대값 찾기 (모드 별로!)
+      const listRole = ['Tank', 'Bruiser', 'Melee Assassin', 'Ranged Assassin', 'Healer', 'Support'];	  
+      
+      
+      const orderRole_QM = listRole.sort((role1, role2) => (showingTemp['stats'][role2]["Quick Match"]['games_played'] - showingTemp['stats'][role1]["Quick Match"]['games_played'] ));
+      const orderRole_SL = listRole.sort((role1, role2) => (showingTemp['stats'][role2]["Storm League"]['games_played'] - showingTemp['stats'][role1]["Storm League"]['games_played'] ));
+      const orderRole_Both = listRole.sort((role1, role2) => (showingTemp['stats'][role2]["Both"]['games_played'] - showingTemp['stats'][role1]["Both"]['games_played'] ));
+      
+      const mostRole_QM = orderRole_QM[0];
+      const mostRole_SL = orderRole_SL[0];
+      const mostRole_Both = orderRole_Both[0];
+      
+      showingTemp['graph'] = {
+        'Quick Match': { ratioMax: showingTemp['stats'][mostRole_QM]['Quick Match']['ratio'] }
+        , 'Storm League': { ratioMax: showingTemp['stats'][mostRole_SL]['Storm League']['ratio'] }
+        , 'Both': { ratioMax: showingTemp['stats'][mostRole_Both]['Both']['ratio'] }
+      }
+      
+		  
 		// finally  
 		setShowing(showingTemp);
-		setTriggerShowing(Date.now().toString())
+		setReadyShowing(true);
 		
     } // if
   
@@ -517,7 +549,8 @@ const General = ({
     KR: flagKR,
     CN: flagCN
   };
-
+  
+  console.log(showing)
   
   return (
     
@@ -531,7 +564,7 @@ const General = ({
         
         { loadingPlayerGeneral && <Loading/> }
         
-        { (!loadingPlayerGeneral && readyPlayerGeneral && nameRegionShowing !== "") &&
+        { (!loadingPlayerGeneral && readyPlayerGeneral && readyShowing) &&
           <DivContainer>
           
             <DivHeader>  
@@ -582,51 +615,116 @@ const General = ({
               <Div> 
                 <DivStatRoles> 
                   
+                  
                   <DivEachRole> 
                     <Div> graph </Div>
                     <Div> <IconTank width={"24px"} height={"24px"} />  </Div>
-                    <Div> <Div> mmr </Div>  <Div> 2234 </Div>  </Div>
+                    {(modeShowing === "Quick Match" || modeShowing === "Storm League") &&
+                      <DivMmr
+                        tier={showing['stats']["Tank"][modeShowing]['tier']}
+                      >    <Div> mmr </Div>    <Div> {showing['stats']["Tank"][modeShowing]['mmr']} </Div>    
+                      </DivMmr>
+                    }
+                    
                   </DivEachRole>
+                  
                   
                   <DivEachRole> 
                     <Div> graph </Div>
                     <Div> <IconBruiser width={"24px"} height={"24px"} />  </Div>
-                    <Div> <Div> mmr </Div>  <Div> 2234 </Div>  </Div>
+                    {(modeShowing === "Quick Match" || modeShowing === "Storm League") &&
+                      <DivMmr
+                        tier={showing['stats']["Bruiser"][modeShowing]['tier']}
+                      >    <Div> mmr </Div>    <Div> {showing['stats']["Bruiser"][modeShowing]['mmr']} </Div>    
+                      </DivMmr>
+                    }
                   </DivEachRole>
+                  
                   
                   <DivEachRole> 
                     <Div> graph </Div>
                     <Div> <IconMelee width={"24px"} height={"24px"} />  </Div>
-                    <Div> <Div> mmr </Div>  <Div> 2234 </Div>  </Div>
+                    {(modeShowing === "Quick Match" || modeShowing === "Storm League") &&
+                      <DivMmr
+                        tier={showing['stats']["Melee Assassin"][modeShowing]['tier']}
+                      >    <Div> mmr </Div>    <Div> {showing['stats']["Melee Assassin"][modeShowing]['mmr']} </Div>    
+                      </DivMmr>
+                    }
                   </DivEachRole>
+                  
                   
                   <DivEachRole> 
                     <Div> graph </Div>
                     <Div> <IconRanged width={"24px"} height={"24px"} />  </Div>
-                    <Div> <Div> mmr </Div>  <Div> 2234 </Div>  </Div>
+                    {(modeShowing === "Quick Match" || modeShowing === "Storm League") &&
+                      <DivMmr
+                        tier={showing['stats']["Ranged Assassin"][modeShowing]['tier']}
+                      >    <Div> mmr </Div>    <Div> {showing['stats']["Ranged Assassin"][modeShowing]['mmr']} </Div>    
+                      </DivMmr>
+                    }
                   </DivEachRole>
+                  
                   
                   <DivEachRole> 
                     <Div> graph </Div>
                     <Div> <IconHealer width={"28px"} height={"28px"} />  </Div>
-                    <Div> <Div> mmr </Div>  <Div> 2234 </Div>  </Div>
+                    {(modeShowing === "Quick Match" || modeShowing === "Storm League") &&
+                      <DivMmr
+                        tier={showing['stats']["Healer"][modeShowing]['tier']}
+                      >    <Div> mmr </Div>    <Div> {showing['stats']["Healer"][modeShowing]['mmr']} </Div>    
+                      </DivMmr>
+                    }
                   </DivEachRole>
                   
+                  
                   <DivEachRole> 
-                    <Div> graph </Div>
-                    <Div> <IconSupport width={"24px"} height={"24px"} />  </Div>
-                    <Div> <Div> mmr </Div>  <Div> 2234 </Div>  </Div>
+                  
+                    <DivGraph> 
+                      <Div>
+                        <Div> {showing['stats']["Support"][modeShowing]['games_played']} </Div>
+                        <Div> games </Div>
+                      </Div>
+                      
+                      <DivBar 
+                        ratioAgainstMax={ showing['stats']["Support"][modeShowing]['ratio'] / showing['graph'][modeShowing]['ratioMax']}
+                      >  
+                      </DivBar>
+                    </DivGraph>
+                    
+                    <DivIconRole> <IconSupport width={"24px"} height={"24px"} />  </DivIconRole>
+                    
+                    {(modeShowing === "Quick Match" || modeShowing === "Storm League") &&
+                      <DivMmr
+                        tier={showing['stats']["Support"][modeShowing]['tier']}
+                      >    <Div> mmr </Div>    <Div> {showing['stats']["Support"][modeShowing]['mmr']} </Div>    
+                      </DivMmr>
+                    }
                   </DivEachRole>
                 
                 </DivStatRoles>
                 
+                
                 <DivChooseMode>
-                  <Button> Quick Match </Button>
-                  <Button> Storm League </Button>
-                  <Button> Both </Button>
+                
+                  <Button 
+                    onClick={ (event)=>{setModeShowing("Quick Match")} }
+                    active={(modeShowing==="Quick Match")}
+                    > Quick Match </Button>
+                    
+                  <Button 
+                    onClick={ (event)=>{setModeShowing("Storm League")} }
+                    active={(modeShowing==="Storm League")}
+                    > Storm League </Button>
+                    
+                  <Button 
+                    onClick={ (event)=>{setModeShowing("Both")} }
+                    active={(modeShowing==="Both")}
+                    > Both </Button>
+                    
                 </DivChooseMode>
               
-              </Div>
+              
+              </Div> 
               
             </DivBody>
           

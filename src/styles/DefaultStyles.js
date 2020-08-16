@@ -177,14 +177,15 @@ export const Img = styled.img`
   color: ${props => props.theme.color_strong};
   background-color: ${props => props.theme.COLOR_normal};
   
-  border: 0;
   
   /* working, https://webisfree.com/2019-02-08/[css]-outline%EC%9D%84-%EB%91%A5%EA%B8%80%EA%B2%8C-%ED%91%9C%ED%98%84%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EC%9D%80-radius */
   
+  
+  border: 2px solid transparent;
+  
   &:focus, &:active {
    outline: none;
-   box-shadow: inset 2px 2px ${props => props.theme.color_very_weak}, inset -2px -2px ${props => props.theme.color_very_weak};
-   
+   border: 2px solid ${props => props.theme.color_weak};
   }
   
   
@@ -213,19 +214,18 @@ margin-right: 2px;
 margin-left: 2px;
 
 border-radius: 0.5rem;
-
-border: 0;
 box-sizing: border-box;
 
 &::placeholder {
  color: ${props => props.theme.color_weak} !important;
 }
 
-&:focus, &:active {
-  outline: none;
-  box-shadow: inset 2px 2px ${props => props.theme.color_very_weak}, inset -2px -2px ${props => props.theme.color_very_weak};
-
- }
+border: 2px solid transparent;
+  
+  &:focus, &:active {
+   outline: none;
+   border: 2px solid ${props => props.theme.color_weak};
+  }
  
 `
 
@@ -237,7 +237,6 @@ export const Textarea = styled.textarea`
  background-color: ${props => props.theme.COLOR_normal};
  width: 100%;
  font-size: 1rem;
- border: 0;
  
  padding-left: 10px;
  box-sizing: border-box;
@@ -246,11 +245,12 @@ export const Textarea = styled.textarea`
   color: ${props => props.theme.color_weak} !important;
  }
  
- &:focus, &:active {
-  outline: none;
-  box-shadow: inset 2px 2px ${props => props.theme.color_very_weak}, inset -2px -2px ${props => props.theme.color_very_weak};
-
- }
+ 
+  border: 2px solid transparent;
+  &:focus, &:active {
+   outline: none;
+   border: 2px solid ${props => props.theme.color_weak};
+  }
  
 `
 
