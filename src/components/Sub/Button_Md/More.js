@@ -250,19 +250,21 @@ const More = ({
     })()} 
 		</NavLinkNavItem> 
 
-    
-    <NavLinkNavItem to="/my/profiles" isActive={()=>checkActive(/^(\/my)/)} > 
-		{(() => {
-      switch (language) {
-        case 'ko': 
-          return '나';
-        case 'ja': 
-          return '私';
-        default: // eng
-          return 'My';
-      }
-    })()} 
-		</NavLinkNavItem> 
+
+    {(readyUser) &&
+	    <NavLinkNavItem to="/my" isActive={()=>checkActive(/^(\/my)/)} > 
+			{(() => {
+	      switch (language) {
+	        case 'ko': 
+	          return '나';
+	        case 'ja': 
+	          return '私';
+	        default: // eng
+	          return 'My';
+	      }
+	    })()} 
+			</NavLinkNavItem>
+    }
 		
 		
 		<NavLinkNavItem to={toPlayerGeneral} isActive={()=>checkActive(/^(\/player)/)} > 

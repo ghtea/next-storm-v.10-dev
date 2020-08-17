@@ -150,8 +150,8 @@ const SubCompGallery = ({
      
     <DivSubCompGallery>
     
-      <NavLinkStyled to="/comp-gallery" exact={true}>
-        <IconGallery width={"24px"} height={"24px"} color={(location.pathname==="/comp-gallery")?"color_active": "color_very_weak"} />
+      <NavLinkStyled to="/comp-gallery" exact={true} onClick={(event)=>{ replaceData2("ready", "listComp", false)}}>
+        <IconGallery width={"24px"} height={"24px"} color={(location.pathname==="/comp-gallery" || location.pathname==="/comp-gallery/")?"color_active": "color_very_weak"} />
 				<Div> 
 				  {(() => {
             switch (language) {

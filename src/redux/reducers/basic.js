@@ -12,7 +12,7 @@ const stateInitial = {
     , ready : {
       
       planTeam: false
-      , listPlan: false
+      , listPlanTeam: false
       
       ,dictAllHeroBasic: false
       
@@ -27,7 +27,8 @@ const stateInitial = {
       
       , editingComp: false
       
-      ,listVideo: false
+      , listComment: false
+      , listVideo: false
       
       ,user: false
       
@@ -41,7 +42,7 @@ const stateInitial = {
     ,loading : {
       
       planTeam: false
-      , listPlan: false
+      , listPlanTeam: false
       
       , listComp: false
       , focusingComp: false
@@ -49,6 +50,7 @@ const stateInitial = {
       , focusingCompVideo: false
       , editingComp: false
       
+      , listComment: false
       , listVideo: false
       
       , user: false

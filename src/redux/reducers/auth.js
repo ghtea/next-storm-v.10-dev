@@ -6,9 +6,7 @@ import * as types from '../actions/ActionTypes';
 
 const stateInitial = { 
     
-    _id: ""
-    , email: ""
-    , battletag: ""
+    user: {}
     
   
   };

@@ -75,7 +75,7 @@ const DivMaps = styled(Div)
   }
   
   & > div:nth-child(n+2) {
-    margin-top: 10px;
+    margin-top: 5px;
   }
   
   

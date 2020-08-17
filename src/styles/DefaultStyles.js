@@ -181,11 +181,12 @@ export const Img = styled.img`
   /* working, https://webisfree.com/2019-02-08/[css]-outline%EC%9D%84-%EB%91%A5%EA%B8%80%EA%B2%8C-%ED%91%9C%ED%98%84%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EC%9D%80-radius */
   
   
-  border: 2px solid transparent;
+  border: 0;
+  /*border: 2px solid transparent;*/
   
   &:focus, &:active {
    outline: none;
-   border: 2px solid ${props => props.theme.color_weak};
+   /*border: 2px solid ${props => props.theme.color_weak};*/
   }
   
   

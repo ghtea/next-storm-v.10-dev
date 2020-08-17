@@ -87,16 +87,25 @@ const Profiles = ({
   , addDeleteNotification
 }) => {
 
-  
+  const [listIdShapeUsing , setListIdShapeUsing] = useState(["Default"]);
+  useEffect(()=> {
+    if (readyUser){
+      if(user.battletag === "mbcat#1703") {
+        setListIdShapeUsing(Object.keys(shapes));
+      }
+      else {
+        setListIdShapeUsing(user.profile.listIdShape);
+      }
+    }
+  },[readyUser])
 
   return (
 
   <DivProfiles>
 
-
     
       <DivListProfile>
-        { Object.keys(shapes).map(element=>
+        { listIdShapeUsing.map(element=>
           
           <ProfileSample 
             key={`${element}-Default-Default`}
@@ -131,6 +140,19 @@ const Profiles = ({
       </DivListProfile>
       
       
+      
+      
+
+    </DivProfiles>
+
+  )
+
+}
+
+
+/* border 은 잠시 보류
+
+
       <DivListProfile>
         { Object.keys(borders).map(element=>
           
@@ -147,16 +169,8 @@ const Profiles = ({
             />
         )}
       </DivListProfile>
-      
-      
 
-    </DivProfiles>
-
-  )
-
-}
-
-
+*/
 
 
 function mapStateToProps(state) {
@@ -167,9 +181,7 @@ function mapStateToProps(state) {
     , user: state.auth.user
     , readyUser: state.basic.ready.user
     
-    , listVideo: state.comp_gallery.videos.listVideo
-    , readyListVideo: state.basic.ready.listVideo
-    , loadingListVideo: state.basic.loading.listVideo
+    
     
   };
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
 import shapes from "../../../profile/shapes";
@@ -10,7 +10,6 @@ import {Div} from '../../../styles/DefaultStyles';
 
 const DivContainer = styled(Div)`
 	background-color: ${props => props.colorBack};
-	/*border: 2px solid rgb(255, 255, 255, 0.1);*/
 	
 	width: ${props => props.width};
 	height: ${props => props.height};
@@ -28,21 +27,30 @@ const Icon = ({
 	
 }) => {
 	
+	let paletteUsing = {};
+	if (palettes[palette]) { paletteUsing = palettes[palette] }
+	else { paletteUsing = palettes['Default'] }
+	
+	let shapeUsing = {};
+	if (shapes[shape]) { shapeUsing = shapes[shape] }
+	else { shapeUsing = shapes['Default'] }
+	
 	return (
 		
-	<DivContainer width={width} height={height} colorBack={palettes[palette]['colorBack']}  >
+		
+	<DivContainer width={width} height={height} colorMain={ paletteUsing['colorMain']} colorBack={ paletteUsing['colorBack'] }  >
 		<svg 
 			
 			className="icon"
 			xmlns="http://www.w3.org/2000/svg" 
 			
-			width={shapes[shape]['size']}
-			height={shapes[shape]['size']}
-			viewBox={shapes[shape]['viewBox']}
+			width={shapeUsing['size']}
+			height={shapeUsing['size']}
+			viewBox={shapeUsing['viewBox']}
 			>
 			
-		<path fill={palettes[palette]['colorMain']} 
-		d={shapes[shape]['d']} ></path></svg>
+		<path fill={ paletteUsing['colorMain']} 
+		d={shapeUsing['d']} ></path></svg>
 
 	</DivContainer>
 	)

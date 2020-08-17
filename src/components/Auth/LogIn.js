@@ -103,7 +103,7 @@ const Link_Common = styled(LinkDefault)`
   
   
   
-  const onClick_LogIn = async (event) => {
+  const onClick_LogIn = async () => {
     
     try {
       if (inputEmailBattletag.value === "") {
@@ -196,7 +196,11 @@ const Link_Common = styled(LinkDefault)`
     
   }
   
-
+  const onKeyPress_LogIn = async (event) => {
+    if (event.key === "Enter") {
+      onClick_LogIn();
+    }
+  }
   
   
   return (
@@ -214,7 +218,9 @@ const Link_Common = styled(LinkDefault)`
                   return 'Email or Battletag'
               }
             })()}  </DivLabel>
-      <InputCommon {...inputEmailBattletag}  placeholder="email or battletag"  />
+      <InputCommon {...inputEmailBattletag}  placeholder="email or battletag"  
+        onKeyPress={onKeyPress_LogIn}
+      />
     </Div>
     
     <Div>
@@ -228,10 +234,14 @@ const Link_Common = styled(LinkDefault)`
                   return 'Password';
               }
             })()}  </DivLabel>
-      <InputCommon {...inputPassword}  placeholder="password" type="password" />
+      <InputCommon {...inputPassword}  placeholder="password" type="password" 
+        onKeyPress={onKeyPress_LogIn}
+      />
     </Div>
     
-    <ButtonLogIn onClick={onClick_LogIn}> {(() => {
+    <ButtonLogIn 
+      onClick={onClick_LogIn}
+      > {(() => {
               switch (language) {
                 case 'ko': 
                   return '로그인';
@@ -242,8 +252,26 @@ const Link_Common = styled(LinkDefault)`
               }
             })()}  </ButtonLogIn>
     
-    <Link_Common to="/auth/sign-up"> to Sign Up </Link_Common>
-    <Link_Common to="/auth/apply-battletag"> to Apply Battletag </Link_Common>
+    <Link_Common to="/auth/sign-up">  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '회원가입';
+                case 'ja': 
+                  return '会員加入';
+                default: // eng
+                  return 'Sign Up';
+              }
+            })()} </Link_Common>
+    <Link_Common to="/auth/apply-battletag"> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '배틀태그 등록';
+                case 'ja': 
+                  return 'バトルタグ登録';
+                default: // eng
+                  return 'Register Battletag';
+              }
+            })()} </Link_Common>
     
   </DivLogIn>
   

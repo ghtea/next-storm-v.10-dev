@@ -8,7 +8,7 @@ import { Route, NavLink, Switch } from 'react-router-dom';
 
 import * as config from '../config';
 
-
+import Library  from "../components/My/Library"
 import Profiles  from "../components/My/Profiles"
 import SubMy from "../components/My/SubMy"
 
@@ -105,7 +105,8 @@ const My = ({
       <Main>
         <Switch>
           
-          <Route path="/my/profiles" exact={true} component={Profiles} />
+          <Route path="/my" exact={true} component={Library} />
+          <Route path="/my/profiles" component={Profiles} />
           
         </Switch>
       </Main>

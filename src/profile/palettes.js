@@ -3,7 +3,7 @@ import hots from './palettes/hots';
 
 const palettes ={
 	...basic
-	, ...hots
+	//, ...hots
 }
 
 export default palettes;

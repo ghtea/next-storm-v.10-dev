@@ -15,6 +15,11 @@ const stateInitial = {
       
       , listAllTag: ["ToWin", "ForFun", "Kill", "Push", "Combo", "Theme"] //, "Early", "Late"
       
+      
+      , optionSort: "3"
+      , limitEach: 50
+      , skipEntire: 0
+      
       , filterSize: [2,3,5]
       , filterTag: []    //, "Early", "Late"
       , filterMap: []

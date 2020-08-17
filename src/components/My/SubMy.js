@@ -29,6 +29,9 @@ import IconUserCircleRegular from '../../svgs/basic/IconUserCircleRegular';
 import IconVideo from '../../svgs/basic/IconVideo';
 import IconComment from '../../svgs/basic/IconComment';
 
+
+import IconCabinetRegular from '../../svgs/basic/IconCabinetRegular';
+import IconList from '../../svgs/basic/IconList';
 import IconEye from '../../svgs/basic/IconEye';
 import IconEdit from '../../svgs/basic/IconEdit';
 
@@ -149,6 +152,22 @@ const SubMy = ({
    return (
      
     <DivSubMy>
+		  
+		  <NavLinkStyled to="/my" exact={true}>
+        <IconCabinetRegular width={"24px"} height={"24px"} color={(location.pathname==="/my")?"color_active": "color_very_weak"} />
+				<Div> 
+				  {(() => {
+            switch (language) {
+              case 'ko': 
+                return '보관함';
+              case 'ja': 
+                return 'ライブラリー';
+              default: // eng
+                return 'Library';
+            }
+          })()}  
+        </Div> 
+			</NavLinkStyled> 
 		  
 		  <NavLinkStyled to="/my/profiles" isActive={()=>checkActive(/^(\/my\/profiles)/)} > 
         <IconUserCircleRegular width={"22px"} height={"22px"} color={(location.pathname==="/my/profiles")?"color_active": "color_very_weak"} />

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import queryString from 'query-string';
 
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import * as config from '../config';
 import { connect } from "react-redux";
@@ -62,9 +62,6 @@ const DivA = styled(Div)`
   }
 `
 
-
-
-
 const DivB = styled(Div)`
   
   display: flex;
@@ -84,26 +81,52 @@ const DivB = styled(Div)`
   }
 `
 
-const DivMain = styled(Div)`
-  
-  & > div:nth-child(1){
-    font-size: 2.4rem;
-    font-weight: bold;
-  }
-  & > div:nth-child(2){
-    font-size: 1rem;
-    font-weight: normal;
-    color: ${props => props.theme.color_weak};
-  }
+
+
+const DivIdentification = styled(Div)`
+  font-size: 1.6rem;
+  margin: 4px;
+  font-weight: bold;
 `
 
-const DivButtons = styled(Div)`
-  margin-top: 10px;
-  margin-bottom: 10px;
-  & > button {
-    
-  }
+
+
+/*
+const DivThemes = styled(Div)`
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `
+
+const ButtonChooseTheme = styled(Button)`
+  height: 36px;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const DivLanguages = styled(Div)`
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`
+
+const ButtonChooseLanguage = styled(Button)`
+  padding-top: 0px;
+  padding-bottom: 0px;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+*/
 
 
 
@@ -146,12 +169,19 @@ const Home= ({
   , replaceDataAuth
   
 }) => {
-    
+  
   const [cookies, setCookie, removeCookie] = useCookies(['logged', 'language', 'themeOption']);
-	
-	const history = useHistory();
-	
-	const onClick_LogOut = async (event) => {
+  
+  /*
+  // 로그아웃 시도후 내가 만든 흔적 쿠키가 완전히 사라져야 새로고침!
+  useEffect(()=>{
+    if (!cookies.logged) {
+      window.location.reload(true); // 현재페이지 새로고침
+    }
+  }, [cookies.logged])
+  */
+  
+  const onClick_LogOut = async (event) => {
 		try {
 			const res = await axios.post(`${config.URL_API_NS}/auth-local/log-out`, {withCredentials: true, credentials: 'include'});
 		}
@@ -170,10 +200,48 @@ const Home= ({
     window.location.reload(true);
 	}
 	
-	const onClick_LogIn = (event) => {
-	  history.push("/auth/log-in");
+	
+	
+	/*
+	const onClick_ChangeTheme = (event, themeOption) => {
+	  setCookie('themeOption', themeOption,{maxAge: 60 * 60 * 24 * 30});
+	  if (themeOption === 'auto') {
+      const themeName = isDarkMode() ? 'dark' : 'light';
+      replaceData("themeName", themeName);
+    }
+    else {
+      replaceData("themeName", themeOption);
+    }
 	}
 	
+	const onClick_ChangeLanguage = (event, language) => {
+	  setCookie('language', language,{maxAge: 60 * 60 * 24 * 30});
+    replaceData("language", language);
+	}
+	*/
+	
+	
+	const onClick_UpdateMmr = async (event) => {
+	  try {
+	    replaceData2("ready", "mmrUser", false);
+	    replaceData2("working", "updateMmr", true);
+	    
+      const res = await axios.post (`${process.env.REACT_APP_URL_AHR}/user/update-mmr`, {
+        _id: user._id
+        ,battletag: user.battletag
+      });
+      
+      // mmr obj 받는다
+      console.log(res.data);
+      
+      replaceData2("working", "updateMmr", false);
+      replaceData2("ready", "mmrUser", true);
+      
+      addDeleteNotification("alocal42", language);
+	    
+		}
+		catch (error) {  addDeleteNotification("alocal41", language); }
+	}
     
     return (
     
@@ -181,34 +249,11 @@ const Home= ({
       
       <DivA>
         
-        <DivMain>
+        <Div>
           <Div> NEXT STORM </Div>
-          <Div> v0.9 (2020. 8. 16.)  </Div>
-        </DivMain>
-        
-        <DivButtons>
-          {(!readyUser)? <Button onClick={onClick_LogIn} >  {(() => {
-              switch (language) {
-                case 'ko': 
-                  return '로그인';
-                case 'ja': 
-                  return 'ログイン';
-                default: // eng
-                  return 'Log In'
-              }
-            })()} </Button> 
-            : <Button onClick={onClick_LogOut} >  {(() => {
-              switch (language) {
-                case 'ko': 
-                  return '로그아웃';
-                case 'ja': 
-                  return 'ログアウト';
-                default: // eng
-                  return 'Log Out'
-              }
-            })()}  </Button> 
-            }
-        </DivButtons>
+          <Div> v0.9 2020. 8. 16.  </Div>
+        </Div>
+          
         
       </DivA>
       
@@ -240,6 +285,83 @@ const Home= ({
 } //Home
 
 
+
+
+
+
+/*
+<DivA>
+        
+        {(readyUser)?
+  				<Div>
+  					<DivIdentification> {(user.battletag)? user.battletag : user.email} </DivIdentification>
+  					
+  					<Button onClick={onClick_LogOut}> LOG OUT </Button>
+  					{(user.battletag)? 
+  					  <Button onClick={onClick_UpdateMmr}> Update Mmr </Button>
+  					  : <LinkDefault to="/auth/apply-battletag"> Apply Battletag </LinkDefault> 
+  					}
+  					
+  				</Div>
+  				:  
+  				<Div>
+  				  <LinkDefault to="/auth/log-in" > {(() => {
+            switch (language) {
+              case 'ko': 
+                return '로그인';
+              case 'ja': 
+                return 'ログイン';
+              default: // eng
+                return 'Log In';
+            }
+  	      })()}  </LinkDefault> 
+  				</Div>
+  			}
+			
+        
+      </DivA>
+
+*/
+
+
+
+
+
+
+
+
+/*
+<DivThemes>
+          <ButtonChooseTheme onClick={(event) => onClick_ChangeTheme(event, 'light')} > 
+            <IconSun width={"32px"} height={"32px"} color="color_weak" />
+            <Div> light </Div>
+          </ButtonChooseTheme>
+          
+          <ButtonChooseTheme onClick={(event) => onClick_ChangeTheme(event, 'dark')} > 
+            <IconMoon width={"25px"} height={"25px"} color="color_weak" />
+            <Div> dark </Div>
+          </ButtonChooseTheme>
+          
+          <ButtonChooseTheme onClick={(event) => onClick_ChangeTheme(event, 'auto')} > 
+            <IconMoonSun width={"36px"} height={"36px"} color="color_weak" />
+            <Div> auto </Div>
+          </ButtonChooseTheme>
+        </DivThemes>
+        
+        <DivLanguages>
+          <ButtonChooseLanguage onClick={(event) => onClick_ChangeLanguage(event, 'en')} > 
+            <Div>  English </Div>
+          </ButtonChooseLanguage>
+          
+          <ButtonChooseLanguage onClick={(event) => onClick_ChangeLanguage(event, 'ko')} > 
+            <Div> 한국어 </Div>
+          </ButtonChooseLanguage>
+          
+          <ButtonChooseLanguage onClick={(event) => onClick_ChangeLanguage(event, 'ja')} > 
+            <Div> 日本語 </Div>
+          </ButtonChooseLanguage>
+        </DivLanguages>
+*/
 
 
 function mapStateToProps(state) { 

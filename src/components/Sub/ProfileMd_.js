@@ -104,7 +104,7 @@ const DivIconProfile = styled(Div)`
   width: ${props => props.size};
   height: ${props => props.size};
   
-  ${props => borders[props.border]}
+  ${props => borders[props.border] || borders['Default']}
   border-radius: 6px; 
   
   display: flex;

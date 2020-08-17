@@ -244,7 +244,16 @@ const Link_Common = styled(LinkDefault)`
               }
             })()}  </ButtonSignUp>
     
-    <Link_Common to="/auth/log-in"> to Log In </Link_Common>
+    <Link_Common to="/auth/log-in"> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '로그인';
+                case 'ja': 
+                  return 'ログイン';
+                default: // eng
+                  return 'Log In'
+              }
+            })()} </Link_Common>
     
   </DivSignUp>
   

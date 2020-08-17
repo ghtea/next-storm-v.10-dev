@@ -86,12 +86,19 @@ const Comments = ({
           
           const queryRecieved = queryString.parse(location.search);
    
-          const idSubject = queryRecieved.idSubject
-          const modelSubject = queryRecieved.modelSubject
-      
           const queryRequest = queryString.stringify({
-            idSubject: idSubject
-            , modelSubject: modelSubject
+            
+            listSort: queryRecieved.listSort || ["createdNew"]  // 기본 정렬 설정
+            , limitEach: queryRecieved.limitEach || 50  // test로서 3개씩 가져와 보자
+            , skipEntire: queryRecieved.skipEntire || 0
+            
+            , idAuthor: queryRecieved.idAuthor
+      
+            , idUserLike: queryRecieved.idUserLike
+            
+            , idSubject: queryRecieved.idSubject
+            , modelSubject: queryRecieved.modelSubject
+
           });
           
           replaceData2("ready", "listComment", false);

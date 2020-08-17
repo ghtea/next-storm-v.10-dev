@@ -1,8 +1,7 @@
-import dotenv from 'dotenv';
-import React, {
-  useState, useEffect
-}
-from 'react';
+
+import React, { useState, useEffect} from 'react';
+import {  useHistory } from 'react-router-dom';
+
 import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive'
 
@@ -48,6 +47,7 @@ import IconExpand from '../../../svgs/basic/IconExpand'
 import IconHero from '../../../svgs/basic/IconHero'
 import IconMap from '../../../svgs/basic/IconMap'
 import IconMore from '../../../svgs/basic/IconMore'
+import IconSort from '../../../svgs/basic/IconSort'
 
 
 import IconFun from '../../../svgs/tags/IconFun'
@@ -90,10 +90,54 @@ const DivFilter = styled(Div)
   
 `
 
-
-const ButtonFilter = styled(Button)`
-  height: 30px;
+const GroupButton = styled(Div)`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  
+  font-size: 0.9rem;
+  
+  @media (min-width:  ${props => (props.theme.media.md) }px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 `
+
+const ButtonSort = styled(Button)`
+  height: 36px;
+  width: auto;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  
+  padding-left: 2px;
+  padding-right: 2px;
+  
+  & > div {
+    font-size: 0.9rem;
+    width: auto;
+    &:nth-child(n+2) {margin-left: 3px;}
+  }
+`
+
+const ButtonApply = styled(Button)`
+  height: 36px;
+  width: auto;
+  
+  padding-left: 6px;
+  padding-right: 6px;
+  
+  margin-left: 5px;
+  background-color: ${props => props.theme.color_weak};
+  color: ${props => props.theme.COLOR_normal};
+`
+
+
 
 const GroupWhich = styled(Div)`
   display: flex;
@@ -145,10 +189,18 @@ const Filter = ({
     , listAllTag
     , searchHero
     
+    
+    
+    , optionSort
+    , limitEach
+    , skipEntire
+    
     , filterSize
     , filterTag
     , filterHero
     , filterMap
+    
+    
     
     , readyListAllMap
     , readyListMapStandardRanked
@@ -160,9 +212,10 @@ const Filter = ({
 
   }) => {
     
-    
+    const history = useHistory();
     const [which, setWhich] = useState("others"); // heroes, map, others (size, tags)
     
+    const [textOptionSort, setTextOptionSort] = useState("");
     
     // 입력중인 내용을 redux -> localstorage 저장하기 위해서!
     const useInput_Heroes = (value) => {
@@ -189,49 +242,141 @@ const Filter = ({
     }
     
     
-    const onClick_Filtered = async (event) => {
-      try {
+    const onClick_Apply = (event) => {
+     
+      let listSort = [];
+      
+      switch (optionSort) {
+        case '1': 
+          listSort = ['numberLike', 'createdNew']; break;
+        case '2': 
+          listSort = ['numberLike', 'updatedNew']; break;
+        case '3': 
+          listSort = ['createdNew']; break;
+        case '4': 
+          listSort = ['updatedNew']; break;
+        default: 
+          listSort = ['createdNew']; break;  
+      }
+     
+      const query = queryString.stringify({
         
-        const query = queryString.stringify({
-          filterSize: filterSize
-          , filterMap: filterMap
-          , filterTag: filterTag
-          , filterHero: filterHero
-        });
+        listSort: listSort
+        , limitEach: limitEach
+        , skipEntire: skipEntire
         
-        replaceData2("ready", "listComp", false);
-        replaceData2("loading", "listComp", true);
-            
-        const { data } = await axios.get(`${config.URL_API_NS}/comp/?` + query );
-  
-        replaceData2CompGallery("gallery", "listComp", data);
-        replaceData2("ready", "listComp", true);
-        replaceData2("loading", "listComp", false);
-  
-      } catch (error) {
-  
-        addDeleteNotification("basic01", language);
-        console.log(error)
+        , filterSize: filterSize
+        , filterMap: filterMap
+        , filterTag: filterTag
+        , filterHero: filterHero
+      });
+        
+      
+      history.push(`/comp-gallery/?` + query );
+      replaceData2("ready", "listComp", false);
+    }
+    
+    
+    useEffect(()=>{
+      switch (optionSort) {
+        
+        case '1': 
+          switch (language) {
+            case 'ko': 
+              setTextOptionSort('좋아요 & 최근 작성'); break;
+            case 'ja': 
+              setTextOptionSort('いいね & 最近作成'); break;
+            default: // eng
+              setTextOptionSort('Likes & Created'); break;
+          }
+          break;
+          
+        case '2': 
+          switch (language) {
+            case 'ko': 
+              setTextOptionSort('좋아요 & 최근 수정'); break;
+            case 'ja': 
+              setTextOptionSort('いいね & 最近修正'); break;
+            default: // eng
+              setTextOptionSort('Likes & Updated'); break;
+          }
+          break;
+          
+        case '3': 
+          switch (language) {
+            case 'ko': 
+              setTextOptionSort('최근 작성'); break;
+            case 'ja': 
+              setTextOptionSort('最近作成'); break;
+            default: // eng
+              setTextOptionSort('Created newly'); break;
+          }
+          break;
+          
+        case '4': 
+          switch (language) {
+            case 'ko': 
+              setTextOptionSort('최근 수정'); break;
+            case 'ja': 
+              setTextOptionSort('最近修正'); break;
+            default: // eng
+              setTextOptionSort('Updated newly'); break;
+          }
+          break;
+          
+      } // big switch
+        
+    }, [optionSort, language])
+    
+    
+    
+    const onClick_OptionSort = (event) => {
+      
+      // "numberLike-createdNew", "numberLike-updatedNew", "createdNew", "updatedNew" 순서로!
+      
+      if (optionSort === "1") { // 이전이 이거였다면, 아래와 같이 바꾼다
+        replaceData2CompGallery("gallery", "optionSort", "2");
+      }
+      else if (optionSort === "2") { // 이전이 이거였다면, 아래와 같이 바꾼다
+        replaceData2CompGallery("gallery", "optionSort", "3");
+      }
+      else if (optionSort === "3") { // 이전이 이거였다면, 아래와 같이 바꾼다
+        replaceData2CompGallery("gallery", "optionSort", "4");
+      }
+      else if (optionSort === "4") { // 이전이 이거였다면, 아래와 같이 바꾼다
+        replaceData2CompGallery("gallery", "optionSort", "1");
       }
     }
-
+    
     
 
     return (
       <DivFilter>
         
-        <ButtonFilter
-          onClick={onClick_Filtered}
-        > {(() => {
-              switch (language) {
-                case 'ko': 
-                  return '적용';
-                case 'ja': 
-                  return '適用';
-                default: // eng
-                  return 'Apply';
-              }
-            })()}  </ButtonFilter>
+        <GroupButton>
+          
+          <ButtonApply
+            onClick={onClick_Apply}
+          > {(() => {
+                switch (language) {
+                  case 'ko': 
+                    return '적용';
+                  case 'ja': 
+                    return '適用';
+                  default: // eng
+                    return 'Apply';
+                }
+              })()}  </ButtonApply>
+              
+          <ButtonSort
+            onClick={onClick_OptionSort} >  
+            <Div> <IconSort width={'20px'} height={'20px'} color={'color_weak'} /> </Div>
+            <Div> {textOptionSort}  </Div>
+          </ButtonSort>
+        
+          
+              
+        </GroupButton>
         
         <GroupWhich>
           <Div> 
@@ -287,6 +432,9 @@ const Filter = ({
       
       , searchHero: state.comp_gallery.gallery.searchHero
       
+      , optionSort: state.comp_gallery.gallery.optionSort
+      , limitEach: state.comp_gallery.gallery.limitEach
+      , skipEntire: state.comp_gallery.gallery.skipEntire
       
       , filterSize: state.comp_gallery.gallery.filterSize
       , filterTag: state.comp_gallery.gallery.filterTag

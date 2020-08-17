@@ -225,9 +225,27 @@ const Link_Common = styled(LinkDefault)`
       <InputCommon {...inputBattletag}  placeholder="exmaple#1234"  />
     </Div>
     
-    <Button onClick={onClick_ApplyBattletag}> APPLY BATTLETAG </Button>
+    <Button onClick={onClick_ApplyBattletag}> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '배틀태그 등록';
+                case 'ja': 
+                  return 'バトルタグ登録';
+                default: // eng
+                  return 'Register Battletag';
+              }
+            })()} </Button>
     
-    <Link_Common to="/auth/sign-up"> to Sign Up </Link_Common>
+    <Link_Common to="/auth/sign-up"> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '회원가입';
+                case 'ja': 
+                  return '会員加入';
+                default: // eng
+                  return 'Sign Up';
+              }
+            })()} </Link_Common>
     
   </DivApplyBattletag>
   

@@ -19,6 +19,7 @@ import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 
 import {Div, Input, Button, A} from '../../styles/DefaultStyles';
 import Loading from '../_/Loading';
+import NeedLogIn from '../_/NeedLogIn';
 //import Player from '../components/Player'
 
 
@@ -67,8 +68,8 @@ const Out = ({
   
   , language
   
-  , readyListPlan
-  , loadingListPlan
+  , readyListPlanTeam
+  , loadingListPlanTeam
   
   , replaceDataTeamPlanner
   , replaceData2TeamPlanner
@@ -83,7 +84,7 @@ const Out = ({
   
   useEffect(()=>{
     
-    if (readyUser && !readyListPlan) { 
+    if (readyUser && !readyListPlanTeam) { 
       
      (async() => {
       
@@ -93,8 +94,8 @@ const Out = ({
           author: user._id
         });
           
-        replaceData2("ready", "listPlan", false);
-        replaceData2("loading", "listPlan", true);
+        replaceData2("ready", "listPlanTeam", false);
+        replaceData2("loading", "listPlanTeam", true);
         
 
         const {
@@ -103,9 +104,9 @@ const Out = ({
         
         console.log(data)
         
-        replaceDataTeamPlanner("listPlan", data);
-        replaceData2("loading", "listPlan", false);
-        replaceData2("ready", "listPlan", true);
+        replaceDataTeamPlanner("listPlanTeam", data);
+        replaceData2("loading", "listPlanTeam", false);
+        replaceData2("ready", "listPlanTeam", true);
         
   
       } catch (error) {
@@ -117,7 +118,7 @@ const Out = ({
     })()
     
     } //if
-  },[readyUser, readyListPlan])
+  },[readyUser, readyListPlanTeam])
     
     return (
     
@@ -126,56 +127,18 @@ const Out = ({
       <CreatingPlan /> 
       
       
-      { (!readyUser ) && 
-        <>
+      { (!readyUser) && <NeedLogIn 
+        destination={"/team-planner/"}
+        dictMessage={{
+          ko: '로그인/회원가입을 하시면, 만든 것들을 여기서 확인 가능합니다'
+          , ja: 'ログイン/会員登録をしたら、作ったものをここで確認できます'
+          , en: 'If you log-in/sign-up as a member, you can check what you made here.'
+        }}
+      />}
         
-        <Guide>
-        <Button onClick={(event)=>{
-        
-          const query = queryString.stringify({
-            "destination": "/team-planner/"
-          });
-          history.push('/auth/log-in?' + query)
-          
-        }} > {(() => {
-            switch (language) {
-              case 'ko': 
-                return '로그인';
-              case 'ja': 
-                return 'ログイン';
-              default: // eng
-                return 'Log In';
-            }
-  	      })()}  </Button>
-  	      
-  	      <Button onClick={(event)=>{history.push(`/auth/sign-up`)}} > {(() => {
-            switch (language) {
-              case 'ko': 
-                return '회원가입';
-              case 'ja': 
-                return '会員登録';
-              default: // eng
-                return 'Sign Up';
-            }
-  	      })()}  </Button>
-  	     </Guide>
-        
-        <Div> {(() => {
-            switch (language) {
-              case 'ko': 
-                return '로그인/회원가입을 하시면, 만든 것들을 여기서 확인 가능합니다';
-              case 'ja': 
-                return 'ログイン/会員登録をしたら、作ったものをここで確認できます';
-              default: // eng
-                return 'If you log-in/sign-up as a member, you can check what you made here.';
-            }
-  	      })()}  </Div>
-  	      
-        </>
-      }
 	      
-      { (readyUser && loadingListPlan ) && <Loading />}
-      { (readyUser && !loadingListPlan && readyListPlan ) && <ListPlan />}
+      { (readyUser && loadingListPlanTeam ) && <Loading />}
+      { (readyUser && !loadingListPlanTeam && readyListPlanTeam ) && <ListPlan />}
       
     </DivTeamPlanner>
     )
@@ -194,8 +157,8 @@ function mapStateToProps(state) {
     
     , language: state.basic.language
     
-    , readyListPlan: state.basic.ready.listPlan
-    , loadingListPlan: state.basic.loading.listPlan
+    , readyListPlanTeam: state.basic.ready.listPlanTeam
+    , loadingListPlanTeam: state.basic.loading.listPlanTeam
   }; 
 } 
 
