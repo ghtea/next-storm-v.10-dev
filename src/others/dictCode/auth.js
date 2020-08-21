@@ -29,8 +29,16 @@ const auth = {
 		situation: "error"
 		, message: {
 			en: `Please enter both passwords`
-			,ko: `두 비밀번호를모두 입력하세요`
+			,ko: `두 비밀번호를 모두 입력하세요`
 			,ja: `両方のパスワードを入力してください`
+		}
+	}
+	, "auth031": { // 
+		situation: "error"
+		, message: {
+			en: `Please enter current password`
+			,ko: `현재의 비밀번호를 입력하세요`
+			,ja: `現在のパスワードを入力してください`
 		}
 	}
 	, "auth04": { // 
@@ -77,13 +85,11 @@ const auth = {
 	, "auth09": { // 
 		situation: "error"
 		, message: {
-			en: `You failed to sign up`
+			en: `You have failed to sign up`
 			,ko: `회원가입에 실패하였습니다`
 			,ja: `会員加入に失敗しました`
 		}
 	}
-	
-	
 	
 	
 	, "auth11": { // 
@@ -171,7 +177,8 @@ const auth = {
 	}
 	
 	
-	, "alocal41": { // 
+	
+	, "auth41": { // 
 		situation: "error"
 		, message: {
 			en: `You failed to update mmr`
@@ -179,7 +186,7 @@ const auth = {
 			,ja: `MMRのアップデートに失敗しました`
 		}
 	}
-	, "alocal42": { // 
+	, "auth42": { // 
 		situation: "success"
 		, message: {
 			en: `You have updated mmr`
@@ -187,6 +194,27 @@ const auth = {
 			,ja: `MMRのアップデートに成功しました`
 		}
 	}
+	
+	
+	
+	, "auth51": { // 
+		situation: "success"
+		, message: {
+			en: `Your passowrd has been changed`
+			,ko: `성공적으로 비밀번호를 변경했습니다`
+			,ja: `パスワードの変更に成功しました`
+		}
+	}
+	, "auth52": { // 
+		situation: "error"
+		, message: {
+			en: `You have failed to change password`
+			,ko: `비밀번호 변경에 실패하였습니다`
+			,ja: `パスワードの変更に失敗しました`
+		}
+	}
+	
+	
 }
 
 

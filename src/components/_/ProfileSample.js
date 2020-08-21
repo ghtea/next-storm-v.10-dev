@@ -20,8 +20,8 @@ import themes from "../../styles/themes"
 import { Div, Input, Button } from '../../styles/DefaultStyles';
 
 // for profile of user
-import IconProfile from "./Profile/Icon";
-import borders from "../../profile/borders";
+import ProfileIcon from "./Profile/ProfileIcon";
+
 
 const DivProfileSample = styled(Div)`
   
@@ -47,19 +47,19 @@ const DivProfileSample = styled(Div)`
   }
 `
 
+// ${props => borders[props.border] }
 const DivIcon = styled(Div)`
   
   width: ${props => props.size}px;
   height: ${props => props.size}px;
   
-  ${props => borders[props.border] }
+  
   border-radius: 6px; 
   
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  
 `
 
 
@@ -100,7 +100,7 @@ const ProfileSample = ({
   , readyUser
   
   , palette
-  , border
+  , badge
   , shape
   
   , size
@@ -119,7 +119,7 @@ const ProfileSample = ({
   const onClick_ProfileSample = async (event) => {
     
     addDeleteNotification(
-      undefined, language, `${shape}-${palette}-${border}`, 3000
+      undefined, language, `${shape}-${palette}-${badge}`, 3000
     )
     
     if (readyUser) {
@@ -127,7 +127,7 @@ const ProfileSample = ({
         const query = queryString.stringify({
           shape: shape
           , palette: palette
-          , border: border
+          , badge: badge
         })  
         await axios.put(`${config.URL_API_NS}/user/profile/${user._id}?` + query );
         replaceData2("ready", "user", false);
@@ -148,9 +148,9 @@ const ProfileSample = ({
       >
       
       
-      <DivIcon size={size} layout={layout} border={border} >
+      <DivIcon size={size} layout={layout} badge={badge} >
         
-        <IconProfile 
+        <ProfileIcon 
           width = { `${size-6}px` } height = { `${size-6}px` } 
           shape={shape} 
           palette={palette} 

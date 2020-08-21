@@ -49,10 +49,10 @@ const ImgHero = styled(Img)`
 
 const Hero = ({
   tIdHero
-  ,dictAllHeroBasic
+  ,listAllHeroBasic
 }) => {
   
-  const tHeroBasic = dictAllHeroBasic.find(element => element._id === tIdHero)
+  const tHeroBasic = listAllHeroBasic.find(element => element._id === tIdHero)
   
   const key_HeroesTalents = tHeroBasic['key_HeroesTalents']
   
@@ -100,7 +100,7 @@ const DivRemaining = styled(Div)`
 `
 
  const Position = ({
-   dictAllHeroBasic
+   listAllHeroBasic
    
    , tPosition
    
@@ -130,7 +130,7 @@ const DivRemaining = styled(Div)`
           <Hero
             key={tIdHero}
             tIdHero={tIdHero}
-            dictAllHeroBasic={dictAllHeroBasic}
+            listAllHeroBasic={listAllHeroBasic}
           />
         ) 
       })
@@ -150,7 +150,7 @@ const DivRemaining = styled(Div)`
 
 function mapStateToProps(state) { 
   return { 
-  dictAllHeroBasic: state.hots.dictAllHeroBasic
+  listAllHeroBasic: state.hots.listAllHeroBasic
     , option: state.comp_gallery.gallery.option
   }; 
 } 

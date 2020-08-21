@@ -14,6 +14,8 @@ import Sub from "./routes/Sub";
 import Reaction from "./routes/Reaction";
 import Notification from "./routes/Notification";
 
+
+import Loading from "./components/_/Loading";
 import Home from "./routes/Home";
 
 import My from "./routes/My";
@@ -25,6 +27,7 @@ import TeamPlanner from "./routes/TeamPlanner";
 
 import CompGallery from "./routes/CompGallery";
 
+import {replaceDataHots, replaceData2Hots} from "./redux/actions/hots";
 import addDeleteNotification from "./redux/thunks/addDeleteNotification";
 import {replaceData, replaceData2} from "./redux/actions/basic";
 import {replaceDataAuth, replaceData2Auth} from "./redux/actions/auth";
@@ -81,6 +84,11 @@ const App = ({
   , themeName, language
   , visibilityReaction
   
+  , readyListAllHeroBasic
+  , readyListAllMap
+  , readyListMapStandardRanked
+  
+  , replaceDataHots, replaceData2Hots
   ,replaceDataAuth, replaceData2Auth
   ,replaceData, replaceData2
   
@@ -199,6 +207,58 @@ const App = ({
   
   
   
+  //  HeroBasic 가져오기
+  useEffect( () => { 
+    (async () => {
+    
+      // 내 서버에서 히오스 영웅들 정보 가져오기
+      if (!readyListAllHeroBasic ) {
+        
+        try { 
+          replaceData2("ready", "listAllHeroBasic", false)
+          
+          const {data} = await axios.get (`${config.URL_API_NS}/hero-basic/`);
+          
+          replaceDataHots("listAllHeroBasic", data)
+          replaceData2("ready", "listAllHeroBasic", true)
+          
+        } 
+        catch (error) { 
+          
+          addDeleteNotification("basic01",  language);
+          console.log(error) 
+        }
+      }
+      
+      // Heroes Profile API 로 맵 정보 가져오기
+      if (!readyListAllMap ) {
+        
+        try { 
+          replaceData2("ready", "listMapStandardRanked", false);
+          replaceData2("ready", "listAllMap", false);
+          
+          const {data} = await axios.get (`${config.URL_API_NS}/map/`);
+          
+          replaceDataHots("listAllMap", data);
+          replaceData2("ready", "listAllMap", true);
+          
+          let listMapStandardRankedTemp = data.filter(element => element.type === "standard" && element.rankedRotation === true);
+          replaceDataHots( "listMapStandardRanked", listMapStandardRankedTemp );
+          replaceData2("ready", "listMapStandardRanked", true);
+          
+        } 
+        catch (error) { 
+          
+          addDeleteNotification("basic01", language);
+          console.log(error) 
+        }
+      }
+      
+    }) ()
+  
+  },[])
+  
+  
   return (
     <>
     
@@ -215,24 +275,24 @@ const App = ({
       
       <Route path="/" component={Reaction} />
       
+      
       <DivContent visibilityReaction={visibilityReaction}>
-      <Switch >
-      
-      <Route path="/" exact={true} component={Home} />
-      
-      <Route path="/auth" component={Auth} />
-      
-      <Route path="/my" component={My} />
-      
-      <Route path="/player" component={Player} />
-      
-      <Route path="/comp-gallery" component={CompGallery} />
-      <Route path="/team-planner" component={TeamPlanner} />
-      
-      
-      
-      
-      </Switch >
+        {(readyListAllHeroBasic && readyListAllMap && readyListMapStandardRanked)? 
+          <Switch >
+          <Route path="/" exact={true} component={Home} />
+          
+          <Route path="/auth" component={Auth} />
+          
+          <Route path="/my" component={My} />
+          
+          <Route path="/player" component={Player} />
+          
+          <Route path="/comp-gallery" component={CompGallery} />
+          <Route path="/team-planner" component={TeamPlanner} />
+        </Switch >
+          : <Loading/>
+        }
+        
       </DivContent>
       
       
@@ -258,12 +318,20 @@ function mapStateToProps(state) {
     , language: state.basic.language
     
     , visibilityReaction: state.reaction.visibility
+    
+    , readyListAllHeroBasic: state.basic.ready.listAllHeroBasic
+    , readyListAllMap: state.basic.ready.listAllMap
+    , readyListMapStandardRanked: state.basic.ready.listMapStandardRanked
   }; 
 } 
 
 function mapDispatchToProps(dispatch) { 
   return { 
     replaceTheme: (themeName) => dispatch(replaceTheme(themeName)) 
+    
+    
+    , replaceDataHots : (which, replacement) => dispatch(replaceDataHots(which, replacement))
+    , replaceData2Hots : (which1, which2, replacement) => dispatch(replaceData2Hots(which1, which2, replacement))
     
     ,replaceDataAuth : (which, replacement) => dispatch(replaceDataAuth(which, replacement))
     ,replaceData2Auth : (which1, which2, replacement) => dispatch(replaceData2Auth(which1, which2, replacement))

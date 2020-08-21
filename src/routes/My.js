@@ -10,6 +10,7 @@ import * as config from '../config';
 
 import Library  from "../components/My/Library"
 import Profiles  from "../components/My/Profiles"
+import Setting  from "../components/My/Setting"
 import SubMy from "../components/My/SubMy"
 
 import { connect } from "react-redux";
@@ -107,6 +108,7 @@ const My = ({
           
           <Route path="/my" exact={true} component={Library} />
           <Route path="/my/profiles" component={Profiles} />
+          <Route path="/my/setting" component={Setting} />
           
         </Switch>
       </Main>

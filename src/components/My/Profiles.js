@@ -26,7 +26,6 @@ import Loading from '../_/Loading';
 
 import shapes from "../../profile/shapes";
 import palettes from "../../profile/palettes";
-import borders from "../../profile/borders";
 
 
 import ProfileSample from '../_/ProfileSample';
@@ -112,7 +111,7 @@ const Profiles = ({
             
             shape = {element}
             palette = {(readyUser)? user.profile.listIdPalette[0] : "Default"}
-            border = {(readyUser)? user.profile.listIdBorder[0] : "Default"}
+            badge = {(readyUser)? user.profile.listIdBadge[0] : "Default"}
             
             
             size = {40}
@@ -130,7 +129,7 @@ const Profiles = ({
             
             shape = {(readyUser)? user.profile.listIdShape[0] : "Default"}
             palette = {element}
-            border = {(readyUser)? user.profile.listIdBorder[0] : "Default"}
+            badge = {(readyUser)? user.profile.listIdBadge[0] : "Default"}
            
             
             size = {40}

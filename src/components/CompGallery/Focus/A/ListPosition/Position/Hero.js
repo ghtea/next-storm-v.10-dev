@@ -73,14 +73,14 @@ const DivHero = styled(Div)`
 const Hero = ({
   
   idHero
-  , dictAllHeroBasic
+  , listAllHeroBasic
   
   , addDeleteNotification
 }) => {
         
   
   
-  const tHeroBasic = dictAllHeroBasic.find(element => element._id === idHero)
+  const tHeroBasic = listAllHeroBasic.find(element => element._id === idHero)
   const key_HeroesTalents = tHeroBasic['key_HeroesTalents']
   
   
@@ -100,7 +100,7 @@ const Hero = ({
 function mapStateToProps(state) { 
   return { 
     
-    dictAllHeroBasic: state.hots.dictAllHeroBasic
+    listAllHeroBasic: state.hots.listAllHeroBasic
     
     
   }; 

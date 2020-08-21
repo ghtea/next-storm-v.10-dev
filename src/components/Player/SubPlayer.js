@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import styled from 'styled-components';
 import axios from 'axios';
@@ -22,7 +22,8 @@ import {Div, Input, Button, NavLinkDefault} from '../../styles/DefaultStyles';
 
 import IconLoading from '../../svgs/basic/IconLoading';
 
-import IconPersonCard from '../../svgs/basic/IconPersonCard';
+import IconChartBar from '../../svgs/basic/IconChartBar';
+import IconUsers from '../../svgs/basic/IconUsers';
 
 
 const DivSubPlayer = styled(Div)`
@@ -124,7 +125,11 @@ const SubPlayer = ({
   
   authority, language
  
+  , user
+  , readyUser
   
+  , player
+  , readyPlayerBattletag
   //, replaceAuthority
   
   , replaceDataHots
@@ -139,12 +144,34 @@ const SubPlayer = ({
   
   const location = useLocation();
   
+  const [toPlayerGeneral, setToPlayerGeneral] = useState("/player/general/undefined");
+	useEffect(()=>{
+	  if (readyPlayerBattletag){
+	    setToPlayerGeneral ( `/player/general/${encodeURIComponent(player.battletag)}`);
+	  }
+	  else if (readyUser && user.battletag){
+	    setToPlayerGeneral ( `/player/general/${encodeURIComponent(user.battletag)}`);
+	  }
+	}, [readyPlayerBattletag])
+	
+	
+	const [toPlayerHeroes, setToPlayerHeroes] = useState("/player/heroes/undefined");
+	useEffect(()=>{
+	  if (readyPlayerBattletag){
+	    setToPlayerHeroes ( `/player/heroes/${encodeURIComponent(player.battletag)}`);
+	  }
+	  else if (readyUser && user.battletag){
+	    setToPlayerHeroes ( `/player/heroes/${encodeURIComponent(user.battletag)}`);
+	  }
+	}, [readyPlayerBattletag])
+  
+  
    return (
      
     <DivSubPlayer>
 		  
-		  <NavLinkStyled to="/player/general" isActive={()=>checkActive(/^(\/player\/general)/)} > 
-        <IconPersonCard width={"22px"} height={"22px"} color={((/^(\/player\/general)/).test(window.location.pathname))? "color_active" : "color_very_weak"} />
+		  <NavLinkStyled to={toPlayerGeneral} isActive={()=>checkActive(/^(\/player\/general)/)} > 
+        <IconChartBar width={"22px"} height={"22px"} color={((/^(\/player\/general)/).test(window.location.pathname))? "color_active" : "color_very_weak"} />
 				<Div> 
 				  {(() => {
             switch (language) {
@@ -154,6 +181,22 @@ const SubPlayer = ({
                 return '概要';
               default: // eng
                 return 'General';
+            }
+          })()}  
+        </Div> 
+			</NavLinkStyled>  
+			
+			 <NavLinkStyled to={toPlayerHeroes} isActive={()=>checkActive(/^(\/player\/heroes)/)} > 
+        <IconUsers width={"22px"} height={"22px"} color={((/^(\/player\/heroes)/).test(window.location.pathname))? "color_active" : "color_very_weak"} />
+				<Div> 
+				  {(() => {
+            switch (language) {
+              case 'ko': 
+                return '영웅';
+              case 'ja': 
+                return 'ヒーロー';
+              default: // eng
+                return 'Heroes';
             }
           })()}  
         </Div> 
@@ -169,6 +212,11 @@ function mapStateToProps(state) {
   return { 
     user: state.auth.user
     , language: state.basic.language
+    
+    , readyUser: state.basic.ready.user
+    
+    , player: state.player.player
+    , readyPlayerBattletag: state.basic.ready.playerBattletag
   }; 
 } 
 

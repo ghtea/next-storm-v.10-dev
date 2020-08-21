@@ -166,6 +166,7 @@ const Gallery = ({
           
           
           // query 로 보내면 숫자가 string 이 되는 것에 주의! (받아서 이용하는 쪽에서 parse 해야 한다)
+          // list 등은 왠만하면 JSON.stringify 해서 보내자, 아래에서는 이미 Filter 에서 그렇게해서 받았기 때문에 그냥 보내도 된다 (백엔드에서 JSON.parse해야 한다)
           const queryRequest = queryString.stringify({
             
             listSort: queryRecieved.listSort || ["createdNew"]  // 기본 정렬 설정

@@ -88,10 +88,15 @@ const Videos = ({
         try {
           
           const queryRecieved = queryString.parse(location.search);
-   
+          
+          let listSortUsing = ["createdNew"]
+          if(queryRecieved.listSort){
+            listSortUsing = JSON.parse(queryRecieved.listSort);
+          }
+          
           const queryRequest = queryString.stringify({
             
-            listSort: queryRecieved.listSort || ["createdNew"]  // 기본 정렬 설정
+            listSort: listSortUsing
             , limitEach: queryRecieved.limitEach || 50  // test로서 3개씩 가져와 보자
             , skipEntire: queryRecieved.skipEntire || 0
             

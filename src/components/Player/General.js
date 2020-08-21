@@ -7,7 +7,7 @@ import queryString from 'query-string';
 
 import { connect } from "react-redux";
 import * as config from '../../config';
-import storage from '../../tools/vanilla/storage';
+//import storage from '../../tools/vanilla/storage';
 
 import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 import dictCode from '../../others/dictCode'
@@ -24,7 +24,7 @@ import Loading from '../_/Loading'
 
 import useInput from '../../tools/hooks/useInput';
 
-import IconSync from '../../svgs/basic/IconSync';
+import IconSearch from '../../svgs/basic/IconSearch';
 import flagNA from '../../images/flags/NA.png';
 import flagEU from '../../images/flags/EU.png';
 import flagKR from '../../images/flags/KR.png';
@@ -37,7 +37,8 @@ import IconRanged from '../../svgs/roles/IconRangedAssassin'
 import IconHealer from '../../svgs/roles/IconHealer'
 import IconSupport from '../../svgs/roles/IconSupport'
 
-import borders from "../../profile/borders";
+//import borders from "../../profile/borders";
+import palettesTier from '../../styles/palettes/tier'
 
 
 const DivGeneral = styled(Div)
@@ -226,7 +227,7 @@ const DivGamesAll = styled(Div)`
   align-items: center;
   
   & > div:nth-child(1){
-    
+    width: auto;
     display: block;
     text-align: right;
     font-weight: bold;
@@ -234,16 +235,16 @@ const DivGamesAll = styled(Div)`
     color: ${props => props.theme.color_normal};
     
     font-size: ${props => {
-      if (props.games_played > 1000) { return 1.7; }  
+      if (props.games_played > 1000) { return 1.6; }  
       else if (props.games_played > 700) { return 1.5; }  
       else if (props.games_played > 400) { return 1.3; }  
       else if (props.games_played > 200) { return 1.1; }  
-      else if (props.games_played > 50) { return 0.9; }  
+      else if (props.games_played > 50) { return 1; }  
     }}rem;
   }
   
   & > div:nth-child(2){
-    
+    width: auto;
     display: block;
     text-align: left;
     margin-left: 3px;
@@ -257,32 +258,32 @@ const DivRank = styled(Div)`
   width: 90px;
   height: 50px;
   
-  border-radius: 9px;
-  
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   
+  
+  border-radius: 9px;
   color: ${props => props.theme.COLOR_normal};
   ${props => {
-    switch (props.league_tier) {
-      case 'bronze':
-        return borders['Bronze'];
-      case 'silver':
-        return borders['Silver'];
-      case 'gold':
-        return borders['Gold'];
-      case 'platinum':
-        return borders['Platinum'];
-      case 'diamond':
-        return borders['Diamond'];
-      case 'master':
-        return borders['Master'];
-      default:
-        return `background-color: ${props => props.theme.color_very_weak};`
+    let tier = "";
+    switch(props.league_tier){
+      case('bronze'): tier="Bronze"; break;
+      case('silver'): tier="Silver"; break;
+      case('gold'): tier="Gold"; break;
+      case('platinum'): tier="Platinum"; break;
+      case('diamond'): tier="Diamond"; break;
+      case('master'): tier="Master"; break;
+      default: tier="Default"; break;
     }
-  }}
+    
+    return  `
+      border: 1px solid ${palettesTier[tier][1]}; 
+      background-color: ${palettesTier[tier][1]}; 
+      background-image: linear-gradient(135deg, ${palettesTier[tier][0]}, ${palettesTier[tier][1]}, ${palettesTier[tier][2]});`
+    }
+  }
   
   & > div:nth-child(1){
     height: 18px;
@@ -314,6 +315,8 @@ const DivEachRole = styled(Div)`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  
+  cursor: pointer;
   
 `
 
@@ -384,23 +387,33 @@ const DivMmr = styled(Div)`
   
   
   ${props => {
-    switch (props.league_tier) {
-      case 'bronze':
-        return borders['Bronze'];
-      case 'silver':
-        return borders['Silver'];
-      case 'gold':
-        return borders['Gold'];
-      case 'platinum':
-        return borders['Platinum'];
-      case 'diamond':
-        return borders['Diamond'];
-      case 'master':
-        return borders['Master'];
-      default:
-        return `background-color: ${props => props.theme.color_very_weak};`
+    let tier = "";
+    switch(props.league_tier){
+      case('bronze'): 
+        tier="Bronze"; break;
+      case('silver'): 
+        tier="Silver"; break;
+      case('gold'): 
+        tier="Gold"; break;
+      case('platinum'): 
+        tier="Platinum"; break;
+      case('diamond'): 
+        tier="Diamond"; break;
+      case('master'): 
+        tier="Master"; break;
+      default: 
+        tier="Default"; break;
     }
-  }}
+    
+    console.log(tier)
+    
+    return  `
+      border: 1px solid ${palettesTier[tier][1]}; 
+      background-color: ${palettesTier[tier][1]}; 
+      background-image: linear-gradient(135deg, ${palettesTier[tier][0]}, ${palettesTier[tier][1]}, ${palettesTier[tier][2]});`
+    }
+  }
+  
     
   
   color: ${props => props.theme.COLOR_normal};
@@ -455,9 +468,20 @@ const General = ({
   language
   , user
   
-  , playerGeneral
+  
+  , readyPlayerBattletag
+  , dataPlayerGeneral
   , readyPlayerGeneral
   , loadingPlayerGeneral
+  
+  , player
+  
+  , region
+  , mode
+  , role
+  , sort
+  
+  , triggerUpdateGeneral
   
   , replaceData2
   , replaceDataPlayer
@@ -466,13 +490,6 @@ const General = ({
   , addDeleteNotification
 }) => {
   
-  // input 안의 battletag 있는 상태로 update 버튼 ->   history.push() ? 
-  
-  // params 에 battletag 있으면 ->
-    // local storage 에 있고, 업데이트 하루 안이면 local storage 꺼 읽기
-    // local sotrge에 없거나 업데이트 오래전이면 -> @업데이트
-    
-  // input 에 battletag 담긴 상태에서 유저가 update 버튼 누르면 -> @업데이트
   
   const history = useHistory();
   const params = useParams();
@@ -482,8 +499,8 @@ const General = ({
   const [updatedText, setUpdatedText] = useState("")
   
   // 화면에 표시할 정보 정리
-  const [nameRegionShowing, setNameRegionShowing] = useState("");
-  const [modeShowing, setModeShowing] = useState("Both"); // for roles 
+  //const [region, setregion] = useState("");
+  //const [mode, setmode] = useState("Both"); // for roles 
   
   const [readyShowing, setReadyShowing] = useState(false);
   
@@ -492,7 +509,7 @@ const General = ({
     , battletagNumber: ""
     , orderNameRegion: []
     , stats : {
-      All: {}
+      "All": {}
       ,  "Tank": {}
       ,  "Bruiser": {}
       ,  "Melee Assassin": {}
@@ -513,50 +530,21 @@ const General = ({
       }
       
       else {  
+        replaceData2("ready", "playerBattletag", false);
         const battletag = decodeURIComponent(params.battletagEncoded)
+        replaceData2Player("player", "battletag", battletag); // 나중에 다른곳에서 쓰기 위해서
+        //const battletag = decodeURIComponent(params.battletagEncoded)
         replaceData2("ready", "playerGeneral", false);
         replaceData2("loading", "playerGeneral", true);
         
         
         inputBattletag.setValue(battletag);
-        
+        replaceData2("ready", "playerBattletag", true);
         //const updated = Date.parse( storage.get("updatedPlayerGeneral") );
-        const dictUpdatedPlayerGeneral = storage.get("dictUpdatedPlayerGeneral"); // 우선 JSON.parse 는 거친다
         
-        if (dictUpdatedPlayerGeneral &&  dictUpdatedPlayerGeneral[battletag] && ( dictUpdatedPlayerGeneral[battletag] > new Date().getTime() - 1000 * 60 * 60 * 24 * 1 ) ) {
           
-          const dictPlayerGeneral = storage.get("dictPlayerGeneral"); // 우선 JSON.parse 는 거친다
-          
-          if (dictPlayerGeneral && dictPlayerGeneral[ battletag ]) {
-            
-            const updatedDate = new Date (dictUpdatedPlayerGeneral[battletag]);
-            const month = updatedDate.getUTCMonth() + 1; //months from 1-12
-            const day = updatedDate.getUTCDate();
-            const year = updatedDate.getUTCFullYear();
-            
-            setUpdatedText(`${year}. ${month}. ${day}`);
-            
-            const thisPlayerGeneral = dictPlayerGeneral[ battletag ];
-                      
-            
-            let replacement = { };
-            replacement[battletag] = thisPlayerGeneral;
-            replaceDataPlayer("general", replacement );
-            
-            replaceData2("loading", "playerGeneral", false);
-            replaceData2("ready", "playerGeneral", true); 
-            
-          }
-          
-        }
-        
-        else {
-          
-          setTriggerUpdate(Date.now().toString());
-          
-        }
-        
-        
+         // 바로 업데이트 trigger
+        replaceData2Player("general", "triggerUpdate", Date.now().toString()); 
       } // else
       
     } // if
@@ -565,91 +553,81 @@ const General = ({
   
   const onClick_Update = () => {
     if (inputBattletag.value) {
+      replaceData2("ready", "playerBattletag", false);
+      replaceData2Player("player", "battletag", inputBattletag.value);
       history.push(`/player/general/${encodeURIComponent(inputBattletag.value)}`);
-      setTriggerUpdate(Date.now().toString());
+      replaceData2("ready", "playerBattletag", true);
+      replaceData2Player("general", "triggerUpdate", Date.now().toString()); 
     }
   }
   
   
-  // trigger 변하면 무조건 업데이트
+  // trigger 변하면 내 서버에서 가져오기 (내 서버에서 가져오는 것도 완전 새 데이터는 아님)
   useEffect(() => {
     (async() => {
       
-      if ( inputBattletag.value ) {
-        try {
-          
-           
-          replaceData2("ready", "playerGeneral", false);
-          replaceData2("loading", "playerGeneral", true);
-          
-          const resRegions = await axios.get(`${config.URL_API_NS}/player/regions/${encodeURIComponent(inputBattletag.value)}`);
-          const listNameRegion = resRegions.data.listNameRegion;
-          // [ 'NA', 'KR' ]
-          
-          //console.log(listNameRegion);
-          
-          const query = queryString.stringify({
-            listNameRegion: listNameRegion
-          });
-          
-          
-          const resPlayerGeneral = await axios.get(`${config.URL_API_NS}/player/general/${encodeURIComponent(inputBattletag.value)}?` + query);
-          const playerGeneralNew = resPlayerGeneral.data;
-          
-          
-          
-          let dictPlayerGeneralTemp = storage.get("dictPlayerGeneral") || {};
-          dictPlayerGeneralTemp[ inputBattletag.value ] = playerGeneralNew;
-          storage.set("dictPlayerGeneral", dictPlayerGeneralTemp );
-          
-          
-          let dictUpdatedPlayerGeneralTemp = storage.get("dictUpdatedPlayerGeneral") || {};
-          dictUpdatedPlayerGeneralTemp[ inputBattletag.value ] =  Date.now();
-          storage.set("dictUpdatedPlayerGeneral", dictUpdatedPlayerGeneralTemp );
-          
-          let replacement = { };
-          replacement[inputBattletag.value] = playerGeneralNew;
-          replaceDataPlayer("general", replacement );
-          replaceData2("loading", "playerGeneral", false);
-          replaceData2("ready", "playerGeneral", true);
-          
-          
-          const updatedText = Date().now;
-          const month = updatedText.getUTCMonth() + 1; //months from 1-12
-          const day = updatedText.getUTCDate();
-          const year = updatedText.getUTCFullYear();
-          setUpdatedText(`${year}. ${month}. ${day}`);
-    
-        } catch (error) {
-          replaceData2("ready", "playerGeneral", false);
-          replaceData2("loading", "playerGeneral", false);
-          
-          addDeleteNotification("basic01", language);
-          console.log(error)
-        }
+     if (readyPlayerBattletag) {
+      try {
+       
+        replaceData2("ready", "playerGeneral", false);
+        replaceData2("loading", "playerGeneral", true);
         
+        const resRegions = await axios.get(`${config.URL_API_NS}/player/regions/${encodeURIComponent(player.battletag)}`);
+        const orderNameRegion = resRegions.data.orderNameRegion;
+        replaceData2Player("player", "orderNameRegion",  orderNameRegion); // 잊지 않기!
+        console.log('hi2')
+        console.log(orderNameRegion);
+        
+        const query = queryString.stringify({
+          orderNameRegion: JSON.stringify(orderNameRegion)
+        });
+        
+        
+        const res = await axios.get(`${config.URL_API_NS}/player/general/${encodeURIComponent(player.battletag)}?` + query);
+        let dataPlayer = res.data;
+        
+        // 중요! 내 서버에서 stats의 general 을 json string 으로 저장했기 때문에, 여기서 parse 하는 작업 필요!
+        const playerGeneralNew = JSON.parse(dataPlayer['stats']['general_String']);
+        //console.log(playerGeneralNew)
+        // delete dataPlayer['stats']['general_String'];
+        
+        replaceData2Player("general", "data", playerGeneralNew );
+        replaceData2("loading", "playerGeneral", false);
+        replaceData2("ready", "playerGeneral", true);
+        
+        const updatedText = new Date(dataPlayer['updated']['general']);
+        const month = updatedText.getUTCMonth() + 1; //months from 1-12
+        const day = updatedText.getUTCDate();
+        const year = updatedText.getUTCFullYear();
+        setUpdatedText(`${year}. ${month}. ${day}`);
+  
+      } catch (error) {
+        replaceData2("ready", "playerGeneral", false);
+        replaceData2("loading", "playerGeneral", false);
+        
+        addDeleteNotification("basic01", language);
+        console.log(error)
       }
+      
+     }
      
     })() // async
 
-  }, [ triggerUpdate ])
+  }, [ triggerUpdateGeneral, readyPlayerBattletag ])
   
   
   
   
   
   
-  
-  
-  // 처음 데이터 불러왔을 때 / 로컬 스토리지에서 읽었을 때
+  // 처음 데이터 불러왔을 때 
   useEffect(()=>{
     
-    if (readyPlayerGeneral) {
+    if (readyPlayerGeneral && readyPlayerBattletag) {
       
       let showingTemp = showing;
       
-        const battletagFull = Object.keys(playerGeneral)[0]
-        
+        const battletagFull = player.battletag
         
         const regexBattletag = /(#\d*)$/;
   		  const listNumberBattletag = battletagFull.match(regexBattletag);
@@ -659,14 +637,14 @@ const General = ({
   		showingTemp['battletagName'] = battletagName;
   		showingTemp['battletagNumber'] = battletagNumber;
   		  
-  		  const orderNameRegion = Object.keys(playerGeneral[battletagFull]);
+  		  //const orderNameRegion = Object.keys(dataPlayerGeneral);
   		  //console.log(orderNameRegion)
   		
   		
-  		showingTemp['orderNameRegion'] = orderNameRegion;
+  		showingTemp['orderNameRegion'] = player.orderNameRegion;
   		
-    		if (nameRegionShowing === ""){
-    		  setNameRegionShowing(orderNameRegion[0])
+    		if (region === ""){
+    		  replaceData2Player("general", "region", player.orderNameRegion[0]); 
     		}
     
     
@@ -675,21 +653,19 @@ const General = ({
 		  
     } // if
     
-  }, [readyPlayerGeneral])
+  }, [readyPlayerGeneral, readyPlayerBattletag])
   		
     
     
-    // 메인 지역 알아냈을 때/ 보일 지역 변경했을 때
+    // region, mode, role 가 변하면
   useEffect(()=>{
     
-    
+    try {
     setReadyShowing(false);
     
-    if (readyPlayerGeneral && nameRegionShowing !== "" ) {
+    if (readyPlayerGeneral && region !== "" ) {
       
-
-      
-      const battletagFull = Object.keys(playerGeneral)[0]
+      const battletagFull = player.battletag;
       let showingTemp = showing;
       
 		  const listRole_withAll = ['All', 'Tank', 'Bruiser', 'Melee Assassin', 'Ranged Assassin', 'Healer', 'Support'];
@@ -701,14 +677,14 @@ const General = ({
     		  , "Both": { games_played: 0 }
 		    }
 		    
-		    if (playerGeneral[battletagFull][nameRegionShowing][role] && playerGeneral[battletagFull][nameRegionShowing][role]['Quick Match']) {
-		      showingTemp['stats'][role]["Quick Match"] = playerGeneral[battletagFull][nameRegionShowing][role]['Quick Match'];
-		      showingTemp['stats'][role]["Both"]['games_played'] += playerGeneral[battletagFull][nameRegionShowing][role]['Quick Match']['games_played'];
+		    if (dataPlayerGeneral[region][role] && dataPlayerGeneral[region][role]['Quick Match']) {
+		      showingTemp['stats'][role]["Quick Match"] = dataPlayerGeneral[region][role]['Quick Match'];
+		      showingTemp['stats'][role]["Both"]['games_played'] += dataPlayerGeneral[region][role]['Quick Match']['games_played'];
 		    }
 		    
-		    if (playerGeneral[battletagFull][nameRegionShowing][role] && playerGeneral[battletagFull][nameRegionShowing][role]['Storm League']) {
-		      showingTemp['stats'][role]["Storm League"] = playerGeneral[battletagFull][nameRegionShowing][role]['Storm League'];
-		      showingTemp['stats'][role]["Both"]['games_played'] += playerGeneral[battletagFull][nameRegionShowing][role]['Storm League']['games_played'];
+		    if (dataPlayerGeneral[region][role] && dataPlayerGeneral[region][role]['Storm League']) {
+		      showingTemp['stats'][role]["Storm League"] = dataPlayerGeneral[region][role]['Storm League'];
+		      showingTemp['stats'][role]["Both"]['games_played'] += dataPlayerGeneral[region][role]['Storm League']['games_played'];
 		    }
 		    
 		    showingTemp['stats'][role]["Quick Match"]['ratio'] = showingTemp['stats'][role]['Quick Match']['games_played'] / showingTemp['stats']["All"]['Quick Match']['games_played'];
@@ -746,9 +722,14 @@ const General = ({
 		setReadyShowing(true);
 		
     } // if
+    
+    } catch(error) {
+      console.log(error)
+      addDeleteNotification("basic01", language);
+    }
   
     
-  }, [readyPlayerGeneral, nameRegionShowing] )
+  }, [readyPlayerGeneral, region, mode, role] )
   
   
   
@@ -759,6 +740,18 @@ const General = ({
     CN: flagCN
   };
   
+  
+  const returnTextTier = (league_tier) => {
+    switch(league_tier){
+      case('bronze'):  switch (language) { case 'ko':  return '브론즈'; case 'ja':  return 'ブロンズ'; default: return 'Bronze'; } break;
+      case('silver'):  switch (language) { case 'ko':  return '실버'; case 'ja':  return 'シルバー'; default: return 'Silver'; } break;
+      case('gold'):  switch (language) { case 'ko':  return '골드'; case 'ja':  return 'ゴールド: '; default: return 'Gold'; } break;
+      case('platinum'):  switch (language) { case 'ko':  return '플래티넘'; case 'ja':  return 'プラチナ'; default: return 'Platinum'; } break;
+      case('diamond'):  switch (language) { case 'ko':  return '다이아'; case 'ja':  return 'ダイヤ'; default: return 'Diamond'; } break;
+      case('master'):  switch (language) { case 'ko':  return '마스터'; case 'ja':  return 'マスター'; default: return 'Master'; } break;
+      default: switch (language) { case 'ko':  return '없음'; case 'ja':  return '無し'; default: return 'none'; } break;
+    }
+  }
   
   const returnIconRole = (nameRole, ratio) => {
     
@@ -787,13 +780,18 @@ const General = ({
   
   
   const returnDivEachRole = (nameRole) => {
-    
+    const onClick_EachRole = (event) => {
+      replaceData2Player("heroes", "role", nameRole);
+      history.push(`/player/heroes/${encodeURIComponent(player.battletag)}`);
+    }
     return (
       
-      <DivEachRole> 
+      <DivEachRole
+        onClick={onClick_EachRole}
+      > 
         <DivGraph> 
           <DivGames>
-            <Div> {showing['stats'][nameRole][modeShowing]['games_played']} </Div>
+            <Div> {showing['stats'][nameRole][mode]['games_played']} </Div>
             <Div> {(() => {
                       switch (language) {
                         case 'ko': 
@@ -807,19 +805,19 @@ const General = ({
           </DivGames>
           
           <DivBar 
-            ratio={ showing['stats'][nameRole][modeShowing]['ratio']}
-            ratioAgainstMax={ showing['stats'][nameRole][modeShowing]['ratio'] / showing['graph'][modeShowing]['ratioMax']}
-            games={ showing['stats'][nameRole][modeShowing]['games_played'] }
+            ratio={ showing['stats'][nameRole][mode]['ratio']}
+            ratioAgainstMax={ showing['stats'][nameRole][mode]['ratio'] / showing['graph'][mode]['ratioMax']}
+            games={ showing['stats'][nameRole][mode]['games_played'] }
           >  
           </DivBar>
         </DivGraph>
         
-        <DivIconRole> {returnIconRole(nameRole, showing['stats'][nameRole][modeShowing]['ratio'] )}  </DivIconRole>
+        <DivIconRole> {returnIconRole(nameRole, showing['stats'][nameRole][mode]['ratio'] )}  </DivIconRole>
         
-        {(modeShowing === "Quick Match" || modeShowing === "Storm League") &&
+        {(mode === "Quick Match" || mode === "Storm League") &&
           <DivMmr
-            league_tier={showing['stats'][nameRole][modeShowing]['league_tier']}
-          >    <Div> mmr </Div>    <Div> {showing['stats'][nameRole][modeShowing]['mmr']} </Div>    
+            league_tier={showing['stats'][nameRole][mode]['league_tier']}
+          >    <Div> MMR </Div>    <Div> {showing['stats'][nameRole][mode]['mmr']} </Div>    
           </DivMmr>
         }
       </DivEachRole>
@@ -830,13 +828,14 @@ const General = ({
   
   
   
+  
   return (
     
       <DivGeneral>
         
         <DivInputBattletag>
           <Input {...inputBattletag} placeholder="battletag#1234" />
-          <Button onClick={onClick_Update} > <IconSync width={'24px'}  height={'24px'} color={'COLOR_normal'} /> </Button>
+          <Button onClick={onClick_Update} > <IconSearch width={'24px'}  height={'24px'} color={'COLOR_normal'} /> </Button>
         </DivInputBattletag>
         
         { (!loadingPlayerGeneral && readyPlayerGeneral && readyShowing) &&
@@ -863,7 +862,7 @@ const General = ({
             <DivHeader>  
             
               <DivIdentification> 
-                <Div> <ImgFlagMain src={objFlag[nameRegionShowing]} /> </Div>
+                <Div> <ImgFlagMain src={objFlag[region]} /> </Div>
                 <Div> {showing["battletagName"] } </Div>
                 <Div> {showing["battletagNumber"] } </Div>
               </DivIdentification>
@@ -872,10 +871,12 @@ const General = ({
                 {showing['orderNameRegion'].map(element=>
                   <DivFlagNormal
                     key={`flagNormal-${element}`}
-                    active={element === nameRegionShowing}
+                    active={element === region}
                     onClick={(event=>{
-                      setNameRegionShowing(element)
-                      setReadyShowing(false)
+                      if (region !== element) {
+                        replaceData2Player("general", "region", element)
+                        setReadyShowing(false)
+                      }
                     })}
                     > <ImgFlagNormal src={objFlag[element]} /> 
                   </DivFlagNormal>
@@ -922,7 +923,7 @@ const General = ({
                     <DivRank
                       league_tier={showing['stats']['All']['Quick Match']['league_tier']}
                     >
-                      <Div> {showing['stats']['All']['Quick Match']['league_tier']} </Div>
+                      <Div> { returnTextTier( showing['stats']['All']['Quick Match']['league_tier']) } </Div>
                       <Div> {showing['stats']['All']['Quick Match']['mmr']} </Div>
                     </DivRank>
                   </Div>
@@ -958,7 +959,7 @@ const General = ({
                     <DivRank
                       league_tier={showing['stats']['All']['Storm League']['league_tier']}
                     >
-                      <Div> {showing['stats']['All']['Storm League']['league_tier']} </Div>
+                      <Div> { returnTextTier( showing['stats']['All']['Storm League']['league_tier']) } </Div>
                       <Div> {showing['stats']['All']['Storm League']['mmr']} </Div>
                     </DivRank>
                   </Div>
@@ -984,8 +985,8 @@ const General = ({
                 <DivChooseMode>
                 
                   <ButtonChooseMode 
-                    onClick={ (event)=>{setModeShowing("Quick Match")} }
-                    active={(modeShowing==="Quick Match")}
+                    onClick={ (event)=>{ replaceData2Player("general", "mode", "Quick Match") } }
+                    active={(mode==="Quick Match")}
                     > {(() => {
                       switch (language) {
                         case 'ko': 
@@ -998,8 +999,8 @@ const General = ({
                     })()}  </ButtonChooseMode>
                     
                   <ButtonChooseMode 
-                    onClick={ (event)=>{setModeShowing("Storm League")} }
-                    active={(modeShowing==="Storm League")}
+                    onClick={ (event)=>{ replaceData2Player("general", "mode", "Storm League") } }
+                    active={(mode==="Storm League")}
                     > {(() => {
                       switch (language) {
                         case 'ko': 
@@ -1012,8 +1013,8 @@ const General = ({
                     })()}  </ButtonChooseMode>
                     
                   <ButtonChooseMode 
-                    onClick={ (event)=>{setModeShowing("Both")} }
-                    active={(modeShowing==="Both")}
+                    onClick={ (event)=>{ replaceData2Player("general", "mode", "Both") } }
+                    active={(mode==="Both")}
                     > {(() => {
                       switch (language) {
                         case 'ko': 
@@ -1040,65 +1041,6 @@ const General = ({
 
 }
 
-/*
-<Div> <ImgFlagNormal src={objFlag["NA"]} /> </Div>
-                <Div> <ImgFlagNormal src={objFlag["KR"]} /> </Div>
-                <Div> <ImgFlagNormal src={objFlag["CN"]} /> </Div>
-                <Div> <ImgFlagNormal src={objFlag["EU"]} /> </Div>
-*/
-
-
-/*
-
-const { idComp } = useParams();
-  
-  
-  useEffect(() => {
-
-    (async() => {
-      
-      if (!readyFocusingComp) {
-        try {
-            
-          replaceData2("ready", "focusingComp", false);
-          replaceData2("loading", "focusingComp", true);
-          
-          const {
-            data
-          } = await axios.get(`${config.URL_API_NS}/comp/${idComp}`);
-          
-          
-          replaceData2CompGallery("focus", "comp", data);
-          replaceData2("loading", "focusingComp", false);
-          replaceData2("ready", "focusingComp", true);
-          
-    
-        } catch (error) {
-          replaceData2("ready", "focusingComp", false);
-          replaceData2("loading", "focusingComp", false);
-          
-          addDeleteNotification("basic01", language);
-          console.log(error)
-        }
-        
-      }
-     
-    })() // async
-
-  }, [readyFocusingComp, idComp])
-  
-  
-  
-  */
-
-
-/*
-<>
-    { (loadingFocusingComp || !readyFocusingComp) ? <DivFocus> <Loading /> </DivFocus>
-
-*/
-
-
 
 function mapStateToProps(state) {
   return {
@@ -1108,7 +1050,17 @@ function mapStateToProps(state) {
     , user: state.auth.user
     , readyUser: state.basic.ready.user
     
-    , playerGeneral: state.player.general
+    , player: state.player.player
+    
+    , region: state.player.general.region
+    , mode: state.player.general.mode
+    , role: state.player.general.role
+    
+    , triggerUpdateGeneral: state.player.general.triggerUpdate
+    
+    
+    , readyPlayerBattletag: state.basic.ready.playerBattletag
+    , dataPlayerGeneral: state.player.general.data
     , readyPlayerGeneral: state.basic.ready.playerGeneral
     , loadingPlayerGeneral: state.basic.loading.playerGeneral
   };

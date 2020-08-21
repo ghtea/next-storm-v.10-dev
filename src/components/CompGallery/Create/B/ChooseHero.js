@@ -27,13 +27,11 @@ import * as imgHero from '../../../../images/heroes'
 
 const DivChooseHero = styled(Div)`
   
-  
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
 
-  
 `
 
 
@@ -107,7 +105,7 @@ const ImgEachHero = styled(Img)`
    
   language
    
-    , dictAllHeroBasic
+    , listAllHeroBasic
      
     , listPosition
     
@@ -121,12 +119,12 @@ const ImgEachHero = styled(Img)`
    
  } ) => {
   
-    const dictTank = dictAllHeroBasic.filter(objHero => objHero.role === "Tank");
-    const dictBruiser = dictAllHeroBasic.filter(objHero => objHero.role === "Bruiser");
-    const dictMelee = dictAllHeroBasic.filter(objHero => objHero.role === "Melee Assassin");
-    const dictRanged = dictAllHeroBasic.filter(objHero => objHero.role === "Ranged Assassin");
-    const dictHealer = dictAllHeroBasic.filter(objHero => objHero.role === "Healer");
-    const dictSupport = dictAllHeroBasic.filter(objHero => objHero.role === "Support");
+    const dictTank = listAllHeroBasic.filter(objHero => objHero.role === "Tank");
+    const dictBruiser = listAllHeroBasic.filter(objHero => objHero.role === "Bruiser");
+    const dictMelee = listAllHeroBasic.filter(objHero => objHero.role === "Melee Assassin");
+    const dictRanged = listAllHeroBasic.filter(objHero => objHero.role === "Ranged Assassin");
+    const dictHealer = listAllHeroBasic.filter(objHero => objHero.role === "Healer");
+    const dictSupport = listAllHeroBasic.filter(objHero => objHero.role === "Support");
     
     
     const onClick_Hero = (event, idHero) => {
@@ -306,7 +304,7 @@ function mapStateToProps(state) {
     
     language: state.basic.language
     
-    , dictAllHeroBasic: state.hots.dictAllHeroBasic
+    , listAllHeroBasic: state.hots.listAllHeroBasic
     
     , listPosition: state.comp_gallery.create.listPosition
     

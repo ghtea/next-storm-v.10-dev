@@ -18,9 +18,7 @@ import {Div, Button, A, NavLinkDefault} from '../../styles/DefaultStyles';
 
 import Profile from '../_/Profile';
 
-import IconProfile from "../_/Profile/Icon";
-import borders from "../../profile/borders";
-
+import ProfileIcon from "../_/Profile/ProfileIcon";
 
 import IconLoading from '../../svgs/basic/IconLoading';
 import IconLogIn from '../../svgs/basic/IconLogIn';
@@ -99,12 +97,11 @@ const DivIconCommon = styled(Div)`
   
 `
 
-const DivIconProfile = styled(Div)`
+const DivProfileIcon = styled(Div)`
   
   width: ${props => props.size};
   height: ${props => props.size};
   
-  ${props => borders[props.border] || borders['Default']}
   border-radius: 6px; 
   
   display: flex;
@@ -253,17 +250,18 @@ const ProfileMd_ = ({
     		return (
 			<NavLinkStyled to="/" >
 			
-					<DivIconProfile size={"40px"} border={user.profile.listIdBorder[0]} > 
-						<IconProfile 
+					<DivProfileIcon size={"40px"} > 
+						<ProfileIcon 
               width = { "34px" } height = { "34px" } 
               shape={user.profile.listIdShape[0]} 
               palette={user.profile.listIdPalette[0]} 
+              badge={user.profile.listIdBadge[0]} 
             />
-          </DivIconProfile>
+          </DivProfileIcon>
           
-				{(user.battletag)?
+				{(user.battletag)&&
   				<DivBattletag> <DivBattletagName> {battletagName} </DivBattletagName> <DivBattletagNumber> {battletagNumber} </DivBattletagNumber> </DivBattletag> 
-				: <DivEmail> {user.email} </DivEmail>
+			
 				}
 			</NavLinkStyled>
 				)

@@ -25,8 +25,6 @@ import {Div, Input, Button, Img, Textarea, LinkDefault, NavLinkDefault} from '..
 import useInput from '../../tools/hooks/useInput';
 import {getTimeStamp} from '../../tools/vanilla/time';
 
-import IconWorking from '../../svgs/basic/IconWorking'
-
 
 
 const DivSignUp = styled(Div)`

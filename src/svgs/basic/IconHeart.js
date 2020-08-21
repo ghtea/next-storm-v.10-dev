@@ -17,7 +17,7 @@ const IconHeart = ({width, height, color, themeName, filled=false}) => {
 	
 	useEffect( () => {
 		if (!color) {
-			color=[ "color_normal", "color_very_weak"];
+			color=[ "color_active", "color_very_weak"];
 		}
 		
 		if (filled) {

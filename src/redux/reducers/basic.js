@@ -14,7 +14,7 @@ const stateInitial = {
       planTeam: false
       , listPlanTeam: false
       
-      ,dictAllHeroBasic: false
+      ,listAllHeroBasic: false
       
       ,listAllMap: false
       , listMapStandardRanked: false
@@ -36,7 +36,9 @@ const stateInitial = {
       
       , reactionToEdit: false
       
+      , playerBattletag: false
       , playerGeneral: false
+      , playerHeroes: false
     }
     
     ,loading : {
@@ -57,7 +59,9 @@ const stateInitial = {
       
       , reactionToEdit: false
       
+      
       , playerGeneral: false
+      , playerHeroes: false
     }
     
     

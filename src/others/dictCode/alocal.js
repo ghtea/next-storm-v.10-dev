@@ -55,6 +55,25 @@ const alocal = {
 		}
 	}
 
+
+	, "aloca201": { // 
+		situation: "error"
+		, message: {
+			en: `No user using this id exists`
+			,ko: `해당 아이디의 유저가 존재하지 않습니다`
+			,ja: `このアイディのユーザーが存在しません`
+		}
+	}
+	, "aloca202": { // 
+		situation: "error"
+		, message: {
+			en: `Current password is incorrect`
+			,ko: `현재의 비밀번호가 틀립니다`
+			,ja: `現在のパスワードが間違っています`
+		}
+	}
+	
+	
 	
 }
 

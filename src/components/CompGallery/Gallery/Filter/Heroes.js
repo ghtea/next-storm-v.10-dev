@@ -108,7 +108,7 @@ const ImgEachHero = styled(Img)`
 const Heroes = ({
     language
     
-    , dictAllHeroBasic // 사실 list 다!
+    , listAllHeroBasic // 사실 list 다!
     
     , filterHero
     , searchHero
@@ -126,7 +126,7 @@ const Heroes = ({
     
     const reg = new RegExp(searchHero);
     
-    const resultSearchingHeroTemp1 = dictAllHeroBasic.filter( (element, index) => reg.test(element['search']) );
+    const resultSearchingHeroTemp1 = listAllHeroBasic.filter( (element, index) => reg.test(element['search']) );
     const resultSearchingHeroTemp2 =  resultSearchingHeroTemp1.slice(0,16); //  검색결과 20개까지!
     
     setResultSearchingHero(resultSearchingHeroTemp2);
@@ -152,7 +152,7 @@ const Heroes = ({
         
          <DivSelected>
         {filterHero.map(element=>{
-          const tObjHero = dictAllHeroBasic.find(obj => obj._id === element)
+          const tObjHero = listAllHeroBasic.find(obj => obj._id === element)
           const idHero = element;
           const key_HeroesTalents = tObjHero['key_HeroesTalents'];
           
@@ -169,7 +169,7 @@ const Heroes = ({
         
         <DivResultSearching>
         {resultSearchingHero.map(element=>{
-          const tObjHero = dictAllHeroBasic.find(obj => obj._id === element._id)
+          const tObjHero = listAllHeroBasic.find(obj => obj._id === element._id)
           const idHero = tObjHero._id;
           const key_HeroesTalents = tObjHero['key_HeroesTalents'];
           
@@ -199,7 +199,7 @@ const Heroes = ({
       
       language: state.basic.language
       
-      , dictAllHeroBasic: state.hots.dictAllHeroBasic
+      , listAllHeroBasic: state.hots.listAllHeroBasic
       
       , filterHero: state.comp_gallery.gallery.filterHero
       , searchHero: state.comp_gallery.gallery.searchHero

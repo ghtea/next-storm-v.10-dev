@@ -18,8 +18,7 @@ import themes from "../../styles/themes"
 import { Div, Input, Button } from '../../styles/DefaultStyles';
 
 // for profile of user
-import IconProfile from "./Profile/Icon";
-import borders from "../../profile/borders";
+import ProfileIcon from "./Profile/ProfileIcon";
 
 const DivProfile = styled(Div)`
   
@@ -45,12 +44,13 @@ const DivProfile = styled(Div)`
   }
 `
 
+// ${props => borders[props.border] || borders['Default']}
 const DivIcon = styled(Div)`
   
   width: ${props => props.size}px;
   height: ${props => props.size}px;
   
-  ${props => borders[props.border] || borders['Default']}
+  
   border-radius: 6px; 
   
   display: flex;
@@ -58,6 +58,7 @@ const DivIcon = styled(Div)`
   justify-content: center;
   align-items: center;
   
+  cursor: pointer;
 `
 
 
@@ -107,45 +108,62 @@ const Profile = ({
   
   const [battletagName, setBattletagName] = useState("");
 	const [battletagNumber, setBattletagNumber] = useState("");
- 
+  
+  const history = useHistory();
   
   size = size || 40;
   //const sizeUsing = size || 40;
   
   useEffect(() => {
-
+    // https://stackoverflow.com/questions/58038008/how-to-stop-memory-leak-in-useeffect-hook-react
+    let unmounted = false;
+    
     (async() => {
-      
+        console.log('please');
       try {
-        setReadySomeone(false);
+        
         const resSomeone = await axios.get(`${config.URL_API_NS}/user/public/${idUser}`);
         //console.log(resUser.data.listIdShape)
         
         const someone = resSomeone.data; // 현재 사이트 상의 유저가 아니라, 해당 아이콘의 유저!
+        //console.log(someone)
+        
+        const battletagFull = someone.battletag || '...';
         const regexBattletag = /(#\d*)$/;
-  		  const listNumberBattletag = someone.battletag.match(regexBattletag);
+  		  const listNumberBattletag = battletagFull.match(regexBattletag) || [""];
   		  
-  		  const battletagNameTemp = someone.battletag.replace(regexBattletag, "");
+  		  const battletagNameTemp = battletagFull.replace(regexBattletag, "");
   		  const battletagNumberTemp = listNumberBattletag[0];
   		  
-  		  setBattletagName(battletagNameTemp)
-  		  setBattletagNumber(battletagNumberTemp)
-        
-        setSomeone(resSomeone.data);
-        setReadySomeone(true);
+  		  if (!unmounted) {
+    		  setBattletagName(battletagNameTemp)
+    		  setBattletagNumber(battletagNumberTemp)
+          
+          setSomeone(resSomeone.data);
+          setReadySomeone(true);
+  		  }
         //console.log(User)
         
-        
       } catch (error) {
-        setReadySomeone(false);
+        if (!unmounted) {
+          setReadySomeone(false);
+        }
         //addDeleteNotification("basic01", language);
         console.log(error)
       }
-        
+      
+      return () => { unmounted = true };
+    
     })() // async
-
+    
   }, [])
-
+  
+  const onClick_Icon = (event) => {
+    if (readySomeone && someone.battletag) {
+      history.push(`/player/general/${encodeURIComponent(someone.battletag)}`);
+    }
+  }
+  
   // Suspense 로 변수를 이용한 컴포넌트 import!
   return (
 
@@ -154,16 +172,17 @@ const Profile = ({
       {(!readySomeone)? 'loading' :
         <>
         
-          <DivIcon size={size} layout={layout} border={someone.profile.listIdBorder[0]} >
+          <DivIcon
+            onClick={onClick_Icon}
+            size={size} layout={layout}  >
             
-            <IconProfile 
+            <ProfileIcon 
               width = { `${size-6}px` } height = { `${size-6}px` } 
               shape={someone.profile.listIdShape[0]} 
               palette={someone.profile.listIdPalette[0]} 
-             
+              badge={someone.profile.listIdBadge[0]}
             />
 
-            
           </DivIcon>
         
           <DivName layout={layout}>

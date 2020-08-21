@@ -75,6 +75,17 @@ const ButtonLogIn = styled(Button)`
 `
 
 const Link_Common = styled(LinkDefault)`
+  width: auto;
+  align-self: flex-end;
+  text-decoration: underline;
+  color: ${props => props.theme.color_weak};
+  margin-top: 1px;
+  margin-bottom: 1px;
+`
+
+const DivForgotPassword = styled(Div)`
+  cursor: pointer;
+  width: auto;
   align-self: flex-end;
   text-decoration: underline;
   color: ${props => props.theme.color_weak};
@@ -200,7 +211,10 @@ const Link_Common = styled(LinkDefault)`
     if (event.key === "Enter") {
       onClick_LogIn();
     }
+    
   }
+  
+  
   
   
   return (
@@ -252,6 +266,17 @@ const Link_Common = styled(LinkDefault)`
               }
             })()}  </ButtonLogIn>
     
+    
+    <Link_Common to="/auth/forgot-password">  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '비밀번호를 잊어버렸나요?';
+                case 'ja': 
+                  return 'パスワードをお忘れですか?';
+                default: // eng
+                  return 'Forgot Password?';
+              }
+            })()} </Link_Common>
     <Link_Common to="/auth/sign-up">  {(() => {
               switch (language) {
                 case 'ko': 

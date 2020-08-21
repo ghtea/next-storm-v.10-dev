@@ -128,7 +128,7 @@ const DivHeader = styled(Div)`
 
 const DivTitle = styled(Div)`
   width: auto;
-  max-width: 150px;
+  max-width: 180px;
   line-height: 1.1rem;
   
   display: block;
@@ -136,6 +136,8 @@ const DivTitle = styled(Div)`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  
+  cursor: pointer;
 `
 
 const DivListTag = styled(Div)`
@@ -427,7 +429,7 @@ const Comp = ({
       
      <DivHeader>
         
-       <DivTitle> {tComp["title"] }</DivTitle> 
+       <DivTitle onClick={onClick_Focus} > {tComp["title"] }</DivTitle> 
         
        <DivListTag> 
        { listTagSorted.map(tag => {

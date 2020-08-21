@@ -7,7 +7,40 @@ import * as types from '../actions/ActionTypes';
 
 const stateInitial = { 
   
-  general: {}
+  // 이 player obj는 사용할지 아직 미정
+  player: {
+    battletag: "sample#1234" //에러 방지..
+    , battletagName: ""
+    , battletagNumber: ""
+    
+    , orderNameRegion: []  
+    , triggerUpdate: "" // battletag 가 변하거나 그냥 업데이트할때
+  }
+  
+  // 아직 미완성
+  , general: {
+    role: "All" // All, Tank, ... (general 에서 역할 아이콘 클릭해서 이 값 바꾸면서 넘어오게 )
+    , mode : "Both" // "Quick Match", "Storm League", "Both"
+    , region: "" // "NA", ...
+    
+    , triggerUpdate: ""
+    
+    , data: {} // original full data which is not organized yet for showing
+  }
+  
+  
+  , heroes: {
+    
+    role: "All" // All, Tank, ... (general 에서 역할 아이콘 클릭해서 이 값 바꾸면서 넘어오게 )
+    , mode : "Both" // "Quick Match", "Storm League", "Both"
+    , region: "" // "NA", ...
+    , sort: "games" // "mmr", "games", "winrate"
+    
+    , triggerUpdate: ""
+    
+    , data: {} // original full data which is not organized yet for showing
+  }
+  
   
   
 };

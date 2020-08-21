@@ -137,7 +137,7 @@ const Hero = ({
   idHero, indexHero, indexPosition
   , returnIsFocused
   
-  , dictAllHeroBasic
+  , listAllHeroBasic
   
   
    
@@ -186,7 +186,7 @@ const Hero = ({
   
   
   
-  const tHeroBasic = dictAllHeroBasic.find(element => element._id === idHero)
+  const tHeroBasic = listAllHeroBasic.find(element => element._id === idHero)
   
   const key_HeroesTalents = tHeroBasic['key_HeroesTalents']
   const isFocused = returnIsFocused(indexPosition, indexHero);
@@ -243,7 +243,7 @@ const DivPositionReady = styled(Div)`
 const PositionReady = ({
   indexPosition
   
-  , dictAllHeroBasic
+  , listAllHeroBasic
   
   , listPosition
   
@@ -330,7 +330,7 @@ const PositionReady = ({
    
           triggerPosition={triggerPosition}
           
-          dictAllHeroBasic={dictAllHeroBasic}
+          listAllHeroBasic={listAllHeroBasic}
           returnIsFocused = {returnIsFocused}
         />
         )
@@ -365,7 +365,7 @@ const PositionReady = ({
 function mapStateToProps(state) { 
   return { 
     
-    dictAllHeroBasic: state.hots.dictAllHeroBasic
+    listAllHeroBasic: state.hots.listAllHeroBasic
     
     , listPosition: state.comp_gallery.create.listPosition
     

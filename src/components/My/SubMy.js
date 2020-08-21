@@ -29,7 +29,7 @@ import IconUserCircleRegular from '../../svgs/basic/IconUserCircleRegular';
 import IconVideo from '../../svgs/basic/IconVideo';
 import IconComment from '../../svgs/basic/IconComment';
 
-
+import IconSetting from '../../svgs/basic/IconSetting';
 import IconCabinetRegular from '../../svgs/basic/IconCabinetRegular';
 import IconList from '../../svgs/basic/IconList';
 import IconEye from '../../svgs/basic/IconEye';
@@ -170,7 +170,7 @@ const SubMy = ({
 			</NavLinkStyled> 
 		  
 		  <NavLinkStyled to="/my/profiles" isActive={()=>checkActive(/^(\/my\/profiles)/)} > 
-        <IconUserCircleRegular width={"22px"} height={"22px"} color={(location.pathname==="/my/profiles")?"color_active": "color_very_weak"} />
+        <IconUserCircleRegular width={"26px"} height={"26px"} color={(location.pathname==="/my/profiles")?"color_active": "color_very_weak"} />
 				<Div> 
 				  {(() => {
             switch (language) {
@@ -182,6 +182,22 @@ const SubMy = ({
                 return 'Profiles';
             }
           })()}  
+				</Div> 
+			</NavLinkStyled> 
+			
+			<NavLinkStyled to="/my/setting" isActive={()=>checkActive(/^(\/my\/setting)/)} > 
+        <IconSetting width={"22px"} height={"22px"} color={(location.pathname==="/my/setting")?"color_active": "color_very_weak"} />
+				<Div> 
+				  {(() => {
+            switch (language) {
+              case 'ko': 
+                return '설정';
+              case 'ja': 
+                return '設定';
+              default: // eng
+                return 'Setting';
+            }
+          })()}   
 				</Div> 
 			</NavLinkStyled> 
 			

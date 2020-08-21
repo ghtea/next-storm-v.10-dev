@@ -6,7 +6,7 @@ import * as types from '../actions/ActionTypes';
 
 const stateInitial = { 
     
-      dictAllHeroBasic: {}
+      listAllHeroBasic: [] // list of obj
       , listAllMap : [] // list of obj
       , listMapStandardRanked : [] // list of obj
       

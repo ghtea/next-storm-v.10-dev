@@ -9,6 +9,8 @@ import { Route, NavLink, Switch } from 'react-router-dom';
 import * as config from '../config';
 
 import General from "../components/Player/General"
+import Heroes from "../components/Player/Heroes"
+
 
 import SubPlayer from "../components/Player/SubPlayer"
 
@@ -105,6 +107,7 @@ const Player = ({
         <Switch>
         
           <Route path="/player/general/:battletagEncoded" component={General} />
+          <Route path="/player/heroes/:battletagEncoded" component={Heroes} />
           
         </Switch>
       </Main>

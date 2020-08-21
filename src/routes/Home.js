@@ -174,6 +174,9 @@ const Home= ({
 	  history.push("/auth/log-in");
 	}
 	
+	const onClick_ApplyBattletag = (event) => {
+	  history.push("auth/apply-battletag");
+	}
     
     return (
     
@@ -208,6 +211,19 @@ const Home= ({
               }
             })()}  </Button> 
             }
+          
+          {(readyUser && !user.battletag) && 
+            <Button onClick={onClick_ApplyBattletag} >  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '배틀태그 등록';
+                case 'ja': 
+                  return 'バトルタグ登録';
+                default: // eng
+                  return 'Register Battletag';
+              }
+            })()}  </Button> 
+          }
         </DivButtons>
         
       </DivA>

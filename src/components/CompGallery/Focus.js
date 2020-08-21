@@ -172,6 +172,9 @@ const Focus = ({
           replaceData2("loading", "focusingComp", false);
           replaceData2("ready", "focusingComp", true);
           
+          replaceData2("ready", "focusingCompComment", false);
+          replaceData2("ready", "focusingCompVideo", false);
+          
     
         } catch (error) {
           replaceData2("ready", "focusingComp", false);

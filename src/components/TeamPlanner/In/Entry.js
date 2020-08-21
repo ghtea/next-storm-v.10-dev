@@ -429,7 +429,7 @@ onMouseEnter={(event)=>{
           
           const messageBase = dictCode['tplan02']['message'][language];
           const message = messageBase.replace('BATTLETAG', battletag);
-          addDeleteNotification("tplan02", language, message, 2000); 
+          addDeleteNotification("basic04", language, message, 2000); 
           
         } } >
         

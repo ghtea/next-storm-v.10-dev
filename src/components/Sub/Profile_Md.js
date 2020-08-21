@@ -15,8 +15,7 @@ import dictCode from '../../others/dictCode';
 import { NavLink } from 'react-router-dom';
 import {Div, Button, A, NavLinkDefault} from '../../styles/DefaultStyles';
 
-import IconProfile from "../_/Profile/Icon";
-import borders from "../../profile/borders";
+import ProfileIcon from "../_/Profile/ProfileIcon";
 
 import IconLoading from '../../svgs/basic/IconLoading';
 import IconLogIn from '../../svgs/basic/IconLogIn';
@@ -61,12 +60,12 @@ const DivProfileMd_ = styled(Div)`
 	
 `
 
-const DivIconProfile = styled(Div)`
+const DivProfileIcon = styled(Div)`
   
   width: ${props => props.size}px;
   height: ${props => props.size}px;
   
-  ${props => borders[props.border] || borders['Default']}
+  
   border-radius: 6px; 
   
   display: flex;
@@ -133,14 +132,14 @@ const ProfileMd_ = ({
       if (loadingUser) {
       	return (
       		<A>
-        		<DivIconProfile> <IconLoading width={"22px"} height={"22px"} color={"color_weak"} /> </DivIconProfile>
+        		<DivProfileIcon> <IconLoading width={"22px"} height={"22px"} color={"color_weak"} /> </DivProfileIcon>
         	</A>
       	);
     	}
     	else if (!loadingUser && !readyUser) {
       	return (
 					<NavLinkStyled to="/auth/log-in" > 
-						<DivIconProfile> <IconLogIn width={"22px"} height={"22px"} color={"color_weak"} /> </DivIconProfile>
+						<DivProfileIcon> <IconLogIn width={"22px"} height={"22px"} color={"color_weak"} /> </DivProfileIcon>
 					</NavLinkStyled> 
 
 				);
@@ -149,13 +148,14 @@ const ProfileMd_ = ({
     		return (
 			<NavLinkStyled to="/" >
 				
-				<DivIconProfile size={36} border={user.profile.listIdBorder[0]} > 
-						<IconProfile 
+				<DivProfileIcon size={36} > 
+						<ProfileIcon 
               width = { "30px" } height = { "30px" } 
               shape={user.profile.listIdShape[0]} 
               palette={user.profile.listIdPalette[0]} 
+              badge={user.profile.listIdBadge[0]} 
             />
-          </DivIconProfile>
+          </DivProfileIcon>
 				
 			</NavLinkStyled>
 				)

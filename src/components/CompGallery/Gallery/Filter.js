@@ -182,7 +182,7 @@ const ButtonWhich = styled(Button)`
 const Filter = ({
     language
     
-    , dictAllHeroBasic
+    , listAllHeroBasic
     , listAllMap
     , listMapStandardRanked
     
@@ -265,10 +265,10 @@ const Filter = ({
         , limitEach: limitEach
         , skipEntire: skipEntire
         
-        , filterSize: filterSize
-        , filterMap: filterMap
-        , filterTag: filterTag
-        , filterHero: filterHero
+        , filterSize: JSON.stringify(filterSize)
+        , filterMap: JSON.stringify(filterMap)
+        , filterTag: JSON.stringify(filterTag)
+        , filterHero: JSON.stringify(filterHero)
       });
         
       
@@ -424,7 +424,7 @@ const Filter = ({
       
       language: state.basic.language
       
-      , dictAllHeroBasic: state.hots.dictAllHeroBasic
+      , listAllHeroBasic: state.hots.listAllHeroBasic
       ,listAllMap: state.hots.listAllMap
       , listMapStandardRanked:  state.hots.listMapStandardRanked
       

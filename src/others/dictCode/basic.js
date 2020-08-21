@@ -24,10 +24,27 @@ const basic = {
 		, message: {
 			en: `The link has been copied.`
 			,ko: `링크가 복사되었습니다`
-			,ja: `リンクがコピーされました。`
+			,ja: `リンクがコピーされました`
 		}
 	}
 	
+	, "basic04": { 
+		situation: "success"
+		, message: {
+			ko: `관리자의 이메일 주소가 복사되었습니다`
+			,ja: `管理者のメールアドレスがコピーされました`
+			, en: `The administrator's email address has been copied`
+		}
+	}
+	
+	, "basic05": { 
+		situation: "success"
+		, message: {
+			ko: `존재하지 않는 배틀태그 입니다`
+			,ja: `存在しないバトルタグです`
+			, en: `This battletag doesn't exist`
+		}
+	}
 	
 }
 
