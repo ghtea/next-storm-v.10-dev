@@ -46,6 +46,23 @@ const basic = {
 		}
 	}
 	
+	, "basic06": { 
+		situation: "warning"
+		, message: {
+			ko: `신고/삭제를 원하는 경우, 바로 다시 클릭하세요`
+			,ja: `申告、削除を希望する場合は、直ちにクリックしてください`
+			, en: `If you want to report/delete, please click again immediately`
+		}
+	}
+	, "basic07": { 
+		situation: "success"
+		, message: {
+			ko: `신고가 적용되었습니다`
+			,ja: `申告が適用されました`
+			, en: `The report has been applied`
+		}
+	}
+	
 }
 
 

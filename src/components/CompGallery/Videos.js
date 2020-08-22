@@ -64,10 +64,11 @@ const Videos = ({
 
   language
   
+  , user
+  , readyUser, loadingUser
+  
   , location
   
-  , user
-  , readyUser
   
   , listVideo
   , readyListVideo
@@ -83,7 +84,7 @@ const Videos = ({
 
     (async() => {
       
-      if (!readyListVideo) {
+      if (!readyListVideo && !loadingUser) {
 
         try {
           
@@ -94,7 +95,7 @@ const Videos = ({
             listSortUsing = JSON.parse(queryRecieved.listSort);
           }
           
-          const queryRequest = queryString.stringify({
+          const queryRequestBefore = {
             
             listSort: listSortUsing
             , limitEach: queryRecieved.limitEach || 50  // test로서 3개씩 가져와 보자
@@ -107,8 +108,14 @@ const Videos = ({
             , idSubject: queryRecieved.idSubject
             , modelSubject: queryRecieved.modelSubject
 
-          });
+          };
           
+          
+          if (readyUser) {
+            queryRequestBefore['idUser'] = user._id;
+          }
+          
+          const queryRequest = queryString.stringify(queryRequestBefore);
           
           replaceData2("ready", "listVideo", false);
           replaceData2("loading", "listVideo", true);
@@ -130,7 +137,7 @@ const Videos = ({
 
     })() // async
 
-  }, [readyListVideo])
+  }, [readyListVideo, readyUser])
 
 
   return (
@@ -170,6 +177,7 @@ function mapStateToProps(state) {
     
     , user: state.auth.user
     , readyUser: state.basic.ready.user
+    , loadingUser: state.basic.loading.user
     
     , listVideo: state.comp_gallery.videos.listVideo
     , readyListVideo: state.basic.ready.listVideo

@@ -12,7 +12,7 @@ import {replaceDataAuth, replaceData2Auth} from "../../redux/actions/auth";
 import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 import dictCode from '../../others/dictCode';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import themes from "../../styles/themes"
 import {Div, Button, A, NavLinkDefault} from '../../styles/DefaultStyles';
 
@@ -158,6 +158,12 @@ const DivBattletagNumber = styled(Div)`
 	text-overflow: ellipsis;
 `
 
+const DivApplyBattletag = styled(Div)`
+	cursor: pointer;
+	font-weight: normal;
+	text-decoration: underline;l
+`
+
 const DivEmail = styled(Div)`
 	width: 70px;
 	
@@ -177,6 +183,7 @@ const NavLinkStyled = styled(NavLinkDefault)`
 	justify-content: flex-start;
 	align-items: center;
 	
+	cursor: pointer;
 	width: auto;
 `;
 
@@ -198,7 +205,7 @@ const ProfileMd_ = ({
 	, replaceDataAuth, replaceData2Auth
 	}) => {
 	
-	
+	const history = useHistory();
 	
 	const [battletagName, setBattletagName] = useState("");
 	const [battletagNumber, setBattletagNumber] = useState("");
@@ -248,7 +255,7 @@ const ProfileMd_ = ({
     	else {
     		
     		return (
-			<NavLinkStyled to="/" >
+			<NavLinkStyled to={(readyUser && !user.battletag)? '/auth/apply-battletag' : '/'  } >
 			
 					<DivProfileIcon size={"40px"} > 
 						<ProfileIcon 
@@ -259,10 +266,17 @@ const ProfileMd_ = ({
             />
           </DivProfileIcon>
           
-				{(user.battletag)&&
-  				<DivBattletag> <DivBattletagName> {battletagName} </DivBattletagName> <DivBattletagNumber> {battletagNumber} </DivBattletagNumber> </DivBattletag> 
-			
-				}
+				{(user.battletag)&& <DivBattletag> <DivBattletagName> {battletagName} </DivBattletagName> <DivBattletagNumber> {battletagNumber} </DivBattletagNumber> </DivBattletag>  }
+				{(!user.battletag) && <DivApplyBattletag >  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '배틀태그를 등록하세요!';
+                case 'ja': 
+                  return 'バトルタグを登録してください！';
+                default: // eng
+                  return 'register battletag!'
+              }
+            })()}  </DivApplyBattletag>   }
 			</NavLinkStyled>
 				)
     	}

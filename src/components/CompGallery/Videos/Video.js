@@ -27,13 +27,14 @@ import { Div, Input, Button } from '../../../styles/DefaultStyles';
 
 import Profile from '../../_/Profile';
 
-import IconEdit from '../../../svgs/basic/IconEdit'
-import IconPlus from '../../../svgs/basic/IconPlus'
-import IconHeart from '../../../svgs/basic/IconHeart'
+import IconEdit from '../../../svgs/basic/IconEdit';
+import IconPlus from '../../../svgs/basic/IconPlus';
+import IconHeart from '../../../svgs/basic/IconHeart';
+import IconReportTriangle from '../../../svgs/basic/IconReportTriangle';
 
-import IconEnter from '../../../svgs/basic/IconEnter'
-import IconEye from '../../../svgs/basic/IconEye'
-import IconLayers from '../../../svgs/basic/IconLayers'
+import IconEnter from '../../../svgs/basic/IconEnter';
+import IconEye from '../../../svgs/basic/IconEye';
+import IconLayers from '../../../svgs/basic/IconLayers';
 
 
 
@@ -61,6 +62,21 @@ const DivVideo = styled(Div)
 const DivToSubject = styled(Div)`
   z-index: 2;
   position: absolute;
+  left: 0;
+  top: 0;
+  
+  background-color: ${props=> props.theme.COLOR_normal};
+  
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  
+  cursor: pointer;
+`
+
+const DivReport = styled(Div)`
+  z-index: 2;
+  position: absolute;
   right: 0;
   top: 0;
   
@@ -68,10 +84,16 @@ const DivToSubject = styled(Div)`
   
   width: 36px;
   height: 36px;
-  border-radius: 5px;
+  border-radius: 10px;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   
   cursor: pointer;
 `
+
 
 
 const DivView = styled(Div)`
@@ -147,7 +169,8 @@ const Video = ({
   
   , where
     
-    
+  
+  , replaceData2
   , replaceDataReaction
   , replaceData2Reaction
   
@@ -156,12 +179,14 @@ const Video = ({
   
   const history = useHistory(); 
   
+  const [stageReport, setStageReport] =useState(0);
+    
   const [like, setLike] = useState(false);
   const [plus, setPlus] = useState(0);
   
   
   useEffect(()=>{
-    if ( video.listUserLike.includes(user._id) ) { setLike(true)}
+    if ( video.listUserLike && video.listUserLike.includes(user._id) ) { setLike(true)}
     else {setLike(false)};
   },[])
     
@@ -222,16 +247,60 @@ const Video = ({
     }
     
   }
+  
+  const onClick_Report = async (event) => {
+      
+      try {
+        
+        if(!readyUser) { addDeleteNotification("auth31", language); }
+        else {
+          
+          if (stageReport === 0) {
+            setStageReport(1);
+            setTimeout( ()=>{ setStageReport(0) }, 5000);
+            addDeleteNotification("basic06", language);
+          }
+          
+          else {
+            
+            try {
+              
+              let queryTemp = {
+                idUser: user._id 
+                , typeUser: user.type
+              };
+              const query = queryString.stringify(queryTemp)  
+              await axios.put(`${config.URL_API_NS}/video/report/${video._id}?` + query );
+              
+              addDeleteNotification("basic07", language);
+              replaceData2("ready", "listVideo", false);
+              //history.push('/comp-gallery/');
+                
+            } catch (error) {
+              addDeleteNotification("basic01", language);
+            }
+          } // else
+    
+        }
+      }
+      catch(error) {
+        console.log(error);
+        addDeleteNotification("basic01", language);
+      }
+    }
+
 
   return (
 
     <DivVideo>
-    
+      
+      
       { (where==="videos")&&  
         <DivToSubject
           onClick={event=>{history.push(`/comp-gallery/focus/${video.subject._id}`)}}
         > <IconEye width={"24px"} height={"24px"} color={"color_weak"}  /> </DivToSubject>
       }
+      <DivReport onClick={onClick_Report} > <IconReportTriangle width={"24px"} height={"24px"} color={ (stageReport===0)? "color_very_weak" : "color_warning"}  /> </DivReport>
       
       
       <DivView> 
@@ -274,7 +343,7 @@ const Video = ({
         }
         
         <DivLike onClick={onClick_Like} >
-          <Div number={video.listUserLike.length + plus}> {video.listUserLike.length + plus} </Div>
+          <Div number={(video.listUserLike)? (video.listUserLike.length + plus) : plus}> {(video.listUserLike)? (video.listUserLike.length + plus) : plus} </Div>
           <IconHeart width = { "25x" } height = { "25px" }  filled={like} />
         </DivLike>
         

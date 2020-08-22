@@ -25,6 +25,7 @@ import IconCopy from '../../../../svgs/basic/IconCopy'
 import IconBack from '../../../../svgs/basic/IconBack'
 import IconEdit from '../../../../svgs/basic/IconEdit'
 import IconHeart from '../../../../svgs/basic/IconHeart'
+import IconReportTriangle from '../../../../svgs/basic/IconReportTriangle'
 
 
 
@@ -66,6 +67,8 @@ const Tools = ({
   
   , addDeleteNotification
 }) => {
+  
+  const [stageReport, setStageReport] =useState(0);
   
   const [like, setLike] = useState(false);
   const [plus, setPlus] = useState(0);
@@ -119,6 +122,48 @@ const Tools = ({
       }
     }
 
+
+
+  const onClick_Report = async (event) => {
+      
+      try {
+        
+        if(!readyUser) { addDeleteNotification("auth31", language); }
+        else {
+          
+          if (stageReport === 0) {
+            setStageReport(1);
+            setTimeout( ()=>{ setStageReport(0) }, 5000);
+            addDeleteNotification("basic06", language);
+          }
+          
+          else {
+            
+            try {
+              
+              let queryTemp = {
+                idUser: user._id 
+                , typeUser: user.type
+              };
+              const query = queryString.stringify(queryTemp)  
+              await axios.put(`${config.URL_API_NS}/comp/report/${focusingComp._id}?` + query );
+              
+              addDeleteNotification("basic07", language);
+              replaceData2("ready", "listComp", false);
+              history.push('/comp-gallery/');
+                
+            } catch (error) {
+              addDeleteNotification("basic01", language);
+            }
+          } // else
+    
+        }
+      }
+      catch(error) {
+        console.log(error);
+        addDeleteNotification("basic01", language);
+      }
+    }
   
   return (
 
@@ -141,6 +186,12 @@ const Tools = ({
         <ButtonTool
           onClick={(event=>{history.push(`/comp-gallery/edit/${focusingComp._id}`)})}
         > <IconEdit  width={"24px"} height={"24px"} color={"color_weak"} />  </ButtonTool>
+      }
+      
+      { readyUser && 
+        <ButtonTool
+          onClick={onClick_Report}
+        > <IconReportTriangle width={"24px"} height={"24px"} color={ (stageReport===0)? "color_very_weak" : "color_warning"}  />  </ButtonTool>
       }
 
     </DivTools>

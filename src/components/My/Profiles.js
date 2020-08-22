@@ -23,6 +23,8 @@ import { Div, Input, Button } from '../../styles/DefaultStyles';
 import Loading from '../_/Loading';
 
 
+import shapesPerson from "../../profile/shapes/person";
+import shapesAnimal from "../../profile/shapes/animal";
 
 import shapes from "../../profile/shapes";
 import palettes from "../../profile/palettes";
@@ -92,8 +94,17 @@ const Profiles = ({
       if(user.battletag === "mbcat#1703") {
         setListIdShapeUsing(Object.keys(shapes));
       }
-      else {
-        setListIdShapeUsing(user.profile.listIdShape);
+      else if (user){
+        const listIdShapeFromUser =user.profile.listIdShape;
+        
+        const listIdShapePerson = Object.keys(shapesPerson);
+        const listIdShapeAnimal = Object.keys(shapesAnimal);
+        
+        const listIdShapeMerged = listIdShapeFromUser.concat(listIdShapePerson).concat(listIdShapeAnimal);
+        const listIdShapeFinal = listIdShapeMerged.filter((item, pos) => listIdShapeMerged.indexOf(item) === pos)
+        
+        
+        setListIdShapeUsing(listIdShapeFinal);
       }
     }
   },[readyUser])

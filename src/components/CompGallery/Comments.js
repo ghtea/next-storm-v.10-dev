@@ -63,6 +63,9 @@ const Comments = ({
 
   language
   
+  , user
+  , readyUser, loadingUser
+  
   , location
   
   , listComment
@@ -80,7 +83,7 @@ const Comments = ({
 
     (async() => {
       
-      if (!readyListComment) {
+      if (!readyListComment && !loadingUser) {
 
         try {
           
@@ -91,7 +94,7 @@ const Comments = ({
             listSortUsing = JSON.parse(queryRecieved.listSort);
           }
           
-          const queryRequest = queryString.stringify({
+          let queryRequestBefore = {
             
             listSort: listSortUsing
             , limitEach: queryRecieved.limitEach || 50  // test로서 3개씩 가져와 보자
@@ -104,7 +107,14 @@ const Comments = ({
             , idSubject: queryRecieved.idSubject
             , modelSubject: queryRecieved.modelSubject
 
-          });
+          };
+          
+          
+          if (readyUser) {
+            queryRequestBefore['idUser'] = user._id;
+          }
+          
+          const queryRequest = queryString.stringify(queryRequestBefore);
           
           replaceData2("ready", "listComment", false);
           replaceData2("loading", "listComment", true);
@@ -126,7 +136,7 @@ const Comments = ({
 
     })() // async
 
-  }, [readyListComment])
+  }, [readyListComment, readyUser])
 
 
   return (
@@ -163,7 +173,11 @@ function mapStateToProps(state) {
   return {
 
     language: state.basic.language
-
+    
+    , user: state.auth.user
+    , readyUser: state.basic.ready.user
+    , loadingUser: state.basic.loading.user
+    
     , listComment: state.comp_gallery.comments.listComment
     , readyListComment: state.basic.ready.listComment
     , loadingListComment: state.basic.loading.listComment

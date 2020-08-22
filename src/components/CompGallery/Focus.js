@@ -125,6 +125,8 @@ const Focus = ({
 
   language
   
+  , user, readyUser
+  
   , location
   
   , listComp
@@ -208,12 +210,32 @@ const Focus = ({
             replaceData2CompGallery("focus", "comment", {});
           }
           else {
-            try {
-              const resComment = await axios.get( `${config.URL_API_NS}/comment/${focusingComp.listIdComment[0] }`);
+            
+            
+            
+            const queryRequestBefore = {
               
-              console.log(resComment);
-              replaceData2CompGallery("focus", "comment", resComment.data);
-            } catch { replaceData2CompGallery("focus", "comment", {}); } 
+              listSort: ["createdNew"]
+              , limitEach: 10  // test로서 3개씩 가져와 보자
+              , skipEntire: 0
+              
+              , idSubject: idComp
+              , modelSubject: "Comp"
+  
+            };
+            
+            
+            if (readyUser) { queryRequestBefore['idUser'] = user._id; }
+            
+            const queryRequest = queryString.stringify(queryRequestBefore);
+            
+            replaceData2("ready", "listComment", false);
+            replaceData2("loading", "listComment", true);
+                
+            const { data } = await axios.get(`${config.URL_API_NS}/comment/?` + queryRequest );
+              
+            replaceData2CompGallery("focus", "comment", data[0]);
+            
           }
           
           replaceData2("loading", "focusingCompComment", false);
@@ -251,11 +273,34 @@ const Focus = ({
             replaceData2CompGallery("focus", "video", {});
           }
           else {
-            try {
-              const resVideo = await axios.get( `${config.URL_API_NS}/video/${focusingComp.listIdVideo[0] }`);
-              replaceData2CompGallery("focus", "video", resVideo.data);
-            } catch { replaceData2CompGallery("focus", "video", {}); } 
+            
+            
+            
+            const queryRequestBefore = {
+              
+              listSort: ["createdNew"]
+              , limitEach: 10  // test로서 3개씩 가져와 보자
+              , skipEntire: 0
+              
+              , idSubject: idComp
+              , modelSubject: "Comp"
+  
+            };
+            
+            
+            if (readyUser) { queryRequestBefore['idUser'] = user._id; }
+            
+            const queryRequest = queryString.stringify(queryRequestBefore);
+            
+            replaceData2("ready", "listVideo", false);
+            replaceData2("loading", "listVideo", true);
+                
+            const { data } = await axios.get(`${config.URL_API_NS}/video/?` + queryRequest );
+              
+            replaceData2CompGallery("focus", "video", data[0]);
+            
           }
+          
           
           replaceData2("loading", "focusingCompVideo", false);
           replaceData2("ready", "focusingCompVideo", true);
@@ -334,7 +379,11 @@ function mapStateToProps(state) {
   return {
 
     language: state.basic.language
-
+    
+    
+    , user: state.auth.user
+    , readyUser: state.basic.ready.user
+    
     , listComp: state.comp_gallery.gallery.listComp
     , readyListComp: state.basic.ready.listComp
     , loadingListComp: state.basic.loading.listComp

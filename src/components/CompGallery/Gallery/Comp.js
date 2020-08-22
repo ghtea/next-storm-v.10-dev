@@ -38,7 +38,7 @@ import Profile from '../../_/Profile';
 import IconExpand from '../../../svgs/basic/IconExpand'
 import IconEnter from '../../../svgs/basic/IconEnter'
 import IconEye from '../../../svgs/basic/IconEye'
-
+import IconReportTriangle from '../../../svgs/basic/IconReportTriangle'
 
 import IconLink from '../../../svgs/basic/IconLink'
 import IconVideo from '../../../svgs/basic/IconVideo'
@@ -83,7 +83,7 @@ const DivComp = styled(Div)
   }
 `
 
-const DivFocus = styled(Div)`
+const DivReport = styled(Div)`
   z-index: 2;
   position: absolute;
   right: 0;
@@ -181,6 +181,8 @@ const DivMain = styled(Div)
 const DivMain = styled(Div)
 ` 
   height: auto;
+  
+  cursor: pointer;
   
   background-color: ${props => props.theme.COLOR_middle};
   color: ${props => props.theme.color_normal};
@@ -321,6 +323,8 @@ const Comp = ({
     
     const history=useHistory();
     
+    const [stageReport, setStageReport] =useState(0);
+    
     const [like, setLike] = useState(false);
     const [plus, setPlus] = useState(0);
     useEffect(()=>{
@@ -360,6 +364,51 @@ const Comp = ({
 
           }
       }
+    
+  
+  
+  
+    const onClick_Report = async (event) => {
+      
+      try {
+        
+        if(!readyUser) { addDeleteNotification("auth31", language); }
+        else {
+          
+          if (stageReport === 0) {
+            setStageReport(1);
+            setTimeout( ()=>{ setStageReport(0) }, 5000);
+            addDeleteNotification("basic06", language);
+          }
+          
+          else {
+            
+            try {
+              
+              let queryTemp = {
+                idUser: user._id 
+                , typeUser: user.type
+              };
+              const query = queryString.stringify(queryTemp)  
+              await axios.put(`${config.URL_API_NS}/comp/report/${tComp._id}?` + query );
+              
+              addDeleteNotification("basic07", language);
+              replaceData2("ready", "listComp", false);
+              //history.push('/comp-gallery/');
+                
+            } catch (error) {
+              addDeleteNotification("basic01", language);
+            }
+          } // else
+    
+        }
+      }
+      catch(error) {
+        console.log(error);
+        addDeleteNotification("basic01", language);
+      }
+    }
+    
     
     
     const onClick_Like = async (event) => {
@@ -425,7 +474,7 @@ const Comp = ({
 
    <DivComp>
     
-    <DivFocus onClick={onClick_Focus} > <IconEye width={"24px"} height={"24px"} color={"color_weak"}  /> </DivFocus>
+    <DivReport onClick={onClick_Report} > <IconReportTriangle width={"24px"} height={"24px"} color={ (stageReport===0)? "color_very_weak" : "color_warning"}  /> </DivReport>
       
      <DivHeader>
         
@@ -442,7 +491,9 @@ const Comp = ({
      </DivHeader>
 
 
-     <DivMain>
+     <DivMain
+      onClick={onClick_Focus}
+     >
       
        {
           listPosition.map((position, index) => {

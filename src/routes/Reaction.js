@@ -95,7 +95,6 @@ const DivContent = styled(Div)`
     justify-content: center;
     align-items: center;
     
-    & > * {width: auto!important;}
   }
 `
 
@@ -103,7 +102,7 @@ const DivContent = styled(Div)`
 const InputVideoLink = styled(Input)`
   border-radius: 4px;
   
-  width: 300px;
+  width: 340px;
   
   background-color: ${props => props.theme.COLOR_middle};
   border: 1px solid ${props => props.theme.color_very_weak};
@@ -111,6 +110,7 @@ const InputVideoLink = styled(Input)`
 
 const TextareaComment =  styled(Textarea)`
   height: 180px;
+  width: 340px;
   
   border-radius: 4px;
   background-color: ${props => props.theme.COLOR_middle};

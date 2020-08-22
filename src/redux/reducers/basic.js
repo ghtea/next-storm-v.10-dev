@@ -39,6 +39,7 @@ const stateInitial = {
       , playerBattletag: false
       , playerGeneral: false
       , playerHeroes: false
+      , playerHeroesShowing: false
     }
     
     ,loading : {

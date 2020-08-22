@@ -12,7 +12,7 @@ const common = {
     ,color_success: '#37A569'
     ,COLOR_success: '#dbf2d6'
     
-    ,color_warning: '#eabe5c'
+    ,color_warning: '#C98600'
     ,COLOR_warning: '#ffedbe'
     
     ,color_tip: '#2688b2'

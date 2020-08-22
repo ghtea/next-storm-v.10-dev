@@ -24,8 +24,9 @@ import Loading from '../../_/Loading';
 import useInput from '../../../tools/hooks/useInput';
 
 
-import * as imgHero from '../../../images/heroes'
-
+import * as imgHero from '../../../images/heroes';
+import IconFilter from '../../../svgs/basic/IconFilter';
+import IconSort from '../../../svgs/basic/IconSort';
 
 
 const DivOption = styled(Div)`
@@ -34,10 +35,13 @@ const DivOption = styled(Div)`
   justify-content: space-between;
   align-items: center;
   
+  height: 30px;
 `
 
-const DivFilter = styled(Div)`
+const DivGames = styled(Div)`
   width: auto;
+  font-size: 0.9rem;
+  cursor: pointer;
   
   display: flex;
   flex-direction: row;
@@ -52,6 +56,8 @@ const DivFilter = styled(Div)`
 
 const DivSort = styled(Div)`
   width: auto;
+  font-size: 0.9rem;
+  cursor: pointer;
   
   display: flex;
   flex-direction: row;
@@ -82,6 +88,7 @@ const Option = ({
   , region
   , mode
   , role
+  , games
   , sort
   
   , triggerUpdateHeroes
@@ -94,30 +101,124 @@ const Option = ({
 }) => {
   
   
+  const onClick_Games = (event) => {
+    switch(games){
+      case 1: replaceData2Player('heroes', 'games', 5); break;
+      case 5: replaceData2Player('heroes', 'games', 10); break;
+      case 10: replaceData2Player('heroes', 'games', 50); break;
+      case 50: replaceData2Player('heroes', 'games', 1); break;
+      default: replaceData2Player('heroes', 'games', 1); break;
+    }
+    replaceData2("ready", "playerHeroesShowing", false); 
+  }
+  
+  const onClick_Sort = (event) => { 
+    if (sort === "games" && mode === 'Both') { replaceData2Player('heroes', 'sort', "win_rate"); }
+    else if (sort === "games") { replaceData2Player('heroes', 'sort', "mmr"); }
+    else if (sort === "mmr") { replaceData2Player('heroes', 'sort', "win_rate"); }
+    else if (sort === "win_rate") { replaceData2Player('heroes', 'sort', "games"); }
+    else { replaceData2Player('heroes', 'sort', "games"); }
+    
+    replaceData2("ready", "playerHeroesShowing", false); 
+  }
+  
   return (
     
     <DivOption>
     
     
-      <DivFilter>
+      <DivGames
+        onClick={onClick_Games}
+      >
         <Div>
-          filter icon
+          <IconFilter width={"18px"} height={"18px"} color={'color_weak'} />
         </Div>
         
         <Div>
-          More than 10 games
+          {(() => {
+            if (games === 1) {
+              switch (language) {
+                case 'ko': 
+                  return '플레이한 모든 영웅';
+                case 'ja': 
+                  return 'プレーしたヒーロー';
+                default: // eng
+                  return 'All Heroes Played';
+              }
+            }
+            
+            else {
+              switch (language) {
+                case 'ko': 
+                  return `${games}게임 이상`;
+                case 'ja': 
+                  return `${games}ゲーム以上`;
+                default: // eng
+                  return `More than ${games}games`;
+              }
+            }
+            
+          })()}
         </Div>
-      </DivFilter>
+      </DivGames>
       
       
       
-      <DivSort>
+      <DivSort
+        onClick={onClick_Sort}
+      >
         <Div>
-          sort icon
+          <IconSort width={"22px"} height={"22px"} color={'color_weak'} />
         </Div>
         
         <Div>
-          Winrate
+          {(() => {
+          
+            switch(sort){
+            
+              case 'games':
+                switch (language) {
+                  case 'ko': 
+                    return '플레이한 게임';
+                  case 'ja': 
+                    return 'プレイしたゲーム';
+                  default: // eng
+                    return 'Games Played';
+                }
+                break;
+              case 'win_rate':
+                switch (language) {
+                  case 'ko': 
+                    return '승률';
+                  case 'ja': 
+                    return '勝率';
+                  default: // eng
+                    return 'Winrate';
+                }
+                break;
+              case 'mmr':
+                switch (language) {
+                  case 'ko': 
+                    return 'MMR';
+                  case 'ja': 
+                    return 'MMR';
+                  default: // eng
+                    return 'MMR';
+                }
+                break;
+              default:
+                switch (language) {
+                  case 'ko': 
+                    return '플레이한 게임';
+                  case 'ja': 
+                    return 'プレイしたゲーム';
+                  default: // eng
+                    return 'Games Played';
+                }
+                break;
+            }
+          
+          })()}
         </Div>
       </DivSort>
       
@@ -148,6 +249,7 @@ function mapStateToProps(state) {
     , region: state.player.heroes.region
     , mode: state.player.heroes.mode
     , role: state.player.heroes.role
+    , games: state.player.heroes.games
     , sort: state.player.heroes.sort
     
     , triggerUpdateHeroes: state.player.heroes.triggerUpdate

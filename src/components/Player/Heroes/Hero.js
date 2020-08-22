@@ -315,7 +315,7 @@ const Hero = ({
   
   , mode
   
-  , readyShowing
+  , readyPlayerHeroesShowing
   , ratioMax
   
 }) => {
@@ -327,7 +327,7 @@ const Hero = ({
   
   // https://heroesprofile.com/MMR/?blizz_id=758941&battletag=mbcat&region=1
   useEffect(()=>{
-    if(!mode || !stats || !stats.mmr || !readyShowing) { setTier("Default") }
+    if(!mode || !stats || !stats.mmr || !readyPlayerHeroesShowing) { setTier("Default") }
     else if(mode ==="Both"){
       setTier("Default");
     }
@@ -340,7 +340,7 @@ const Hero = ({
       else if (stats.mmr > 0) { setTier("Bronze") }
       else { setTier("Default") }
     }
-  },[mode, readyShowing])
+  },[mode, readyPlayerHeroesShowing])
   
   
   //console.log(stats)
@@ -425,6 +425,7 @@ function mapStateToProps(state) {
     language: state.basic.language
     
     , mode: state.player.heroes.mode
+    , readyPlayerHeroesShowing: state.basic.ready.playerHeroesShowing
   };
 }
 

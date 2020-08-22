@@ -15,7 +15,7 @@ import * as config from '../../config';
 import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
 import dictCode from '../../others/dictCode'
 
-import {replaceWorking} from "../../redux/actions/basic";
+import {replaceData2, replaceWorking} from "../../redux/actions/basic";
 import {replaceDataCompGallery, replaceData2CompGallery, replaceListPosition} from "../../redux/actions/comp_gallery";
 
 
@@ -365,7 +365,7 @@ const TextareaComment =  styled(Textarea)`
    , locationAddingHero
    
    
-   
+   , replaceData2
    , replaceDataCompGallery
    , replaceData2CompGallery
    , replaceListPosition
@@ -481,6 +481,7 @@ const TextareaComment =  styled(Textarea)`
           ,listIdVideo: []
           
           ,listUserLike: []
+          ,listUserReport: []
         }
         
         
@@ -584,7 +585,13 @@ const TextareaComment =  styled(Textarea)`
         
         
         addDeleteNotification("comp01", language);
+        //replaceData2("loading", "listComp", false);
+        replaceData2("ready", "focusingComp", false);
+        replaceData2("ready", "focusingCompComment", false);
+        replaceData2("ready", "focusingCompVideo", false);
+        
         history.push(`/comp-gallery/focus/${idComp}`);
+        
         storage.remove("comp-creating");
         
         const reset = {
@@ -783,7 +790,8 @@ function mapDispatchToProps(dispatch) {
     
     ,replaceListPosition : (replacement) => dispatch(replaceListPosition(replacement))
     
-    
+    , replaceData2: (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
+
     , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }

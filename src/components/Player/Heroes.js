@@ -277,6 +277,7 @@ const Heroes = ({
   , dataPlayerHeroes
   , readyPlayerHeroes
   , loadingPlayerHeroes
+  , readyPlayerHeroesShowing
   
   , player
   
@@ -284,6 +285,7 @@ const Heroes = ({
   , mode
   , role
   , sort
+  , games
   
   , triggerUpdateHeroes
   
@@ -309,7 +311,7 @@ const Heroes = ({
   
   // 직접적인 것들은 redux가 아닌 여기 component 에서 state로
   const [updatedText, setUpdatedText] = useState("")
-  const [readyShowing, setReadyShowing] = useState(false);
+  //const [readyPlayerHeroesShowing, setReadyShowing] = useState(false);
   
   const [showing, setShowing] = useState({
     updatedText: ""
@@ -462,7 +464,7 @@ const Heroes = ({
   useEffect(()=>{
     
     try {
-    setReadyShowing(false);
+    replaceData2Player("heroes", "playerHeroesShowing", false);
     
     //readyPlayerHeroes 가 트루이면 player 도 ready인 상태
     if (readyPlayerHeroes && region !== "" ) {
@@ -506,22 +508,23 @@ const Heroes = ({
         dataPlayerHeroes_region_withBothMode['Both'][keyHero] = resultHero;
       }
       //이제 mode 적용
-      console.log(dataPlayerHeroes_region_withBothMode)
+      //console.log(dataPlayerHeroes_region_withBothMode)
       showingTemp['dataRegionMode'] = dataPlayerHeroes_region_withBothMode[mode];
       
       
-      // role 적용
+      // games & role  적용
       //let listRoleKeyHero =listAllHeroBasic.map(element => element.key_HeroesProfile); 이렇게 하면 에러뜬다. 아직 이해 안됨
-      let listRoleKeyHero = Object.keys(showingTemp['dataRegionMode']);
-      listRoleKeyHero = listRoleKeyHero.filter(element => showingTemp['dataRegionMode'][element] && showingTemp['dataRegionMode'][element]['games_played'] > 0)
+      const listPlayedKeyHero = Object.keys(showingTemp['dataRegionMode']);
+      let listRoleKeyHero = [];
       
-      if (role !== "All") {
+      if (role === "All") {
+        listRoleKeyHero = [...listPlayedKeyHero].filter(element => showingTemp['dataRegionMode'][element] && showingTemp['dataRegionMode'][element]['games_played'] >= games)
+      }
+      else {
         const listRoleObjHero = listAllHeroBasic.filter(element => element.role === role)
         listRoleKeyHero = listRoleObjHero.map(element=> element.key_HeroesProfile);
-        listRoleKeyHero = listRoleKeyHero.filter(element => showingTemp['dataRegionMode'][element] && showingTemp['dataRegionMode'][element]['games_played'] > 0)
+        listRoleKeyHero = listRoleKeyHero.filter(element => showingTemp['dataRegionMode'][element] && showingTemp['dataRegionMode'][element]['games_played'] >= games)
         
-        console.log(role)
-        console.log(listRoleKeyHero)
       }
       
       
@@ -534,17 +537,20 @@ const Heroes = ({
         sortUsing = "games";
         replaceData2Player("heroes", "sort", "games"); 
       }
-      //console.log(listRoleKeyHero)
+      
       if (sortUsing === "games") {
-        orderRoleKeyHero = listRoleKeyHero.sort((a, b)=>  showingTemp['dataRegionMode'][b]["games_played"] - showingTemp['dataRegionMode'][b]["games_played"]);
+        orderRoleKeyHero = listRoleKeyHero.sort((a, b)=>  showingTemp['dataRegionMode'][b]["games_played"] - showingTemp['dataRegionMode'][a]["games_played"]);
+        showingTemp['orderRoleKeyHero'] = orderRoleKeyHero;
       }
       else if (sortUsing === "mmr") {
-        orderRoleKeyHero = listRoleKeyHero.sort((a, b)=>  showingTemp['dataRegionMode'][b]["mmr"] - showingTemp['dataRegionMode'][b]["mmr"]);
+        orderRoleKeyHero = listRoleKeyHero.sort((a, b)=>  showingTemp['dataRegionMode'][b]["mmr"] - showingTemp['dataRegionMode'][a]["mmr"]);
+        showingTemp['orderRoleKeyHero'] = orderRoleKeyHero;
       }
       else if (sortUsing === "win_rate") {
-        orderRoleKeyHero = listRoleKeyHero.sort((a, b)=>  showingTemp['dataRegionMode'][b]["win_rate"] - showingTemp['dataRegionMode'][b]["win_rate"]);
+        orderRoleKeyHero = listRoleKeyHero.sort((a, b)=>  showingTemp['dataRegionMode'][b]["win_rate"] - showingTemp['dataRegionMode'][a]["win_rate"]);
+        showingTemp['orderRoleKeyHero'] = orderRoleKeyHero;
       }
-      showingTemp['orderRoleKeyHero'] = orderRoleKeyHero;
+      
       /* 참고!
         "Alarak": {
           "wins": 0,
@@ -585,9 +591,8 @@ const Heroes = ({
     }
 		// finally  
 
-		
 		setShowing(showingTemp);
-		setReadyShowing(true);
+		replaceData2("ready", "playerHeroesShowing", true); 
 		
     } // if
     
@@ -597,7 +602,56 @@ const Heroes = ({
     }
   
     
-  }, [readyPlayerHeroes, region, mode, role, sort] )
+  }, [readyPlayerHeroes, region, mode, role, games, sort] )
+  
+  
+  
+  /*
+  useEffect(()=>{
+    // sort 가 이상하게 안되서 따로 시도해본다
+    try {
+      replaceData2Player("heroes", "playerHeroesShowing", false);
+      
+      //readyPlayerHeroes 가 트루이면 player 도 ready인 상태
+      if (readyPlayerHeroes && region !== "" ) {
+        
+        const showingTemp = showing;
+        let orderRoleKeyHero = [];
+        
+        let sortUsing = sort;
+        if (mode === "Both" && sort==="mmr"){
+          sortUsing = "games";
+          replaceData2Player("heroes", "sort", "games"); 
+        }
+        
+        if (sortUsing === "games") {
+          orderRoleKeyHero = Array.from(listRoleKeyHero).sort((a, b)=>  showingTemp['dataRegionMode'][b]["games_played"] - showingTemp['dataRegionMode'][b]["games_played"]);
+          showingTemp['orderRoleKeyHero'] = orderRoleKeyHero;
+          
+        }
+        else if (sortUsing === "mmr") {
+          orderRoleKeyHero = Array.from(listRoleKeyHero).sort((a, b)=>  showingTemp['dataRegionMode'][b]["mmr"] - showingTemp['dataRegionMode'][b]["mmr"]);
+          console.log(orderRoleKeyHero)
+          showingTemp['orderRoleKeyHero'] = orderRoleKeyHero;
+          
+        }
+        else if (sortUsing === "win_rate") {
+          orderRoleKeyHero = Array.from(listRoleKeyHero).sort((a, b)=>  showingTemp['dataRegionMode'][b]["win_rate"] - showingTemp['dataRegionMode'][b]["win_rate"]);
+          showingTemp['orderRoleKeyHero'] = orderRoleKeyHero;
+          
+        }
+        
+        setShowing(showingTemp);
+		    replaceData2("ready", "playerHeroesShowing", true); 
+        
+      }
+        
+    } catch(error) {
+      console.log(error)
+      addDeleteNotification("basic01", language);
+    }
+  },[sort, readyPlayerHeroes])
+  */
   
   
   
@@ -637,11 +691,11 @@ const Heroes = ({
 
     if (roleThis === role) {
       replaceData2Player("heroes", "role", "All") 
-      setReadyShowing(false); // 잊지 말기!
+      replaceData2("ready", "playerHeroesShowing", false); // 잊지 말기!
     }
     else {
       replaceData2Player("heroes", "role", roleThis) 
-      setReadyShowing(false); // 잊지 말기!
+      replaceData2("ready", "playerHeroesShowing", false); // 잊지 말기!
     }
   }
   
@@ -654,7 +708,7 @@ const Heroes = ({
           <Button onClick={onClick_Update} > <IconSearch width={'24px'}  height={'24px'} color={'COLOR_normal'} /> </Button>
         </DivInputBattletag>
         
-        { (!loadingPlayerHeroes && readyPlayerHeroes && readyShowing) &&
+        { (!loadingPlayerHeroes && readyPlayerHeroes && readyPlayerHeroesShowing) &&
           <DivUpdated>
             <Div> {(() => {
                           switch (language) {
@@ -672,7 +726,7 @@ const Heroes = ({
         
         { loadingPlayerHeroes && <Loading/> }
         
-        { (!loadingPlayerHeroes && readyPlayerHeroes && readyShowing) &&
+        { (!loadingPlayerHeroes && readyPlayerHeroes && readyPlayerHeroesShowing) &&
           <DivContainer>
           
             <DivHeader>  
@@ -691,7 +745,7 @@ const Heroes = ({
                     onClick={(event=>{
                       if (region !== element) {
                         replaceData2Player("heroes", "region", element)
-                        setReadyShowing(false);
+                        replaceData2Player("heroes", "playerHeroesShowing", false);
                       }
                     })}
                     > <ImgFlagNormal src={objFlag[element]} /> 
@@ -722,7 +776,7 @@ const Heroes = ({
                       stats={showing.dataRegionMode[objHero.key_HeroesProfile]}
                       
                       ratioMax={showing.graph.ratioMax}
-                      readyShowing={readyShowing}
+                      
                     />
                   )
                 })}
@@ -754,7 +808,7 @@ const Heroes = ({
                 
                 <DivChooseMode>
                   <ButtonChooseMode 
-                    onClick={ (event)=>{ replaceData2Player("heroes", "mode", "Quick Match"); setReadyShowing(false); } }
+                    onClick={ (event)=>{ replaceData2Player("heroes", "mode", "Quick Match"); replaceData2("ready", "playerHeroesShowing", false); } }
                     active={(mode==="Quick Match")}
                     > {(() => {
                       switch (language) {
@@ -768,7 +822,7 @@ const Heroes = ({
                     })()}  </ButtonChooseMode>
                     
                   <ButtonChooseMode 
-                    onClick={ (event)=>{ replaceData2Player("heroes", "mode", "Storm League"); setReadyShowing(false); } }
+                    onClick={ (event)=>{ replaceData2Player("heroes", "mode", "Storm League"); replaceData2("ready", "playerHeroesShowing", false); } }
                     active={(mode==="Storm League")}
                     > {(() => {
                       switch (language) {
@@ -782,7 +836,7 @@ const Heroes = ({
                     })()}  </ButtonChooseMode>
                     
                   <ButtonChooseMode 
-                    onClick={ (event)=>{ replaceData2Player("heroes", "mode", "Both"); setReadyShowing(false); } }
+                    onClick={ (event)=>{ replaceData2Player("heroes", "mode", "Both"); replaceData2("ready", "playerHeroesShowing", false); } }
                     active={(mode==="Both")}
                     > {(() => {
                       switch (language) {
@@ -831,6 +885,7 @@ function mapStateToProps(state) {
     , mode: state.player.heroes.mode
     , role: state.player.heroes.role
     , sort: state.player.heroes.sort
+    , games: state.player.heroes.games
     
     , triggerUpdateHeroes: state.player.heroes.triggerUpdate
     
@@ -839,6 +894,8 @@ function mapStateToProps(state) {
     , dataPlayerHeroes: state.player.heroes.data
     , readyPlayerHeroes: state.basic.ready.playerHeroes
     , loadingPlayerHeroes: state.basic.loading.playerHeroes
+    
+    , readyPlayerHeroesShowing: state.basic.ready.playerHeroesShowing
   };
 }
 

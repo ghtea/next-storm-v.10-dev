@@ -119,7 +119,7 @@ const ProfileSample = ({
   const onClick_ProfileSample = async (event) => {
     
     addDeleteNotification(
-      undefined, language, `${shape}-${palette}-${badge}`, 3000
+      undefined, language, `${shape}-${palette}`, 3000
     )
     
     if (readyUser) {

@@ -85,9 +85,14 @@ const stateInitial = {
       
       , author: {}
       
-      , comment: {}  // 대표 1 코맨트
-      , video: {} 
-      , link: {} 
+      , comment: {
+        listUserLike: []
+        , listUserReport: []
+      }  // 대표 1 코맨트
+      , video: {
+        listUserLike: []
+        , listUserReport: []
+      } 
       
     }
     
