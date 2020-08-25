@@ -99,8 +99,7 @@ const Profile = ({
   
   , size
   , layout
-  
-  , replaceData2
+
   , addDeleteNotification
 }) => {
   
@@ -112,24 +111,18 @@ const Profile = ({
   
   const history = useHistory();
   
-  let unmounted = false;
   
   size = size || 40;
   //const sizeUsing = size || 40;
   
-  useEffect(()=>{
-    return ()=> {
-      //console.log("i solve!")
-      unmounted = true;
-    };
-  },[])
-  
   
   // important !! https://codesandbox.io/s/l458746w89?from-embed=&file=/src/AxiosHooksComponent.js
   useEffect(() => {
+    // https://stackoverflow.com/questions/58038008/how-to-stop-memory-leak-in-useeffect-hook-react
+    let unmounted = false;
     
     (async() => {
-        //console.log('please');
+        console.log('please');
       try {
         
         const resSomeone = await axios.get(`${config.URL_API_NS}/user/public/${idUser}`);
@@ -147,29 +140,29 @@ const Profile = ({
   		  
   		  if (!unmounted) {
     		  setBattletagName(battletagNameTemp)
-      		setBattletagNumber(battletagNumberTemp)
-            
+    		  setBattletagNumber(battletagNumberTemp)
+          
           setSomeone(resSomeone.data);
           setReadySomeone(true);
   		  }
+  		  
+        //console.log(User)
+        
         
       } catch (error) {
         if (!unmounted) {
           setReadySomeone(false);
         }
       }
-      
+        
+      return () => { unmounted = true };
+    
     })() // async
     
-  }, []);
-  
-  
+  }, [])
   
   const onClick_Icon = (event) => {
     if (readySomeone && someone.battletag) {
-      //replaceData2('ready', 'playerBattletag', false);
-      //replaceData2('ready', 'playerGeneral', false);
-      //replaceData2('ready', 'playerGeneralShowing', false);
       history.push(`/player/general/${encodeURIComponent(someone.battletag)}`);
     }
   }
@@ -179,38 +172,7 @@ const Profile = ({
 
     <DivProfile size={size} layout={layout} >
       
-      {(!readySomeone) &&
-        <>
-        
-          <DivIcon
-            size={size} layout={layout}  >
-            
-            <ProfileIcon 
-              width = { `${size-6}px` } height = { `${size-6}px` } 
-              shape={"Default"} 
-              palette={"Default"} 
-              badge={"Default"}
-            />
-
-          </DivIcon>
-        
-          <DivName layout={layout}>
-            {(() => {
-              switch (language) {
-                case 'ko': 
-                  return '로딩중';
-                case 'ja': 
-                  return 'ローディング';
-                default: // eng
-                  return 'loading'
-              }
-            })()} 
-          </DivName>
-
-        </>
-      }
-      
-      {(readySomeone) &&
+      {(!readySomeone)? 'loading' :
         <>
         
           <DivIcon
@@ -252,9 +214,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    replaceData2: (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
 
-    , addDeleteNotification: (code_situation, language, message, time) => dispatch(addDeleteNotification(code_situation, language, message, time))
+    addDeleteNotification: (code_situation, language, message, time) => dispatch(addDeleteNotification(code_situation, language, message, time))
   };
 }
 

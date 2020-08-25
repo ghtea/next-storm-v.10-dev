@@ -191,21 +191,25 @@ const Others = ({
     let filterTagTemp = filterTag;
     
     if (tag === "ToWin"){
-      if (filterTag.includes("ToWin")) { filterTagTemp = filterTagTemp.filter(element => element !== "ToWin"); }
-      else  { filterTagTemp.push("ToWin");  filterTagTemp = filterTagTemp.filter(element => element !== "ForFun"); }
+      filterTagTemp = filterTagTemp.filter(element => element !== "ToWin");
+      filterTagTemp = filterTagTemp.filter(element => element !== "ForFun");
+      filterTagTemp.push("ToWin");
     }
     else if (tag === "ForFun"){
-      if (filterTag.includes("ToWin")) { filterTagTemp = filterTagTemp.filter(element => element !== "ToWin"); }
-      else  { filterTagTemp.push("ToWin");  filterTagTemp = filterTagTemp.filter(element => element !== "ForFun"); }
+      filterTagTemp = filterTagTemp.filter(element => element !== "ToWin");
+      filterTagTemp = filterTagTemp.filter(element => element !== "ForFun");
+      filterTagTemp.push("ForFun");
     }
     
     else if (tag === "Kill"){
-      if (filterTag.includes("Kill")) { filterTagTemp = filterTagTemp.filter(element => element !== "Kill"); }
-      else  { filterTagTemp.push("Kill");  filterTagTemp = filterTagTemp.filter(element => element !== "Push"); }
+      filterTagTemp = filterTagTemp.filter(element => element !== "Kill");
+      filterTagTemp = filterTagTemp.filter(element => element !== "Push");
+      filterTagTemp.push("Kill");
     }
     else if (tag === "Push"){
-      if (filterTag.includes("Kill")) {  filterTagTemp = filterTagTemp.filter(element => element !== "Kill"); }
-      else  { filterTagTemp.push("Kill");  filterTagTemp = filterTagTemp.filter(element => element !== "Push"); }
+      filterTagTemp = filterTagTemp.filter(element => element !== "Kill");
+      filterTagTemp = filterTagTemp.filter(element => element !== "Push");
+      filterTagTemp.push("Push");
     }
     
     else {

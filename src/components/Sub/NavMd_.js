@@ -6,7 +6,7 @@ import Media from 'react-media';
 import * as config from '../../config';
 
 import { connect } from "react-redux";
-import {replaceData} from "../../redux/actions/basic";
+import {replaceData, replaceData2} from "../../redux/actions/basic";
 import {replaceDataAuth, replaceData2Auth} from "../../redux/actions/auth";
 
 import addDeleteNotification from "../../redux/thunks/addDeleteNotification";
@@ -81,7 +81,8 @@ const NavMd_ = ({
 	
 	, themeName
 	
-	,replaceData, addDeleteNotification
+	,replaceData, replaceData2
+	, addDeleteNotification
 	
 	, replaceDataAuth, replaceData2Auth
 	}) => {
@@ -90,6 +91,7 @@ const NavMd_ = ({
 	const [toPlayerGeneral, setToPlayerGeneral] = useState("/player/general/undefined");
 	useEffect(()=>{
 	  if (readyUser && user.battletag){
+	    //replaceData2('ready', 'playerGeneralShowing', false);
 	    setToPlayerGeneral ( `/player/general/${encodeURIComponent(user.battletag)}`);
 	  }
 	}, [readyUser])
@@ -190,6 +192,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) { 
   return { 
     replaceData: (which, newThemeName) => dispatch( replaceData(which, newThemeName) ) 
+    ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
     
     , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
     

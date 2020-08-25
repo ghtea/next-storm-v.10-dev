@@ -78,6 +78,12 @@ const Comments = ({
   , addDeleteNotification
 }) => {
 
+  // clean up function! 이렇게 따로 만들어야 잘 작동한다!
+  useEffect(()=>{
+    return ()=> {
+      replaceData2('ready', 'listComment', false);
+    };
+  },[])
   
   useEffect(() => {
 
@@ -191,11 +197,9 @@ function mapDispatchToProps(dispatch) {
     replaceDataCompGallery: (which, replacement) => dispatch(replaceDataCompGallery(which, replacement)),
     replaceData2CompGallery: (which1, which2, replacement) => dispatch(replaceData2CompGallery(which1, which2, replacement))
 
-    ,
-    replaceData2: (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
+    , replaceData2: (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
 
-    ,
-    addDeleteNotification: (code_situation, language, message, time) => dispatch(addDeleteNotification(code_situation, language, message, time))
+    , addDeleteNotification: (code_situation, language, message, time) => dispatch(addDeleteNotification(code_situation, language, message, time))
   };
 }
 

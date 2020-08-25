@@ -467,12 +467,15 @@ const General = ({
 
   language
   , user
+  //, loadingUser, readyUser
   
   
   , readyPlayerBattletag
   , dataPlayerGeneral
   , readyPlayerGeneral
   , loadingPlayerGeneral
+  
+  , readyPlayerGeneralShowing
   
   , player
   
@@ -493,22 +496,21 @@ const General = ({
   
   const history = useHistory();
   const params = useParams();
+  let unmounted = false;
   
   const inputBattletag = useInput("");
-  const [triggerUpdate, setTriggerUpdate] = useState("")
+  //const [triggerUpdate, setTriggerUpdate] = useState("")
   const [updatedText, setUpdatedText] = useState("")
   
   // 화면에 표시할 정보 정리
   //const [region, setregion] = useState("");
   //const [mode, setmode] = useState("Both"); // for roles 
   
-  const [readyShowing, setReadyShowing] = useState(false);
+  //const [readyShowing, setReadyShowing] = useState(false);
   
   const [showing, setShowing] = useState({
-    battletagName: ""
-    , battletagNumber: ""
-    , orderNameRegion: []
-    , stats : {
+    
+     stats : {
       "All": {}
       ,  "Tank": {}
       ,  "Bruiser": {}
@@ -519,9 +521,24 @@ const General = ({
     }
   })
   
-  // const urlBattletag = encodeURIComponent(battletag);
+  // clean up function! 이렇게 따로 만들어야 잘 작동한다!
+  useEffect(()=>{
+    return ()=> {
+      //console.log("final moment of General")
+      unmounted = true;
+      replaceData2('ready', 'playerBattletag', false);
+      replaceData2('ready', 'playerGeneral', false);
+      replaceData2('ready', 'playerGeneralShowing', false);
+      replaceData2Player("general", "region", ""); 
+      replaceData2Player("general", "mode", "Both"); 
+    };
+  },[])
+  
   
   useEffect(()=>{
+    replaceData2('ready', 'playerGeneral', false);
+    replaceData2('ready', 'playerGeneralShowing', false);
+    
     if (params.battletagEncoded){
       
       
@@ -533,28 +550,27 @@ const General = ({
         replaceData2("ready", "playerBattletag", false);
         const battletag = decodeURIComponent(params.battletagEncoded)
         replaceData2Player("player", "battletag", battletag); // 나중에 다른곳에서 쓰기 위해서
-        //const battletag = decodeURIComponent(params.battletagEncoded)
-        replaceData2("ready", "playerGeneral", false);
-        replaceData2("loading", "playerGeneral", true);
         
+        replaceData2("ready", "playerGeneral", false);
         
         inputBattletag.setValue(battletag);
         replaceData2("ready", "playerBattletag", true);
-        //const updated = Date.parse( storage.get("updatedPlayerGeneral") );
-        
-          
-         // 바로 업데이트 trigger
-        replaceData2Player("general", "triggerUpdate", Date.now().toString()); 
+
+        // 바로 업데이트 trigger
+        //replaceData2Player("heroes", "triggerUpdate", Date.now().toString()); 
       } // else
-      
     } // if
+    
   },[])
+  
   
   
   const onClick_Update = () => {
     if (inputBattletag.value) {
       replaceData2("ready", "playerBattletag", false);
-      replaceData2Player("player", "battletag", inputBattletag.value);
+      replaceData2Player("player", "battletag", inputBattletag.value); 
+      replaceData2("ready", "playerGeneral", false);
+      
       history.push(`/player/general/${encodeURIComponent(inputBattletag.value)}`);
       replaceData2("ready", "playerBattletag", true);
       replaceData2Player("general", "triggerUpdate", Date.now().toString()); 
@@ -568,15 +584,17 @@ const General = ({
       
      if (readyPlayerBattletag) {
       try {
-       
+        replaceData2Player("general", "region", "");  // important!
+        replaceData2Player("general", "mode", "Both"); 
+      
         replaceData2("ready", "playerGeneral", false);
         replaceData2("loading", "playerGeneral", true);
         
         const resRegions = await axios.get(`${config.URL_API_NS}/player/regions/${encodeURIComponent(player.battletag)}`);
         const orderNameRegion = resRegions.data.orderNameRegion;
         replaceData2Player("player", "orderNameRegion",  orderNameRegion); // 잊지 않기!
-        console.log('hi2')
-        console.log(orderNameRegion);
+        //console.log('hi2')
+        //console.log(orderNameRegion);
         
         const query = queryString.stringify({
           orderNameRegion: JSON.stringify(orderNameRegion)
@@ -599,7 +617,10 @@ const General = ({
         const month = updatedText.getUTCMonth() + 1; //months from 1-12
         const day = updatedText.getUTCDate();
         const year = updatedText.getUTCFullYear();
-        setUpdatedText(`${year}. ${month}. ${day}`);
+        
+        if (!unmounted) {
+          setUpdatedText(`${year}. ${month}. ${day}`);
+        }
   
       } catch (error) {
         replaceData2("ready", "playerGeneral", false);
@@ -613,47 +634,38 @@ const General = ({
      
     })() // async
 
-  }, [ triggerUpdateGeneral, readyPlayerBattletag ])
+  }, [ triggerUpdateGeneral, readyPlayerBattletag])
   
   
   
   
   
   
-  // 처음 데이터 불러왔을 때 
+  // 처음 데이터 불러왔을 때
   useEffect(()=>{
     
-    if (readyPlayerGeneral && readyPlayerBattletag) {
+    if (readyPlayerGeneral) {
       
-      let showingTemp = showing;
-      
-        const battletagFull = player.battletag
+      const battletagFull = player.battletag
         
-        const regexBattletag = /(#\d*)$/;
-  		  const listNumberBattletag = battletagFull.match(regexBattletag);
-  		  const battletagName = battletagFull.replace(regexBattletag, "");
-  		  const battletagNumber = listNumberBattletag[0];
+      const regexBattletag = /(#\d*)$/;
+		  const listNumberBattletag = battletagFull.match(regexBattletag);
+		  const battletagName = battletagFull.replace(regexBattletag, "");
+		  const battletagNumber = listNumberBattletag[0];
   		  
-  		showingTemp['battletagName'] = battletagName;
-  		showingTemp['battletagNumber'] = battletagNumber;
-  		  
-  		  //const orderNameRegion = Object.keys(dataPlayerGeneral);
-  		  //console.log(orderNameRegion)
   		
+  		replaceData2Player("player", "battletagName", battletagName);
+  		replaceData2Player("player", "battletagNumber", battletagNumber);
   		
-  		showingTemp['orderNameRegion'] = player.orderNameRegion;
+  		if (region === ""){
+  		  replaceData2Player("general", "region", player.orderNameRegion[0]);
+  		}
   		
-    		if (region === ""){
-    		  replaceData2Player("general", "region", player.orderNameRegion[0]); 
-    		}
-    
-    
-      	// finally  
-  		setShowing(showingTemp);
-		  
     } // if
     
-  }, [readyPlayerGeneral, readyPlayerBattletag])
+  }, [readyPlayerGeneral])
+  		
+    
   		
     
     
@@ -661,8 +673,7 @@ const General = ({
   useEffect(()=>{
     
     try {
-    setReadyShowing(false);
-    
+    replaceData2("ready", "playerGeneralShowing", false);
     if (readyPlayerGeneral && region !== "" ) {
       
       const battletagFull = player.battletag;
@@ -716,10 +727,14 @@ const General = ({
       }
       
 		// finally  
-
+    console.log(showingTemp)
+    
+    
+		if (!unmounted) {
+      setShowing(showingTemp);
+    }
 		
-		setShowing(showingTemp);
-		setReadyShowing(true);
+		replaceData2("ready", "playerGeneralShowing", true);
 		
     } // if
     
@@ -729,7 +744,7 @@ const General = ({
     }
   
     
-  }, [readyPlayerGeneral, region, mode, role] )
+  }, [readyPlayerGeneral, region, mode, role, readyPlayerGeneralShowing] )
   
   
   
@@ -826,19 +841,27 @@ const General = ({
   }
   
   
-  
-  
+  const onKeyPress_Battletag = async (event) => {
+    if (event.key === "Enter") {
+      onClick_Update();
+    }
+    
+  }
   
   return (
     
       <DivGeneral>
         
         <DivInputBattletag>
-          <Input {...inputBattletag} placeholder="battletag#1234" />
+          <Input 
+            {...inputBattletag} 
+            placeholder="battletag#1234" 
+            onKeyPress={onKeyPress_Battletag}
+            />
           <Button onClick={onClick_Update} > <IconSearch width={'24px'}  height={'24px'} color={'COLOR_normal'} /> </Button>
         </DivInputBattletag>
         
-        { (!loadingPlayerGeneral && readyPlayerGeneral && readyShowing) &&
+        { (!loadingPlayerGeneral && readyPlayerGeneral && readyPlayerGeneralShowing) &&
           <DivUpdated>
             <Div> {(() => {
                           switch (language) {
@@ -856,26 +879,26 @@ const General = ({
         
         { loadingPlayerGeneral && <Loading/> }
         
-        { (!loadingPlayerGeneral && readyPlayerGeneral && readyShowing) &&
+        { (!loadingPlayerGeneral && readyPlayerBattletag && readyPlayerGeneral && readyPlayerGeneralShowing ) &&
           <DivContainer>
           
             <DivHeader>  
             
               <DivIdentification> 
                 <Div> <ImgFlagMain src={objFlag[region]} /> </Div>
-                <Div> {showing["battletagName"] } </Div>
-                <Div> {showing["battletagNumber"] } </Div>
+                <Div> {player["battletagName"] } </Div>
+                <Div> {player["battletagNumber"] } </Div>
               </DivIdentification>
               
               <Div> 
-                {showing['orderNameRegion'].map(element=>
+                {player.orderNameRegion.map(element=>
                   <DivFlagNormal
                     key={`flagNormal-${element}`}
                     active={element === region}
                     onClick={(event=>{
                       if (region !== element) {
                         replaceData2Player("general", "region", element)
-                        setReadyShowing(false)
+                        replaceData2("ready", "playerGeneralShowing", true); 
                       }
                     })}
                     > <ImgFlagNormal src={objFlag[element]} /> 
@@ -985,7 +1008,7 @@ const General = ({
                 <DivChooseMode>
                 
                   <ButtonChooseMode 
-                    onClick={ (event)=>{ replaceData2Player("general", "mode", "Quick Match") } }
+                    onClick={ (event)=>{ replaceData2Player("general", "mode", "Quick Match"); replaceData2("ready", "playerGeneralShowing", false); } }
                     active={(mode==="Quick Match")}
                     > {(() => {
                       switch (language) {
@@ -999,7 +1022,7 @@ const General = ({
                     })()}  </ButtonChooseMode>
                     
                   <ButtonChooseMode 
-                    onClick={ (event)=>{ replaceData2Player("general", "mode", "Storm League") } }
+                    onClick={ (event)=>{ replaceData2Player("general", "mode", "Storm League"); replaceData2("ready", "playerGeneralShowing", false); } }
                     active={(mode==="Storm League")}
                     > {(() => {
                       switch (language) {
@@ -1013,7 +1036,7 @@ const General = ({
                     })()}  </ButtonChooseMode>
                     
                   <ButtonChooseMode 
-                    onClick={ (event)=>{ replaceData2Player("general", "mode", "Both") } }
+                    onClick={ (event)=>{ replaceData2Player("general", "mode", "Both"); replaceData2("ready", "playerGeneralShowing", false); } }
                     active={(mode==="Both")}
                     > {(() => {
                       switch (language) {
@@ -1048,7 +1071,8 @@ function mapStateToProps(state) {
     language: state.basic.language
     
     , user: state.auth.user
-    , readyUser: state.basic.ready.user
+    //, readyUser: state.basic.ready.user
+    //, loadingUser: state.basic.loading.user
     
     , player: state.player.player
     
@@ -1061,8 +1085,11 @@ function mapStateToProps(state) {
     
     , readyPlayerBattletag: state.basic.ready.playerBattletag
     , dataPlayerGeneral: state.player.general.data
+    
     , readyPlayerGeneral: state.basic.ready.playerGeneral
     , loadingPlayerGeneral: state.basic.loading.playerGeneral
+    
+    , readyPlayerGeneralShowing: state.basic.ready.playerGeneralShowing
   };
 }
 

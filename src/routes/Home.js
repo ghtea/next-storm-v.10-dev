@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import queryString from 'query-string';
@@ -26,6 +26,9 @@ import IconSun from '../svgs/basic/IconSun';
 import IconMoon from '../svgs/basic/IconMoon';
 import IconMoonSun from '../svgs/basic/IconMoonSun';
 
+import IconUpload from '../svgs/basic/IconUpload';
+import IconPaperPlane from '../svgs/basic/IconPaperPlane';
+
 
 //import Guide from '../components/Home/Guide';
 
@@ -36,7 +39,7 @@ import storage from '../tools/vanilla/storage';
 
 
 const DivHome = styled(Div)`
-  height: 100%;
+  width: 350px;
   
   display: flex;
   flex-direction: column;
@@ -47,6 +50,7 @@ const DivHome = styled(Div)`
 
 
 const DivA = styled(Div)`
+  
   height: 240px;
   
   display: flex;
@@ -54,12 +58,6 @@ const DivA = styled(Div)`
   justify-content: center;
   align-items: center;
   
-  & > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
 `
 
 
@@ -68,21 +66,30 @@ const DivA = styled(Div)`
 const DivB = styled(Div)`
   
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   
   & > div {
+    
+    &:nth-child(n+2){margin-top: 20px;}
     width: auto;
-    margin-left: 10px;
-    margin-right: 10px;
     
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
+    
+    & > div {
+      width: 170px;
+      height: 120px;
+      &:nth-child(n+2){margin-left: 10px;}
+    }
   }
 `
+
+
+
 
 const DivMain = styled(Div)`
   
@@ -90,7 +97,7 @@ const DivMain = styled(Div)`
     font-size: 2.4rem;
     font-weight: bold;
   }
-  & > div:nth-child(2){
+  & > div:nth-child(2), & > div:nth-child(3){
     font-size: 1rem;
     font-weight: normal;
     color: ${props => props.theme.color_weak};
@@ -98,17 +105,28 @@ const DivMain = styled(Div)`
 `
 
 const DivButtons = styled(Div)`
-  margin-top: 10px;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  
+  margin-top: 20px;
   margin-bottom: 10px;
   & > button {
-    
+    width: auto;
   }
 `
 
 
-
+const DivIcon = styled(Div)`
+  width: 80px;
+  height: 80px;
+`
 
 const DivWho = styled(Div)`
+  width: auto;
   color: ${props => props.theme.color_weak};
   
   margin-top: 3px;
@@ -117,7 +135,7 @@ const DivWho = styled(Div)`
 `
 
 const DivPeople = styled(Div)`
-  width: 100%;
+  width: auto;
   
 `
 
@@ -148,8 +166,19 @@ const Home= ({
 }) => {
     
   const [cookies, setCookie, removeCookie] = useCookies(['logged', 'language', 'themeOption']);
+	const [textVersion, setTextVersion] = useState("");
+	const [textUpdated, setTextUpdated] = useState("");
 	
 	const history = useHistory();
+	
+	
+	useEffect(()=>{
+	  const date = new Date(1598314473037);
+	  const region = Intl.DateTimeFormat().resolvedOptions().timeZone;
+	  
+	  setTextVersion('v1.032')
+	  setTextUpdated(`${date.getFullYear()}. ${(date.getMonth() + 1)}. ${date.getDate()}. ${date.getHours()}:00 (${region})`);
+	},[])
 	
 	const onClick_LogOut = async (event) => {
 		try {
@@ -174,6 +203,10 @@ const Home= ({
 	  history.push("/auth/log-in");
 	}
 	
+	const onClick_SignUp = (event) => {
+	  history.push("/auth/sign-up");
+	}
+	
 	const onClick_ApplyBattletag = (event) => {
 	  history.push("auth/apply-battletag");
 	}
@@ -186,11 +219,12 @@ const Home= ({
         
         <DivMain>
           <Div> NEXT STORM </Div>
-          <Div> v0.9 (2020. 8. 16.)  </Div>
+          <Div> {textVersion} </Div>
+          <Div> {textUpdated} </Div>
         </DivMain>
         
         <DivButtons>
-          {(!readyUser)? <Button onClick={onClick_LogIn} >  {(() => {
+          {(!readyUser) && <Button onClick={onClick_LogIn} >  {(() => {
               switch (language) {
                 case 'ko': 
                   return '로그인';
@@ -199,18 +233,32 @@ const Home= ({
                 default: // eng
                   return 'Log In'
               }
-            })()} </Button> 
-            : <Button onClick={onClick_LogOut} >  {(() => {
-              switch (language) {
-                case 'ko': 
-                  return '로그아웃';
-                case 'ja': 
-                  return 'ログアウト';
-                default: // eng
-                  return 'Log Out'
-              }
-            })()}  </Button> 
+            })()} </Button>  }
+          
+          {(!readyUser) && <Button onClick={onClick_SignUp} >  {(() => {
+            switch (language) {
+              case 'ko': 
+                return '회원가입';
+              case 'ja': 
+                return '会員加入';
+              default: // eng
+                return 'Sign Up';
             }
+          })()} </Button> }
+          
+          
+          
+          {(readyUser) && <Button onClick={onClick_LogOut} >  {(() => {
+            switch (language) {
+              case 'ko': 
+                return '로그아웃';
+              case 'ja': 
+                return 'ログアウト';
+              default: // eng
+                return 'Log Out'
+            }
+          })()}  </Button> }
+          
           
           {(readyUser && !user.battletag) && 
             <Button onClick={onClick_ApplyBattletag} >  {(() => {
@@ -230,19 +278,62 @@ const Home= ({
       
       <DivB>
       
-
+      
         <Div>
-          <IconPenBrush width={"64px"} height={"64px"} color="color_weak" />
-          <DivWho> developed & designed by </DivWho>
-          <DivPeople> <A href="https://twitter.com/mbcat_hots" > @mbcat_hots </A>  </DivPeople>
+          <Div> <A href="https://api.heroesprofile.com/upload" >
+            <DivIcon> <IconUpload width={"72px"} height={"72px"} color="color_weak" /></DivIcon> 
+            <Div>  {(() => {
+                switch (language) {
+                  case 'ko': 
+                    return '리플레이 업로드';
+                  case 'ja': 
+                    return 'リプレイ·アップロード';
+                  default: // eng
+                    return 'Upload Replays';
+                }
+              })()}  </Div>
+         </A> </Div>
+          
+          
+          <Div> <A href="https://forms.gle/55en1pMgT6EBspuf9" >
+            <DivIcon> <IconPaperPlane width={"56px"} height={"56px"} color="color_weak" /></DivIcon> 
+            <Div>  {(() => {
+                switch (language) {
+                  case 'ko': 
+                    return '의견/에러';
+                  case 'ja': 
+                    return '意見·エラー';
+                  default: // eng
+                    return 'Opinion/Error';
+                }
+              })()} </Div>
+          </A> </Div>
         </Div>
         
+        
+        
         <Div>
-          <IconHandHeart width={"56px"} height={"64px"} color="color_weak" />
-          <DivWho> thanks to </DivWho>
-          <DivPeople> Heroes Profile API </DivPeople>
-          <DivPeople>  Madosan </DivPeople>
+          <Div>
+            <DivWho> {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '개발/디자인';
+                case 'ja': 
+                  return '開発·デザイン';
+                default: // eng
+                  return 'Made by';
+              }
+            })()}  </DivWho>
+            <DivPeople> mbcat#1703  </DivPeople>
+          </Div>
+          
+          <Div>
+            <DivWho> thanks to </DivWho>
+            <DivPeople> Heroes Profile API </DivPeople>
+            <DivPeople>  Madosan </DivPeople>
+          </Div>
         </Div>
+        
         
       </DivB>
       

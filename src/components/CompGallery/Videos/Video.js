@@ -62,14 +62,14 @@ const DivVideo = styled(Div)
 const DivToSubject = styled(Div)`
   z-index: 2;
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 5px;
+  top: 5px;
   
   background-color: ${props=> props.theme.COLOR_normal};
   
-  width: 40px;
-  height: 40px;
-  border-radius: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
   
   cursor: pointer;
 `
@@ -77,14 +77,14 @@ const DivToSubject = styled(Div)`
 const DivReport = styled(Div)`
   z-index: 2;
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 6px;
+  top: 6px;
   
   background-color: ${props=> props.theme.COLOR_normal};
   
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
   
   display: flex;
   flex-direction: column;
@@ -197,23 +197,23 @@ const Video = ({
         let queryTemp = {
           idUser: user._id
           , idVideo: video._id
-          , how: false
+          , how: 'false'
         };
         
         // 클릭하기 이전의 like!
         if (like) {
-          queryTemp.how = false;
+          queryTemp.how = 'false';
           setPlus(plus-1);
         }
         else { 
-          queryTemp.how = true; 
+          queryTemp.how = 'true'; 
           setPlus(plus+1);
         }
         setLike(!like);
         
-        
+        console.log(queryTemp)
         const query = queryString.stringify(queryTemp)  
-        await axios.put(`${config.URL_API_NS}/video/like?` + query );
+        await axios.put(`${config.URL_API_NS}/video/like/${video._id}?` + query );
       }
       catch(error) {
         console.log(error);

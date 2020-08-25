@@ -374,6 +374,9 @@ const TextareaComment =  styled(Textarea)`
    
  }) => {
   
+  
+  
+  
   const listHeroDefault = [];
   //const listPositionDefault = new Array(5).fill(listHeroDefault);
   // for test
@@ -670,7 +673,7 @@ const TextareaComment =  styled(Textarea)`
                 case 'ja': 
                   return 'タイトル';
                 default: // eng
-                  return 'Title';
+                  return 'title';
               }
             })()} />  </Div>
           </DivOne>
@@ -705,14 +708,32 @@ const TextareaComment =  styled(Textarea)`
           
           
           <DivFour> 
-            <Div> <TextareaComment {...inputComment} placeholder="comment" /> </Div>
+            <Div> <TextareaComment {...inputComment} placeholder={(() => {
+              switch (language) {
+                case 'ko': 
+                  return '댓글';
+                case 'ja': 
+                  return 'コメント';
+                default: // eng
+                  return 'comment';
+                }
+              })()}  /> </Div>
           </DivFour>
           
           <DivFive>
             <Div> Youtube or Twitch 'Clip'</Div>
             <Div> 
               <Div> <IconVideo width={'20px'}  height={'20px'} color={'color_very_weak'} /> </Div>
-              <InputVideoLink  {...inputVideo} placeholder="link" /> 
+              <InputVideoLink  {...inputVideo} placeholder={(() => {
+                switch (language) {
+                  case 'ko': 
+                    return '링크 (단축 링크 제외)';
+                  case 'ja': 
+                    return 'リンク(短縮リンクを除く)';
+                  default: // eng
+                    return 'link (no shortened link)';
+                }
+              })()} /> 
             </Div>
             
           </DivFive>

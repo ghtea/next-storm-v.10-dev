@@ -155,6 +155,19 @@ const Focus = ({
     replaceData2("ready", "focusingComp", false);
   },[])
   */
+  
+  
+  // clean up function! 이렇게 따로 만들어야 잘 작동한다!
+  useEffect(()=>{
+    return ()=> {
+      replaceData2('ready', 'focusingComp', false);
+      replaceData2('ready', 'focusingCompComment', false);
+      replaceData2('ready', 'focusingCompVideo', false);
+    };
+  },[])
+  
+  
+  
   useEffect(() => {
 
     (async() => {
@@ -207,7 +220,7 @@ const Focus = ({
           
           // comment
           if (focusingComp.listIdComment.length === 0) {
-            replaceData2CompGallery("focus", "comment", {});
+            replaceData2CompGallery("focus", "comment", undefined);
           }
           else {
             
@@ -233,8 +246,15 @@ const Focus = ({
             replaceData2("loading", "listComment", true);
                 
             const { data } = await axios.get(`${config.URL_API_NS}/comment/?` + queryRequest );
-              
-            replaceData2CompGallery("focus", "comment", data[0]);
+            
+            if (data[0]) {
+              replaceData2CompGallery("focus", "comment", data[0]);
+            }
+            else {
+              replaceData2CompGallery("focus", "comment", undefined);
+            }
+             
+            
             
           }
           
@@ -270,7 +290,7 @@ const Focus = ({
           
           // video
           if (focusingComp.listIdVideo.length === 0) {
-            replaceData2CompGallery("focus", "video", {});
+            replaceData2CompGallery("focus", "video", undefined);
           }
           else {
             
@@ -296,8 +316,13 @@ const Focus = ({
             replaceData2("loading", "listVideo", true);
                 
             const { data } = await axios.get(`${config.URL_API_NS}/video/?` + queryRequest );
-              
-            replaceData2CompGallery("focus", "video", data[0]);
+            
+            if (data[0]) {
+              replaceData2CompGallery("focus", "video", data[0]);
+            }
+            else {
+              replaceData2CompGallery("focus", "video", undefined);
+            }
             
           }
           
@@ -345,14 +370,14 @@ const Focus = ({
           <Reactions />
           
         
-          { (readyFocusingComp && readyFocusingCompComment && focusingComp.listIdComment.length > 0) && 
+          { (readyFocusingComp && readyFocusingCompComment && focusingComp.listIdComment.length > 0 && focusingComment) && 
             <Comment 
               comment={focusingComment}
               where="focus"
             />
           }
           
-           { (readyFocusingComp && readyFocusingCompVideo && focusingComp.listIdVideo.length > 0) && 
+           { (readyFocusingComp && readyFocusingCompVideo && focusingComp.listIdVideo.length > 0 && focusingVideo) && 
             <Video 
               video={focusingVideo}
               where="focus"

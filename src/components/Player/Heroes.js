@@ -194,6 +194,10 @@ const DivBody = styled(Div)`
 
 
 const ListHero = styled(Div)`
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
+  
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -308,6 +312,7 @@ const Heroes = ({
   const params = useParams();
   
   const inputBattletag = useInput("");
+  let unmounted = false;
   
   // 직접적인 것들은 redux가 아닌 여기 component 에서 state로
   const [updatedText, setUpdatedText] = useState("")
@@ -327,9 +332,24 @@ const Heroes = ({
     
   })
   
-  // const urlBattletag = encodeURIComponent(battletag);
+  // clean up function! 이렇게 따로 만들어야 잘 작동한다!
+  useEffect(()=>{
+    return ()=> {
+      //console.log("final moment of General")
+      unmounted = true;
+      replaceData2('ready', 'playerBattletag', false);
+      replaceData2('ready', 'playerHeroes', false);
+      replaceData2('ready', 'playerHeroesShowing', false);
+      replaceData2Player("heroes", "region", ""); 
+      replaceData2Player("heroes", "mode", "Both"); 
+    };
+  },[])
+  
   
   useEffect(()=>{
+    replaceData2('ready', 'playerHeroes', false);
+      replaceData2('ready', 'playerHeroesShowing', false);
+      
     if (params.battletagEncoded){
     
       if (params.battletagEncoded === "undefined") {
@@ -340,8 +360,8 @@ const Heroes = ({
         replaceData2("ready", "playerBattletag", false);
         const battletag = decodeURIComponent(params.battletagEncoded)
         replaceData2Player("player", "battletag", battletag); // 나중에 다른곳에서 쓰기 위해서
+        
         replaceData2("ready", "playerHeroes", false);
-        replaceData2("loading", "playerHeroes", true);
         
         inputBattletag.setValue(battletag);
         replaceData2("ready", "playerBattletag", true);
@@ -350,6 +370,7 @@ const Heroes = ({
         replaceData2Player("heroes", "triggerUpdate", Date.now().toString()); 
       } // else
     } // if
+    
   },[])
   
   
@@ -357,6 +378,8 @@ const Heroes = ({
     if (inputBattletag.value) {
       replaceData2("ready", "playerBattletag", false);
       replaceData2Player("player", "battletag", inputBattletag.value); 
+      replaceData2("ready", "playerHeroes", false);
+      
       history.push(`/player/heroes/${encodeURIComponent(inputBattletag.value)}`);
       replaceData2("ready", "playerBattletag", true);
       replaceData2Player("heroes", "triggerUpdate", Date.now().toString()); 
@@ -370,6 +393,11 @@ const Heroes = ({
       
     if (readyPlayerBattletag) {
       try {
+        
+        replaceData2Player("heroes", "region", "");  // important!
+        replaceData2Player("heroes", "mode", "Both"); 
+        
+        
         replaceData2("ready", "playerHeroes", false);
         replaceData2("loading", "playerHeroes", true);
         
@@ -388,7 +416,9 @@ const Heroes = ({
         
         // 중요! 내 서버에서 stats의 Heroes 을 json string 으로 저장했기 때문에, 여기서 parse 하는 작업 필요!
         const dataPlayerHeroesNew = JSON.parse(dataPlayer['stats']['heroes_String']);
-
+        
+        
+        
         replaceData2Player("heroes", "data", dataPlayerHeroesNew );
         replaceData2("loading", "playerHeroes", false);
         replaceData2("ready", "playerHeroes", true);
@@ -398,8 +428,10 @@ const Heroes = ({
         const month = updatedText.getUTCMonth() + 1; //months from 1-12
         const day = updatedText.getUTCDate();
         const year = updatedText.getUTCFullYear();
-        setUpdatedText(`${year}. ${month}. ${day}`);
         
+        if (!unmounted) {
+          setUpdatedText(`${year}. ${month}. ${day}`);
+        }
         
   
       } catch (error) {
@@ -420,42 +452,29 @@ const Heroes = ({
   
   
   
-  
   // 처음 데이터 불러왔을 때
   useEffect(()=>{
     
-    if (readyPlayerHeroes && readyPlayerBattletag) {
+    if (readyPlayerHeroes ) {
       
-      let showingTemp = showing;
-        //console.log(player)
-        //const battletagFull = Object.keys(playerHeroes)[0]
-        const battletagFull = player.battletag
+      const battletagFull = player.battletag
         
-        const regexBattletag = /(#\d*)$/;
-  		  const listNumberBattletag = battletagFull.match(regexBattletag);
-  		  const battletagName = battletagFull.replace(regexBattletag, "");
-  		  const battletagNumber = listNumberBattletag[0];
+      const regexBattletag = /(#\d*)$/;
+		  const listNumberBattletag = battletagFull.match(regexBattletag);
+		  const battletagName = battletagFull.replace(regexBattletag, "");
+		  const battletagNumber = listNumberBattletag[0];
   		  
-  		showingTemp['battletagName'] = battletagName;
-  		showingTemp['battletagNumber'] = battletagNumber;
-  		  
-  		  
-  		  //const orderNameRegion = Object.keys(playerHeroes[battletagFull]);
-  		  //console.log(orderNameRegion)
   		
-  		showingTemp['orderNameRegion'] = player.orderNameRegion;
+  		replaceData2Player("player", "battletagName", battletagName);
+  		replaceData2Player("player", "battletagNumber", battletagNumber);
   		
-    		if (region === ""){
-    		  replaceData2Player("heroes", "region", player.orderNameRegion[0]); 
-    		}
-    
-    
-      	// finally  
-  		setShowing(showingTemp);
-		  
+  		if (region === ""){
+  		  replaceData2Player("heroes", "region", player.orderNameRegion[0]);
+  		}
+  		
     } // if
     
-  }, [readyPlayerHeroes, readyPlayerBattletag])
+  }, [readyPlayerHeroes])
   		
     
     
@@ -464,7 +483,7 @@ const Heroes = ({
   useEffect(()=>{
     
     try {
-    replaceData2Player("heroes", "playerHeroesShowing", false);
+    replaceData2("ready", "playerHeroesShowing", false);
     
     //readyPlayerHeroes 가 트루이면 player 도 ready인 상태
     if (readyPlayerHeroes && region !== "" ) {
@@ -540,16 +559,18 @@ const Heroes = ({
       
       if (sortUsing === "games") {
         orderRoleKeyHero = listRoleKeyHero.sort((a, b)=>  showingTemp['dataRegionMode'][b]["games_played"] - showingTemp['dataRegionMode'][a]["games_played"]);
-        showingTemp['orderRoleKeyHero'] = orderRoleKeyHero;
+        showingTemp['orderRoleKeyHero'] = [...orderRoleKeyHero];
       }
       else if (sortUsing === "mmr") {
         orderRoleKeyHero = listRoleKeyHero.sort((a, b)=>  showingTemp['dataRegionMode'][b]["mmr"] - showingTemp['dataRegionMode'][a]["mmr"]);
-        showingTemp['orderRoleKeyHero'] = orderRoleKeyHero;
+        showingTemp['orderRoleKeyHero'] = [...orderRoleKeyHero];
       }
       else if (sortUsing === "win_rate") {
         orderRoleKeyHero = listRoleKeyHero.sort((a, b)=>  showingTemp['dataRegionMode'][b]["win_rate"] - showingTemp['dataRegionMode'][a]["win_rate"]);
-        showingTemp['orderRoleKeyHero'] = orderRoleKeyHero;
+        showingTemp['orderRoleKeyHero'] = [...orderRoleKeyHero];
       }
+      console.log(orderRoleKeyHero)
+      console.log(showingTemp)
       
       /* 참고!
         "Alarak": {
@@ -588,10 +609,13 @@ const Heroes = ({
       
     } catch(error) { // 예를 들어 탱커를 한번도 플레이 안한 플레이어에서 탱커를 role로 선택했을 때
       showing.orderRoleKeyHero = []
+      console.log(error)
     }
 		// finally  
 
-		setShowing(showingTemp);
+		if (!unmounted) {
+      setShowing(showingTemp);
+    }
 		replaceData2("ready", "playerHeroesShowing", true); 
 		
     } // if
@@ -602,7 +626,7 @@ const Heroes = ({
     }
   
     
-  }, [readyPlayerHeroes, region, mode, role, games, sort] )
+  }, [readyPlayerHeroes, region, mode, role, games, sort, readyPlayerHeroesShowing] )
   
   
   
@@ -699,12 +723,24 @@ const Heroes = ({
     }
   }
   
+  
+  const onKeyPress_Battletag = async (event) => {
+    if (event.key === "Enter") {
+      onClick_Update();
+    }
+    
+  }
+  
   return (
     
       <DivHeroes>
         
         <DivInputBattletag>
-          <Input {...inputBattletag} placeholder="battletag#1234" />
+          <Input 
+            {...inputBattletag} 
+            placeholder="battletag#1234" 
+            onKeyPress={onKeyPress_Battletag}
+            />
           <Button onClick={onClick_Update} > <IconSearch width={'24px'}  height={'24px'} color={'COLOR_normal'} /> </Button>
         </DivInputBattletag>
         
@@ -726,15 +762,15 @@ const Heroes = ({
         
         { loadingPlayerHeroes && <Loading/> }
         
-        { (!loadingPlayerHeroes && readyPlayerHeroes && readyPlayerHeroesShowing) &&
+        { (!loadingPlayerHeroes && readyPlayerBattletag && readyPlayerHeroes && readyPlayerHeroesShowing) &&
           <DivContainer>
           
             <DivHeader>  
             
               <DivIdentification> 
                 <Div> <ImgFlagMain src={objFlag[region]} /> </Div>
-                <Div> {showing["battletagName"] } </Div>
-                <Div> {showing["battletagNumber"] } </Div>
+                <Div> {player["battletagName"] } </Div>
+                <Div> {player["battletagNumber"] } </Div>
               </DivIdentification>
               
               <Div> 
@@ -745,7 +781,7 @@ const Heroes = ({
                     onClick={(event=>{
                       if (region !== element) {
                         replaceData2Player("heroes", "region", element)
-                        replaceData2Player("heroes", "playerHeroesShowing", false);
+                        replaceData2("ready", "playerHeroesShowing", false);
                       }
                     })}
                     > <ImgFlagNormal src={objFlag[element]} /> 

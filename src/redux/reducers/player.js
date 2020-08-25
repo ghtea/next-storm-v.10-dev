@@ -32,7 +32,7 @@ const stateInitial = {
   , heroes: {
     
     role: "All" // All, Tank, ... (general 에서 역할 아이콘 클릭해서 이 값 바꾸면서 넘어오게 )
-    , games: 1
+    , games: 5
     
     , mode : "Both" // "Quick Match", "Storm League", "Both"
     , region: "" // "NA", ...

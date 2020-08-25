@@ -79,6 +79,12 @@ const Videos = ({
   , addDeleteNotification
 }) => {
 
+  // clean up function! 이렇게 따로 만들어야 잘 작동한다!
+  useEffect(()=>{
+    return ()=> {
+      replaceData2('ready', 'listVideo', false);
+    };
+  },[])
   
   useEffect(() => {
 

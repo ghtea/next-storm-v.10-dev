@@ -180,7 +180,7 @@ const DivListPlan = styled(Div)`
 
  const ListPlan = ({
    
-  listPlan
+  listPlanTeam
   , user
   , language
   
@@ -193,7 +193,7 @@ const DivListPlan = styled(Div)`
   return (
   
   <DivListPlan>
-    {listPlan.map(plan=>{
+    {listPlanTeam.map(plan=>{
       return(
         <RowPlan
           key={plan._id}
@@ -215,13 +215,13 @@ const DivListPlan = styled(Div)`
 function mapStateToProps(state) { 
   return { 
     
-    listPlan: state.team_planner.listPlan
+    listPlanTeam: state.team_planner.listPlanTeam
     
     , user: state.auth.user
     , language: state.basic.language
     
-    , readyListPlan: state.basic.ready.listPlan
-    , loadingListPlan: state.basic.loading.listPlan
+    , readyListPlanTeam: state.basic.ready.listPlanTeam
+    , loadingListPlanTeam: state.basic.loading.listPlanTeam
   }; 
 } 
 

@@ -107,7 +107,7 @@ const GroupButton = styled(Div)`
 `
 
 const ButtonSort = styled(Button)`
-  height: 36px;
+  height: 32px;
   width: auto;
   
   display: flex;
@@ -115,18 +115,19 @@ const ButtonSort = styled(Button)`
   justify-content: center;
   align-items: center;
   
-  padding-left: 2px;
-  padding-right: 2px;
   
   & > div {
     font-size: 0.9rem;
     width: auto;
     &:nth-child(n+2) {margin-left: 3px;}
+    
+    &:first-child {padding-left: 1px;}
+    &:last-child {padding-right: 1px;}
   }
 `
 
 const ButtonApply = styled(Button)`
-  height: 36px;
+  height: 32px;
   width: auto;
   
   padding-left: 6px;

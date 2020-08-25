@@ -70,7 +70,7 @@ const DivRoleName = styled(Div)`
 
 const ContainerHero = styled(Div)`
   width: calc(100% - 40px);
-  padding: 6px;
+  padding: 8px;
   
   background-color: ${props => props.theme.COLOR_middle};
   border-radius: 0 12px 12px 0;
@@ -86,7 +86,8 @@ const ContainerHero = styled(Div)`
 
 const DivEachHero = styled(Div)`
 
-  margin: 3px;
+  margin: 5px;
+  
   width: 40px;
   height: 40px;
 

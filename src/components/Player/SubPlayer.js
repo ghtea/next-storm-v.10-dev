@@ -170,7 +170,9 @@ const SubPlayer = ({
      
     <DivSubPlayer>
 		  
-		  <NavLinkStyled to={toPlayerGeneral} isActive={()=>checkActive(/^(\/player\/general)/)} > 
+		  <NavLinkStyled to={toPlayerGeneral} isActive={()=>checkActive(/^(\/player\/general)/)} 
+		    onClick={(event=>{replaceData2("ready", "playerGeneralShowing", false);})}
+		  > 
         <IconChartBar width={"22px"} height={"22px"} color={((/^(\/player\/general)/).test(window.location.pathname))? "color_active" : "color_very_weak"} />
 				<Div> 
 				  {(() => {
@@ -186,7 +188,9 @@ const SubPlayer = ({
         </Div> 
 			</NavLinkStyled>  
 			
-			 <NavLinkStyled to={toPlayerHeroes} isActive={()=>checkActive(/^(\/player\/heroes)/)} > 
+			 <NavLinkStyled to={toPlayerHeroes} isActive={()=>checkActive(/^(\/player\/heroes)/)} 
+			  onClick={(event=>{replaceData2("ready", "playerHeroesShowing", false);})}
+			 > 
         <IconUsers width={"22px"} height={"22px"} color={((/^(\/player\/heroes)/).test(window.location.pathname))? "color_active" : "color_very_weak"} />
 				<Div> 
 				  {(() => {

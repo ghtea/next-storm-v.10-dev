@@ -185,7 +185,7 @@ const SubCompGallery = ({
 			
 			
 		  
-			<NavLinkStyled to="/comp-gallery/videos" isActive={()=>checkActive(/^(\/comp-gallery\/videos)/)} > 
+			<NavLinkStyled to="/comp-gallery/videos" isActive={()=>checkActive(/^(\/comp-gallery\/videos)/)} onClick={(event)=>{ replaceData2("ready", "listVideo", false)}}> 
         <IconVideo width={"22px"} height={"22px"} color={(location.pathname==="/comp-gallery/videos")?"color_active": "color_very_weak"} />
 				<Div> 
 				  {(() => {
@@ -201,7 +201,7 @@ const SubCompGallery = ({
         </Div> 
 			</NavLinkStyled> 
 
-      <NavLinkStyled to="/comp-gallery/comments" isActive={()=>checkActive(/^(\/comp-gallery\/comments)/)} > 
+      <NavLinkStyled to="/comp-gallery/comments" isActive={()=>checkActive(/^(\/comp-gallery\/comments)/)} onClick={(event)=>{ replaceData2("ready", "listComment", false)}}> 
         <IconComment width={"22px"} height={"22px"} color={(location.pathname==="/comp-gallery/comments")?"color_active": "color_very_weak"} />
 				<Div> 
 				  {(() => {

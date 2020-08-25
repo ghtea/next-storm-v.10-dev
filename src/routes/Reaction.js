@@ -446,7 +446,16 @@ const Reaction = ({
     		</Div> 
     		
     		<Div>
-    		  <TextareaComment {...inputComment} placeholder="comment" /> 
+    		  <TextareaComment {...inputComment} placeholder={(() => {
+              switch (language) {
+                case 'ko': 
+                  return '댓글';
+                case 'ja': 
+                  return 'コメント';
+                default: // eng
+                  return 'comment';
+                }
+              })()} /> 
     		</Div>
     	</DivContent>
   	}
@@ -459,7 +468,16 @@ const Reaction = ({
   		  </Div>
   		  
         <Div> 
-          <InputVideoLink  {...inputVideo} placeholder="link" /> 
+          <InputVideoLink  {...inputVideo} placeholder={(() => {
+                switch (language) {
+                  case 'ko': 
+                    return '링크 (단축 링크 제외)';
+                  case 'ja': 
+                    return 'リンク(短縮リンクを除く)';
+                  default: // eng
+                    return 'link (no shortened link)';
+                }
+              })()} /> 
         </Div>
   		</DivContent>
   	}

@@ -10,7 +10,7 @@ import * as config from '../../config';
 import readPlanTeam from "../../redux/thunks/readPlanTeam";
 
 //import {replaceRerender} from "../../redux/store";
-import {replaceData, replaceReady, replaceLoading, replaceWorking, replaceAuthority} from "../../redux/actions/basic";
+import {replaceData, replaceData2, replaceReady, replaceLoading, replaceWorking, replaceAuthority} from "../../redux/actions/basic";
 
 import Loading from '../_/Loading';
 
@@ -73,8 +73,7 @@ const DivA = styled(Div)`
     height: 240px; 
     
     @media (min-width:  ${props => props.theme.media.md }px) {
-      width: 50%;
-      max-width: 500px;
+      width: 360px;
       height: 240px; 
     }
   }
@@ -103,8 +102,7 @@ const DivB = styled(Div)`
     min-width: 360px;
     
     @media (min-width:  ${props => props.theme.media.md }px) {
-      width: 50%;
-      max-width: 500px;
+      width: 360px;
     }
   }
 `
@@ -142,7 +140,8 @@ const TeamPlanner = ({
   //, rerenderPlanTeamA
   
   , readPlanTeam
-  , replaceData
+  
+  , replaceData, replaceData2
   ,replaceAuthority
   , addDeleteNotification
 }) => {
@@ -152,6 +151,16 @@ const TeamPlanner = ({
   const isFirstRun = useRef(true);
   
   const idPlanTeamTrying = match.params.idPlanTeam;
+  
+  
+  // clean up function! 이렇게 따로 만들어야 잘 작동한다!
+  useEffect(()=>{
+    return ()=> {
+      replaceData2('ready', 'planTeam', false);
+    };
+  },[])
+  
+  
   
   useEffect(()=>{
     console.log(idPlanTeamTrying);
@@ -298,7 +307,9 @@ function mapDispatchToProps(dispatch) {
   return { 
     readPlanTeam: (idPlanTeam, language) => dispatch(readPlanTeam(idPlanTeam, language)) 
     //,replaceRerender: (which) => dispatch(replaceRerender(which))
-    ,replaceData: (which, newData) => dispatch(replaceData(which, newData))
+    , replaceData: (which, newData) => dispatch(replaceData(which, newData))
+    , replaceData2: (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
+
     ,replaceLoading: (which, true_false) => dispatch(replaceLoading(which, true_false)) 
     ,replaceReady: (which, true_false) => dispatch(replaceReady(which, true_false)) 
     ,replaceAuthority: (which, authority) => dispatch(replaceAuthority(which, authority))

@@ -152,7 +152,15 @@ const Gallery = ({
   
   const history = useHistory();
 
-
+  
+  // clean up function! 이렇게 따로 만들어야 잘 작동한다!
+  useEffect(()=>{
+    return ()=> {
+      replaceData2('ready', 'listComp', false);
+    };
+  },[])
+  
+  
   useEffect(() => {
 
     (async() => {
@@ -194,9 +202,10 @@ const Gallery = ({
           
           replaceData2("ready", "listComp", false);
           replaceData2("loading", "listComp", true);
-              
+          
+          console.log(queryRequest)
           const { data } = await axios.get(`${config.URL_API_NS}/comp/?` + queryRequest );
-          console.log(data)
+          
 
           replaceData2CompGallery("gallery", "listComp", data);
           replaceData2("ready", "listComp", true);

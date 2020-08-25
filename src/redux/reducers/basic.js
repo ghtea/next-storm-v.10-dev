@@ -37,7 +37,10 @@ const stateInitial = {
       , reactionToEdit: false
       
       , playerBattletag: false
+      
       , playerGeneral: false
+      , playerGeneralShowing: false
+      
       , playerHeroes: false
       , playerHeroesShowing: false
     }

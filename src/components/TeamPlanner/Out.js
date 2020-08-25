@@ -71,6 +71,7 @@ const Out = ({
   , readyListPlanTeam
   , loadingListPlanTeam
   
+  , listPlanTeam
   , replaceDataTeamPlanner
   , replaceData2TeamPlanner
   
@@ -82,6 +83,12 @@ const Out = ({
   
   const history = useHistory();
   
+  
+  console.log(readyUser)
+  console.log(loadingListPlanTeam)
+  console.log(readyListPlanTeam)
+  console.log(listPlanTeam)
+  
   useEffect(()=>{
     
     if (readyUser && !readyListPlanTeam) { 
@@ -89,6 +96,7 @@ const Out = ({
      (async() => {
       
       try {
+        console.log('hello')
         
         const queryRequest = queryString.stringify({
           author: user._id
@@ -156,6 +164,8 @@ function mapStateToProps(state) {
     , readyUser: state.basic.ready.user
     
     , language: state.basic.language
+    
+    , listPlanTeam: state.team_planner.listPlanTeam
     
     , readyListPlanTeam: state.basic.ready.listPlanTeam
     , loadingListPlanTeam: state.basic.loading.listPlanTeam

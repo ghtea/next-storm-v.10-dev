@@ -129,6 +129,7 @@ const DivGo = styled(Div)`
   
   cursor: pointer;
   
+  font-size: 0.9rem;
   
   & > * {
     width: auto;
@@ -177,6 +178,7 @@ const DivGoLikes = styled(Div)`
   
   cursor: pointer;
   
+  font-size: 0.9rem;
   
   & > * {
     width: auto;
@@ -330,7 +332,16 @@ const Library = ({
               <DivGo
                 onClick={onClick_Works_Comp}
               >  
-                <Div> {user.works.listIdComp.length} </Div>
+                <Div> {(() => {
+                  switch (language) {
+                    case 'ko': 
+                      return '보러 가기';
+                    case 'ja': 
+                      return '見に行く';
+                    default: // eng
+                      return 'View';
+                  }
+                })()} </Div>
                 <IconAngleRight width={"20px"} height={"20px"} color={"COLOR_normal"}  />
               </DivGo>
             </DivB>
@@ -354,7 +365,16 @@ const Library = ({
               <DivGo
                 onClick={onClick_Works_PlanTeam}
               >  
-                <Div> {user.works.listIdPlanTeam.length} </Div>
+                <Div> {(() => {
+                  switch (language) {
+                    case 'ko': 
+                      return '보러 가기';
+                    case 'ja': 
+                      return '見に行く';
+                    default: // eng
+                      return 'View';
+                  }
+                })()} </Div>
                 <IconAngleRight width={"20px"} height={"20px"} color={"COLOR_normal"}  />
               </DivGo>
             </DivB>
@@ -404,7 +424,16 @@ const Library = ({
               <DivGo
                 onClick={onClick_Comment_Comp}
               >  
-                <Div> {user.works.listIdComment.length} </Div>
+                <Div> {(() => {
+                  switch (language) {
+                    case 'ko': 
+                      return '보러 가기';
+                    case 'ja': 
+                      return '見に行く';
+                    default: // eng
+                      return 'View';
+                  }
+                })()} </Div>
                 <IconAngleRight width={"20px"} height={"20px"} color={"COLOR_normal"}  />
               </DivGo>
             </DivB>
@@ -428,7 +457,16 @@ const Library = ({
               <DivGo
                 onClick={onClick_Video_Comp}
               >  
-                <Div> {user.works.listIdVideo.length} </Div>
+                <Div> {(() => {
+                  switch (language) {
+                    case 'ko': 
+                      return '보러 가기';
+                    case 'ja': 
+                      return '見に行く';
+                    default: // eng
+                      return 'View';
+                  }
+                })()} </Div>
                 <IconAngleRight width={"20px"} height={"20px"} color={"COLOR_normal"}  />
               </DivGo>
             </DivB>
@@ -463,7 +501,7 @@ const Library = ({
               <DivGoLikes
                 onClick={onClick_Likes_Comp}
               >   
-                <IconShapesRegular width={"24px"} height={"24px"} color={"COLOR_normal"} /> 
+                <Div> <IconShapesRegular width={"24px"} height={"24px"} color={"COLOR_normal"} />  </Div> 
                 <Div>{(() => {
                   switch (language) {
                     case 'ko': 
@@ -474,8 +512,8 @@ const Library = ({
                       return 'Compositions';
                   }
                 })()} </Div>
-                <Div> {user.likes.listIdComp.length} </Div>
-                <IconAngleRight width={"20px"} height={"20px"} color={"COLOR_normal"}  />
+                
+                <Div> <IconAngleRight width={"20px"} height={"20px"} color={"COLOR_normal"}  /> </Div> 
               </DivGoLikes>
               
               
@@ -483,7 +521,7 @@ const Library = ({
               <DivGoLikes
                 onClick={onClick_Likes_Comment}
               >   
-                <IconComment width={"22px"} height={"22px"} color={"COLOR_normal"} /> 
+                <Div> <IconComment width={"22px"} height={"22px"} color={"COLOR_normal"} />  </Div> 
                 <Div> {(() => {
                   switch (language) {
                     case 'ko': 
@@ -494,15 +532,16 @@ const Library = ({
                       return 'Comments';
                   }
                 })()} </Div>
-                <Div> {user.likes.listIdComment.length} </Div>
-                <IconAngleRight width={"20px"} height={"20px"} color={"COLOR_normal"}  />
+               
+                <Div> <IconAngleRight width={"20px"} height={"20px"} color={"COLOR_normal"}  /> </Div> 
               </DivGoLikes>
               
               
               <DivGoLikes
                 onClick={onClick_Likes_Video}
               >   
-                <IconVideo width={"24px"} height={"24px"} color={"COLOR_normal"} /> 
+                <Div> <IconVideo width={"24px"} height={"24px"} color={"COLOR_normal"} /> </Div> 
+                
                 <Div> {(() => {
                   switch (language) {
                     case 'ko': 
@@ -513,10 +552,9 @@ const Library = ({
                       return 'Videos';
                   }
                 })()}  </Div>
-                <Div> {user.likes.listIdVideo.length} </Div>
-                <IconAngleRight width={"20px"} height={"20px"} color={"COLOR_normal"}  />
+                
+                <Div> <IconAngleRight width={"20px"} height={"20px"} color={"COLOR_normal"}  /> </Div> 
               </DivGoLikes>
-            
             
             
             </DivC>

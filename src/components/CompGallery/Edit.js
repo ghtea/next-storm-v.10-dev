@@ -335,8 +335,18 @@ const InputCommon = styled(Input)`
   
   const [stageDelete, setStageDelete] =useState(0);
   
+  
+  
+  // clean up function! 이렇게 따로 만들어야 잘 작동한다!
+  useEffect(()=>{
+    return ()=> {
+      replaceData2('ready', 'editingComp', false);
+    };
+  },[])
+  
+  
+  
   useEffect(() => {
-
     (async() => {
       
       try {
@@ -471,6 +481,28 @@ const InputCommon = styled(Input)`
         
         
         await axios.put(`${config.URL_API_NS}/comp/${idComp}`, compRequest);
+        
+        
+        const reset = {
+          title: ""
+          , listIdMap: []
+          , listPosition: [ { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] }, { listIdHero: [] } ]
+          , listTag: ["ToWin", "Kill"]
+          
+          , comment: ""
+          , video: ""
+          
+          , whichAdding: "Hero"
+          
+          , locationAddingMap: [0]
+          , locationAddingHero: [0,0]
+          
+          , triggerPosition: ""
+          , triggerMap: ""
+        }
+        
+        replaceDataCompGallery("create", reset);
+        
         
         addDeleteNotification("comp011", language);
         history.push(`/comp-gallery/focus/${idComp}`);

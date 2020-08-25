@@ -86,14 +86,14 @@ const DivComp = styled(Div)
 const DivReport = styled(Div)`
   z-index: 2;
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 6px;
+  top: 6px;
   
   background-color: ${props=> props.theme.COLOR_normal};
   
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
   
   display: flex;
   flex-direction: column;
@@ -110,7 +110,7 @@ const DivHeader = styled(Div)`
   width: 100%;
   height: 30px;
   
-  
+  cursor: pointer;
   color: ${props => props.theme.color_normal};
   
   display: flex;
@@ -128,8 +128,7 @@ const DivHeader = styled(Div)`
 
 const DivTitle = styled(Div)`
   width: auto;
-  max-width: 180px;
-  line-height: 1.1rem;
+  max-width: 170px;
   
   display: block;
   text-align: left;
@@ -325,6 +324,8 @@ const Comp = ({
     
     const [stageReport, setStageReport] =useState(0);
     
+    
+    
     const [like, setLike] = useState(false);
     const [plus, setPlus] = useState(0);
     useEffect(()=>{
@@ -420,16 +421,16 @@ const Comp = ({
           let queryTemp = {
             idUser: user._id
             //, idComp: tComp._id
-            , how: false
+            , how: 'false'
           };
           
           // 클릭하기 이전의 like!
           if (like) {
-            queryTemp.how = false;
+            queryTemp.how = 'false';
             setPlus(plus-1);
           }
           else { 
-            queryTemp.how = true; 
+            queryTemp.how = 'true'; 
             setPlus(plus+1);
           }
           setLike(!like);
@@ -476,7 +477,9 @@ const Comp = ({
     
     <DivReport onClick={onClick_Report} > <IconReportTriangle width={"24px"} height={"24px"} color={ (stageReport===0)? "color_very_weak" : "color_warning"}  /> </DivReport>
       
-     <DivHeader>
+     <DivHeader
+      onClick={onClick_Focus}
+     >
         
        <DivTitle onClick={onClick_Focus} > {tComp["title"] }</DivTitle> 
         

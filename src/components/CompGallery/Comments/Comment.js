@@ -58,14 +58,14 @@ const DivComment = styled(Div)
 const DivToSubject = styled(Div)`
   z-index: 2;
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 5px;
+  top: 5px;
   
   background-color: ${props=> props.theme.COLOR_normal};
   
-  width: 40px;
-  height: 40px;
-  border-radius: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
   
   cursor: pointer;
 `
@@ -73,14 +73,14 @@ const DivToSubject = styled(Div)`
 const DivReport = styled(Div)`
   z-index: 2;
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 6px;
+  top: 6px;
   
   background-color: ${props=> props.theme.COLOR_normal};
   
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
   
   display: flex;
   flex-direction: column;
@@ -99,10 +99,7 @@ const DivView = styled(Div)`
   max-height: 150px;
   overflow: auto;
   
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  display: block;
   
   & > div {
     font-size: 0.9rem;
@@ -209,7 +206,7 @@ const Comment = ({
         
         
         const query = queryString.stringify(queryTemp)  
-        await axios.put(`${config.URL_API_NS}/comment/like?` + query );
+        await axios.put(`${config.URL_API_NS}/comment/like/${comment._id}?` + query );
       }
       catch(error) {
         console.log(error);
@@ -301,11 +298,9 @@ const Comment = ({
       
       
       <DivView> 
-      
-        <Div> 
+   
           {comment.content}
-        </Div>
-      
+        
       </DivView>
       
       <DivFooter>  
