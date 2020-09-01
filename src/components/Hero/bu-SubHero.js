@@ -1,5 +1,4 @@
-import React, {useEffect, useRef} from 'react';
-import dotenv from 'dotenv';
+import React, {useEffect, useRef, useState} from 'react';
 
 import styled from 'styled-components';
 import axios from 'axios';
@@ -23,25 +22,12 @@ import {Div, Input, Button, NavLinkDefault} from '../../styles/DefaultStyles';
 
 import IconLoading from '../../svgs/basic/IconLoading';
 
-import IconUserCircleRegular from '../../svgs/basic/IconUserCircleRegular';
+import IconLayers from '../../svgs/basic/IconLayers';
+import IconSearch from '../../svgs/basic/IconSearch';
+//import IconUsers from '../../svgs/basic/IconUsers';
 
 
-import IconVideo from '../../svgs/basic/IconVideo';
-import IconComment from '../../svgs/basic/IconComment';
-
-import IconSetting from '../../svgs/basic/IconSetting';
-import IconCabinetRegular from '../../svgs/basic/IconCabinetRegular';
-import IconList from '../../svgs/basic/IconList';
-import IconEye from '../../svgs/basic/IconEye';
-import IconEdit from '../../svgs/basic/IconEdit';
-
-const DivSubMy = styled(Div)`
-
-  background-color: ${props => props.theme.COLOR_normal};
-  border-bottom: 1px solid ${props => props.theme.color_very_weak};
-  color: ${props => props.theme.color_normal};
-  
-  
+const DivSubHero = styled(Div)`
   position: fixed;
   
   display: flex;
@@ -52,23 +38,71 @@ const DivSubMy = styled(Div)`
   z-index: 10;
   
   top: 50px;
-  
   width: 100%;
-  /*max-width: 360px;*/
   
-  height: 40px; 
+  background-color: ${props => props.theme.COLOR_normal};
+  border-bottom: 1px solid ${props => props.theme.color_very_weak};
   
   @media (min-width:  ${props => (props.theme.media.md) }px) {
+    background-color: transparent;
+    border: none;
+    
     top: 70px;
     width: auto;
     
+    & > div:nth-child(n+2){
+      margin-left: 10px;
+    }
+  }
+`
+
+
+const DivSubHeroMain = styled(Div)`
+
+  
+  
+  color: ${props => props.theme.color_normal};
+  
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  
+  width: auto;
+  height: 40px; 
+  
+  @media (min-width:  ${props => (props.theme.media.md) }px) {
+  
+    background-color: ${props => props.theme.COLOR_normal};
     border: 1px solid ${props => props.theme.color_very_weak};
-    
     border-radius: 25px;
+    
+    width: auto;
   }
   
 `
 
+
+const DivSubHeroSub = styled(Div)`
+
+  
+  border: 2px solid ${props => props.active? props.theme.color_active : props.theme.color_weak};
+  border-radius: 16px;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  
+  width: auto;
+  height: 32px; 
+  
+  @media (min-width:  ${props => (props.theme.media.md) }px) {
+    
+  }
+  
+`
 
 const activeClassName = 'nav-link-active';
 
@@ -128,13 +162,19 @@ const checkActive = (regex) => {
 
 
 
-const SubMy = ({
+const SubHero = ({
   
   
   
   authority, language
  
+  , user
+  , readyUser
   
+  
+  
+  , focusingHero
+
   //, replaceAuthority
   
   , replaceDataHots
@@ -149,60 +189,70 @@ const SubMy = ({
   
   const location = useLocation();
   
+  
+  const [toBuildStats, setToBuildStats] = useState("/hero/builds-stats");
+	useEffect(()=>{
+	  if (focusingHero){
+	    const focusingHeroEncoded = encodeURIComponent(focusingHero);
+	    setToBuildStats ( `/hero/builds-stats/${focusingHeroEncoded}`);
+	  }
+	}, [focusingHero])
+	
+
+  
+  
    return (
      
-    <DivSubMy>
-		  
-		  <NavLinkStyled to="/my" exact={true}>
-        <IconCabinetRegular width={"24px"} height={"24px"} color={(location.pathname==="/my")?"color_active": "color_very_weak"} />
+    <DivSubHero> 
+     
+      <DivSubHeroMain>
+  		  
+  		  <NavLinkStyled to={toBuildStats} isActive={()=>checkActive(/^(\/hero\/builds-stats)/)} 
+  		    onClick={(event=>{replaceData2("ready", "heroBuildsStats", false);})}
+  		  > 
+          <IconLayers width={"22px"} height={"22px"} color={((/^(\/hero\/builds-stats)/).test(window.location.pathname))? "color_active" : "color_very_weak"} />
+  				<Div> 
+  				  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '빌드';
+                case 'ja': 
+                  return 'ビルド';
+                default: // eng
+                  return 'Builds';
+              }
+            })()}  
+          </Div> 
+  			</NavLinkStyled>  
+  			
+      </DivSubHeroMain>
+      
+      
+      <DivSubHeroSub active={( ( /(\/hero\/builds-stats)$/ ).test(window.location.pathname))} > 
+      
+      <NavLinkStyled to={'/hero/builds-stats'} isActive={()=>checkActive(/(\/hero\/builds-stats)$/)} 
+  		  > 
+        
+        <IconSearch width={"18px"} height={"18px"} color={( ( /(\/hero\/builds-stats)$/ ).test(window.location.pathname))? "color_active" : "color_weak"} />
 				<Div> 
 				  {(() => {
             switch (language) {
               case 'ko': 
-                return '보관함';
+                return '영웅 선택';
               case 'ja': 
-                return 'ライブラリー';
+                return 'ヒーロー選択';
               default: // eng
-                return 'Library';
+                return 'Choose Hero';
             }
           })()}  
         </Div> 
-			</NavLinkStyled> 
-		  
-		  <NavLinkStyled to="/my/profiles" isActive={()=>checkActive(/^(\/my\/profiles)/)} > 
-        <IconUserCircleRegular width={"26px"} height={"26px"} color={(location.pathname==="/my/profiles")?"color_active": "color_very_weak"} />
-				<Div> 
-				  {(() => {
-            switch (language) {
-              case 'ko': 
-                return '프로필';
-              case 'ja': 
-                return 'プロフィール';
-              default: // eng
-                return 'Profiles';
-            }
-          })()}  
-				</Div> 
-			</NavLinkStyled> 
-			
-			<NavLinkStyled to="/my/setting" isActive={()=>checkActive(/^(\/my\/setting)/)} > 
-        <IconSetting width={"22px"} height={"22px"} color={(location.pathname==="/my/setting")?"color_active": "color_very_weak"} />
-				<Div> 
-				  {(() => {
-            switch (language) {
-              case 'ko': 
-                return '설정';
-              case 'ja': 
-                return '設定';
-              default: // eng
-                return 'Setting';
-            }
-          })()}   
-				</Div> 
-			</NavLinkStyled> 
-			
-    </DivSubMy>
-      
+          
+  			</NavLinkStyled>  
+  		</DivSubHeroSub>
+
+    
+    </DivSubHero> 
+    
     )
 }
 
@@ -211,6 +261,10 @@ function mapStateToProps(state) {
   return { 
     user: state.auth.user
     , language: state.basic.language
+    
+    , readyUser: state.basic.ready.user
+    
+    , focusingHero: state.hero.focusingHero
   }; 
 } 
 
@@ -228,5 +282,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 // 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다
-export default connect(mapStateToProps, mapDispatchToProps)(SubMy);
+export default connect(mapStateToProps, mapDispatchToProps)(SubHero);
 

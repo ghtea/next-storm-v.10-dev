@@ -10,6 +10,7 @@ import basic from './reducers/basic';
 import reaction from './reducers/reaction';
 import hots from './reducers/hots';
 import player from './reducers/player';
+import hero from './reducers/hero';
 import team_planner from './reducers/team_planner';
 import comp_gallery from './reducers/comp_gallery';
 //import reducer from './reducer'
@@ -24,6 +25,7 @@ const reducers = combineReducers({
   ,reaction: reaction
   ,hots : hots
   ,player: player
+  ,hero: hero
   ,team_planner : team_planner
   ,comp_gallery : comp_gallery
   

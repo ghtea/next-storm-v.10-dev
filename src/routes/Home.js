@@ -18,6 +18,11 @@ import {replaceDataAuth, replaceData2Auth} from "../redux/actions/auth";
 
 
 import {Div, Input, Button, A, LinkDefault} from '../styles/DefaultStyles';
+
+import SubBasic from "../components/Basic/SubBasic"
+
+
+
 //import Player from '../components/Player'
 import IconHandHeart from '../svgs/basic/IconHandHeart'
 import IconPenBrush from '../svgs/basic/IconPenBrush'
@@ -47,6 +52,34 @@ const DivHome = styled(Div)`
   align-items: center;
 
 `;
+
+
+const Main = styled(Div)`
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  
+  width: 360px; /* 여기서 부터 360 고정! */ 
+  height: auto;
+  
+  
+  margin-top: 50px; 
+  
+  
+  @media (min-width:  ${props => (props.theme.media.md) }px) {
+    
+    width: 100%;
+    margin-top: 60px; 
+    /*height: calc(100vh - 120px);*/
+    
+    overflow: auto; /* important!!! */
+    
+  }
+`
+
+
 
 
 const DivA = styled(Div)`
@@ -153,6 +186,7 @@ const isDarkMode = () => {
 const Home= ({
   readyUser
   , user
+  , version
   
   , theme
   , language
@@ -179,6 +213,7 @@ const Home= ({
 	  setTextVersion('v1.032')
 	  setTextUpdated(`${date.getFullYear()}. ${(date.getMonth() + 1)}. ${date.getDate()}. ${date.getHours()}:00 (${region})`);
 	},[])
+	
 	
 	const onClick_LogOut = async (event) => {
 		try {
@@ -215,128 +250,133 @@ const Home= ({
     
     <DivHome>
       
-      <DivA>
-        
-        <DivMain>
-          <Div> NEXT STORM </Div>
-          <Div> {textVersion} </Div>
-          <Div> {textUpdated} </Div>
-        </DivMain>
-        
-        <DivButtons>
-          {(!readyUser) && <Button onClick={onClick_LogIn} >  {(() => {
-              switch (language) {
-                case 'ko': 
-                  return '로그인';
-                case 'ja': 
-                  return 'ログイン';
-                default: // eng
-                  return 'Log In'
-              }
-            })()} </Button>  }
-          
-          {(!readyUser) && <Button onClick={onClick_SignUp} >  {(() => {
-            switch (language) {
-              case 'ko': 
-                return '회원가입';
-              case 'ja': 
-                return '会員加入';
-              default: // eng
-                return 'Sign Up';
-            }
-          })()} </Button> }
-          
-          
-          
-          {(readyUser) && <Button onClick={onClick_LogOut} >  {(() => {
-            switch (language) {
-              case 'ko': 
-                return '로그아웃';
-              case 'ja': 
-                return 'ログアウト';
-              default: // eng
-                return 'Log Out'
-            }
-          })()}  </Button> }
-          
-          
-          {(readyUser && !user.battletag) && 
-            <Button onClick={onClick_ApplyBattletag} >  {(() => {
-              switch (language) {
-                case 'ko': 
-                  return '배틀태그 등록';
-                case 'ja': 
-                  return 'バトルタグ登録';
-                default: // eng
-                  return 'Register Battletag';
-              }
-            })()}  </Button> 
-          }
-        </DivButtons>
-        
-      </DivA>
+      {readyUser && <SubBasic/>}
       
-      <DivB>
+      <Main>
       
-      
-        <Div>
-          <Div> <A href="https://api.heroesprofile.com/upload" >
-            <DivIcon> <IconUpload width={"72px"} height={"72px"} color="color_weak" /></DivIcon> 
-            <Div>  {(() => {
+        <DivA>
+          
+          <DivMain>
+            <Div> NEXT STORM </Div>
+            <Div> {`v${version['NextStorm'][config.STATUS]['version']}`} </Div>
+            <Div> {version['NextStorm'][config.STATUS]['message']['content'][language]} </Div>
+          </DivMain>
+          
+          <DivButtons>
+            {(!readyUser) && <Button onClick={onClick_LogIn} >  {(() => {
                 switch (language) {
                   case 'ko': 
-                    return '리플레이 업로드';
+                    return '로그인';
                   case 'ja': 
-                    return 'リプレイ·アップロード';
+                    return 'ログイン';
                   default: // eng
-                    return 'Upload Replays';
+                    return 'Log In'
                 }
-              })()}  </Div>
-         </A> </Div>
-          
-          
-          <Div> <A href="https://forms.gle/55en1pMgT6EBspuf9" >
-            <DivIcon> <IconPaperPlane width={"56px"} height={"56px"} color="color_weak" /></DivIcon> 
-            <Div>  {(() => {
-                switch (language) {
-                  case 'ko': 
-                    return '의견/에러';
-                  case 'ja': 
-                    return '意見·エラー';
-                  default: // eng
-                    return 'Opinion/Error';
-                }
-              })()} </Div>
-          </A> </Div>
-        </Div>
-        
-        
-        
-        <Div>
-          <Div>
-            <DivWho> {(() => {
+              })()} </Button>  }
+            
+            {(!readyUser) && <Button onClick={onClick_SignUp} >  {(() => {
               switch (language) {
                 case 'ko': 
-                  return '개발/디자인';
+                  return '회원가입';
                 case 'ja': 
-                  return '開発·デザイン';
+                  return '会員加入';
                 default: // eng
-                  return 'Made by';
+                  return 'Sign Up';
               }
-            })()}  </DivWho>
-            <DivPeople> mbcat#1703  </DivPeople>
+            })()} </Button> }
+            
+            
+            
+            {(readyUser) && <Button onClick={onClick_LogOut} >  {(() => {
+              switch (language) {
+                case 'ko': 
+                  return '로그아웃';
+                case 'ja': 
+                  return 'ログアウト';
+                default: // eng
+                  return 'Log Out'
+              }
+            })()}  </Button> }
+            
+            
+            {(readyUser && !user.battletag) && 
+              <Button onClick={onClick_ApplyBattletag} >  {(() => {
+                switch (language) {
+                  case 'ko': 
+                    return '배틀태그 등록';
+                  case 'ja': 
+                    return 'バトルタグ登録';
+                  default: // eng
+                    return 'Register Battletag';
+                }
+              })()}  </Button> 
+            }
+          </DivButtons>
+          
+        </DivA>
+        
+        <DivB>
+        
+        
+          <Div>
+            <Div> <A href="https://api.heroesprofile.com/upload" >
+              <DivIcon> <IconUpload width={"72px"} height={"72px"} color="color_weak" /></DivIcon> 
+              <Div>  {(() => {
+                  switch (language) {
+                    case 'ko': 
+                      return '리플레이 업로드';
+                    case 'ja': 
+                      return 'リプレイ·アップロード';
+                    default: // eng
+                      return 'Upload Replays';
+                  }
+                })()}  </Div>
+           </A> </Div>
+            
+            
+            <Div> <A href="https://forms.gle/55en1pMgT6EBspuf9" >
+              <DivIcon> <IconPaperPlane width={"56px"} height={"56px"} color="color_weak" /></DivIcon> 
+              <Div>  {(() => {
+                  switch (language) {
+                    case 'ko': 
+                      return '의견/에러';
+                    case 'ja': 
+                      return '意見·エラー';
+                    default: // eng
+                      return 'Opinion/Error';
+                  }
+                })()} </Div>
+            </A> </Div>
           </Div>
           
+          
+          
           <Div>
-            <DivWho> thanks to </DivWho>
-            <DivPeople> Heroes Profile API </DivPeople>
-            <DivPeople>  Madosan </DivPeople>
+            <Div>
+              <DivWho> {(() => {
+                switch (language) {
+                  case 'ko': 
+                    return '개발/디자인';
+                  case 'ja': 
+                    return '開発·デザイン';
+                  default: // eng
+                    return 'Made by';
+                }
+              })()}  </DivWho>
+              <DivPeople> mbcat#1703  </DivPeople>
+            </Div>
+            
+            <Div>
+              <DivWho> thanks to </DivWho>
+              <DivPeople> Heroes Profile API </DivPeople>
+              <DivPeople>  Madosan </DivPeople>
+            </Div>
           </Div>
-        </Div>
-        
-        
-      </DivB>
+          
+          
+        </DivB>
       
+      </Main>
       
     
     </DivHome>
@@ -353,6 +393,8 @@ function mapStateToProps(state) {
   return { 
     readyUser: state.basic.ready.user
     , user: state.auth.user
+    
+    , version: state.basic.version
     
     , theme: state.basic.theme
     , language: state.basic.language

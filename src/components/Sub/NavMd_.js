@@ -79,6 +79,8 @@ const NavMd_ = ({
 	, user
 	, readyUser
 	
+	, focusingHero
+	
 	, themeName
 	
 	,replaceData, replaceData2
@@ -95,6 +97,19 @@ const NavMd_ = ({
 	    setToPlayerGeneral ( `/player/general/${encodeURIComponent(user.battletag)}`);
 	  }
 	}, [readyUser])
+	
+	
+	const [toHero, setToHero] = useState("/hero/builds-stats");
+	useEffect(()=>{
+	  if ( focusingHero !== "" ){
+	    const focusingHeroEncoded = encodeURIComponent(focusingHero);
+	    setToHero ( `/hero/builds-stats/${focusingHeroEncoded}`);
+	  }
+	  else {
+	    setToHero ( `/hero/builds-stats`);
+	  }
+	}, [focusingHero])
+	
 	
 	
 	return (
@@ -116,21 +131,6 @@ const NavMd_ = ({
     })()} 
 		</NavLinkNavItem> 
     
-    {(readyUser) &&
-      <NavLinkNavItem to="/my" isActive={()=>checkActive(/^(\/my)/)} > 
-  		{(() => {
-        switch (language) {
-          case 'ko': 
-            return '나';
-          case 'ja': 
-            return '私';
-          default: // eng
-            return 'My';
-        }
-      })()} 
-  		</NavLinkNavItem> 
-    }
-		
 		
 		<NavLinkNavItem to={toPlayerGeneral} isActive={()=>checkActive(/^(\/player)/)} > 
 		{(() => {
@@ -141,6 +141,20 @@ const NavMd_ = ({
           return 'プレーヤー';
         default: // eng
           return 'Player';
+      }
+    })()} 
+		</NavLinkNavItem> 
+		
+		
+		<NavLinkNavItem to={toHero} isActive={()=>checkActive(/^(\/hero)/)} > 
+		{(() => {
+      switch (language) {
+        case 'ko': 
+          return '영웅';
+        case 'ja': 
+          return 'ヒーロー';
+        default: // eng
+          return 'Hero';
       }
     })()} 
 		</NavLinkNavItem> 
@@ -178,6 +192,26 @@ const NavMd_ = ({
 	)
 }
 
+
+/*
+
+    {(readyUser) &&
+      <NavLinkNavItem to="/my" isActive={()=>checkActive(/^(\/my)/)} > 
+  		{(() => {
+        switch (language) {
+          case 'ko': 
+            return '나';
+          case 'ja': 
+            return '私';
+          default: // eng
+            return 'My';
+        }
+      })()} 
+  		</NavLinkNavItem> 
+    }
+		
+*/
+
 function mapStateToProps(state) { 
   return { 
     themeName: state.basic.themeName
@@ -186,18 +220,20 @@ function mapStateToProps(state) {
     , user: state.auth.user
     
     , readyUser: state.basic.ready.user
+    
+    , focusingHero: state.hero.focusingHero
   }; 
 } 
 
 function mapDispatchToProps(dispatch) { 
   return { 
     replaceData: (which, newThemeName) => dispatch( replaceData(which, newThemeName) ) 
-    ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
+    , replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
     
     , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
     
-    ,replaceDataAuth : (which, replacement) => dispatch(replaceDataAuth(which, replacement))
-    ,replaceData2Auth : (which1, which2, replacement) => dispatch(replaceData2Auth(which1, which2, replacement))
+    , replaceDataAuth : (which, replacement) => dispatch(replaceDataAuth(which, replacement))
+    , replaceData2Auth : (which1, which2, replacement) => dispatch(replaceData2Auth(which1, which2, replacement))
   }; 
 }
 

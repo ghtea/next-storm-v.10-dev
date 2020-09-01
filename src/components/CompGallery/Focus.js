@@ -228,7 +228,7 @@ const Focus = ({
             
             const queryRequestBefore = {
               
-              listSort: ["createdNew"]
+              listSort: ['numberLike', 'createdNew']
               , limitEach: 10  // test로서 3개씩 가져와 보자
               , skipEntire: 0
               
@@ -298,7 +298,7 @@ const Focus = ({
             
             const queryRequestBefore = {
               
-              listSort: ["createdNew"]
+              listSort: ['numberLike', 'createdNew']
               , limitEach: 10  // test로서 3개씩 가져와 보자
               , skipEntire: 0
               

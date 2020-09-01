@@ -8,15 +8,19 @@ import { Route, NavLink, Switch } from 'react-router-dom';
 
 import * as config from '../config';
 
-import Library  from "../components/My/Library"
-import Profiles  from "../components/My/Profiles"
-import Setting  from "../components/My/Setting"
-import SubMy from "../components/My/SubMy"
+import BuildsStats from "../components/Hero/BuildsStats"
+import ChooseHero from "../components/Hero/ChooseHero"
+//import Heroes from "../components/Player/Heroes"
+
+
+import SubHero from "../components/Hero/SubHero"
 
 import { connect } from "react-redux";
 
+
 import {replaceData, replaceReady, replaceLoading, replaceWorking, replaceAuthority, replaceData2} from "../redux/actions/basic";
-import {replaceDataHots, replaceData2Hots} from "../redux/actions/hots";
+import {replaceDataHero, replaceData2Hero} from "../redux/actions/hero";
+
 
 
 import addDeleteNotification from "../redux/thunks/addDeleteNotification";
@@ -28,9 +32,8 @@ import Loading from '../components/_/Loading'
 
 
 
-const DivMy = styled(Div)`
+const DivHero = styled(Div)`
   width: 100%;
-  /* height: 100%;  App의 DivContent 에서 height: calc(100vh - 50px); 로 설정해놨다 */
   
   display: flex;
   flex-direction: column;
@@ -64,7 +67,6 @@ const Main = styled(Div)`
     
     width: 100%;
     margin-top: 60px; 
-    /*height: calc(100vh - 120px);*/
     
     overflow: auto; /* important!!! */
     
@@ -74,7 +76,7 @@ const Main = styled(Div)`
 
 
 
-const My = ({
+const Hero = ({
   
   match, location
   
@@ -89,6 +91,9 @@ const My = ({
   , replaceDataHots
   , replaceData2Hots
   
+  , replaceDataHero
+  , replaceData2Hero
+  
   , replaceData
   , replaceData2
   
@@ -96,60 +101,63 @@ const My = ({
   
 }) => {
   
+  // clean up function! 이렇게 따로 만들어야 잘 작동한다!
+  useEffect(()=>{
+    return ()=> {
+      replaceDataHero('focusingHero', "");
+    };
+  },[])
   
   
    return (
-   <DivMy>
+   <DivHero>
     
-      <SubMy/>
+      <SubHero/>
       
+    
       <Main>
         <Switch>
           
-          <Route path="/my" exact={true} component={Library} />
-          <Route path="/my/profiles" component={Profiles} />
-          <Route path="/my/setting" component={Setting} />
+          <Route path="/hero/builds-stats" exact={true} component={ChooseHero} />
+          <Route path="/hero/builds-stats/:keyHeroEncoded" component={BuildsStats} />
           
         </Switch>
       </Main>
+    
   
-    </DivMy>
+    </DivHero>
     )
 }
   
- 
+ // <Route path={["/player/general", "/player/general/:battletagEncoded"]} component={General} />
+    
+ //CompGallery
+
 
 
 function mapStateToProps(state) { 
   return { 
-    
-    user: state.auth.user
+    authority: state.basic.authority.comp_gallery
     , language: state.basic.language
     
-    
+    //, readyDictAllHeroBasic: state.basic.ready.dictAllHeroBasic
   }; 
 } 
 
 function mapDispatchToProps(dispatch) { 
   return { 
-    //readPlanTeam: (idPlanTeam) => dispatch(readPlanTeam(idPlanTeam)) 
+     
+    replaceData : (which, replacement) => dispatch(replaceData(which, replacement))
+    , replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
     
-    //,replaceData: (which, newData) => dispatch(replaceData(which, newData))
-    //,replaceLoading: (which, true_false) => dispatch(replaceLoading(which, true_false)) 
-    //,replaceReady: (which, true_false) => dispatch(replaceReady(which, true_false)) 
+    , replaceDataHero : (which, replacement) => dispatch(replaceDataHero(which, replacement))
+    , replaceData2Hero : (which1, which2, replacement) => dispatch(replaceData2Hero(which1, which2, replacement))
     
-    //replaceAuthority: (which, authority) => dispatch(replaceAuthority(which, authority))
-    
-    replaceDataHots : (which, replacement) => dispatch(replaceDataHots(which, replacement))
-    ,replaceData2Hots : (which1, which2, replacement) => dispatch(replaceData2Hots(which1, which2, replacement))
-    
-    ,replaceData : (which, replacement) => dispatch(replaceData(which, replacement))
-    ,replaceData2 : (which1, which2, replacement) => dispatch(replaceData2(which1, which2, replacement))
     
     , addDeleteNotification: (code_situation, language, message, time) => dispatch(  addDeleteNotification(code_situation, language, message, time) )
   }; 
 }
 
 // 컴포넌트에서 redux의 state, dispatch 를 일부분 골라서 이용가능하게 된다
-export default connect(mapStateToProps, mapDispatchToProps)(My);
+export default connect(mapStateToProps, mapDispatchToProps)(Hero);
 

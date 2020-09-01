@@ -125,6 +125,7 @@ const More = ({
 	, language
 	
 	, user , readyUser
+	, focusingHero 
 	
 	, themeName
 	, themeOption
@@ -136,12 +137,26 @@ const More = ({
 	
 	  const [cookies, setCookie, removeCookie] = useCookies(['logged', 'language', 'themeOption']);
 	  
+	  
 	  const [toPlayerGeneral, setToPlayerGeneral] = useState("/player/general/undefined");
 		useEffect(()=>{
 		  if (readyUser && user.battletag){
 		    setToPlayerGeneral ( `/player/general/${encodeURIComponent(user.battletag)}`);
 		  }
 		}, [readyUser])
+		
+	  const [toHero, setToHero] = useState("/hero/builds-stats");
+		useEffect(()=>{
+		  if ( focusingHero !== "" ){
+		    const focusingHeroEncoded = encodeURIComponent(focusingHero);
+		    setToHero ( `/hero/builds-stats/${focusingHeroEncoded}`);
+		  }
+			else {
+		    setToHero ( `/hero/builds-stats`);
+		  }
+		}, [focusingHero])
+		  
+		  
 	  
 	  const dictLanguage = {
   		en: "English"
@@ -250,22 +265,6 @@ const More = ({
     })()} 
 		</NavLinkNavItem> 
 
-
-    {(readyUser) &&
-	    <NavLinkNavItem to="/my" isActive={()=>checkActive(/^(\/my)/)} > 
-			{(() => {
-	      switch (language) {
-	        case 'ko': 
-	          return '나';
-	        case 'ja': 
-	          return '私';
-	        default: // eng
-	          return 'My';
-	      }
-	    })()} 
-			</NavLinkNavItem>
-    }
-		
 		
 		<NavLinkNavItem to={toPlayerGeneral} isActive={()=>checkActive(/^(\/player)/)} > 
 		{(() => {
@@ -276,6 +275,20 @@ const More = ({
           return 'プレーヤー';
         default: // eng
           return 'Player';
+      }
+    })()} 
+		</NavLinkNavItem> 
+		
+		
+		<NavLinkNavItem to={toHero} isActive={()=>checkActive(/^(\/hero)/)} > 
+		{(() => {
+      switch (language) {
+        case 'ko': 
+          return '영웅';
+        case 'ja': 
+          return 'ヒーロー';
+        default: // eng
+          return 'Hero';
       }
     })()} 
 		</NavLinkNavItem> 
@@ -324,6 +337,25 @@ const More = ({
 	)
 }
 
+
+/*
+
+    {(readyUser) &&
+	    <NavLinkNavItem to="/my" isActive={()=>checkActive(/^(\/my)/)} > 
+			{(() => {
+	      switch (language) {
+	        case 'ko': 
+	          return '나';
+	        case 'ja': 
+	          return '私';
+	        default: // eng
+	          return 'My';
+	      }
+	    })()} 
+			</NavLinkNavItem>
+    }
+		
+*/
 function mapStateToProps(state) { 
   return { 
     themeName: state.basic.themeName
@@ -334,6 +366,8 @@ function mapStateToProps(state) {
  
     , user: state.auth.user
     , readyUser: state.basic.ready.user
+    
+    , focusingHero: state.hero.focusingHero
   }; 
 } 
 

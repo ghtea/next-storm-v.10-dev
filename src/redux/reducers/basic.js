@@ -14,9 +14,12 @@ const stateInitial = {
       planTeam: false
       , listPlanTeam: false
       
-      ,listAllHeroBasic: false
       
-      ,listAllMap: false
+      , version: false
+      , listAllHeroBasic: false
+      , listAllHeroDetail: false
+      
+      , listAllMap: false
       , listMapStandardRanked: false
       
       ,listComp: false
@@ -36,6 +39,8 @@ const stateInitial = {
       
       , reactionToEdit: false
       
+      
+      
       , playerBattletag: false
       
       , playerGeneral: false
@@ -43,6 +48,10 @@ const stateInitial = {
       
       , playerHeroes: false
       , playerHeroesShowing: false
+      
+      , focusingHero: false
+      , heroBuildsStats: false
+      
     }
     
     ,loading : {
@@ -66,6 +75,9 @@ const stateInitial = {
       
       , playerGeneral: false
       , playerHeroes: false
+      
+      , focusingHero: false
+      , heroBuildsStats: false
     }
     
     
@@ -94,7 +106,17 @@ const stateInitial = {
       team_planner: "viewer" // "administrator" "viewer"
     }
     
-   
+    , versionDbLocal: {
+      HeroBasic: {  }   
+      , HeroDetail: {  }  
+      
+      , HeroStats: { }  
+      , Map: {  }
+    }
+    
+    , version: {
+      
+    }
     
   };
 

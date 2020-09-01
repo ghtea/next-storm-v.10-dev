@@ -18,8 +18,9 @@ import Notification from "./routes/Notification";
 import Loading from "./components/_/Loading";
 import Home from "./routes/Home";
 
-import My from "./routes/My";
+import Basic from "./routes/Basic";
 import Player from "./routes/Player";
+import Hero from "./routes/Hero";
 
 import Auth from "./routes/Auth";
 
@@ -31,7 +32,7 @@ import {replaceDataHots, replaceData2Hots} from "./redux/actions/hots";
 import addDeleteNotification from "./redux/thunks/addDeleteNotification";
 import {replaceData, replaceData2} from "./redux/actions/basic";
 import {replaceDataAuth, replaceData2Auth} from "./redux/actions/auth";
-//import storage from './tools/vanilla/storage';
+import storage from './tools/vanilla/storage';
 
 import {language_browser_to_ISO_639_1} from './tools/vanilla/language';
 import {ThemeProvider } from 'styled-components';
@@ -79,18 +80,23 @@ const App = ({
   , user
   , readyUser
   
+  , version
+  , readyVersion  
+  
   ,match, location, history
   
   , themeName, language
   , visibilityReaction
   
   , readyListAllHeroBasic
+  , readyListAllHeroDetail
+  //, readyListAllHeroStats
   , readyListAllMap
   , readyListMapStandardRanked
   
   , replaceDataHots, replaceData2Hots
-  ,replaceDataAuth, replaceData2Auth
-  ,replaceData, replaceData2
+  , replaceDataAuth, replaceData2Auth
+  , replaceData, replaceData2
   
   , addDeleteNotification
 }) => {
@@ -197,6 +203,8 @@ const App = ({
       } catch (e) { // token 정보가 잘못되었었으면 여기로 이동
         removeCookie('logged');
         window.location.href = '/auth/log-in';
+        
+        replaceData2('loading', 'user', false);
       }
       
       }) ()
@@ -207,56 +215,155 @@ const App = ({
   
   
   
-  //  HeroBasic 가져오기
+  
+  useEffect(() => {
+
+    (async() => {
+
+      if (!readyVersion) {
+
+        try {
+          
+          replaceData2("ready", "version", false);
+          
+          const { data } = await axios.get(`${config.URL_API_NS}/version` );
+          
+          console.log(data);
+          
+          replaceData("version", data);
+          replaceData2("ready", "version", true);
+
+        } catch (error) {
+
+          addDeleteNotification("basic01", language);
+          console.log(error)
+        }
+      } // if
+
+    })() // async
+
+  }, [readyVersion])
+  
+  
+  
+  
+  //  HeroBasic, HeroDetail, HeroStats, Map, MapStandardRanked
   useEffect( () => { 
     (async () => {
-    
-      // 내 서버에서 히오스 영웅들 정보 가져오기
-      if (!readyListAllHeroBasic ) {
-        
-        try { 
-          replaceData2("ready", "listAllHeroBasic", false)
-          
-          const {data} = await axios.get (`${config.URL_API_NS}/hero-basic/`);
-          
-          replaceDataHots("listAllHeroBasic", data)
-          replaceData2("ready", "listAllHeroBasic", true)
-          
-        } 
-        catch (error) { 
-          
-          addDeleteNotification("basic01",  language);
-          console.log(error) 
-        }
-      }
       
-      // Heroes Profile API 로 맵 정보 가져오기
-      if (!readyListAllMap ) {
+      if (readyVersion) {
         
-        try { 
-          replaceData2("ready", "listMapStandardRanked", false);
-          replaceData2("ready", "listAllMap", false);
+        const versionDbFromLocal = storage.get("versionDb");
+        let versionDbTemp = versionDbFromLocal || {};
+        
+        const listAllHeroBasicFromLocal = storage.get("listAllHeroBasic");
+        const listAllHeroDetailFromLocal = storage.get("listAllHeroDetail");
+        
+        const listAllMapFromLocal = storage.get("listAllMap");
+        
+        
+        
+        // HeroBasic
+        if (!readyListAllHeroBasic) {
+          if ( listAllHeroBasicFromLocal ) {
+            replaceDataHots("listAllHeroBasic", listAllHeroBasicFromLocal);
+            replaceData2("ready", "listAllHeroBasic", true);
+          }
+          else {
+            try {
+              const {data} = await axios.get (`${config.URL_API_NS}/hero-basic/`);
+              replaceDataHots("listAllHeroBasic", data);
+              replaceData2("ready", "listAllHeroBasic", true);
+              storage.set("listAllHeroBasic", data);
+
+              versionDbTemp['HeroBasic'] = version['db']['HeroBasic'];
+            }
+            catch (error) { 
+              replaceData2("ready", "listAllHeroBasic", false);
+              addDeleteNotification("basic01", language);
+              console.log(error) 
+            }
+          }
+        } // HeroBasic
+        
+        
+        // HeroDetail
+        if (!readyListAllHeroDetail) {
+          if ( listAllHeroDetailFromLocal ) {
+            replaceDataHots("listAllHeroDetail", listAllHeroDetailFromLocal);
+            replaceData2("ready", "listAllHeroDetail", true);
+          }
+          else {
+            try {
+              const {data} = await axios.get (`${config.URL_API_NS}/hero-detail/`);
+              replaceDataHots("listAllHeroDetail", data)
+              replaceData2("ready", "listAllHeroDetail", true);
+              storage.set("listAllHeroDetail", data);
+              
+              versionDbTemp['HeroDetail'] = version['db']['HeroDetail'];
+              
+            }
+            catch (error) { 
+              replaceData2("ready", "listAllHeroDetail", false);
+              addDeleteNotification("basic01", language);
+              console.log(error) 
+            }
+          }
+        } // HeroDetail
+        
+        
+        
+        // Map
+        if (!readyListAllMap || !readyListMapStandardRanked) {
           
-          const {data} = await axios.get (`${config.URL_API_NS}/map/`);
+          if ( listAllMapFromLocal ) {
+            replaceDataHots("listAllMap", listAllMapFromLocal);
+            replaceData2("ready", "listAllMap", true);
+            
+            const listMapStandardRankedTemp = listAllMapFromLocal.filter(element => element.type === "standard" && element.rankedRotation === true);
+            replaceDataHots( "listMapStandardRanked", listMapStandardRankedTemp );
+            replaceData2("ready", "listMapStandardRanked", true);
+          }
           
-          replaceDataHots("listAllMap", data);
-          replaceData2("ready", "listAllMap", true);
-          
-          let listMapStandardRankedTemp = data.filter(element => element.type === "standard" && element.rankedRotation === true);
-          replaceDataHots( "listMapStandardRanked", listMapStandardRankedTemp );
-          replaceData2("ready", "listMapStandardRanked", true);
-          
-        } 
-        catch (error) { 
-          
-          addDeleteNotification("basic01", language);
-          console.log(error) 
-        }
-      }
+          else { // (listAllMapFromLocal)
+        
+            try { 
+              replaceData2("ready", "listMapStandardRanked", false);
+              replaceData2("ready", "listAllMap", false);
+              
+              const {data} = await axios.get (`${config.URL_API_NS}/map/`);
+              
+              replaceDataHots("listAllMap", data);
+              replaceData2("ready", "listAllMap", true);
+              storage.set("listAllMap", data);
+              
+              versionDbTemp['Map'] = version['db']['Map'];
+              
+              // 
+              const listMapStandardRankedTemp = data.filter(element => element.type === "standard" && element.rankedRotation === true);
+              replaceDataHots( "listMapStandardRanked", listMapStandardRankedTemp );
+              replaceData2("ready", "listMapStandardRanked", true);
+            } 
+            catch (error) { 
+              replaceData2("ready", "listMapStandardRanked", false);
+              replaceData2("ready", "listAllMap", false);
+              
+              addDeleteNotification("basic01", language);
+              console.log(error) 
+            }
+          }// else  listAllMapFromLocal
+        
+        } // if map
+        
+        storage.set("versionDb", versionDbTemp);
+
+      } // readyVersion
       
     }) ()
   
-  },[])
+  }, [readyVersion])
+  
+  
   
   
   return (
@@ -271,23 +378,27 @@ const App = ({
       
       
       <Route path="/" component={Sub} />
+      
       <Route path="/" component={Notification} />
       
       <Route path="/" component={Reaction} />
       
       
       <DivContent visibilityReaction={visibilityReaction}>
-        {(readyListAllHeroBasic && readyListAllMap && readyListMapStandardRanked)? 
+      
+        {(readyListAllHeroBasic && readyListAllHeroDetail && readyListAllMap && readyListMapStandardRanked)? 
           <Switch >
           <Route path="/" exact={true} component={Home} />
           
           <Route path="/auth" component={Auth} />
           
-          <Route path="/my" component={My} />
+          <Route path="/basic" component={Basic} />
           
           <Route path="/player" component={Player} />
           
           <Route path="/comp-gallery" component={CompGallery} />
+          <Route path="/hero" component={Hero} />
+          
           <Route path="/team-planner" component={TeamPlanner} />
         </Switch >
           : <Loading/>
@@ -314,13 +425,21 @@ function mapStateToProps(state) {
     , user: state.auth.user
     , readyUser: state.basic.ready.user
     
+    , version: state.basic.version
+    , readyVersion: state.basic.ready.version
+    
     , themeName: state.basic.themeName
     , language: state.basic.language
     
     , visibilityReaction: state.reaction.visibility
     
+    
+    
     , readyListAllHeroBasic: state.basic.ready.listAllHeroBasic
+    , readyListAllHeroDetail: state.basic.ready.listAllHeroDetail
+    //, readyListAllHeroStats: state.basic.ready.listAllHeroStats
     , readyListAllMap: state.basic.ready.listAllMap
+    
     , readyListMapStandardRanked: state.basic.ready.listMapStandardRanked
   }; 
 } 

@@ -86,7 +86,8 @@ const ContainerGraph = styled(Div)`
         return 40
       }
     }}px;
-    
+    border-radius: 3px 3px 0 0;
+  
     margin-bottom: -20px;
   }
 `
