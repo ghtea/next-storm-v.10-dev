@@ -1,12 +1,23 @@
 # Next Storm
 
 _Website for the game 'Heroes of the Strom'_
-- `Player`:  
-- `Hero`:  
-- `Comp Gallery`:  
-- `Team Planner`:  
+[check website via videos](https://www.dropbox.com/sh/kjov8169q9o7kod/AAD7TtD7osn_JEZwLe4Air6_a?dl=0)
+- Post and share composition of heroes (combination of 5 game characters)
+- Check basic infomation and meta of player and game characters
 
 ## features
+
+### Comp Gallery
+-  Create composition and post to share it
+-  Add link of video (Twitch, Youtube) to make that video is visible and available in page of the composition
+
+### Player
+- Check 
+
+### Hero 
+
+### Team Planner
+
 
 ### overall
 features | memo | link 
