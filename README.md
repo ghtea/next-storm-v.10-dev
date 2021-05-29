@@ -5,6 +5,12 @@ _Website for the game 'Heroes of the Strom'_
 - Post and share composition of heroes (combination of 5 game characters)
 - Check basic infomation and meta of player and game characters
 
+## 참고 이미지
+![Uploading NextStorm.png…]()
+![NextStorm skills](https://user-images.githubusercontent.com/47841931/120080166-8de2c600-c0f2-11eb-964b-9d35128a5e22.png)
+
+
+
 ## features
 
 ### Comp Gallery
