@@ -1,3 +1,4 @@
+
 # Next Storm
 
 - 게임 '히어로즈 오브 더 스톰'을 위한 웹사이트
@@ -11,18 +12,31 @@
 
 
 ## features
+[동영상으로 확인하기](https://www.dropbox.com/sh/kjov8169q9o7kod/AAD7TtD7osn_JEZwLe4Air6_a?dl=0)
 
 ### Comp Gallery
+<img src="https://user-images.githubusercontent.com/47841931/120093029-602d6980-c152-11eb-926a-a7d49bd637a4.png" width="360">
+<img src="https://user-images.githubusercontent.com/47841931/120093046-79ceb100-c152-11eb-92bc-eeac272d7f85.png" width="400">
 -  팀 조합(캐릭터 5명이 한 팀)을 만들고 공유
 -  동영상 링크를 입력하면 한 페이지에서 관람 가능
 
 
-
 ### Player
-- Check 
+- 플레이어의 통계 확인
+<img src="https://user-images.githubusercontent.com/47841931/120092951-bfd74500-c151-11eb-9f75-7ab0176c35f3.png" width="360">
+<img src="https://user-images.githubusercontent.com/47841931/120092952-c2d23580-c151-11eb-8b31-e7f5c2ffcb52.png" width="360">
+
 
 ### Hero 
+- 캐릭터의 아이템 트리별 승률 확인
+![CharacterBuildWinrate](https://user-images.githubusercontent.com/47841931/120092969-edbc8980-c151-11eb-9c29-bb1dfde9b19a.gif)
+
 
 ### Team Planner
+- 많은 플레이어에서 mmr (실력수치), 선호하는 역할 고려해서 팀 나누는 것을 도와주는 기능
 
 
+
+## 기타
+- 프론트엔드를 배우고 처음으로 완성한 풀스택 프로젝트
+- api 비용 문제로 배포 중지
