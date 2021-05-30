@@ -15,10 +15,10 @@
 [동영상으로 확인하기](https://www.dropbox.com/sh/kjov8169q9o7kod/AAD7TtD7osn_JEZwLe4Air6_a?dl=0)
 
 ### Comp Gallery
+-  팀 조합(캐릭터 5명이 한 팀)을 만들고 공유
 <img src="https://user-images.githubusercontent.com/47841931/120093029-602d6980-c152-11eb-926a-a7d49bd637a4.png" width="360">
 <img src="https://user-images.githubusercontent.com/47841931/120093046-79ceb100-c152-11eb-92bc-eeac272d7f85.png" width="400">
--  팀 조합(캐릭터 5명이 한 팀)을 만들고 공유
--  동영상 링크를 입력하면 한 페이지에서 관람 가능
+
 
 
 ### Player
